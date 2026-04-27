@@ -27,6 +27,8 @@ Then open:
 
 Only the reverse-proxy container publishes a host port. PostgreSQL, backend, and frontend stay on the internal Docker network, while Nginx exposes the app on port 80 and proxies `/api/` to FastAPI.
 
+For deployment behind the Apache HTTPS virtual host at `apps.cienciavida.org`, bind the container Nginx to an internal host port such as `127.0.0.1:18080` and proxy `/tcga_explorer/` from Apache. See `docs/APACHE_DEPLOYMENT.md`.
+
 On first backend startup, the app imports cohort metadata and sample-level clinical fields into PostgreSQL. The Docker setup blocks the frontend until the backend cache warmup is complete. A fresh startup preloads cohort gene indexes, CPM library sizes, GDC barcode maps, and binary gene-by-sample matrices for the GDC-derived RNA scales before `http://localhost/tcga_explorer/` is started.
 
 To enable TCGA-CDR endpoints, place the official `TCGA-CDR-SupplementalTableS1.xlsx` file in `./clinical/` before startup. TSV/CSV equivalents with the same endpoint columns are also supported by configuring `TCGA_CDR_PATH`.
