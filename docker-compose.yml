@@ -67,7 +67,7 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "${TCGA_EXPLORER_HTTP_BIND:-0.0.0.0}:${TCGA_EXPLORER_HTTP_PORT:-80}:80"
+      - "${TCGA_EXPLORER_HTTP_BIND:-0.0.0.0}:${TCGA_EXPLORER_HTTP_PORT:-3000}:80"
     volumes:
       - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 

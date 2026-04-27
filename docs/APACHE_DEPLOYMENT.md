@@ -1,6 +1,6 @@
 # Apache deployment for apps.cienciavida.org
 
-`apps.cienciavida.org` terminates HTTPS with Apache. Run the Docker stack on an internal host port and proxy only the `/tcga_explorer/` prefix to the container Nginx.
+`apps.cienciavida.org` terminates HTTPS with Apache. Run the Docker stack on host port `3000` and proxy only the `/tcga_explorer/` prefix to the container Nginx.
 
 ## Docker app
 
@@ -9,9 +9,11 @@ Create `.env` on the host running Docker:
 ```env
 VITE_BASE_PATH=/tcga_explorer/
 VITE_API_BASE_URL=/tcga_explorer
-TCGA_EXPLORER_HTTP_BIND=127.0.0.1
-TCGA_EXPLORER_HTTP_PORT=18080
+TCGA_EXPLORER_HTTP_BIND=0.0.0.0
+TCGA_EXPLORER_HTTP_PORT=3000
 ```
+
+If Apache runs on the same host as Docker, `TCGA_EXPLORER_HTTP_BIND=127.0.0.1` is also valid.
 
 Start or rebuild the app:
 
@@ -22,8 +24,8 @@ docker compose up -d --build
 Verify from the same host:
 
 ```bash
-curl -I http://127.0.0.1:18080/tcga_explorer/
-curl http://127.0.0.1:18080/tcga_explorer/api/health
+curl -I http://127.0.0.1:3000/tcga_explorer/
+curl http://127.0.0.1:3000/tcga_explorer/api/health
 ```
 
 ## Apache virtual host
@@ -44,8 +46,8 @@ ProxyTimeout 600
 
 RedirectMatch 301 ^/tcga_explorer$ /tcga_explorer/
 
-ProxyPass        /tcga_explorer/ http://127.0.0.1:18080/tcga_explorer/ retry=0 timeout=600
-ProxyPassReverse /tcga_explorer/ http://127.0.0.1:18080/tcga_explorer/
+ProxyPass        /tcga_explorer/ http://127.0.0.1:3000/tcga_explorer/ retry=0 timeout=600
+ProxyPassReverse /tcga_explorer/ http://127.0.0.1:3000/tcga_explorer/
 ```
 
 Reload Apache:
