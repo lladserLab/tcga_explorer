@@ -232,6 +232,7 @@ h3 {
 .result-panel {
   min-height: calc(100vh - 180px);
   padding: 18px;
+  scroll-margin-top: 18px;
 }
 
 .panel-header {
@@ -1952,6 +1953,127 @@ textarea {
   background: #f8faf9;
 }
 
+.expression-summary {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-bottom: 1px solid #edf0ef;
+}
+
+.expression-summary div {
+  min-width: 0;
+  padding: 10px 12px;
+  border-right: 1px solid #edf0ef;
+}
+
+.expression-summary div:last-child {
+  border-right: 0;
+}
+
+.expression-summary span {
+  display: block;
+  color: #63716f;
+  font-size: 11px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.expression-summary strong {
+  display: block;
+  margin-top: 4px;
+  color: #17201f;
+  font-size: 13px;
+}
+
+.expression-histogram-wrap {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.expression-histogram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.histogram-grid-line {
+  stroke: #edf0ef;
+  stroke-width: 1;
+}
+
+.histogram-axis,
+.histogram-tick line {
+  stroke: #aebbb7;
+  stroke-width: 1;
+}
+
+.histogram-bar {
+  fill: #2f756f;
+}
+
+.histogram-tick text,
+.cutpoint-marker text,
+.histogram-y-label {
+  fill: #63716f;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.histogram-tick text,
+.cutpoint-marker text {
+  text-anchor: middle;
+}
+
+.cutpoint-marker line {
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.cutpoint-marker text {
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 4px;
+}
+
+.cutpoint-marker.marker-0 line,
+.expression-marker-legend .marker-0 {
+  stroke: #b44b3f;
+  background: #b44b3f;
+}
+
+.cutpoint-marker.marker-1 line,
+.expression-marker-legend .marker-1 {
+  stroke: #d7953f;
+  background: #d7953f;
+}
+
+.cutpoint-marker.marker-2 line,
+.expression-marker-legend .marker-2 {
+  stroke: #5a6f9f;
+  background: #5a6f9f;
+}
+
+.expression-marker-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: #3d4a48;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.expression-marker-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.expression-marker-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -2097,15 +2219,17 @@ dd {
 
   .preview-grid,
   .metric-strip,
-    .date-grid,
-    .source-strip,
-    .summary-kpis,
+  .expression-summary,
+  .date-grid,
+  .source-strip,
+  .summary-kpis,
   .method-grid.compact {
     grid-template-columns: 1fr 1fr;
   }
 
   .preview-item:nth-child(2n),
-  .metric:nth-child(2n) {
+  .metric:nth-child(2n),
+  .expression-summary div:nth-child(2n) {
     border-right: 0;
   }
 }
@@ -2132,18 +2256,20 @@ dd {
 
   .preview-grid,
   .metric-strip,
-    .date-grid,
-    .source-strip,
-    .summary-kpis,
-    .method-grid.compact,
-    .endpoint-grid,
+  .expression-summary,
+  .date-grid,
+  .source-strip,
+  .summary-kpis,
+  .method-grid.compact,
+  .endpoint-grid,
   .color-grid,
   .range-grid {
     grid-template-columns: 1fr;
   }
 
   .preview-item,
-  .metric {
+  .metric,
+  .expression-summary div {
     border-right: 0;
   }
 

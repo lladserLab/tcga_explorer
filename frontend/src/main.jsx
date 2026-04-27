@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Activity,
@@ -242,6 +242,7 @@ function removeGeneToken(value, symbol) {
 }
 
 function App() {
+  const resultPanelRef = useRef(null);
   const [health, setHealth] = useState(null);
   const [cohorts, setCohorts] = useState([]);
   const [datasetSummary, setDatasetSummary] = useState(null);
@@ -471,6 +472,12 @@ function App() {
     }
   }
 
+  function scrollToResults() {
+    window.requestAnimationFrame(() => {
+      resultPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   async function runAnalysis() {
     const sourceInput = geneQuery.trim() ? addGeneToken(form.gene_symbol, geneQuery) : form.gene_symbol;
     const normalizedGenes = uniqueGeneSymbols(sourceInput);
@@ -482,6 +489,7 @@ function App() {
     setLoading(true);
     setError("");
     setAnalysisResults([]);
+    scrollToResults();
     const normalizedInput =
       form.signature_method === "single"
         ? normalizedGenes.join(", ")
@@ -936,7 +944,7 @@ function App() {
             </div>
           </section>
 
-          <section className="result-panel" aria-label="Analysis result">
+          <section ref={resultPanelRef} className="result-panel" aria-label="Analysis result">
             {error && (
               <div className="error-box">
                 <AlertCircle size={18} />
@@ -2079,7 +2087,7 @@ function AnalysisResult({ analysis, onDownload }) {
       </div>
 
       <div className="result-details">
-        <ExpressionDistribution distribution={metrics.expression_distribution} />
+        <ExpressionDistribution distribution={metrics.expression_distribution} cutpointDetails={metrics.cutpoint_details} />
         <QualitySummary quality={metrics.quality} />
       </div>
 
@@ -2152,14 +2160,168 @@ function CutpointSummary({ details }) {
   );
 }
 
-function ExpressionDistribution({ distribution }) {
+function ExpressionDistribution({ distribution, cutpointDetails }) {
   if (!distribution?.bins?.length) return null;
+  const bins = normalizeDistributionBins(distribution.bins);
+  const markers = cutpointMarkers(cutpointDetails);
+  const stats = [
+    ["Patients", formatInteger(distribution.n)],
+    ["Min", formatExpressionValue(distribution.min)],
+    ["Q1", formatExpressionValue(distribution.q1)],
+    ["Median", formatExpressionValue(distribution.median)],
+    ["Q3", formatExpressionValue(distribution.q3)],
+    ["Max", formatExpressionValue(distribution.max)],
+  ];
   return (
-    <div className="detail-section">
+    <div className="detail-section expression-section">
       <h3>Expression distribution before cutpoint</h3>
-      <DistributionBars items={distribution.bins} />
+      <div className="expression-summary">
+        {stats.map(([label, value]) => (
+          <div key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </div>
+        ))}
+      </div>
+      <ExpressionHistogram distribution={distribution} bins={bins} markers={markers} />
     </div>
   );
+}
+
+function ExpressionHistogram({ distribution, bins, markers }) {
+  const width = 640;
+  const height = 230;
+  const plot = { top: 24, right: 18, bottom: 42, left: 46 };
+  const innerWidth = width - plot.left - plot.right;
+  const innerHeight = height - plot.top - plot.bottom;
+  const maxCount = Math.max(...bins.map((item) => item.count), 1);
+  const minValue = finiteNumber(distribution.min) ?? Math.min(...bins.map((item) => item.lower));
+  const maxValue = finiteNumber(distribution.max) ?? Math.max(...bins.map((item) => item.upper));
+  const span = maxValue - minValue || 1;
+  const scaleX = (value) => plot.left + ((value - minValue) / span) * innerWidth;
+  const scaleY = (count) => plot.top + innerHeight - (count / maxCount) * innerHeight;
+  const axisTicks = uniqueNumbers([minValue, finiteNumber(distribution.median), maxValue]);
+  const visibleMarkers = markers.filter((marker) => marker.value >= minValue && marker.value <= maxValue);
+
+  return (
+    <div className="expression-histogram-wrap">
+      <svg className="expression-histogram" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Expression histogram with cutpoint markers">
+        {[0, 0.5, 1].map((fraction) => {
+          const y = plot.top + innerHeight - fraction * innerHeight;
+          return <line key={fraction} className="histogram-grid-line" x1={plot.left} x2={width - plot.right} y1={y} y2={y} />;
+        })}
+        {bins.map((bin, index) => {
+          const singleValue = bin.lower === bin.upper || minValue === maxValue;
+          const x = singleValue ? plot.left + innerWidth * 0.16 : scaleX(bin.lower);
+          const nextX = singleValue ? plot.left + innerWidth * 0.84 : scaleX(bin.upper);
+          const barWidth = Math.max(3, nextX - x - 4);
+          const y = scaleY(bin.count);
+          const barHeight = plot.top + innerHeight - y;
+          return (
+            <rect
+              key={`${bin.label}-${index}`}
+              className="histogram-bar"
+              x={x}
+              y={y}
+              width={barWidth}
+              height={barHeight}
+              rx="3"
+            >
+              <title>{`${bin.label}: ${formatInteger(bin.count)} patients`}</title>
+            </rect>
+          );
+        })}
+        {visibleMarkers.map((marker, index) => {
+          const x = scaleX(marker.value);
+          return (
+            <g key={`${marker.label}-${marker.value}`} className={`cutpoint-marker marker-${index % 3}`}>
+              <line x1={x} x2={x} y1={plot.top - 6} y2={plot.top + innerHeight} />
+              <text x={x} y={index % 2 === 0 ? 14 : 28}>{marker.label}</text>
+            </g>
+          );
+        })}
+        <line className="histogram-axis" x1={plot.left} x2={width - plot.right} y1={plot.top + innerHeight} y2={plot.top + innerHeight} />
+        {axisTicks.map((tick) => {
+          const x = scaleX(tick);
+          return (
+            <g key={tick} className="histogram-tick">
+              <line x1={x} x2={x} y1={plot.top + innerHeight} y2={plot.top + innerHeight + 5} />
+              <text x={x} y={height - 16}>{formatExpressionValue(tick)}</text>
+            </g>
+          );
+        })}
+        <text className="histogram-y-label" x="12" y={plot.top + 10}>Patients</text>
+      </svg>
+      {!!visibleMarkers.length && (
+        <div className="expression-marker-legend">
+          {visibleMarkers.map((marker, index) => (
+            <span key={`${marker.label}-${marker.value}`}>
+              <i className={`marker-${index % 3}`} />
+              {marker.label}: {formatExpressionValue(marker.value)}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function normalizeDistributionBins(items) {
+  return items.map((item, index) => {
+    const label = String(item.label ?? "");
+    const parsed = parseDistributionLabel(label);
+    const lower = finiteNumber(item.lower) ?? parsed.lower ?? index;
+    const upper = finiteNumber(item.upper) ?? parsed.upper ?? lower;
+    return {
+      label,
+      count: Number(item.count || 0),
+      lower,
+      upper,
+    };
+  });
+}
+
+function parseDistributionLabel(label) {
+  const range = label.match(/^\s*(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)\s*$/);
+  if (range) {
+    return { lower: Number(range[1]), upper: Number(range[2]) };
+  }
+  const single = label.match(/^\s*(-?\d+(?:\.\d+)?)\s*$/);
+  if (single) {
+    const value = Number(single[1]);
+    return { lower: value, upper: value };
+  }
+  return {};
+}
+
+function cutpointMarkers(details) {
+  if (!details) return [];
+  return [
+    ["threshold", "Cutpoint"],
+    ["lower_quartile", "Lower quartile"],
+    ["upper_quartile", "Upper quartile"],
+    ["lower_tertile", "Lower tertile"],
+    ["upper_tertile", "Upper tertile"],
+  ]
+    .map(([key, label]) => ({ label, value: finiteNumber(details[key]) }))
+    .filter((marker) => marker.value !== null);
+}
+
+function finiteNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function uniqueNumbers(values) {
+  const seen = new Set();
+  return values
+    .filter((value) => value !== null && value !== undefined)
+    .filter((value) => {
+      const key = Number(value).toFixed(6);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 }
 
 function QualitySummary({ quality }) {
@@ -2263,6 +2425,12 @@ function fallbackDownloadFilename(label, href) {
 function formatInteger(value) {
   if (value === undefined || value === null || value === "") return "...";
   return Number(value).toLocaleString();
+}
+
+function formatExpressionValue(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "...";
+  return number.toFixed(2);
 }
 
 function formatDate(value) {
