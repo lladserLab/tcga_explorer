@@ -1,0 +1,16 @@
+.git
+.gitignore
+artifacts/*
+derived/*
+clinical/*
+jcga/*
+postgres_data
+frontend/node_modules
+frontend/dist
+backend/__pycache__
+backend/.pytest_cache
+*.pyc
+logs
+*.log
+*.tar.gz
+*.zip

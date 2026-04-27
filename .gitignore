@@ -1,0 +1,32 @@
+.DS_Store
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Vite
+frontend/node_modules/
+frontend/dist/
+
+# Docker / local runtime state
+postgres_data/
+logs/
+*.log
+
+# Generated analysis outputs and local data caches
+artifacts/*
+!artifacts/.gitkeep
+derived/*
+!derived/.gitkeep
+clinical/*
+!clinical/.gitkeep
+jcga/*
+!jcga/.gitkeep
