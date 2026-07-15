@@ -49,6 +49,23 @@ def normalize_stage(row: dict[str, str]) -> str | None:
     return stage.replace("_", " ")
 
 
+def normalize_grade(row: dict[str, str]) -> str | None:
+    grade = (
+        clean(row.get("tumor_grade"))
+        or clean(row.get("paper_Tumor_Grade"))
+        or clean(row.get("paper_Grade"))
+        or clean(row.get("paper_Histologic.grade"))
+        or clean(row.get("paper_FNCLCC.grade"))
+        or clean(row.get("paper_histology_grade"))
+        or clean(row.get("tumor_grade_category"))
+        or clean(row.get("gleason_grade_group"))
+        or clean(row.get("primary_gleason_grade"))
+    )
+    if grade is None:
+        return None
+    return grade.replace("_", " ")
+
+
 def derive_os(row: dict[str, str]) -> tuple[float | None, int | None]:
     vital = (clean(row.get("vital_status")) or "").lower()
     days_to_death = parse_float(row.get("days_to_death"))
@@ -92,6 +109,7 @@ def import_cohorts_and_samples(db: Session, tcga_data_dir: Path, force: bool = F
     if existing and not force:
         if source and source.source_file_modified_at == summary_modified:
             register_tcga_rna_source(db, tcga_data_dir)
+            backfill_sample_grade_from_col_data(db, tcga_data_dir)
             return {"cohorts": int(existing), "samples": int(db.scalar(select(func.count()).select_from(Sample)) or 0)}
         db.execute(delete(Sample))
         db.execute(delete(GeneIndex))
@@ -330,6 +348,7 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
                 barcode=barcode,
                 sample_type=clean(row.get("sample_type")),
                 stage=normalize_stage(row),
+                grade=normalize_grade(row),
                 gender=clean(row.get("gender")) or clean(row.get("sex_at_birth")),
                 race=clean(row.get("race")),
                 age_at_index=age,
@@ -338,6 +357,7 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
                 os_event=os_event,
                 raw_metadata={
                     "primary_diagnosis": clean(row.get("primary_diagnosis")),
+                    "tumor_grade": normalize_grade(row),
                     "paper_BRCA_Subtype_PAM50": clean(row.get("paper_BRCA_Subtype_PAM50")),
                     "progression_or_recurrence": clean(row.get("progression_or_recurrence")),
                 },
@@ -353,6 +373,38 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
         db.add_all(batch)
         db.flush()
     return count
+
+
+def backfill_sample_grade_from_col_data(db: Session, tcga_data_dir: Path) -> int:
+    updated = 0
+    for cohort_dir in sorted(tcga_data_dir.glob("TCGA-*")):
+        col_data_path = cohort_dir / "col_data.tsv"
+        if not col_data_path.exists():
+            continue
+        with col_data_path.open(newline="", encoding="utf-8", errors="replace") as handle:
+            reader = csv.DictReader(handle, delimiter="\t")
+            for row in reader:
+                grade = normalize_grade(row)
+                if grade is None:
+                    continue
+                barcode = clean(row.get("")) or clean(row.get("barcode"))
+                if barcode is None:
+                    continue
+                sample = db.scalar(
+                    select(Sample).where(Sample.cohort == cohort_dir.name).where(Sample.barcode == barcode)
+                )
+                if sample is None or sample.grade == grade:
+                    continue
+                metadata = dict(sample.raw_metadata or {})
+                metadata["tumor_grade"] = grade
+                sample.grade = grade
+                sample.raw_metadata = metadata
+                updated += 1
+                if updated % 1000 == 0:
+                    db.flush()
+    if updated:
+        db.commit()
+    return updated
 
 
 def ensure_gene_index(db: Session, tcga_data_dir: Path, cohort_id: str) -> int:

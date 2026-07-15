@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     derived_expression_dir: Path = Path("/app/derived/rna_bulk")
     r_script_path: Path = Path("/app/scripts/km_analysis.R")
     maxstat_script_path: Path = Path("/app/scripts/maxstat_cutpoint.R")
+    pancancer_script_path: Path = Path("/app/scripts/pancancer_cox_scan.R")
     cors_origins: str = "http://localhost:3000,http://localhost:5173"
     bootstrap_on_startup: bool = True
     preload_cache_on_startup: bool = True

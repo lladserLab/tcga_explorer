@@ -42,4 +42,6 @@ def init_db() -> None:
     from app import models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
-
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE samples ADD COLUMN IF NOT EXISTS grade VARCHAR(128)"))
+        conn.execute(text("CREATE INDEX IF NOT EXISTS ix_samples_grade ON samples (grade)"))

@@ -37,6 +37,7 @@ class Sample(Base):
     barcode: Mapped[str] = mapped_column(String(128), index=True)
     sample_type: Mapped[str | None] = mapped_column(String(128), index=True)
     stage: Mapped[str | None] = mapped_column(String(128), index=True)
+    grade: Mapped[str | None] = mapped_column(String(128), index=True)
     gender: Mapped[str | None] = mapped_column(String(64), index=True)
     race: Mapped[str | None] = mapped_column(String(128), index=True)
     age_at_index: Mapped[float | None] = mapped_column(Float)

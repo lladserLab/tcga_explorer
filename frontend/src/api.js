@@ -79,9 +79,27 @@ export function createAnalysis(payload) {
   });
 }
 
+export function createCombinedAnalysis(payload) {
+  return request("/api/analyses/combined", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function createAnalysesBatch(analyses, maxConcurrency = 3) {
   return request("/api/analyses/batch", {
     method: "POST",
     body: JSON.stringify({ analyses, max_concurrency: maxConcurrency }),
   });
+}
+
+export function createPanCancerSurvival(payload) {
+  return request("/api/pancancer/survival", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getImmunePanCancerScreen(screenId = "immune_os_immport_all_v1") {
+  return request(`/api/pancancer/immune-screens/${screenId}`);
 }

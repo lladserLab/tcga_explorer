@@ -89,9 +89,14 @@ class SurvivalRecord:
     event: int
     sample_type: str | None
     stage: str | None
+    grade: str | None
     gender: str | None
     race: str | None
     age_at_index: float | None
+    expression_value_a: float | None = None
+    expression_value_b: float | None = None
+    group_a: str | None = None
+    group_b: str | None = None
 
     def as_dict(self) -> dict:
         return {
@@ -99,11 +104,16 @@ class SurvivalRecord:
             "sample_barcode": self.sample_barcode,
             "endpoint": self.endpoint,
             "expression_value": self.expression_value,
+            "expression_value_a": self.expression_value_a,
+            "expression_value_b": self.expression_value_b,
             "group": self.group,
+            "group_a": self.group_a,
+            "group_b": self.group_b,
             "time_days": self.time_days,
             "event": self.event,
             "sample_type": self.sample_type,
             "stage": self.stage,
+            "grade": self.grade,
             "gender": self.gender,
             "race": self.race,
             "age_at_index": self.age_at_index,
@@ -142,6 +152,9 @@ def filter_samples(
     if filters.stages:
         allowed = set(filters.stages)
         selected = [sample for sample in selected if sample.stage in allowed]
+    if filters.grades:
+        allowed = set(filters.grades)
+        selected = [sample for sample in selected if sample.grade in allowed]
     if filters.genders:
         allowed = {item.lower() for item in filters.genders}
         selected = [sample for sample in selected if sample.gender and sample.gender.lower() in allowed]
@@ -152,13 +165,6 @@ def filter_samples(
         selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index >= filters.age_min]
     if filters.age_max is not None:
         selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index <= filters.age_max]
-    if filters.max_time_days is not None:
-        selected = [
-            sample
-            for sample in selected
-            if outcome(sample) is not None and outcome(sample).time_days <= filters.max_time_days
-        ]
-
     with_endpoint = [sample for sample in selected if outcome(sample) is not None]
     dropped = len(selected) - len(with_endpoint)
     if dropped:
@@ -316,14 +322,14 @@ def assign_groups_with_cutpoint(
         q1 = percentile(sorted_values, 25)
         q3 = percentile(sorted_values, 75)
         details.update({"lower_quartile": q1, "upper_quartile": q3})
-        labels = ["Low" if value < q1 else "High" if value > q3 else None for value in values]
+        labels = ["Low" if value <= q1 else "High" if value >= q3 else None for value in values]
         return labels, ["Low", "High"], details
 
     if method == "percentile":
         pct = 50.0 if custom_percentile is None else custom_percentile
         threshold = percentile(sorted_values, pct)
         details.update({"percentile": pct, "threshold": threshold})
-        labels = ["Low" if value < threshold else "High" for value in values]
+        labels = ["Low" if value <= threshold else "High" for value in values]
         return labels, ["Low", "High"], details
 
     raise ValueError(f"Unsupported cutpoint method: {method}")
@@ -339,6 +345,17 @@ def percentile(sorted_values: list[float], pct: float) -> float:
     return sorted_values[lower] * (1 - weight) + sorted_values[upper] * weight
 
 
+def _apply_time_ceiling(outcome: ClinicalOutcome, max_time_days: float) -> ClinicalOutcome:
+    if outcome.time_days <= max_time_days:
+        return outcome
+    return ClinicalOutcome(
+        endpoint=outcome.endpoint,
+        time_days=max_time_days,
+        event=0,
+        source=outcome.source,
+    )
+
+
 def build_survival_records(
     samples: list[Sample],
     expression_by_barcode: dict[str, float],
@@ -347,6 +364,7 @@ def build_survival_records(
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
     endpoint: str = "OS",
     precomputed_cutpoint: dict | None = None,
+    max_time_days: float | None = None,
 ) -> tuple[list[SurvivalRecord], list[str], dict]:
     samples_with_expression = [sample for sample in samples if sample.barcode in expression_by_barcode]
     values = [expression_by_barcode[sample.barcode] for sample in samples_with_expression]
@@ -364,6 +382,8 @@ def build_survival_records(
         outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
         if outcome is None:
             continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
         records.append(
             SurvivalRecord(
                 patient_id=sample.patient_id,
@@ -375,12 +395,98 @@ def build_survival_records(
                 event=int(outcome.event),
                 sample_type=sample.sample_type,
                 stage=sample.stage,
+                grade=sample.grade,
                 gender=sample.gender,
                 race=sample.race,
                 age_at_index=sample.age_at_index,
             )
         )
     return records, group_levels, cutpoint_details
+
+
+def build_combined_survival_records(
+    samples: list[Sample],
+    expression_a_by_barcode: dict[str, float],
+    expression_b_by_barcode: dict[str, float],
+    method: str,
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    max_time_days: float | None = None,
+) -> tuple[list[SurvivalRecord], list[str], dict]:
+    samples_with_expression = [
+        sample
+        for sample in samples
+        if sample.barcode in expression_a_by_barcode and sample.barcode in expression_b_by_barcode
+    ]
+    values_a = [expression_a_by_barcode[sample.barcode] for sample in samples_with_expression]
+    values_b = [expression_b_by_barcode[sample.barcode] for sample in samples_with_expression]
+    labels_a, levels_a, details_a = assign_groups_with_cutpoint(values_a, method)
+    labels_b, levels_b, details_b = assign_groups_with_cutpoint(values_b, method)
+
+    records: list[SurvivalRecord] = []
+    for sample, label_a, label_b in zip(samples_with_expression, labels_a, labels_b, strict=False):
+        if label_a is None or label_b is None:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None:
+            continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
+        value_a = expression_a_by_barcode[sample.barcode]
+        value_b = expression_b_by_barcode[sample.barcode]
+        records.append(
+            SurvivalRecord(
+                patient_id=sample.patient_id,
+                sample_barcode=sample.barcode,
+                endpoint=endpoint,
+                expression_value=(value_a + value_b) / 2,
+                expression_value_a=value_a,
+                expression_value_b=value_b,
+                group=f"{label_a}_{label_b}",
+                group_a=label_a,
+                group_b=label_b,
+                time_days=float(outcome.time_days),
+                event=int(outcome.event),
+                sample_type=sample.sample_type,
+                stage=sample.stage,
+                grade=sample.grade,
+                gender=sample.gender,
+                race=sample.race,
+                age_at_index=sample.age_at_index,
+            )
+        )
+
+    present_groups = {record.group for record in records}
+    group_levels = [
+        f"{level_a}_{level_b}"
+        for level_a in levels_a
+        for level_b in levels_b
+        if f"{level_a}_{level_b}" in present_groups
+    ]
+    cutpoint_details = combined_cutpoint_details(method, details_a, details_b, levels_a, levels_b)
+    return records, group_levels, cutpoint_details
+
+
+def combined_cutpoint_details(
+    method: str,
+    details_a: dict,
+    details_b: dict,
+    levels_a: list[str],
+    levels_b: list[str],
+) -> dict:
+    details = {
+        "method": method,
+        "combination": "signature_a_x_signature_b",
+        "signature_a_levels": "/".join(levels_a),
+        "signature_b_levels": "/".join(levels_b),
+    }
+    for key, value in details_a.items():
+        if key != "method":
+            details[f"signature_a_{key}"] = value
+    for key, value in details_b.items():
+        if key != "method":
+            details[f"signature_b_{key}"] = value
+    return details
 
 
 def validate_records(records: list[SurvivalRecord], endpoint_label: str = "survival endpoint") -> None:

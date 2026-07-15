@@ -17,6 +17,16 @@ def stable_hash(payload: dict) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
+def json_safe_value(value):
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, dict):
+        return {key: json_safe_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [json_safe_value(item) for item in value]
+    return value
+
+
 def write_records_csv(records: list[SurvivalRecord], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = list(records[0].as_dict().keys())
@@ -56,6 +66,8 @@ def run_r_km(
     output_path = analysis_dir / "metrics.json"
     png_path = analysis_dir / "plot.png"
     svg_path = analysis_dir / "plot.svg"
+    cox_forest_png_path = analysis_dir / "cox_forest.png"
+    cox_forest_svg_path = analysis_dir / "cox_forest.svg"
     csv_path = analysis_dir / "raw_data.csv"
     methodology_path = analysis_dir / "methodology.txt"
 
@@ -78,6 +90,8 @@ def run_r_km(
         "plot_style": plot_style,
         "png_path": str(png_path),
         "svg_path": str(svg_path),
+        "cox_forest_png_path": str(cox_forest_png_path),
+        "cox_forest_svg_path": str(cox_forest_svg_path),
         "render_png": True,
         "render_svg": False,
         "output_path": str(output_path),
@@ -94,7 +108,7 @@ def run_r_km(
     if result.returncode != 0:
         raise RuntimeError(f"Rscript failed: {result.stderr or result.stdout}")
 
-    metrics = json.loads(output_path.read_text(encoding="utf-8"))
+    metrics = json_safe_value(json.loads(output_path.read_text(encoding="utf-8")))
     if sample_selection is not None:
         metrics["sample_selection"] = sample_selection
     write_methodology_txt(
@@ -122,11 +136,47 @@ def run_r_km(
     metrics["artifact_paths"] = {
         "png": str(png_path),
         "svg": str(svg_path),
+        "cox_forest_png": str(cox_forest_png_path) if cox_forest_png_path.exists() else None,
+        "cox_forest_svg": str(cox_forest_svg_path),
         "csv": str(csv_path),
         "json": str(output_path),
         "txt": str(methodology_path),
     }
     return metrics
+
+
+def run_r_pancancer_cox(
+    settings: Settings,
+    scan_id: str,
+    cohorts: list[dict],
+    min_patients: int,
+    min_events: int,
+    request_payload: dict,
+) -> dict:
+    scan_dir = settings.artifact_dir / "pancancer" / scan_id
+    scan_dir.mkdir(parents=True, exist_ok=True)
+    input_path = scan_dir / "input.json"
+    output_path = scan_dir / "cox_results.json"
+    payload = {
+        "scan_id": scan_id,
+        "min_patients": min_patients,
+        "min_events": min_events,
+        "request": request_payload,
+        "cohorts": cohorts,
+        "output_path": str(output_path),
+    }
+    input_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    result = subprocess.run(
+        ["Rscript", str(settings.pancancer_script_path), str(input_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+        timeout=240,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"Rscript failed: {result.stderr or result.stdout}")
+    return json.loads(output_path.read_text(encoding="utf-8"))
 
 
 def ensure_svg_artifact(settings: Settings, analysis_id: str) -> Path:
@@ -142,6 +192,7 @@ def ensure_svg_artifact(settings: Settings, analysis_id: str) -> Path:
     payload["render_png"] = False
     payload["render_svg"] = True
     payload["svg_path"] = str(svg_path)
+    payload["cox_forest_svg_path"] = str(analysis_dir / "cox_forest.svg")
     payload["output_path"] = str(analysis_dir / "svg_metrics.json")
     svg_input_path = analysis_dir / "svg_input.json"
     svg_input_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
@@ -216,11 +267,12 @@ def write_methodology_txt(
         "- Samples were restricted according to the user-selected clinical filters below.",
         f"- Sample type filter: {format_filter(filters.get('sample_types'))}",
         f"- Stage filter: {format_filter(filters.get('stages'))}",
+        f"- Grade filter: {format_filter(filters.get('grades'))}",
         f"- Gender filter: {format_filter(filters.get('genders'))}",
         f"- Race filter: {format_filter(filters.get('races'))}",
         f"- Minimum age at index: {format_optional(filters.get('age_min'))}",
         f"- Maximum age at index: {format_optional(filters.get('age_max'))}",
-        f"- Maximum follow-up time in days: {format_optional(filters.get('max_time_days'))}",
+        f"- Maximum follow-up time in days: {format_optional(filters.get('max_time_days'))} (patients with longer follow-up are administratively censored at this time; event set to 0).",
         f"- Final analyzable patients: {metrics.get('n_patients', 'not available')}",
         f"- Observed events: {metrics.get('n_events', 'not available')}",
         "",
@@ -243,6 +295,7 @@ def write_methodology_txt(
         "",
         "Marker Measurement / RNA Expression Transformation",
         expression_method_text(expression_scale, expression_scale_label),
+        *signature_methodology_lines(request_payload),
         "",
         "Patient Stratification",
         stratification_method_text(cutpoint_method, cutpoint_details),
@@ -252,11 +305,13 @@ def write_methodology_txt(
         "Statistical Analysis",
         f"- Kaplan-Meier curves were fitted with survival::survfit using {endpoint_label.lower()} time and event status.",
         "- Group differences were tested with the log-rank test using survival::survdiff.",
-        "- When exactly two expression groups were present, a univariable Cox proportional hazards model was fitted with survival::coxph to estimate the hazard ratio and 95% confidence interval.",
+        "- When exactly two expression groups were present, Cox proportional hazards models were fitted with survival::coxph to estimate hazard ratios and 95% confidence intervals.",
+        "- Cox models attempted: univariable expression group; expression group adjusted for pathologic stage; expression group adjusted for tumor grade; expression group adjusted for both stage and grade. Adjusted models were reported only when complete covariate data and model rank were sufficient.",
         f"- Log-rank p-value: {format_optional(metrics.get('logrank_p_value'))}",
         f"- Hazard ratio: {format_optional(metrics.get('hazard_ratio'))}",
         f"- Hazard ratio 95% CI: {format_optional(metrics.get('hr_conf_low'))} to {format_optional(metrics.get('hr_conf_high'))}",
         f"- Cox model p-value: {format_optional(metrics.get('hr_p_value'))}",
+        f"- Cox adjustment models available: {format_cox_models(metrics.get('cox_models'))}",
         "",
         "Plot Generation",
         "- Kaplan-Meier plots were generated in R with survminer::ggsurvplot and ggplot2.",
@@ -266,6 +321,7 @@ def write_methodology_txt(
         f"- Plot title text: {plot_style.get('plot_title') or 'not used'}",
         f"- Palette: {', '.join(plot_style.get('palette') or [])}",
         f"- Font family: {plot_style.get('font_family') or 'sans'}",
+        f"- Plot aspect: {plot_style.get('plot_aspect') or 'rectangular'}",
         f"- Base font size: {plot_style.get('base_font_size') or 12}",
         f"- Axis tick-label font size: {plot_style.get('axis_text_size') or 11}",
         f"- Axis title font size: {plot_style.get('axis_title_size') or 12}",
@@ -274,7 +330,7 @@ def write_methodology_txt(
         "Output Files",
         "- PNG contains the rendered Kaplan-Meier plot generated at analysis time.",
         "- SVG contains the rendered Kaplan-Meier plot and is generated on demand when requested for download.",
-        "- CSV contains the exact patient-level records used for the analysis, including expression value, survival time, event status, assigned group and selected metadata.",
+        csv_methodology_text(request_payload),
         "- This TXT file contains the parameter-specific methods text.",
         "",
         "Warnings And Exclusions",
@@ -286,7 +342,7 @@ def write_methodology_txt(
         "- This is a retrospective exploratory analysis based on public TCGA cohort data.",
         "- Kaplan-Meier grouping does not establish causality and can be sensitive to cutpoint choice.",
         "- Optimized cutpoints such as maxstat can overestimate apparent significance unless validated externally.",
-        "- Multivariable clinical adjustment and independent validation are recommended before drawing biological or translational conclusions.",
+        "- Clinical covariate adjustment is limited to imported stage and grade fields and does not account for treatment, tumor purity, immune composition or other prognostic variables.",
         "",
         "Software Versions",
     ]
@@ -296,7 +352,7 @@ def write_methodology_txt(
         [
             "",
             "Suggested citation wording",
-            f"Kaplan-Meier survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). When multiple eligible RNA-seq barcodes were available for the same TCGA participant, one sample was retained using a TCGA biospecimen priority rule before expression stratification. Gene expression was transformed as described above, patients were stratified according to the selected cutpoint rule, and survival differences were assessed with log-rank tests. For two-group comparisons, hazard ratios were estimated with univariable Cox proportional hazards models. Plots were generated in R using survival and survminer.",
+            f"Kaplan-Meier survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). When multiple eligible RNA-seq barcodes were available for the same TCGA participant, one sample was retained using a TCGA biospecimen priority rule before expression stratification. Gene expression was transformed as described above, patients were stratified according to the selected cutpoint rule, and survival differences were assessed with log-rank tests. For two-group comparisons, hazard ratios were estimated with Cox proportional hazards models, including univariable and stage/grade-adjusted models when covariate data were available. Plots were generated in R using survival, survminer and ggplot2.",
             "",
         ]
     )
@@ -315,6 +371,48 @@ def expression_method_text(expression_scale: str, expression_scale_label: str) -
     return f"- Expression scale: {expression_scale_label}."
 
 
+def signature_methodology_lines(request_payload: dict) -> list[str]:
+    signature_a = request_payload.get("signature_a")
+    signature_b = request_payload.get("signature_b")
+    if signature_a and signature_b:
+        return [
+            f"- Signature A: {format_signature_name(signature_a, 'Signature A')}; score method: {signature_a.get('signature_method') or 'not available'}; genes: {format_signature_genes(signature_a)}.",
+            f"- Signature B: {format_signature_name(signature_b, 'Signature B')}; score method: {signature_b.get('signature_method') or 'not available'}; genes: {format_signature_genes(signature_b)}.",
+        ]
+    method = request_payload.get("signature_method")
+    if method and method != "single":
+        return [
+            f"- RNA signature score method: {method}; genes: {format_signature_genes(request_payload)}.",
+        ]
+    return []
+
+
+def format_signature_name(signature: dict, fallback: str) -> str:
+    return str(signature.get("name") or fallback)
+
+
+def format_signature_genes(signature: dict) -> str:
+    entries = signature.get("signature_genes") or []
+    if entries:
+        formatted = []
+        for entry in entries:
+            gene = entry.get("gene_symbol") or entry.get("query") or ""
+            weight = entry.get("weight")
+            formatted.append(f"{gene}:{weight}" if weight not in (None, 1, 1.0) else str(gene))
+        return ", ".join(item for item in formatted if item) or "not available"
+    return str(signature.get("gene_symbol") or "not available")
+
+
+def csv_methodology_text(request_payload: dict) -> str:
+    if request_payload.get("signature_a") and request_payload.get("signature_b"):
+        return (
+            "- CSV contains the exact patient-level records used for the analysis, including combined score, "
+            "signature A score, signature B score, combined group, per-signature groups, survival time, event status "
+            "and selected metadata."
+        )
+    return "- CSV contains the exact patient-level records used for the analysis, including expression value, survival time, event status, assigned group and selected metadata."
+
+
 def endpoint_method_text(endpoint: str, source: str | None) -> str:
     if source == "tcga_cdr":
         return (
@@ -331,6 +429,13 @@ def endpoint_method_text(endpoint: str, source: str | None) -> str:
 
 
 def stratification_method_text(cutpoint_method: str, cutpoint_details: dict) -> str:
+    if cutpoint_details.get("combination") == "signature_a_x_signature_b":
+        method = cutpoint_details.get("method", cutpoint_method)
+        if method == "median":
+            return "- Cutpoint method: each signature was independently split at its median score, then patient labels were crossed to produce combined groups such as Low_High and High_High."
+        if method == "tertiles":
+            return "- Cutpoint method: each signature was independently split into low, middle and high tertiles, then patient labels were crossed to produce up to nine combined groups."
+        return f"- Cutpoint method: each signature was independently stratified by {method}, then labels were crossed to produce combined groups."
     if cutpoint_method == "maxstat":
         return "- Cutpoint method: maximally selected rank statistic via survminer::surv_cutpoint with minprop = 0.15. This is exploratory and can inflate apparent significance if not externally validated."
     if cutpoint_method == "median":
@@ -367,6 +472,15 @@ def format_count_dict(value) -> str:
     if not isinstance(value, dict):
         return str(value)
     return ", ".join(f"{key}: {count}" for key, count in value.items())
+
+
+def format_cox_models(value) -> str:
+    if not value:
+        return "none"
+    if not isinstance(value, list):
+        return str(value)
+    completed = [item.get("label") or item.get("model") for item in value if item.get("status") == "completed"]
+    return ", ".join(str(item) for item in completed if item) or "none"
 
 
 def software_versions(metrics: dict) -> dict[str, str]:

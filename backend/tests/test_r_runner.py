@@ -1,6 +1,8 @@
+import math
+
 import pytest
 
-from app.r_runner import validate_maxstat_records
+from app.r_runner import json_safe_value, validate_maxstat_records
 
 
 def _record(expression: float, event: int = 1) -> dict:
@@ -30,3 +32,11 @@ def test_validate_maxstat_records_rejects_no_events() -> None:
 
     with pytest.raises(ValueError, match="survival event"):
         validate_maxstat_records(records, minprop=0.15)
+
+
+def test_json_safe_value_replaces_non_finite_numbers() -> None:
+    payload = {"median_survival_days": {"High_Low": math.nan, "Low_Low": 2601.0}}
+
+    assert json_safe_value(payload) == {
+        "median_survival_days": {"High_Low": None, "Low_Low": 2601.0}
+    }

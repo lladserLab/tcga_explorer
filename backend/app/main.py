@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import csv
 import io
+import json
 import math
 import uuid
 import zipfile
@@ -29,22 +30,44 @@ from app.expression import (
 from app.gene_aliases import GENE_ALIASES, resolve_gene_symbol
 from app.importer import ensure_gene_index, import_cohorts_and_samples, import_tcga_cdr
 from app.models import AnalysisJob, ClinicalEndpoint, Cohort, DataManifest, DataSource, GeneIndex, Sample
+from app.pancancer import (
+    add_concordance_labels,
+    add_effect_labels,
+    adjust_p_values_bh,
+    meta_analysis_from_rows,
+    summarize_pancancer_results,
+)
 from app.r_runner import compute_maxstat_cutpoint, ensure_svg_artifact, run_r_km, stable_hash
+from app.r_runner import run_r_pancancer_cox
 from app.schemas import (
     AnalysisBatchItemOut,
     AnalysisBatchOut,
     AnalysisBatchRequest,
     AnalysisOut,
     AnalysisRequest,
+    CombinedSignatureAnalysisRequest,
     CohortOut,
     ExpressionScaleOut,
     FilterOptions,
     GeneSearchOut,
+    PanCancerSurvivalOut,
+    PanCancerSurvivalRequest,
+    SignatureSpec,
 )
-from app.survival import ClinicalOutcome, build_survival_records, filter_samples, validate_records
+from app.survival import (
+    ClinicalOutcome,
+    build_combined_survival_records,
+    build_survival_records,
+    filter_samples,
+    percentile,
+    sample_os_outcome,
+    validate_records,
+)
 
 settings = get_settings()
-ANALYSIS_PIPELINE_VERSION = "clinical-endpoints-v3.0"
+ANALYSIS_PIPELINE_VERSION = "clinical-adjusted-cox-v4.0"
+COMBINED_SIGNATURE_PIPELINE_VERSION = "combined-signatures-clinical-adjusted-cox-v2.0"
+PANCANCER_PIPELINE_VERSION = "pancancer-cox-v1.0"
 ENDPOINT_LABELS = {
     "OS": "Overall survival",
     "PFI": "Progression-free interval",
@@ -250,6 +273,7 @@ def build_dataset_summary(db: Session, cohort: str | None = None) -> dict:
             "gender": distribution(db, Sample.gender, cohort=cohort),
             "race": distribution(db, Sample.race, cohort=cohort),
             "stage": distribution(db, Sample.stage, cohort=cohort),
+            "grade": distribution(db, Sample.grade, cohort=cohort),
             "primary_site": cohort_weighted_distribution(db, cohort),
             "age_bins": age_bins(db, cohort),
         },
@@ -498,6 +522,7 @@ def filter_options(cohort_id: str, db: SessionDep) -> FilterOptions:
     return FilterOptions(
         sample_types=values(Sample.sample_type),
         stages=values(Sample.stage),
+        grades=values(Sample.grade),
         genders=values(Sample.gender),
         races=values(Sample.race),
         age_min=age_min,
@@ -574,9 +599,13 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
             endpoint_label=endpoint_label,
         )
         warnings = gene_warnings + filter_warnings
+        if request.filters.max_time_days is not None:
+            warnings.append(
+                f"Patients with follow-up time exceeding {request.filters.max_time_days:.0f} days are administratively censored at that time point (event = 0)."
+            )
         precomputed_cutpoint = None
         if request.cutpoint_method == "maxstat":
-            maxstat_records = _maxstat_records(filtered, expression, endpoint_by_patient)
+            maxstat_records = _maxstat_records(filtered, expression, endpoint_by_patient, request.filters.max_time_days)
             precomputed_cutpoint = compute_maxstat_cutpoint(settings, analysis_id, maxstat_records)
         records, group_levels, cutpoint_details = build_survival_records(
             filtered,
@@ -586,6 +615,7 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
             endpoint_by_patient=endpoint_by_patient,
             endpoint=request.endpoint,
             precomputed_cutpoint=precomputed_cutpoint,
+            max_time_days=request.filters.max_time_days,
         )
         validate_records(records, endpoint_label)
         metrics = run_r_km(
@@ -617,6 +647,172 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
         metrics["signature"] = signature_info
         metrics["sample_selection"] = sample_selection
         metrics["expression_distribution"] = expression_distribution(filtered, expression)
+        metrics["quality"] = quality_summary(records)
+        artifacts = metrics.pop("artifact_paths")
+        job.status = "completed"
+        job.metrics = metrics
+        job.warnings = warnings + metrics.get("warnings", [])
+        job.png_path = artifacts["png"]
+        job.svg_path = artifacts["svg"]
+        job.csv_path = artifacts["csv"]
+        job.json_path = artifacts["json"]
+        job.error = None
+        db.commit()
+    except GeneNotFoundError as exc:
+        _fail_job(db, job, str(exc))
+        raise analysis_http_error(404, "NO_GENE", str(exc)) from exc
+    except ValueError as exc:
+        _fail_job(db, job, str(exc))
+        code = classify_value_error(str(exc))
+        raise analysis_http_error(422, code, str(exc)) from exc
+    except Exception as exc:
+        _fail_job(db, job, str(exc))
+        code = "R_FAILED" if "Rscript failed" in str(exc) else "ANALYSIS_FAILED"
+        raise analysis_http_error(500, code, str(exc)) from exc
+
+    return analysis_out(job)
+
+
+@app.post("/api/analyses/combined", response_model=AnalysisOut)
+def create_combined_analysis(request: CombinedSignatureAnalysisRequest, db: SessionDep) -> AnalysisOut:
+    return _create_combined_analysis(request, db)
+
+
+def _create_combined_analysis(request: CombinedSignatureAnalysisRequest, db: Session) -> AnalysisOut:
+    payload = request.model_dump(mode="json")
+    payload["pipeline_version"] = COMBINED_SIGNATURE_PIPELINE_VERSION
+    payload["data_version"] = current_data_version(db)
+    params_hash = stable_hash(payload)
+    existing = db.scalar(select(AnalysisJob).where(AnalysisJob.params_hash == params_hash))
+    if existing and existing.status == "completed" and _artifacts_exist(existing):
+        existing.cached = True
+        db.commit()
+        return analysis_out(existing)
+
+    cohort = db.get(Cohort, request.cohort)
+    if cohort is None:
+        raise HTTPException(status_code=404, detail="Cohort not found.")
+
+    signature_a_name = normalized_signature_name(request.signature_a.name, "Signature A")
+    signature_b_name = normalized_signature_name(request.signature_b.name, "Signature B")
+    combined_label = f"{signature_a_name} x {signature_b_name}"
+    cutpoint_method = f"combined_{request.combination_method}"
+
+    if existing:
+        analysis_id = existing.id
+        job = existing
+        job.status = "running"
+        job.cohort = request.cohort
+        job.gene_symbol = combined_label
+        job.cutpoint_method = cutpoint_method
+        job.request_payload = payload
+        job.metrics = None
+        job.warnings = []
+        job.png_path = None
+        job.svg_path = None
+        job.csv_path = None
+        job.json_path = None
+        job.error = None
+        job.cached = False
+    else:
+        analysis_id = uuid.uuid4().hex
+        job = AnalysisJob(
+            id=analysis_id,
+            params_hash=params_hash,
+            status="running",
+            cohort=request.cohort,
+            gene_symbol=combined_label,
+            cutpoint_method=cutpoint_method,
+            request_payload=payload,
+            warnings=[],
+        )
+        db.add(job)
+    db.commit()
+
+    try:
+        endpoint_by_patient, endpoint_option = selected_endpoint_outcomes(db, request.cohort, request.endpoint)
+        endpoint_label = endpoint_option["label"]
+        signature_request_a = analysis_request_for_signature_spec(request, request.signature_a)
+        signature_request_b = analysis_request_for_signature_spec(request, request.signature_b)
+        expression_a, signature_info_a, warnings_a = expression_for_request(db, signature_request_a)
+        expression_b, signature_info_b, warnings_b = expression_for_request(db, signature_request_b)
+        signature_info_a = {**signature_info_a, "name": signature_a_name}
+        signature_info_b = {**signature_info_b, "name": signature_b_name}
+
+        samples = list(db.scalars(select(Sample).where(Sample.cohort == request.cohort)).all())
+        filtered, filter_warnings, sample_selection = filter_samples(
+            samples,
+            request.filters,
+            endpoint_by_patient=endpoint_by_patient,
+            endpoint=request.endpoint,
+            endpoint_label=endpoint_label,
+        )
+        warnings = prefixed_warnings("Signature A", warnings_a) + prefixed_warnings("Signature B", warnings_b) + filter_warnings
+        if request.filters.max_time_days is not None:
+            warnings.append(
+                f"Patients with follow-up time exceeding {request.filters.max_time_days:.0f} days are administratively censored at that time point (event = 0)."
+            )
+        records, group_levels, cutpoint_details = build_combined_survival_records(
+            filtered,
+            expression_a,
+            expression_b,
+            request.combination_method,
+            endpoint_by_patient=endpoint_by_patient,
+            endpoint=request.endpoint,
+            max_time_days=request.filters.max_time_days,
+        )
+        validate_records(records, endpoint_label)
+        metrics = run_r_km(
+            settings=settings,
+            analysis_id=analysis_id,
+            cohort=request.cohort,
+            gene_symbol=combined_label,
+            endpoint=request.endpoint,
+            endpoint_label=endpoint_label,
+            cutpoint_method=cutpoint_method,
+            records=records,
+            group_levels=group_levels,
+            cutpoint_details=cutpoint_details,
+            show_confidence_interval=request.show_confidence_interval,
+            show_risk_table=request.show_risk_table,
+            plot_style=request.plot_style.model_dump(mode="json"),
+            expression_scale=request.expression_scale,
+            expression_scale_label=expression_scale_label(request.expression_scale),
+            time_unit=request.time_unit,
+            request_payload=payload,
+            analysis_warnings=warnings,
+            data_dates=dataset_dates(db, load_cache_manifest(settings.derived_expression_dir)),
+            sample_selection=sample_selection,
+        )
+        metrics["endpoint"] = request.endpoint
+        metrics["endpoint_label"] = endpoint_label
+        metrics["endpoint_source"] = endpoint_option["source"]
+        metrics["endpoint_qc"] = endpoint_option
+        metrics["signature"] = {
+            "method": "combined",
+            "label": combined_label,
+            "signatures": [signature_info_a, signature_info_b],
+        }
+        metrics["combined_signature"] = {
+            "method": request.combination_method,
+            "label": combined_label,
+            "signature_a": signature_info_a,
+            "signature_b": signature_info_b,
+            "sample_overlap": len(
+                [
+                    sample
+                    for sample in filtered
+                    if sample.barcode in expression_a and sample.barcode in expression_b
+                ]
+            ),
+            "group_levels": group_levels,
+        }
+        metrics["sample_selection"] = sample_selection
+        samples_with_both_scores = [
+            sample for sample in filtered if sample.barcode in expression_a and sample.barcode in expression_b
+        ]
+        metrics["expression_distribution_a"] = expression_distribution(samples_with_both_scores, expression_a)
+        metrics["expression_distribution_b"] = expression_distribution(samples_with_both_scores, expression_b)
         metrics["quality"] = quality_summary(records)
         artifacts = metrics.pop("artifact_paths")
         job.status = "completed"
@@ -682,6 +878,121 @@ def create_analysis_batch(request: AnalysisBatchRequest) -> AnalysisBatchOut:
     )
 
 
+@app.post("/api/pancancer/survival", response_model=PanCancerSurvivalOut)
+def create_pancancer_survival(request: PanCancerSurvivalRequest, db: SessionDep) -> PanCancerSurvivalOut:
+    payload = request.model_dump(mode="json")
+    payload["pipeline_version"] = PANCANCER_PIPELINE_VERSION
+    payload["data_version"] = current_data_version(db)
+    scan_id = f"pc_{stable_hash(payload)[:24]}"
+    result_path = pancancer_result_path(scan_id)
+    if result_path.exists():
+        result = json.loads(result_path.read_text(encoding="utf-8"))
+        result["cached"] = True
+        result["downloads"] = pancancer_downloads(scan_id)
+        result["results"] = normalize_pancancer_rows(result.get("results", []))
+        return PanCancerSurvivalOut(**result)
+
+    result = run_pancancer_survival_scan(request, db, scan_id, payload)
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text(json.dumps(result, ensure_ascii=False, allow_nan=False, indent=2), encoding="utf-8")
+    return PanCancerSurvivalOut(**result)
+
+
+@app.get("/api/pancancer/survival/{scan_id}/download/csv")
+def download_pancancer_survival(scan_id: str) -> Response:
+    result_path = pancancer_result_path(scan_id)
+    if not result_path.exists():
+        raise HTTPException(status_code=404, detail="Pan-cancer scan not found.")
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    output = io.StringIO()
+    fieldnames = [
+        "cohort",
+        "cohort_label",
+        "primary_site",
+        "disease_type",
+        "endpoint",
+        "endpoint_label",
+        "endpoint_source",
+        "status",
+        "code",
+        "reason",
+        "n_patients",
+        "n_events",
+        "hazard_ratio",
+        "hr_conf_low",
+        "hr_conf_high",
+        "log_hr",
+        "standard_error",
+        "p_value",
+        "fdr",
+        "ph_p_value",
+        "direction",
+        "effect_category",
+        "significant",
+        "concordance",
+    ]
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in result.get("results", []):
+        writer.writerow({field: row.get(field) for field in fieldnames})
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={scan_id}.pancancer_survival.csv"},
+    )
+
+
+@app.get("/api/pancancer/immune-screens")
+def list_immune_pancancer_screens() -> dict:
+    root = settings.artifact_dir / "immune_pancancer"
+    screens = []
+    for summary_path in sorted(root.glob("*/screen_summary.json"), key=lambda path: path.stat().st_mtime, reverse=True):
+        try:
+            payload = json.loads(summary_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        screen_id = summary_path.parent.name
+        screens.append(
+            {
+                "screen_id": screen_id,
+                "headline": payload.get("headline", {}),
+                "created_at": payload.get("created_at"),
+                "downloads": immune_screen_downloads(screen_id),
+            }
+        )
+    return {"screens": screens}
+
+
+@app.get("/api/pancancer/immune-screens/{screen_id}")
+def get_immune_pancancer_screen(screen_id: str) -> dict:
+    summary_path = immune_screen_path(screen_id) / "screen_summary.json"
+    if not summary_path.exists():
+        raise HTTPException(status_code=404, detail="Immune pan-cancer screen not found.")
+    payload = json.loads(summary_path.read_text(encoding="utf-8"))
+    payload["downloads"] = immune_screen_downloads(screen_id)
+    return payload
+
+
+@app.get("/api/pancancer/immune-screens/{screen_id}/download/{kind}")
+def download_immune_pancancer_screen(screen_id: str, kind: str) -> FileResponse:
+    file_map = {
+        "genes": ("gene_summary.csv", "text/csv"),
+        "cohorts": ("cohort_summary.csv", "text/csv"),
+        "terms": ("term_summary.csv", "text/csv"),
+        "results": ("results_long.csv", "text/csv"),
+        "panel": ("immune_gene_panel.tsv", "text/tab-separated-values"),
+        "manifest": ("manifest.json", "application/json"),
+        "methodology": ("methodology.txt", "text/plain"),
+    }
+    if kind not in file_map:
+        raise HTTPException(status_code=404, detail="Unsupported immune screen download type.")
+    filename, media_type = file_map[kind]
+    path = immune_screen_path(screen_id) / filename
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="Immune screen file is not available.")
+    return FileResponse(path, media_type=media_type, filename=f"{screen_id}.{filename}")
+
+
 @app.get("/api/analyses/{analysis_id}", response_model=AnalysisOut)
 def get_analysis(analysis_id: str, db: SessionDep) -> AnalysisOut:
     job = db.get(AnalysisJob, analysis_id)
@@ -702,7 +1013,12 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
             raise
         except Exception as exc:
             raise analysis_http_error(500, "R_FAILED", str(exc)) from exc
-    if kind == "svg" and (job.svg_path is None or not Path(job.svg_path).exists()):
+    cox_forest_png_path = settings.artifact_dir / analysis_id / "cox_forest.png"
+    cox_forest_svg_path = settings.artifact_dir / analysis_id / "cox_forest.svg"
+    needs_svg_render = job.svg_path is None or not Path(job.svg_path).exists()
+    if kind == "cox_svg" and not cox_forest_svg_path.exists():
+        needs_svg_render = True
+    if kind in {"svg", "cox_svg"} and needs_svg_render:
         try:
             job.svg_path = str(ensure_svg_artifact(settings, analysis_id))
             db.commit()
@@ -711,6 +1027,8 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
     path_map = {
         "png": job.png_path,
         "svg": job.svg_path,
+        "cox_png": str(cox_forest_png_path),
+        "cox_svg": str(cox_forest_svg_path),
         "csv": job.csv_path,
         "txt": str(methodology_path(analysis_id)),
         "methodology": str(methodology_path(analysis_id)),
@@ -723,11 +1041,17 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
     media_type = {
         "png": "image/png",
         "svg": "image/svg+xml",
+        "cox_png": "image/png",
+        "cox_svg": "image/svg+xml",
         "csv": "text/csv",
         "txt": "text/plain",
         "methodology": "text/plain",
     }[kind]
-    filename = f"{analysis_id}.methodology.txt" if kind == "methodology" else f"{analysis_id}.{kind}"
+    filename = {
+        "methodology": f"{analysis_id}.methodology.txt",
+        "cox_png": f"{analysis_id}.cox_forest.png",
+        "cox_svg": f"{analysis_id}.cox_forest.svg",
+    }.get(kind, f"{analysis_id}.{kind}")
     return FileResponse(path, media_type=media_type, filename=filename)
 
 
@@ -744,6 +1068,10 @@ def analysis_zip_response(job: AnalysisJob, db: Session) -> Response:
         ("raw_data.csv", job.csv_path),
         ("methodology.txt", str(methodology_path(job.id))),
     ]
+    optional_files = [
+        ("cox_forest.png", str(settings.artifact_dir / job.id / "cox_forest.png")),
+        ("cox_forest.svg", str(settings.artifact_dir / job.id / "cox_forest.svg")),
+    ]
     missing = [name for name, path in files if path is None or not Path(path).exists()]
     if missing:
         raise HTTPException(status_code=404, detail=f"Missing artifact files: {', '.join(missing)}.")
@@ -752,11 +1080,298 @@ def analysis_zip_response(job: AnalysisJob, db: Session) -> Response:
     with zipfile.ZipFile(buffer, mode="w", compression=zipfile.ZIP_DEFLATED) as archive:
         for name, path in files:
             archive.write(Path(path), arcname=name)
+        for name, path in optional_files:
+            if path and Path(path).exists():
+                archive.write(Path(path), arcname=name)
     return Response(
         content=buffer.getvalue(),
         media_type="application/zip",
         headers={"Content-Disposition": f"attachment; filename={job.id}.artifacts.zip"},
     )
+
+
+def run_pancancer_survival_scan(
+    request: PanCancerSurvivalRequest,
+    db: Session,
+    scan_id: str,
+    payload: dict,
+) -> dict:
+    cohort_rows = pancancer_cohorts(db, request)
+    prepared: list[dict] = []
+    skipped_results: list[dict] = []
+    signature_info: dict | None = None
+
+    for cohort in cohort_rows:
+        endpoint_option = choose_pancancer_endpoint(db, cohort.id, request.endpoint, request.endpoint_mode)
+        base_result = pancancer_base_result(cohort)
+        if endpoint_option is None:
+            skipped_results.append(
+                {
+                    **base_result,
+                    "endpoint": request.endpoint,
+                    "endpoint_label": ENDPOINT_LABELS.get(request.endpoint, request.endpoint),
+                    "status": "skipped",
+                    "code": "ENDPOINT_UNAVAILABLE",
+                    "reason": pancancer_endpoint_unavailable_reason(db, cohort.id, request.endpoint, request.endpoint_mode),
+                    "warnings": [],
+                }
+            )
+            continue
+
+        try:
+            analysis_request = AnalysisRequest(
+                cohort=cohort.id,
+                gene_symbol=request.gene_symbol,
+                signature_method=request.signature_method,
+                signature_genes=request.signature_genes,
+                endpoint=endpoint_option["value"],
+                expression_scale=request.expression_scale,
+                filters=request.filters,
+                cutpoint_method="median",
+            )
+            endpoint_by_patient, selected_option = selected_endpoint_outcomes(db, cohort.id, endpoint_option["value"])
+            expression, cohort_signature, gene_warnings = expression_for_request(db, analysis_request)
+            signature_info = signature_info or cohort_signature
+            samples = list(db.scalars(select(Sample).where(Sample.cohort == cohort.id)).all())
+            filtered, filter_warnings, sample_selection = filter_samples(
+                samples,
+                request.filters,
+                endpoint_by_patient=endpoint_by_patient,
+                endpoint=endpoint_option["value"],
+                endpoint_label=selected_option["label"],
+            )
+            records = pancancer_continuous_records(filtered, expression, endpoint_by_patient, request.filters.max_time_days)
+            prepared.append(
+                {
+                    **base_result,
+                    "endpoint": selected_option["value"],
+                    "endpoint_label": selected_option["label"],
+                    "endpoint_source": selected_option["source"],
+                    "records": records,
+                    "warnings": gene_warnings + filter_warnings,
+                    "sample_selection": sample_selection,
+                }
+            )
+        except GeneNotFoundError as exc:
+            skipped_results.append(
+                {
+                    **base_result,
+                    "endpoint": endpoint_option["value"],
+                    "endpoint_label": endpoint_option["label"],
+                    "endpoint_source": endpoint_option["source"],
+                    "status": "failed",
+                    "code": "NO_GENE",
+                    "reason": str(exc),
+                    "warnings": [],
+                }
+            )
+        except ValueError as exc:
+            skipped_results.append(
+                {
+                    **base_result,
+                    "endpoint": endpoint_option["value"],
+                    "endpoint_label": endpoint_option["label"],
+                    "endpoint_source": endpoint_option["source"],
+                    "status": "skipped",
+                    "code": classify_value_error(str(exc)),
+                    "reason": str(exc),
+                    "warnings": [],
+                }
+            )
+
+    r_payload = (
+        run_r_pancancer_cox(
+            settings=settings,
+            scan_id=scan_id,
+            cohorts=prepared,
+            min_patients=request.min_patients,
+            min_events=request.min_events,
+            request_payload=payload,
+        )
+        if prepared
+        else {"results": []}
+    )
+    rows = skipped_results + list(r_payload.get("results", []))
+    rows = apply_pancancer_postprocessing(rows, request)
+    reference = add_concordance_labels(rows, request.index_cohort)
+    summary = summarize_pancancer_results(rows, request.index_cohort, request.fdr_threshold)
+    meta_analysis = meta_analysis_from_rows(rows)
+
+    return {
+        "scan_id": scan_id,
+        "status": "completed",
+        "cached": False,
+        "gene_symbol": (signature_info or {}).get("label") or request.gene_symbol.strip().upper(),
+        "signature": signature_info,
+        "index_cohort": request.index_cohort,
+        "endpoint": request.endpoint,
+        "endpoint_mode": request.endpoint_mode,
+        "expression_scale": request.expression_scale,
+        "expression_scale_label": expression_scale_label(request.expression_scale),
+        "fdr_threshold": request.fdr_threshold,
+        "summary": summary,
+        "reference": reference,
+        "meta_analysis": meta_analysis,
+        "results": rows,
+        "warnings": pancancer_warnings(request),
+        "downloads": pancancer_downloads(scan_id),
+    }
+
+
+def pancancer_cohorts(db: Session, request: PanCancerSurvivalRequest) -> list[Cohort]:
+    if request.cohorts:
+        cohort_ids = list(dict.fromkeys(request.cohorts))
+    else:
+        cohort_ids = list(db.scalars(select(Cohort.id).order_by(Cohort.id)).all())
+    if request.index_cohort and request.index_cohort not in cohort_ids:
+        cohort_ids.append(request.index_cohort)
+    rows = list(db.scalars(select(Cohort).where(Cohort.id.in_(cohort_ids)).order_by(Cohort.id)).all())
+    found = {row.id for row in rows}
+    missing = [cohort_id for cohort_id in cohort_ids if cohort_id not in found]
+    if missing:
+        raise HTTPException(status_code=404, detail=f"Cohorts not found: {', '.join(missing)}.")
+    return rows
+
+
+def choose_pancancer_endpoint(db: Session, cohort_id: str, endpoint: str, endpoint_mode: str) -> dict | None:
+    for candidate in pancancer_endpoint_candidates(endpoint, endpoint_mode):
+        option = endpoint_option_for_cohort(db, cohort_id, candidate)
+        if option["available"]:
+            return option
+    return None
+
+
+def pancancer_endpoint_candidates(endpoint: str, endpoint_mode: str) -> list[str]:
+    if endpoint_mode == "same_endpoint":
+        candidates = [endpoint]
+    elif endpoint_mode == "death_like":
+        candidates = [endpoint if endpoint in {"OS", "DSS"} else None, "DSS", "OS"]
+    elif endpoint_mode == "progression_like":
+        candidates = [endpoint if endpoint in {"PFI", "DFI"} else None, "PFI", "DFI"]
+    else:
+        candidates = [endpoint, "DSS", "PFI", "DFI", "OS"]
+    return [item for item in dict.fromkeys(candidates) if item]
+
+
+def pancancer_endpoint_unavailable_reason(db: Session, cohort_id: str, endpoint: str, endpoint_mode: str) -> str:
+    reasons = []
+    for candidate in pancancer_endpoint_candidates(endpoint, endpoint_mode):
+        option = endpoint_option_for_cohort(db, cohort_id, candidate)
+        reasons.append(f"{candidate}: {option['reason']}")
+    return "No endpoint passed QC for this endpoint mode. " + " ".join(reasons)
+
+
+def pancancer_base_result(cohort: Cohort) -> dict:
+    return {
+        "cohort": cohort.id,
+        "cohort_label": cohort.id,
+        "disease_type": cohort.disease_type,
+        "primary_site": cohort.primary_site,
+    }
+
+
+def pancancer_continuous_records(
+    samples: list[Sample],
+    expression: dict[str, float],
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None,
+    max_time_days: float | None = None,
+) -> list[dict]:
+    records = []
+    for sample in samples:
+        if sample.barcode not in expression:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None:
+            continue
+        time_days = float(outcome.time_days)
+        event = int(outcome.event)
+        if max_time_days is not None and time_days > max_time_days:
+            time_days = max_time_days
+            event = 0
+        records.append(
+            {
+                "patient_id": sample.patient_id,
+                "sample_barcode": sample.barcode,
+                "expression_value": float(expression[sample.barcode]),
+                "time_days": time_days,
+                "event": event,
+                "sample_type": sample.sample_type,
+                "stage": sample.stage,
+                "gender": sample.gender,
+                "race": sample.race,
+                "age_at_index": sample.age_at_index,
+            }
+        )
+    return records
+
+
+def apply_pancancer_postprocessing(rows: list[dict], request: PanCancerSurvivalRequest) -> list[dict]:
+    rows = normalize_pancancer_rows(rows)
+    fdr_values = adjust_p_values_bh(
+        [
+            row.get("p_value")
+            if row.get("status") == "completed"
+            else None
+            for row in rows
+        ]
+    )
+    for row, fdr in zip(rows, fdr_values):
+        row["fdr"] = fdr
+    add_effect_labels(rows, request.fdr_threshold)
+    return sorted(rows, key=lambda row: row.get("cohort") or "")
+
+
+def normalize_pancancer_rows(rows: list[dict]) -> list[dict]:
+    for row in rows:
+        warnings = row.get("warnings")
+        if warnings is None:
+            row["warnings"] = []
+        elif isinstance(warnings, str):
+            row["warnings"] = [warnings]
+        elif not isinstance(warnings, list):
+            row["warnings"] = list(warnings) if isinstance(warnings, tuple) else [str(warnings)]
+    return rows
+
+
+def pancancer_warnings(request: PanCancerSurvivalRequest) -> list[str]:
+    warnings = [
+        "Primary pan-cancer effect estimates use continuous Cox models with expression z-scored within each cohort.",
+        "Kaplan-Meier cutpoints are not used for the pan-cancer primary statistic.",
+    ]
+    if request.endpoint_mode != "same_endpoint":
+        warnings.append("Endpoint mode can select different but biologically related endpoints across cohorts; compare exact endpoint labels before interpreting concordance.")
+    if request.filters.max_time_days is not None:
+        warnings.append(
+            f"Patients with follow-up time exceeding {request.filters.max_time_days:.0f} days are administratively censored at that time point (event = 0)."
+        )
+    return warnings
+
+
+def pancancer_result_path(scan_id: str) -> Path:
+    return settings.artifact_dir / "pancancer" / scan_id / "result.json"
+
+
+def pancancer_downloads(scan_id: str) -> dict[str, str]:
+    return {"csv": f"/api/pancancer/survival/{scan_id}/download/csv"}
+
+
+def immune_screen_path(screen_id: str) -> Path:
+    if not screen_id or any(char not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-." for char in screen_id):
+        raise HTTPException(status_code=404, detail="Immune pan-cancer screen not found.")
+    return settings.artifact_dir / "immune_pancancer" / screen_id
+
+
+def immune_screen_downloads(screen_id: str) -> dict[str, str]:
+    base = f"/api/pancancer/immune-screens/{screen_id}/download"
+    return {
+        "genes": f"{base}/genes",
+        "cohorts": f"{base}/cohorts",
+        "terms": f"{base}/terms",
+        "results": f"{base}/results",
+        "panel": f"{base}/panel",
+        "manifest": f"{base}/manifest",
+        "methodology": f"{base}/methodology",
+    }
 
 
 def dataset_dates(db: Session, cache_manifest: dict | None) -> dict:
@@ -873,6 +1488,7 @@ def metadata_coverage(db: Session, total_samples: int, cohort: str | None = None
     fields = [
         ("Sample type", Sample.sample_type),
         ("Stage", Sample.stage),
+        ("Grade", Sample.grade),
         ("Gender", Sample.gender),
         ("Race", Sample.race),
         ("Age at index", Sample.age_at_index),
@@ -919,6 +1535,35 @@ def age_bins(db: Session, cohort: str | None = None) -> list[dict]:
             count += 1
         result.append({"label": label, "count": count})
     return result
+
+
+def analysis_request_for_signature_spec(
+    request: CombinedSignatureAnalysisRequest,
+    signature: SignatureSpec,
+) -> AnalysisRequest:
+    return AnalysisRequest(
+        cohort=request.cohort,
+        gene_symbol=signature.gene_symbol,
+        signature_method=signature.signature_method,
+        signature_genes=signature.signature_genes,
+        endpoint=request.endpoint,
+        expression_scale=request.expression_scale,
+        cutpoint_method="median",
+        filters=request.filters,
+        time_unit=request.time_unit,
+        show_confidence_interval=request.show_confidence_interval,
+        show_risk_table=request.show_risk_table,
+        plot_style=request.plot_style,
+    )
+
+
+def normalized_signature_name(value: str | None, fallback: str) -> str:
+    normalized = (value or "").strip()
+    return normalized[:48] if normalized else fallback
+
+
+def prefixed_warnings(prefix: str, warnings: list[str]) -> list[str]:
+    return [f"{prefix}: {warning}" for warning in warnings]
 
 
 def expression_for_request(db: Session, request: AnalysisRequest) -> tuple[dict[str, float], dict, list[str]]:
@@ -1064,13 +1709,7 @@ def expression_distribution(samples: list[Sample], expression: dict[str, float])
 
 
 def quantile(values: list[float], proportion: float) -> float:
-    if len(values) == 1:
-        return values[0]
-    rank = proportion * (len(values) - 1)
-    lower = int(rank)
-    upper = min(lower + 1, len(values) - 1)
-    weight = rank - lower
-    return values[lower] * (1 - weight) + values[upper] * weight
+    return percentile(values, proportion * 100.0)
 
 
 def quality_summary(records) -> dict:
@@ -1179,6 +1818,7 @@ def _maxstat_records(
     samples: list[Sample],
     expression: dict[str, float],
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    max_time_days: float | None = None,
 ) -> list[dict]:
     records = []
     for sample in samples:
@@ -1197,12 +1837,17 @@ def _maxstat_records(
             outcome = None
         if outcome is None:
             continue
+        time_days = float(outcome.time_days)
+        event = int(outcome.event)
+        if max_time_days is not None and time_days > max_time_days:
+            time_days = max_time_days
+            event = 0
         records.append(
             {
                 "patient_id": sample.patient_id,
                 "expression_value": expression[sample.barcode],
-                "time_days": float(outcome.time_days),
-                "event": int(outcome.event),
+                "time_days": time_days,
+                "event": event,
             }
         )
     return records
@@ -1228,6 +1873,9 @@ def analysis_out(job: AnalysisJob) -> AnalysisOut:
         }
         if methodology_path(job.id).exists():
             downloads["txt"] = f"/api/analyses/{job.id}/download/txt"
+        if (settings.artifact_dir / job.id / "cox_forest.png").exists():
+            downloads["cox_png"] = f"/api/analyses/{job.id}/download/cox_png"
+            downloads["cox_svg"] = f"/api/analyses/{job.id}/download/cox_svg"
     return AnalysisOut(
         id=job.id,
         status=job.status,

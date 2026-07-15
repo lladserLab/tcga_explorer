@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.survival import assign_groups, assign_groups_with_cutpoint, filter_samples
+from app.survival import assign_groups, assign_groups_with_cutpoint, build_combined_survival_records, filter_samples
 
 
 @dataclass
@@ -11,6 +11,7 @@ class MockSample:
     os_time_days: float | None = 100.0
     os_event: int | None = 1
     stage: str | None = None
+    grade: str | None = None
     gender: str | None = None
     race: str | None = None
     age_at_index: float | None = None
@@ -19,6 +20,7 @@ class MockSample:
 class EmptyFilters:
     sample_types: list[str] = []
     stages: list[str] = []
+    grades: list[str] = []
     genders: list[str] = []
     races: list[str] = []
     age_min = None
@@ -53,6 +55,27 @@ def test_assign_groups_maxstat_uses_precomputed_threshold() -> None:
     assert details["statistic"] == 4.2
 
 
+def test_build_combined_survival_records_crosses_signature_groups() -> None:
+    samples = [
+        MockSample("P1", "S1", "Primary Tumor"),
+        MockSample("P2", "S2", "Primary Tumor"),
+        MockSample("P3", "S3", "Primary Tumor"),
+        MockSample("P4", "S4", "Primary Tumor"),
+    ]
+    expression_a = {"S1": 1.0, "S2": 2.0, "S3": 3.0, "S4": 4.0}
+    expression_b = {"S1": 1.0, "S2": 4.0, "S3": 2.0, "S4": 3.0}
+
+    records, levels, details = build_combined_survival_records(samples, expression_a, expression_b, "median")
+
+    assert levels == ["Low_Low", "Low_High", "High_Low", "High_High"]
+    assert [record.group for record in records] == ["Low_Low", "Low_High", "High_Low", "High_High"]
+    assert records[0].expression_value_a == 1.0
+    assert records[0].expression_value_b == 1.0
+    assert records[0].as_dict()["group_a"] == "Low"
+    assert details["signature_a_threshold"] == 2.5
+    assert details["signature_b_threshold"] == 2.5
+
+
 def test_filter_samples_keeps_primary_tumor_over_alphabetic_normal() -> None:
     samples = [
         MockSample("TCGA-AA-0001", "LOCAL-A", "Solid Tissue Normal"),
@@ -80,3 +103,18 @@ def test_filter_samples_uses_tcga_sample_code_priority() -> None:
     assert len(retained) == 1
     assert retained[0].barcode == "TCGA-AA-0001-01A-01R-0000-01"
     assert summary["removed_duplicate_sample_types"] == {"Solid Tissue Normal": 1}
+
+
+def test_filter_samples_can_filter_by_grade() -> None:
+    class GradeFilters(EmptyFilters):
+        grades = ["G2"]
+
+    samples = [
+        MockSample("TCGA-AA-0001", "TCGA-AA-0001-01A-01R-0000-01", "Primary Tumor", grade="G1"),
+        MockSample("TCGA-AA-0002", "TCGA-AA-0002-01A-01R-0000-01", "Primary Tumor", grade="G2"),
+    ]
+
+    retained, _, summary = filter_samples(samples, GradeFilters())
+
+    assert [sample.patient_id for sample in retained] == ["TCGA-AA-0002"]
+    assert summary["after_user_filters"] == 1
