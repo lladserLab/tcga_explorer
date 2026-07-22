@@ -110,6 +110,12 @@ def health(db: SessionDep) -> dict:
     cache_manifest = load_cache_manifest(settings.derived_expression_dir)
     return {
         "status": "ok",
+        "app_version": app.version,
+        "pipeline_versions": {
+            "analysis": ANALYSIS_PIPELINE_VERSION,
+            "combined_signatures": COMBINED_SIGNATURE_PIPELINE_VERSION,
+            "pancancer": PANCANCER_PIPELINE_VERSION,
+        },
         "cohorts": cohorts,
         "data_dir": str(settings.tcga_data_dir),
         "cache": summarize_cache_manifest(cache_manifest),

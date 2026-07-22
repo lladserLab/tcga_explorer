@@ -13,6 +13,8 @@ Dockerized web application for Kaplan-Meier survival analysis using TCGA cancer 
 
 The analysis surface uses TCGA RNA expression. TCGA-CDR can enable OS, PFI, DFI and DSS per cohort when a configured CDR file is mounted and the endpoint passes basic patient/event QC.
 
+Methodological versions and user-facing analysis behavior are tracked in [CHANGELOG.md](CHANGELOG.md). The same information is exposed in the app under `Help & Methods`.
+
 ## Run
 
 ```bash

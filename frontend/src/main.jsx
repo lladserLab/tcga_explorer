@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Activity,
@@ -6,6 +6,7 @@ import {
   Archive,
   ArrowDownToLine,
   BarChart3,
+  BookOpen,
   CalendarDays,
   ChevronDown,
   CheckCircle2,
@@ -15,6 +16,7 @@ import {
   FileSpreadsheet,
   FileText,
   Image,
+  Info,
   Loader2,
   Network,
   Palette,
@@ -194,6 +196,165 @@ const PANCANCER_ENDPOINT_MODES = [
     value: "best_available",
     label: "Best available",
     help: "Use the selected endpoint first, then a TCGA-CDR fallback.",
+  },
+];
+
+const HELP_CONTENT = {
+  dataset:
+    "All analyses use one selected TCGA cancer cohort. The app links RNA expression to patient-level clinical endpoints and keeps one prioritized biospecimen per patient.",
+  analysisDesign:
+    "One signature runs standard single-gene or multi-gene survival analysis. Two signatures calculates two independent scores, stratifies each score and crosses the labels into combined groups.",
+  survivalEndpoint:
+    "Endpoints come from TCGA-CDR when available: OS, DSS, PFI and DFI. A cohort endpoint is enabled only after patient and event count QC.",
+  geneMode:
+    "Single genes are analyzed independently. Multi-gene modes collapse several genes into one signature score per patient before stratification.",
+  expressionScale:
+    "Expression values are log-scale normalized RNA-seq quantities. log2(TPM + 1) is the default because TPM is comparable across genes within a sample after library-size normalization.",
+  stratification:
+    "Stratification converts a continuous expression or signature score into survival groups. Median is reproducible and balanced; maxstat is exploratory because it optimizes against survival.",
+  clinicalFilters:
+    "Filters restrict the eligible patient set before scoring, cutpoint selection and survival modeling. Empty filters include all available values.",
+  maxFollowup:
+    "Maximum follow-up days censors records after the selected time horizon. Leave it empty to use the full endpoint follow-up.",
+  plotOutput:
+    "Plot controls affect exported PNG and SVG files, including the time axis, confidence interval, risk table and typography. Square changes the KM plot panel while preserving the risk table layout.",
+  compare:
+    "Compare analyses runs the same cohort, endpoint and expression scale across many gene by cutpoint combinations, then applies BH and Bonferroni correction across completed cells.",
+  compareRobustness:
+    "Run all 5 cutpoint methods means maxstat, median, upper quartile, outer quartiles and the selected percentile. Rows that survive downstream checks keep signal across dichotomization choices.",
+  pancancer:
+    "Pan-cancer analysis fits a continuous Cox model per cancer using expression z-scored inside each cohort. The reported HR is per +1 SD expression.",
+  pancancerEndpointMode:
+    "Endpoint mode defines how strictly cohorts must match the requested endpoint. Same endpoint is strict; best available allows TCGA-CDR fallback endpoints when QC passes.",
+  rmst:
+    "RMST, restricted mean survival time, estimates the average event-free time up to a time horizon. It is useful because it adds an effect-size view that is less dependent on a chosen cutpoint.",
+  coxPH:
+    "PH diagnostics use cox.zph for Cox proportional hazards models. A low p-value flags possible violation of the proportional hazards assumption.",
+  audit:
+    "Audit exports record the exact payload, selected patients, endpoint source, model outputs, package versions and artifact checksums for reproducibility.",
+};
+
+const SCORE_METHOD_GUIDE = {
+  single:
+    "Uses one gene expression vector directly. When several genes are entered in single-gene mode, each gene is run as a separate analysis.",
+  mean:
+    "Averages log-scale expression across genes. This is simple and interpretable, but genes with larger numeric ranges can dominate the score.",
+  zscore:
+    "Standardizes each gene across samples, then averages the standardized values. This is the default for signatures because it gives each gene comparable influence.",
+  weighted:
+    "Calculates a weighted score from genes entered as GENE:weight. This is useful for curated signatures where direction or effect size is known in advance.",
+};
+
+const CUTPOINT_GUIDE = {
+  maxstat:
+    "Chooses the threshold with strongest survival separation under a minimum group-size constraint. Use for discovery, then validate because it is outcome-optimized.",
+  median:
+    "Splits patients into two similarly sized groups. It is the safest default for reproducible Kaplan-Meier stratification.",
+  tertiles:
+    "Splits scores into low, middle and high groups. It adds resolution but needs enough patients and events in every group.",
+  upper_quartile:
+    "Compares the top 25% of expression against the remaining 75%. Useful for high-expression biology with sufficient events.",
+  upper_lower_quartile:
+    "Compares the top and bottom quartiles and excludes the middle half. It sharpens contrast but reduces sample size.",
+  percentile:
+    "Uses the selected percentile as the high-expression threshold. Document the percentile because changing it changes the tested hypothesis.",
+};
+
+const HELP_GUIDE_SECTIONS = [
+  {
+    title: "Analysis Inputs",
+    items: [
+      ["Cancer cohort", HELP_CONTENT.dataset],
+      ["Survival endpoint", HELP_CONTENT.survivalEndpoint],
+      ["Expression scale", HELP_CONTENT.expressionScale],
+      ["Clinical filters", HELP_CONTENT.clinicalFilters],
+      ["Maximum follow-up", HELP_CONTENT.maxFollowup],
+    ],
+  },
+  {
+    title: "Signature Scoring",
+    items: [
+      ["Single gene", SCORE_METHOD_GUIDE.single],
+      ["Mean signature", SCORE_METHOD_GUIDE.mean],
+      ["Z-score signature", SCORE_METHOD_GUIDE.zscore],
+      ["Weighted signature", SCORE_METHOD_GUIDE.weighted],
+      ["Why z-score by default", "Bulk RNA-seq genes have different ranges. Z-scoring each gene before averaging prevents a high-range gene from dominating a signature score."],
+    ],
+  },
+  {
+    title: "Stratification",
+    items: Object.entries(CUTPOINT_GUIDE).map(([key, body]) => [formatLabel(key), body]),
+  },
+  {
+    title: "Survival Outputs",
+    items: [
+      ["Kaplan-Meier", "Plots survival curves by expression group, reports log-rank p-values, patient counts, events and median survival when the curve reaches 50%."],
+      ["Cox models", "Reports hazard ratios for univariable and eligible clinically adjusted models. Adjustment depends on available stage, grade, age and sex metadata."],
+      ["PH diagnostics", HELP_CONTENT.coxPH],
+      ["RMST", HELP_CONTENT.rmst],
+      ["Audit report", HELP_CONTENT.audit],
+    ],
+  },
+  {
+    title: "Comparison And Pan-Cancer",
+    items: [
+      ["Run selected methods", "Runs only the cutpoint methods currently selected in Compare analyses."],
+      ["Run all 5 cutpoint methods", HELP_CONTENT.compareRobustness],
+      ["Continuous pan-cancer Cox", HELP_CONTENT.pancancer],
+      ["Endpoint mode", HELP_CONTENT.pancancerEndpointMode],
+    ],
+  },
+];
+
+const METHOD_HISTORY = [
+  {
+    version: "clinical-adjusted-cox-audit-rmst-v4.2",
+    title: "Single-signature survival pipeline",
+    date: "2026-07",
+    items: [
+      "TCGA-CDR endpoint selection with minimum patient and event QC.",
+      "Kaplan-Meier, log-rank, univariable Cox and clinically adjusted Cox when covariates are evaluable.",
+      "cox.zph proportional hazards diagnostics and RMST effect-size output for two-group comparisons.",
+      "Reproducibility audit with payload hash, patient list, software versions and artifact checksums.",
+    ],
+  },
+  {
+    version: "combined-signatures-interaction-cox-audit-rmst-v2.3",
+    title: "Two-signature combined groups",
+    date: "2026-07",
+    items: [
+      "Independent scoring for Signature A and Signature B using single, mean, z-score or weighted methods.",
+      "Median x median or tertile x tertile grouping into crossed expression states.",
+      "Interaction Cox model on continuous signature z-scores plus standard survival summaries for the combined groups.",
+    ],
+  },
+  {
+    version: "pancancer-cox-v1.0",
+    title: "Pan-cancer continuous Cox",
+    date: "2026-07",
+    items: [
+      "One Cox model per cancer using expression z-scored within each cohort.",
+      "BH-FDR adjustment, direction concordance and random-effects meta-analysis.",
+      "Endpoint-mode logic for strict, death-like, progression-like or best-available TCGA-CDR outcomes.",
+    ],
+  },
+  {
+    version: "cutpoint-robustness-v1.0",
+    title: "Dichotomization robustness panel",
+    date: "2026-07",
+    items: [
+      "Batch comparison across maxstat, median, upper quartile, outer quartiles and selected percentile.",
+      "Downstream survival flag combining BH log-rank, Cox, adjusted Cox, RMST direction and PH diagnostics.",
+    ],
+  },
+  {
+    version: "dataset-qc-v1.0",
+    title: "Dataset inventory and biospecimen QC",
+    date: "2026-07",
+    items: [
+      "One prioritized RNA sample per patient for patient-level survival modeling.",
+      "Dataset summary page for endpoint coverage, sample types, event metadata and source dates.",
+    ],
   },
 ];
 
@@ -878,6 +1039,14 @@ function App() {
             <ClipboardList size={16} />
             Dataset Summary
           </button>
+          <button
+            type="button"
+            className={activePage === "help" ? "selected" : ""}
+            onClick={() => setActivePage("help")}
+          >
+            <BookOpen size={16} />
+            Help & Methods
+          </button>
         </nav>
 
       </aside>
@@ -892,7 +1061,9 @@ function App() {
                   ? "Compare analyses"
                   : activePage === "pancancer"
                     ? "Pan-cancer survival concordance"
-                    : "Dataset summary"}
+                    : activePage === "summary"
+                      ? "Dataset summary"
+                      : "Help and methods history"}
             </p>
             <h1>
               {activePage === "analysis"
@@ -901,7 +1072,9 @@ function App() {
                   ? "Gene and cutpoint comparison"
                   : activePage === "pancancer"
                     ? "Cross-cancer outcome concordance"
-                    : "Current TCGA data inventory"}
+                    : activePage === "summary"
+                      ? "Current TCGA data inventory"
+                      : "Application methods guide"}
             </h1>
           </div>
         </header>
@@ -914,6 +1087,7 @@ function App() {
               icon={<Database size={18} />}
               title="Dataset"
               description="Choose one cancer cohort and one or more RNA gene symbols."
+              help={HELP_CONTENT.dataset}
             />
 
             <CohortPicker
@@ -945,6 +1119,7 @@ function App() {
               icon={<Activity size={18} />}
               title="Gene analysis"
               description="Choose a single gene/signature analysis or cross two independent signatures into combined groups."
+              help={HELP_CONTENT.analysisDesign}
             />
 
             <div className="axis-control two-options">
@@ -965,6 +1140,7 @@ function App() {
                 ))}
               </div>
             </div>
+            <div className="parameter-note">{HELP_CONTENT.analysisDesign}</div>
 
             {!isCombinedMode ? (
               <GeneSelector
@@ -995,6 +1171,7 @@ function App() {
               icon={<Activity size={18} />}
               title="Survival endpoint"
               description="TCGA-CDR endpoints are enabled only when the selected cohort passes basic patient and event QC."
+              help={HELP_CONTENT.survivalEndpoint}
             />
 
             <EndpointSelector
@@ -1002,10 +1179,11 @@ function App() {
               selected={form.endpoint}
               onSelect={(value) => updateForm("endpoint", value)}
             />
+            <div className="parameter-note">{HELP_CONTENT.survivalEndpoint}</div>
 
             {!isCombinedMode && (
               <div className="axis-control">
-                <span>Gene mode</span>
+                <LabelWithHelp label="Gene mode" help={HELP_CONTENT.geneMode} />
                 <div>
                   {[
                     ["single", "Single genes"],
@@ -1024,6 +1202,10 @@ function App() {
                     </button>
                   ))}
                 </div>
+                <div className="parameter-note">
+                  {SCORE_METHOD_GUIDE[form.signature_method]}
+                  {form.signature_method === "zscore" ? " This default is recommended for multi-gene signatures." : ""}
+                </div>
               </div>
             )}
 
@@ -1031,6 +1213,7 @@ function App() {
               icon={<BarChart3 size={18} />}
               title="RNA expression scale"
               description="Use a log-scale normalized value for patient stratification."
+              help={HELP_CONTENT.expressionScale}
             />
 
             <div className="scale-grid" aria-label="RNA expression scale">
@@ -1047,11 +1230,13 @@ function App() {
                 </button>
               ))}
             </div>
+            <div className="parameter-note">{expressionTooltip(form.expression_scale)}</div>
 
             <PanelHeader
               icon={<SlidersHorizontal size={18} />}
               title="Stratification"
               description="Split patients by expression before fitting survival curves."
+              help={HELP_CONTENT.stratification}
             />
 
             {!isCombinedMode ? (
@@ -1087,6 +1272,13 @@ function App() {
                 ))}
               </div>
             )}
+            <div className="parameter-note">
+              {!isCombinedMode
+                ? CUTPOINT_GUIDE[form.cutpoint_method]
+                : form.combined_signature.grouping_method === "tertiles"
+                  ? "Tertile crossing creates up to nine combined groups. Use it when the cohort has enough patients and events to avoid unstable strata."
+                  : "Median crossing creates four balanced combined groups: Low_Low, Low_High, High_Low and High_High."}
+            </div>
 
             {!isCombinedMode && form.cutpoint_method === "maxstat" && (
               <div className="method-note">
@@ -1105,6 +1297,7 @@ function App() {
                   value={form.custom_percentile}
                   onChange={(event) => updateForm("custom_percentile", event.target.value)}
                 />
+                <small className="field-help">{CUTPOINT_GUIDE.percentile}</small>
               </label>
             )}
 
@@ -1112,6 +1305,7 @@ function App() {
               icon={<Settings2 size={18} />}
               title="Clinical filters"
               description="Leave a filter empty to include all available values."
+              help={HELP_CONTENT.clinicalFilters}
             />
 
             <FilterGroup
@@ -1176,6 +1370,7 @@ function App() {
                   onChange={(event) => updateFilters("max_time_days", event.target.value)}
                   placeholder={filters?.os_time_max_days ? String(Math.ceil(filters.os_time_max_days)) : ""}
                 />
+                <small className="field-help">{HELP_CONTENT.maxFollowup}</small>
               </label>
             </div>
 
@@ -1290,7 +1485,7 @@ function App() {
             onDownload={startDownload}
             onPlotDownload={startPlotDownload}
           />
-        ) : (
+        ) : activePage === "summary" ? (
           <DatasetSummary
             summary={datasetSummary}
             health={health}
@@ -1299,6 +1494,8 @@ function App() {
             summaryCohort={summaryCohort}
             setSummaryCohort={setSummaryCohort}
           />
+        ) : (
+          <HelpMethodsPage health={health} />
         )}
       </section>
       <DownloadNotifications notices={downloadNotices} onDismiss={dismissDownloadNotice} />
@@ -1316,12 +1513,56 @@ function StatusItem({ icon, label, value }) {
   );
 }
 
-function PanelHeader({ icon, title, description }) {
+function HelpButton({ label, children }) {
+  const id = useId();
+  const [open, setOpen] = useState(false);
+  return (
+    <span className="help-popover">
+      <button
+        type="button"
+        className="help-trigger"
+        aria-label={`Explain ${label}`}
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={(event) => {
+          event.stopPropagation();
+          setOpen((current) => !current);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setOpen(false);
+          }
+        }}
+      >
+        <Info size={14} aria-hidden="true" />
+      </button>
+      {open && (
+        <span id={id} role="note" className="help-card">
+          {children}
+        </span>
+      )}
+    </span>
+  );
+}
+
+function LabelWithHelp({ label, help }) {
+  return (
+    <span className="label-with-help">
+      <span>{label}</span>
+      <HelpButton label={label}>{help}</HelpButton>
+    </span>
+  );
+}
+
+function PanelHeader({ icon, title, description, help }) {
   return (
     <div className="panel-header">
       {icon}
       <div>
-        <h2>{title}</h2>
+        <div className="panel-title-row">
+          <h2>{title}</h2>
+          {help && <HelpButton label={title}>{help}</HelpButton>}
+        </div>
         <p>{description}</p>
       </div>
     </div>
@@ -1628,7 +1869,7 @@ function CombinedSignatureBuilder({
               help="Select genes for this signature. Weighted mode accepts GENE:weight."
             />
             <div className="axis-control">
-              <span>Score method</span>
+              <LabelWithHelp label="Score method" help={SCORE_METHOD_GUIDE[signature.signature_method]} />
               <div>
                 {[
                   ["single", "Single"],
@@ -1646,6 +1887,10 @@ function CombinedSignatureBuilder({
                     {label}
                   </button>
                 ))}
+              </div>
+              <div className="parameter-note">
+                {SCORE_METHOD_GUIDE[signature.signature_method]}
+                {signature.signature_method === "zscore" ? " This is the default because each gene contributes on a comparable scale." : ""}
               </div>
             </div>
           </div>
@@ -1670,6 +1915,7 @@ function PlotOutputControls({
           icon={<Image size={18} />}
           title="Plot output"
           description="Set the time axis, risk table and plot appearance for all comparison runs."
+          help={HELP_CONTENT.plotOutput}
         />
       )}
 
@@ -1706,6 +1952,7 @@ function PlotOutputControls({
         icon={<Palette size={18} />}
         title="Plot style"
         description="Customize colors and typography for exported PNG and SVG artifacts."
+        help={HELP_CONTENT.plotOutput}
       />
 
       <div className="color-grid">
@@ -1739,7 +1986,7 @@ function PlotOutputControls({
           </select>
         </label>
         <div className="axis-control two-options">
-          <span>Plot shape</span>
+          <LabelWithHelp label="Plot shape" help={HELP_CONTENT.plotOutput} />
           <div>
             {[
               { value: "rectangular", label: "Rectangular" },
@@ -1949,6 +2196,7 @@ function CompareAnalyses({
               icon={<Database size={18} />}
               title="1. Dataset and endpoint"
               description="Shared cohort, outcome and expression scale for every matrix cell."
+              help={HELP_CONTENT.compare}
             />
             <div className="compare-control-grid">
               <div className="compare-control-block">
@@ -1977,6 +2225,7 @@ function CompareAnalyses({
                   selected={form.endpoint}
                   onSelect={onSelectEndpoint}
                 />
+                <div className="parameter-note">{HELP_CONTENT.survivalEndpoint}</div>
               </div>
               <div className="compare-control-block wide">
                 <div className="compare-control-label">
@@ -1997,6 +2246,7 @@ function CompareAnalyses({
                     </button>
                   ))}
                 </div>
+                <div className="parameter-note">{expressionTooltip(form.expression_scale)}</div>
               </div>
             </div>
           </section>
@@ -2006,6 +2256,7 @@ function CompareAnalyses({
               icon={<Dna size={18} />}
               title="2. Markers and cutpoints"
               description="Genes define rows; cutpoint methods define columns."
+              help={HELP_CONTENT.compareRobustness}
             />
             <div className="compare-control-grid compare-marker-grid">
               <GeneSelector
@@ -2020,7 +2271,7 @@ function CompareAnalyses({
               />
               <div className="compare-method-panel">
                 <div className="compare-control-label">
-                  <span>Cutpoint methods</span>
+                  <LabelWithHelp label="Cutpoint methods" help={HELP_CONTENT.compareRobustness} />
                   <strong>{selectedMethods.length} selected / {selectedDichotomizationCount} dichotomizing</strong>
                 </div>
                 <div className="method-grid compact">
@@ -2046,7 +2297,11 @@ function CompareAnalyses({
                     value={form.custom_percentile}
                     onChange={(event) => updateForm("custom_percentile", event.target.value)}
                   />
+                  <small className="field-help">{CUTPOINT_GUIDE.percentile}</small>
                 </label>
+                <div className="parameter-note">
+                  Run selected methods uses only checked columns. Run all 5 cutpoint methods runs every dichotomizing strategy downstream: maxstat, median, upper quartile, outer quartiles and percentile.
+                </div>
               </div>
             </div>
           </section>
@@ -2057,6 +2312,7 @@ function CompareAnalyses({
                 <span>3. Clinical filters</span>
                 <strong>{activeFilterCount ? `${activeFilterCount} active` : "All eligible patients"}</strong>
               </summary>
+              <div className="parameter-note">{HELP_CONTENT.clinicalFilters}</div>
               <div className="compare-filter-grid">
                 <FilterGroup
                   title="Sample type"
@@ -2131,6 +2387,7 @@ function CompareAnalyses({
                 <span>4. Plot output</span>
                 <strong>{form.time_unit}, {form.plot_style.plot_aspect}, risk table {form.show_risk_table ? "on" : "off"}</strong>
               </summary>
+              <div className="parameter-note">{HELP_CONTENT.plotOutput}</div>
               <PlotOutputControls
                 form={form}
                 updateForm={updateForm}
@@ -2435,6 +2692,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
             icon={<Network size={18} />}
             title="Pan-cancer query"
             description="Run one continuous Cox model per TCGA cancer using expression z-scored inside each cohort."
+            help={HELP_CONTENT.pancancer}
           />
           <div className="download-row">
             <button type="button" onClick={useCurrentKmInputs}>
@@ -2471,6 +2729,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
             icon={<Activity size={18} />}
             title="Outcome model"
             description="Select the reference endpoint and how similar endpoints are allowed across cohorts."
+            help={HELP_CONTENT.pancancerEndpointMode}
           />
           <div className="range-grid">
             <label className="field">
@@ -2507,6 +2766,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
               </button>
             ))}
           </div>
+          <div className="parameter-note">{HELP_CONTENT.pancancerEndpointMode}</div>
           <div className="range-grid">
             <label className="field">
               <span>Min patients</span>
@@ -2516,6 +2776,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
                 value={state.min_patients}
                 onChange={(event) => updateState("min_patients", event.target.value)}
               />
+              <small className="field-help">Minimum analyzable patients required for each cohort-specific Cox model.</small>
             </label>
             <label className="field">
               <span>Min events</span>
@@ -2525,6 +2786,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
                 value={state.min_events}
                 onChange={(event) => updateState("min_events", event.target.value)}
               />
+              <small className="field-help">Minimum observed endpoint events required before a cohort is modeled.</small>
             </label>
             <label className="field wide">
               <span>FDR threshold</span>
@@ -2536,6 +2798,7 @@ function PanCancerSurvival({ state, setState, updateState, cohorts, form, expres
                 value={state.fdr_threshold}
                 onChange={(event) => updateState("fdr_threshold", event.target.value)}
               />
+              <small className="field-help">Benjamini-Hochberg threshold used to flag significant pan-cancer Cox associations.</small>
             </label>
           </div>
           <div className="run-summary static">
@@ -3603,6 +3866,79 @@ function EndpointCoverageTable({ items }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function HelpMethodsPage({ health }) {
+  const pipelineVersions = health?.pipeline_versions || {};
+  const versionItems = [
+    ["App", health?.app_version || "0.1.0"],
+    ["KM analysis", pipelineVersions.analysis || "clinical-adjusted-cox-audit-rmst-v4.2"],
+    ["Two signatures", pipelineVersions.combined_signatures || "combined-signatures-interaction-cox-audit-rmst-v2.3"],
+    ["Pan-cancer", pipelineVersions.pancancer || "pancancer-cox-v1.0"],
+    ["Data loaded", formatDate(health?.data_dates?.database_imported_at)],
+  ];
+
+  return (
+    <section className="help-page">
+      <section className="help-intro">
+        <PanelHeader
+          icon={<BookOpen size={18} />}
+          title="Methods guide"
+          description="Operational definitions for every analysis parameter currently exposed in TCGA KM Explorer."
+          help="This page mirrors the active application behavior and is intended to support reproducible use and manuscript writing."
+        />
+        <div className="help-version-strip" aria-label="Application and pipeline versions">
+          {versionItems.map(([label, value]) => (
+            <div key={label}>
+              <span>{label}</span>
+              <strong>{value || "..."}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="help-layout">
+        <div className="help-section-stack">
+          {HELP_GUIDE_SECTIONS.map((section) => (
+            <section className="help-section" key={section.title}>
+              <h2>{section.title}</h2>
+              <dl className="help-term-list">
+                {section.items.map(([term, body]) => (
+                  <div className="help-term" key={term}>
+                    <dt>{term}</dt>
+                    <dd>{body}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ))}
+        </div>
+
+        <aside className="help-section method-history" aria-label="Methodological changelog">
+          <h2>Methods History</h2>
+          <p>
+            Version names describe analysis behavior, not Git commits. Keep this list synchronized when a change affects scoring, grouping, endpoint QC, model outputs or reproducibility exports.
+          </p>
+          <div className="history-list">
+            {METHOD_HISTORY.map((entry) => (
+              <article key={entry.version} className="history-entry">
+                <div>
+                  <span>{entry.date}</span>
+                  <h3>{entry.title}</h3>
+                  <code>{entry.version}</code>
+                </div>
+                <ul>
+                  {entry.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </aside>
+      </div>
+    </section>
   );
 }
 

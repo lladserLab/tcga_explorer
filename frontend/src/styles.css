@@ -287,6 +287,89 @@ h3 {
   line-height: 1.4;
 }
 
+.panel-title-row,
+.label-with-help {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.panel-title-row h2 {
+  text-wrap: balance;
+}
+
+.label-with-help {
+  color: #3d4a48;
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.help-popover {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.help-trigger {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #b9c7c3;
+  border-radius: 999px;
+  background: #f8fbfa;
+  color: #2f756f;
+  padding: 0;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.help-trigger:hover,
+.help-trigger[aria-expanded="true"] {
+  border-color: #2f756f;
+  background: #edf8f6;
+}
+
+.help-trigger:active {
+  transform: scale(0.96);
+}
+
+.help-card {
+  position: absolute;
+  z-index: 120;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(340px, calc(100vw - 48px));
+  padding: 10px 12px;
+  border: 1px solid #c7d2cf;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow:
+    0 16px 36px rgba(23, 32, 31, 0.14),
+    0 2px 8px rgba(23, 32, 31, 0.08);
+  color: #263432;
+  font-size: 13px;
+  font-weight: 620;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.parameter-note {
+  padding: 9px 10px;
+  border: 1px solid #dce4e1;
+  border-radius: 8px;
+  background: #f8faf9;
+  color: #53615e;
+  font-size: 13px;
+  font-weight: 620;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
 .field {
   display: grid;
   gap: 7px;
@@ -1083,6 +1166,150 @@ textarea {
   display: grid;
   gap: 18px;
   animation: enter 220ms ease both;
+}
+
+.help-page {
+  display: grid;
+  gap: 16px;
+  animation: enter 220ms ease both;
+}
+
+.help-intro,
+.help-section {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #d7dddb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.help-version-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.help-version-strip div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 10px 11px;
+  border: 1px solid #dce4e1;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.help-version-strip span,
+.method-history > p,
+.history-entry span {
+  color: #63716f;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.help-version-strip strong,
+.history-entry code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #17201f;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.help-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.help-section-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.help-section h2 {
+  text-wrap: balance;
+}
+
+.help-term-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.help-term {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.34fr) minmax(0, 1fr);
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid #e4e8e6;
+}
+
+.help-term:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.help-term dt {
+  color: #17201f;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.help-term dd {
+  margin: 0;
+  color: #53615e;
+  font-size: 13px;
+  line-height: 1.48;
+  text-wrap: pretty;
+}
+
+.method-history {
+  position: sticky;
+  top: 18px;
+}
+
+.method-history > p {
+  margin: 0;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.history-list {
+  display: grid;
+  gap: 12px;
+}
+
+.history-entry {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #dce4e1;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.history-entry h3 {
+  margin-top: 3px;
+  color: #17201f;
+  font-size: 14px;
+  text-wrap: balance;
+}
+
+.history-entry ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #53615e;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.history-entry li + li {
+  margin-top: 6px;
 }
 
 .summary-actions {
@@ -3928,6 +4155,7 @@ dd {
   .result-details,
   .summary-layout,
   .summary-actions,
+  .help-layout,
   .compare-controls,
   .compare-control-grid,
   .compare-marker-grid,
@@ -3958,6 +4186,10 @@ dd {
     border-left: 0;
     border-top: 1px solid #e4e8e6;
   }
+
+  .method-history {
+    position: static;
+  }
 }
 
 @media (max-width: 860px) {
@@ -3976,6 +4208,7 @@ dd {
   .date-grid,
   .source-strip,
   .summary-kpis,
+  .help-version-strip,
   .method-grid.compact,
   .combined-signature-card .axis-control > div,
   .pancancer-kpis,
@@ -4028,6 +4261,7 @@ dd {
   .combined-signature-card .axis-control > div,
   .endpoint-grid,
   .color-grid,
+  .help-term,
   .immune-rare-grid,
   .range-grid {
     grid-template-columns: 1fr;
