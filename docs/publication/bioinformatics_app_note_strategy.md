@@ -156,6 +156,29 @@ and heterogeneous. These examples support the software-scope claim that TCGA
 Explorer can audit advanced workflows without overstating any single biomarker
 result.
 
+## Submission Package Status
+
+Generated manuscript artifacts:
+
+- main manuscript: `manuscript/bioinformatics_app_note/main.tex`;
+- reproducible workflow figure source:
+  `manuscript/bioinformatics_app_note/figures/workflow.tex`;
+- supplementary material:
+  `manuscript/bioinformatics_app_note/supplementary.tex`;
+- readiness checklist:
+  `manuscript/bioinformatics_app_note/submission/submission_readiness_checklist.md`;
+- cover letter draft:
+  `manuscript/bioinformatics_app_note/submission/cover_letter_draft.md`.
+
+Current external blockers before journal submission:
+
+- replace author, affiliation and correspondence placeholders;
+- choose and add an explicit software license;
+- make the repository reviewer-accessible/public as appropriate;
+- decide final public demo or reviewer-access instructions;
+- archive a release and add a DOI or stable release URL;
+- finalize funding and conflict-of-interest statements.
+
 ## Sources
 
 - Bioinformatics author guidelines: https://academic.oup.com/bioinformatics/pages/author-guidelines

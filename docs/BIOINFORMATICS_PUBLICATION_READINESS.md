@@ -111,6 +111,29 @@ For the two-signature case, report both the crossed KM groups and the continuous
 Cox interaction term `signature_A_z:signature_B_z`, including adjusted models
 when stage and grade complete-case data are sufficient.
 
+## Submission Package Status
+
+Generated files:
+
+- main manuscript: `manuscript/bioinformatics_app_note/main.tex`;
+- main workflow figure source:
+  `manuscript/bioinformatics_app_note/figures/workflow.tex`;
+- supplementary material:
+  `manuscript/bioinformatics_app_note/supplementary.tex`;
+- Bioinformatics readiness checklist:
+  `manuscript/bioinformatics_app_note/submission/submission_readiness_checklist.md`;
+- cover letter draft:
+  `manuscript/bioinformatics_app_note/submission/cover_letter_draft.md`.
+
+External blockers before submission:
+
+- author list, affiliations and corresponding-author email;
+- funding and conflict-of-interest statements;
+- explicit software license file;
+- reviewer-accessible or public repository URL;
+- stable public demo or clear Docker-only reviewer instructions;
+- archival DOI or stable release URL.
+
 ## Go/No-Go Criteria
 
 Proceed toward Bioinformatics if all are true:

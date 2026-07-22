@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{tabularx}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+\emergencystretch=2em
+\doublespacing
+
+\renewcommand{\thetable}{S\arabic{table}}
+
+\title{Supplementary Material for TCGA Explorer}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Supplementary Benchmark Reproduction}
+
+The benchmark artifacts in this supplement were generated from a running local
+TCGA Explorer stack at \texttt{http://localhost:3000/tcga\_explorer}. The
+single-gene cutpoint suite can be reproduced with:
+
+\begin{verbatim}
+scripts/publication/run_single_gene_benchmark_suite.py
+\end{verbatim}
+
+The feature-level workflow benchmarks can be reproduced with:
+
+\begin{verbatim}
+scripts/publication/run_feature_benchmarks.py
+\end{verbatim}
+
+Tracked benchmark outputs include compact API responses, summary tables,
+endpoint metadata, audit hashes and patient-record SHA-256 values. Full audit
+bundles and patient-level exports remain local analysis artifacts and are not
+tracked in git.
+
+\section*{Supplementary Comparator Matrix}
+
+\begin{table}[h]
+\centering
+\caption{Extended positioning against representative survival-analysis
+resources.}
+\label{tab:supp-comparator-matrix}
+\begin{tabularx}{\linewidth}{lXX}
+\toprule
+Resource & Confirmed strengths & Gap targeted by TCGA Explorer \\
+\midrule
+GEPIA2 & TCGA/GTEx expression, survival maps, gene/isoform/signature analysis
+and API support. & Patient-level audit bundle, PH diagnostics, RMST and
+cutpoint robustness as exported outputs. \\
+cSurvival & Two genomic predictors, optimal cutoffs for two continuous
+predictors, gene-set survival and cell-line integration. & Cited as prior art;
+TCGA Explorer emphasizes endpoint provenance, auditability, PH diagnostics,
+RMST and robustness panels. \\
+DoSurvive & Multi-omic biomarker survival, log-rank, Cox, AFT, four survival
+endpoint types and combined effects. & TCGA Explorer does not claim uniqueness
+in multivariable survival; it adds hashable patient-level provenance and
+RMST/cutpoint robustness outputs. \\
+PESSA & ssGSEA pathway activation scores, median/optimal cutoffs, Cox models,
+238 datasets, 51 cancer types and 13 survival outcomes. & TCGA Explorer uses
+simpler auditable signatures and adds sample-selection audit, endpoint QC,
+PH diagnostics and RMST. \\
+UALCAN & TCGA/CPTAC expression, subgroup expression and survival
+visualizations. & Does not center the workflow on exported survival provenance
+and model diagnostics. \\
+KM Plotter & Large-scale biomarker survival screening across mRNA, miRNA,
+protein and DNA assays. & Screening-oriented; not centered on TCGA-CDR endpoint
+provenance, PH diagnostics, RMST or cutpoint robustness. \\
+UCSC Xena & Flexible cancer genomics browser, data hubs and Kaplan-Meier
+survival analysis. & Reproducibility depends on manual user workflow rather
+than a single exported audit object. \\
+cBioPortal & Broad cancer genomics exploration, group comparisons and survival
+analysis. & General portal rather than a transcriptomic survival robustness and
+audit workflow. \\
+TCGAbiolinks & Programmable TCGA data acquisition and analysis workflows. &
+Requires coding; TCGA Explorer standardizes an interactive audit artifact. \\
+TCGAplot & R package for TCGA pan-cancer analysis and visualization. &
+Programmable package rather than a web workflow with a survival robustness
+contract and exported audit bundle. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section*{Supplementary Single-Gene Cutpoint Benchmarks}
+
+\input{tables/kirc_ca9_cutpoint_benchmark}
+\input{tables/brca_mki67_os_cutpoint_benchmark}
+\input{tables/brca_mki67_pfi_cutpoint_benchmark}
+\input{tables/skcm_pdcd1_os_cutpoint_benchmark}
+\input{tables/luad_cd274_os_cutpoint_benchmark}
+\input{tables/luad_cd274_pfi_cutpoint_benchmark}
+
+\section*{Supplementary Feature Benchmarks}
+
+\input{tables/feature_benchmark_summary}
+
+\end{document}

@@ -22,6 +22,24 @@ The output is written to:
 build/tcga_explorer_bioinformatics_app_note.pdf
 ```
 
+Build the supplement:
+
+```sh
+make supplement
+```
+
+Build both PDFs:
+
+```sh
+make all
+```
+
+Supplement output:
+
+```text
+build/tcga_explorer_bioinformatics_supplement.pdf
+```
+
 The default image can be overridden:
 
 ```sh
@@ -37,3 +55,11 @@ with one figure.
 
 Before submission, replace placeholders for authors, affiliation, repository,
 license and public web demo.
+
+## Submission Files
+
+- `submission/submission_readiness_checklist.md`: current go/no-go checklist
+  against Bioinformatics Application Note requirements.
+- `submission/cover_letter_draft.md`: reviewer-facing cover letter draft.
+- `figures/workflow.tex`: reproducible vector source for Figure 1.
+- `supplementary.tex`: supplementary comparator and benchmark tables.

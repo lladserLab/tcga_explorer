@@ -1,0 +1,53 @@
+\begin{tikzpicture}[
+  font=\sffamily\small,
+  node distance=0.42cm,
+  stage/.style={
+    draw,
+    rounded corners=2pt,
+    align=center,
+    minimum height=1.0cm,
+    text width=2.65cm,
+    fill=gray!7
+  },
+  check/.style={
+    draw,
+    rounded corners=2pt,
+    align=center,
+    minimum height=0.88cm,
+    text width=2.25cm,
+    fill=blue!8
+  },
+  output/.style={
+    draw,
+    rounded corners=2pt,
+    align=center,
+    minimum height=0.88cm,
+    text width=2.55cm,
+    fill=green!8
+  },
+  arrow/.style={-{Latex[length=2.0mm]}, thick}
+]
+
+\node[stage] (request) {User request\\gene, signature, endpoint};
+\node[check, right=of request] (qc) {Endpoint and\\sample QC};
+\node[stage, right=of qc] (score) {Expression or\\signature score};
+\node[stage, right=of score] (model) {KM, Cox, PH,\\RMST models};
+\node[output, right=of model] (audit) {Audit bundle\\JSON, HTML, hashes};
+
+\draw[arrow] (request) -- (qc);
+\draw[arrow] (qc) -- (score);
+\draw[arrow] (score) -- (model);
+\draw[arrow] (model) -- (audit);
+
+\node[check, below=0.55cm of qc] (cdr) {TCGA-CDR\\OS, DSS, DFI, PFI};
+\node[check, below=0.55cm of score] (cutpoint) {Median, maxstat,\\quartiles, percentile};
+\node[check, below=0.55cm of model] (robust) {BH-FDR, adjusted\\Cox and PH flags};
+
+\draw[arrow] (cdr) -- (qc);
+\draw[arrow] (cutpoint) -- (score);
+\draw[arrow] (robust) -- (model);
+
+\node[output, below=0.55cm of audit] (repro) {Patient-level\\records and\\package versions};
+\draw[arrow] (audit) -- (repro);
+
+\end{tikzpicture}

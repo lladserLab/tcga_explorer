@@ -2,11 +2,15 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{lineno}
 \usepackage{natbib}
 \usepackage{setspace}
 \usepackage{tabularx}
+\usepackage{tikz}
+
+\usetikzlibrary{arrows.meta, positioning}
 
 \hypersetup{
   colorlinks=true,
@@ -48,8 +52,8 @@ two-group comparisons and a cutpoint robustness panel. Each completed analysis
 exports raw records, methods text and a JSON/HTML audit report with SHA-256
 hashes for reproducibility.
 \textbf{Availability:}
-Source code, Docker deployment instructions and example analyses will be made
-available at the project repository before submission.
+Source code, Docker deployment instructions, benchmark scripts and example
+outputs will be made available at the project repository before submission.
 \end{abstract}
 
 \section*{Introduction}
@@ -106,13 +110,7 @@ single dichotomized Kaplan-Meier p-values \citep{rmstBiomarker2016}.
 
 \begin{figure}[t]
 \centering
-\fbox{\begin{minipage}{0.92\linewidth}
-\textbf{TCGA Explorer workflow.}
-User request $\rightarrow$ endpoint and sample QC $\rightarrow$ expression or
-signature scoring $\rightarrow$ stratification and continuous Cox models
-$\rightarrow$ KM, Cox, PH, RMST and robustness summaries $\rightarrow$
-verifiable audit bundle with hashes and exact patient rows.
-\end{minipage}}
+\resizebox{\linewidth}{!}{\input{figures/workflow}}
 \caption{Auditable survival-analysis workflow implemented by TCGA Explorer.}
 \label{fig:workflow}
 \end{figure}
@@ -160,6 +158,16 @@ endpoint rigor, proportional-hazards diagnostics, RMST and cutpoint robustness
 in an interactive TCGA workflow. Gene-set survival and two-predictor interaction
 already exist in prior tools, so these features are presented as supported
 capabilities rather than the central claim.
+
+\section*{Data and Software Availability}
+
+The source code, Docker deployment instructions, benchmark scripts and example
+outputs will be released at [FINAL PUBLIC REPOSITORY URL] under [SOFTWARE
+LICENSE]. The submitted version will be archived at [ARCHIVAL DOI OR STABLE
+RELEASE URL]. TCGA expression and clinical data are obtained from public TCGA
+and TCGA-CDR resources; benchmark summaries and compact API outputs are included
+with the repository, while full patient-level exports are generated locally by
+the application audit workflow.
 
 \section*{Funding}
 
