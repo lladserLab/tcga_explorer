@@ -53,6 +53,15 @@ const CUTPOINTS = [
   { value: "percentile", label: "Percentile", help: "Custom high-expression threshold" },
 ];
 
+const DICHOTOMIZATION_METHODS = [
+  "maxstat",
+  "median",
+  "upper_quartile",
+  "upper_lower_quartile",
+  "percentile",
+];
+const ROBUSTNESS_ALPHA = 0.05;
+
 const EXPRESSION_SCALE_FALLBACK = [
   {
     value: "log2_tpm",
@@ -1784,12 +1793,14 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
     }));
   }
 
-  async function runCompare() {
-    if (!canRun || !genes.length || !selectedMethods.length) return;
+  async function runCompare(methodOverride = null) {
+    const methodsToRun = methodOverride || selectedMethods;
+    if (!canRun || !genes.length || !methodsToRun.length) return;
     const normalizedGenes = uniqueGeneSymbols(effectiveCompareInput);
     setCompareGeneQuery("");
     setCompare((current) => ({
       ...current,
+      methods: methodsToRun,
       genes: normalizedGenes.join(", "),
       running: true,
       error: "",
@@ -1797,7 +1808,7 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
     }));
     try {
       const jobs = normalizedGenes.flatMap((gene) =>
-        selectedMethods.map((method) => {
+        methodsToRun.map((method) => {
           const basePayload = buildAnalysisPayload({ ...form, gene_symbol: gene, signature_method: "single" });
           return {
             gene,
@@ -1869,9 +1880,18 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
             <strong>{genes.length || 0} genes x {selectedMethods.length} methods</strong>
             <small>{expressionScale.label}; up to {ANALYSIS_BATCH_CONCURRENCY} analyses run in parallel, with BH and Bonferroni adjustment across completed comparisons.</small>
           </div>
-          <button className="primary-button" onClick={runCompare} disabled={!canRun || !genes.length || !selectedMethods.length || compare.running}>
+          <button className="primary-button" onClick={() => runCompare()} disabled={!canRun || !genes.length || !selectedMethods.length || compare.running}>
             {compare.running ? <Loader2 className="spin" size={18} /> : <Play size={18} />}
             Run comparison
+          </button>
+          <button
+            className="secondary-button"
+            onClick={() => runCompare(DICHOTOMIZATION_METHODS)}
+            disabled={!canRun || !genes.length || compare.running}
+            title="Run maxstat, median, upper quartile, outer quartiles and the selected custom percentile."
+          >
+            {compare.running ? <Loader2 className="spin" size={18} /> : <SlidersHorizontal size={18} />}
+            Run dichotomization robustness
           </button>
         </div>
       </div>
@@ -1883,6 +1903,7 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
         running={compare.running}
         onDownload={onDownload}
       />
+      <CutpointRobustnessSummary rows={adjusted} methods={cutpoints} />
       <div className="method-note">
         These comparisons are exploratory. Multiple-testing adjustment is applied to the displayed set only and does not replace external validation.
       </div>
@@ -1968,6 +1989,82 @@ function ComparePlotCell({ row, running, onDownload }) {
         <MiniDownloadButton href={downloads.csv} label="CSV" onDownload={onDownload} />
         <MiniDownloadButton href={downloads.txt} label="TXT" onDownload={onDownload} />
         <MiniDownloadButton href={downloads.zip} label="ZIP" onDownload={onDownload} />
+      </div>
+    </div>
+  );
+}
+
+function CutpointRobustnessSummary({ rows, methods }) {
+  const completed = rows.filter((row) => row.result?.metrics && DICHOTOMIZATION_METHODS.includes(row.method));
+  if (!completed.length) return null;
+  const methodLabels = Object.fromEntries(methods.map((method) => [method.value, method.label]));
+  const summarized = completed.map((row) => ({
+    ...row,
+    robustness: cutpointRobustness(row),
+  }));
+  const survived = summarized.filter((row) => row.robustness.survives);
+  const genes = Array.from(new Set(summarized.map((row) => row.gene)));
+  return (
+    <div className="detail-section robustness-summary">
+      <h3>Cutpoint robustness</h3>
+      <div className="robustness-headline">
+        <div>
+          <span>Surviving dichotomizations</span>
+          <strong>{survived.length} / {summarized.length}</strong>
+        </div>
+        <div>
+          <span>Genes evaluated</span>
+          <strong>{genes.length}</strong>
+        </div>
+        <div>
+          <span>Decision rule</span>
+          <strong>BH + Cox + adjusted Cox + PH</strong>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Gene</th>
+            <th>Method</th>
+            <th>Patients</th>
+            <th>Events</th>
+            <th>BH log-rank</th>
+            <th>Cox p</th>
+            <th>Adjusted p</th>
+            <th>PH global p</th>
+            <th>Direction</th>
+            <th>Survives</th>
+          </tr>
+        </thead>
+        <tbody>
+          {summarized.map((row) => {
+            const metrics = row.result.metrics || {};
+            const robustness = row.robustness;
+            const univariable = findCoxModel(metrics.cox_models, "univariable");
+            const adjustedModel = downstreamAdjustedModel(metrics.cox_models);
+            return (
+              <tr key={`${row.gene}-${row.method}`}>
+                <td>{row.gene}</td>
+                <td>{methodLabels[row.method] || formatLabel(row.method)}</td>
+                <td>{formatInteger(metrics.n_patients)}</td>
+                <td>{formatInteger(metrics.n_events)}</td>
+                <td className={robustness.bhPass ? "pass-cell" : "fail-cell"}>{formatP(row.bh)}</td>
+                <td className={robustness.coxPass ? "pass-cell" : "fail-cell"}>{formatP(univariable?.p_value)}</td>
+                <td className={robustness.adjustedPass ? "pass-cell" : "fail-cell"}>{formatP(adjustedModel?.p_value)}</td>
+                <td className={robustness.phOk ? "pass-cell" : "fail-cell"}>{formatP(adjustedModel?.ph_global_p_value)}</td>
+                <td>{robustness.direction}</td>
+                <td>
+                  <span className={`survival-badge ${robustness.survives ? "survives" : "does-not-survive"}`}>
+                    {robustness.survives ? "Survives" : robustness.reason}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="method-note">
+        {`A dichotomization survives when BH-adjusted log-rank p, univariable Cox p and the strongest available adjusted Cox p are all <= ${ROBUSTNESS_ALPHA}, and the adjusted PH global test is not flagged.`}
       </div>
     </div>
   );
@@ -3760,6 +3857,7 @@ function AnalysisResult({ analysis, onDownload }) {
       <AuditSummary audit={metrics.audit_report} />
 
       {combinedSignature && <CombinedSignatureSummary combined={combinedSignature} />}
+      <SignatureInteractionCoxTable models={metrics.signature_interaction_cox_models} />
 
       {combinedSignature ? (
         <div className="result-details">
@@ -3847,6 +3945,54 @@ function CoxModelTable({ models }) {
       </table>
       <div className="method-note">
         Adjusted models use complete cases for the listed covariates; stage and grade are fitted as categorical terms.
+      </div>
+    </div>
+  );
+}
+
+function SignatureInteractionCoxTable({ models }) {
+  if (!models?.length) return null;
+  return (
+    <div className="detail-section interaction-cox-table">
+      <h3>Two-signature interaction Cox</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Covariates</th>
+            <th>Patients</th>
+            <th>Events</th>
+            <th>Signature A HR</th>
+            <th>Signature B HR</th>
+            <th>Interaction HR</th>
+            <th>Interaction p</th>
+            <th>PH global p</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {models.map((model) => {
+            const terms = Object.fromEntries((model.terms || []).map((term) => [term.term, term]));
+            const interaction = model.interaction_term || terms["score_a_z:score_b_z"];
+            return (
+              <tr key={model.model || model.label}>
+                <td>{model.label || formatLabel(model.model)}</td>
+                <td>{formatCoxCovariates(model.covariates)}</td>
+                <td>{formatInteger(model.n_patients)}</td>
+                <td>{formatInteger(model.n_events)}</td>
+                <td>{model.status === "completed" ? formatHrValues(terms.score_a_z) : "..."}</td>
+                <td>{model.status === "completed" ? formatHrValues(terms.score_b_z) : "..."}</td>
+                <td>{model.status === "completed" ? formatHrValues(interaction) : "..."}</td>
+                <td>{model.status === "completed" ? formatP(interaction?.p_value) : "..."}</td>
+                <td>{model.status === "completed" ? formatP(model.ph_global_p_value) : "..."}</td>
+                <td>{model.status === "completed" ? "Completed" : model.reason || formatLabel(model.status)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="method-note">
+        Continuous signature scores are z-scored within the analyzed patients; the interaction term tests whether the effect of one signature changes as the other signature increases.
       </div>
     </div>
   );
@@ -4504,6 +4650,45 @@ function formatHrValues(row) {
 function formatCoxCovariates(value) {
   if (!value?.length) return "None";
   return value.map((item) => formatLabel(item)).join(", ");
+}
+
+function findCoxModel(models, modelId) {
+  return (models || []).find((model) => model.model === modelId && model.status === "completed") || null;
+}
+
+function downstreamAdjustedModel(models) {
+  return (
+    findCoxModel(models, "stage_grade_adjusted") ||
+    findCoxModel(models, "stage_adjusted") ||
+    findCoxModel(models, "grade_adjusted")
+  );
+}
+
+function cutpointRobustness(row) {
+  const metrics = row.result?.metrics || {};
+  const univariable = findCoxModel(metrics.cox_models, "univariable");
+  const adjusted = downstreamAdjustedModel(metrics.cox_models);
+  const bhPass = Number.isFinite(row.bh) && row.bh <= ROBUSTNESS_ALPHA;
+  const coxPass = Number.isFinite(univariable?.p_value) && univariable.p_value <= ROBUSTNESS_ALPHA;
+  const adjustedPass = Number.isFinite(adjusted?.p_value) && adjusted.p_value <= ROBUSTNESS_ALPHA;
+  const phValue = adjusted?.ph_global_p_value;
+  const phOk = phValue === undefined || phValue === null || !Number.isFinite(Number(phValue)) || Number(phValue) >= ROBUSTNESS_ALPHA;
+  const hr = Number(univariable?.hazard_ratio);
+  const direction = Number.isFinite(hr) ? (hr < 1 ? "Protective" : hr > 1 ? "Harmful" : "Neutral") : "...";
+  let reason = "Survives";
+  if (!bhPass) reason = "Fails BH";
+  else if (!coxPass) reason = "Fails Cox";
+  else if (!adjustedPass) reason = "Fails adjusted";
+  else if (!phOk) reason = "PH flagged";
+  return {
+    survives: bhPass && coxPass && adjustedPass && phOk,
+    reason,
+    bhPass,
+    coxPass,
+    adjustedPass,
+    phOk,
+    direction,
+  };
 }
 
 function formatPercent(value) {

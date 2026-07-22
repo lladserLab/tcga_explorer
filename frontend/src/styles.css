@@ -3332,11 +3332,13 @@ textarea {
   background: #f8faf9;
 }
 
-.cox-model-table {
+.cox-model-table,
+.interaction-cox-table {
   overflow-x: auto;
 }
 
-.cox-model-table td:last-child {
+.cox-model-table td:last-child,
+.interaction-cox-table td:last-child {
   min-width: 180px;
   color: #53615e;
   font-size: 12px;
@@ -3354,6 +3356,71 @@ textarea {
   font-size: 12px;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.robustness-summary {
+  overflow-x: auto;
+}
+
+.robustness-headline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid #edf0ef;
+}
+
+.robustness-headline div {
+  padding: 11px 12px;
+  border-right: 1px solid #edf0ef;
+}
+
+.robustness-headline div:last-child {
+  border-right: 0;
+}
+
+.robustness-headline span {
+  display: block;
+  color: #63716f;
+  font-size: 11px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.robustness-headline strong {
+  display: block;
+  margin-top: 4px;
+  color: #17201f;
+  font-size: 14px;
+}
+
+.pass-cell {
+  color: #216b4a;
+  font-weight: 760;
+}
+
+.fail-cell {
+  color: #9f352d;
+  font-weight: 760;
+}
+
+.survival-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.survival-badge.survives {
+  color: #17573e;
+  background: #dff2e9;
+}
+
+.survival-badge.does-not-survive {
+  color: #833026;
+  background: #f8e3df;
 }
 
 .combined-signature-summary td span {

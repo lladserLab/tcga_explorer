@@ -88,11 +88,13 @@ The updater uses the GDC API to compare remote `file_id`, `md5sum`, `file_size`,
 - Dataset Summary can be filtered by cohort and downloaded as CSV.
 - Dataset Summary reports data-source status and endpoint coverage/QC.
 - Compare Analyses can run several genes across several cutpoint methods and shows a plot matrix with genes as rows and methods as columns, including BH and Bonferroni adjusted p-values.
+- Compare Analyses includes a dichotomization robustness run that evaluates maxstat, median, upper quartile, outer quartiles, and the selected custom percentile, then marks which cutpoints survive downstream BH, Cox, adjusted Cox, and PH checks.
 - Multi-gene and compare runs use a bounded batch API that executes up to 10 analyses in parallel.
 - Pan-cancer survival concordance scans one gene across TCGA cohorts with per-cohort continuous Cox models using within-cohort expression z-scores, BH-FDR, direction concordance against an index cancer, random-effects meta-analysis, forest/heatmap/table views, and CSV export.
 - Stratification supports maxstat, median, tertiles, quartiles, outer quartiles, and custom percentile cutpoints.
 - Methodological tooltips explain cutpoint and expression-scale choices.
 - Gene mode supports multiple single-gene KM plots plus mean, z-score, and weighted signature plots using `GENE:weight` syntax.
+- Combined two-signature analyses report continuous Cox interaction models for `signature_A_z + signature_B_z + signature_A_z:signature_B_z`, including stage/grade-adjusted variants when evaluable.
 - Gene selection uses removable chips with live autocomplete gene-symbol suggestions.
 - Clinical filters start empty; users explicitly select sample type, stage, gender, race, age, or follow-up limits.
 - Survival analyses retain one RNA-seq sample per TCGA participant using a biospecimen priority rule: primary tumor or primary blood-derived cancer, recurrent/additional/metastatic tumor, then normal/control only if no higher-priority sample remains after filters.

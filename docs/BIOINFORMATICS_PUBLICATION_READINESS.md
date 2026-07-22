@@ -16,8 +16,10 @@ the integration of:
 - one RNA-seq sample per TCGA participant using an explicit biospecimen rule;
 - gene and custom signature scoring, including weighted signatures;
 - two-signature combined stratification;
+- two-signature continuous Cox interaction models;
 - univariable and stage/grade-adjusted Cox models;
 - proportional-hazards QC from `cox.zph` where estimable;
+- cutpoint robustness summaries across dichotomization rules;
 - continuous pan-cancer Cox scans with BH-FDR and meta-analysis;
 - downloadable raw records, methods text and audit reports.
 
@@ -65,6 +67,16 @@ Minimum benchmark cases:
 | 6 | TCGA-SKCM | effector signature x exhaustion signature | OS | Two-signature stratification |
 | 7 | Pan-cancer | CA9 | OS | Continuous pan-cancer Cox/FDR workflow |
 | 8 | Low-event cohort | any plausible marker | DSS/DFI | Endpoint QC and not-reached median behavior |
+
+For cutpoint robustness, each single-marker case should run the dichotomization
+panel: maxstat, median, upper quartile, outer quartiles and the selected custom
+percentile. A cutpoint is considered to survive downstream only when the
+BH-adjusted log-rank p-value, univariable Cox p-value and adjusted Cox p-value
+are all <= 0.05, with no flagged adjusted proportional-hazards test.
+
+For the two-signature case, report both the crossed KM groups and the continuous
+Cox interaction term `signature_A_z:signature_B_z`, including adjusted models
+when stage and grade complete-case data are sufficient.
 
 ## Go/No-Go Criteria
 

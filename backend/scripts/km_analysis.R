@@ -74,11 +74,12 @@ records$expression_value <- as.numeric(records$expression_value)
 records$expression_value_a <- as.numeric(records$expression_value_a)
 records$expression_value_b <- as.numeric(records$expression_value_b)
 records$group <- factor(records$group, levels = payload$group_levels)
+records$group <- droplevels(records$group)
 records$stage <- trimws(as.character(records$stage))
 records$stage[is.na(records$stage) | records$stage == ""] <- NA
 records$grade <- trimws(as.character(records$grade))
 records$grade[is.na(records$grade) | records$grade == ""] <- NA
-group_levels <- payload$group_levels
+group_levels <- levels(records$group)
 n_groups <- length(group_levels)
 endpoint_label <- payload$endpoint_label %||% "Overall survival"
 
@@ -108,6 +109,7 @@ p_value <- 1 - pchisq(survdiff_fit$chisq, length(survdiff_fit$n) - 1)
 
 cox_metrics <- list()
 cox_models <- list()
+signature_interaction_cox_models <- list()
 cox_warning_messages <- c()
 
 cox_skip <- function(model_id, label, covariates, reason, data = records) {
@@ -248,6 +250,154 @@ if (length(levels(records$group)) == 2) {
   }
 }
 
+interaction_cox_skip <- function(model_id, label, covariates, reason, data = records) {
+  list(
+    model = model_id,
+    label = label,
+    covariates = as.list(covariates),
+    status = "skipped",
+    reason = reason,
+    n_patients = nrow(data),
+    n_events = sum(data$event, na.rm = TRUE)
+  )
+}
+
+zscore_vector <- function(value) {
+  value <- as.numeric(value)
+  center <- mean(value, na.rm = TRUE)
+  scale <- stats::sd(value, na.rm = TRUE)
+  if (!is.finite(scale) || scale == 0) {
+    return(rep(NA_real_, length(value)))
+  }
+  (value - center) / scale
+}
+
+extract_cox_term <- function(cox_summary, term, term_label) {
+  coefficient_names <- rownames(cox_summary$coefficients)
+  row_index <- match(term, coefficient_names)
+  if (is.na(row_index)) {
+    return(NULL)
+  }
+  hazard_ratio <- unname(cox_summary$conf.int[row_index, "exp(coef)"])
+  hr_conf_low <- unname(cox_summary$conf.int[row_index, "lower .95"])
+  hr_conf_high <- unname(cox_summary$conf.int[row_index, "upper .95"])
+  p_value <- unname(cox_summary$coefficients[row_index, "Pr(>|z|)"])
+  coefficient <- unname(cox_summary$coefficients[row_index, "coef"])
+  standard_error <- unname(cox_summary$coefficients[row_index, "se(coef)"])
+  list(
+    term = term,
+    label = term_label,
+    log_hr = coefficient,
+    standard_error = standard_error,
+    hazard_ratio = hazard_ratio,
+    hr_conf_low = hr_conf_low,
+    hr_conf_high = hr_conf_high,
+    p_value = p_value
+  )
+}
+
+fit_signature_interaction_model <- function(model_id, label, covariates) {
+  data <- records[, c("time_days", "event", "expression_value_a", "expression_value_b", covariates), drop = FALSE]
+  data$score_a_z <- zscore_vector(data$expression_value_a)
+  data$score_b_z <- zscore_vector(data$expression_value_b)
+  data <- data[, c("time_days", "event", "score_a_z", "score_b_z", covariates), drop = FALSE]
+  data <- data[is.finite(data$time_days) & !is.na(data$event) & is.finite(data$score_a_z) & is.finite(data$score_b_z), , drop = FALSE]
+  for (covariate in covariates) {
+    data[[covariate]] <- trimws(as.character(data[[covariate]]))
+    data[[covariate]][is.na(data[[covariate]]) | data[[covariate]] == ""] <- NA
+  }
+  data <- data[complete.cases(data), , drop = FALSE]
+  if (nrow(data) < 10) {
+    return(interaction_cox_skip(model_id, label, covariates, "Fewer than 10 complete patients after covariate filtering.", data))
+  }
+  if (sum(data$event, na.rm = TRUE) < 1) {
+    return(interaction_cox_skip(model_id, label, covariates, "No events after covariate filtering.", data))
+  }
+  if (length(unique(data$score_a_z)) < 2 || length(unique(data$score_b_z)) < 2) {
+    return(interaction_cox_skip(model_id, label, covariates, "Both signature scores require variation after filtering.", data))
+  }
+  for (covariate in covariates) {
+    data[[covariate]] <- droplevels(factor(data[[covariate]]))
+    if (length(levels(data[[covariate]])) < 2) {
+      return(interaction_cox_skip(model_id, label, covariates, paste0("Covariate ", covariate, " has fewer than two levels after filtering."), data))
+    }
+  }
+
+  formula_terms <- c("score_a_z * score_b_z", covariates)
+  formula <- as.formula(paste("Surv(time_days, event) ~", paste(formula_terms, collapse = " + ")))
+  model_warnings <- c()
+  fit <- tryCatch(
+    withCallingHandlers(
+      coxph(formula, data = data, ties = "efron"),
+      warning = function(w) {
+        model_warnings <<- c(model_warnings, conditionMessage(w))
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) e
+  )
+  if (inherits(fit, "error")) {
+    return(list(
+      model = model_id,
+      label = label,
+      covariates = as.list(covariates),
+      status = "failed",
+      reason = conditionMessage(fit),
+      n_patients = nrow(data),
+      n_events = sum(data$event, na.rm = TRUE)
+    ))
+  }
+
+  cox_summary <- summary(fit)
+  terms <- Filter(Negate(is.null), list(
+    extract_cox_term(cox_summary, "score_a_z", "Signature A score"),
+    extract_cox_term(cox_summary, "score_b_z", "Signature B score"),
+    extract_cox_term(cox_summary, "score_a_z:score_b_z", "Signature A x Signature B")
+  ))
+  interaction_indexes <- which(vapply(terms, function(item) item$term == "score_a_z:score_b_z", logical(1)))
+  interaction_term <- if (length(interaction_indexes)) terms[[interaction_indexes[[1]]]] else NULL
+  if (is.null(interaction_term)) {
+    return(interaction_cox_skip(model_id, label, covariates, "Could not isolate the signature interaction coefficient.", data))
+  }
+  if (!is.finite(interaction_term$hazard_ratio) || !is.finite(interaction_term$hr_conf_low) || !is.finite(interaction_term$hr_conf_high)) {
+    return(interaction_cox_skip(model_id, label, covariates, "Interaction model did not produce finite HR confidence intervals.", data))
+  }
+
+  ph_test <- tryCatch(cox.zph(fit), error = function(e) e)
+  ph_global_p_value <- NA_real_
+  if (inherits(ph_test, "error")) {
+    model_warnings <- c(model_warnings, paste("cox.zph failed:", conditionMessage(ph_test)))
+  } else if (!is.null(ph_test$table) && "p" %in% colnames(ph_test$table) && "GLOBAL" %in% rownames(ph_test$table)) {
+    ph_global_p_value <- unname(ph_test$table["GLOBAL", "p"])
+    if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
+      model_warnings <- c(model_warnings, "Global proportional hazards test p < 0.05; inspect time-varying effects.")
+    }
+  }
+
+  list(
+    model = model_id,
+    label = label,
+    covariates = as.list(covariates),
+    status = "completed",
+    n_patients = nrow(data),
+    n_events = sum(data$event, na.rm = TRUE),
+    score_scale = "within-analysis z-score",
+    interaction_term = interaction_term,
+    terms = terms,
+    ph_global_p_value = ph_global_p_value,
+    warnings = as.list(unique(model_warnings))
+  )
+}
+
+if (any(is.finite(records$expression_value_a)) && any(is.finite(records$expression_value_b))) {
+  signature_interaction_cox_models <- list(
+    fit_signature_interaction_model("signature_interaction", "Signature interaction", character(0)),
+    fit_signature_interaction_model("signature_interaction_stage_adjusted", "Signature interaction adjusted for stage", c("stage")),
+    fit_signature_interaction_model("signature_interaction_grade_adjusted", "Signature interaction adjusted for grade", c("grade")),
+    fit_signature_interaction_model("signature_interaction_stage_grade_adjusted", "Signature interaction adjusted for stage and grade", c("stage", "grade"))
+  )
+}
+
 group_counts <- as.list(table(records$group))
 event_counts <- as.list(tapply(records$event, records$group, sum))
 median_table <- as.data.frame(summary(fit)$table)
@@ -264,11 +414,13 @@ if (nrow(median_table) > 0 && "median" %in% colnames(median_table)) {
 }
 
 plot_style <- payload$plot_style %||% list()
-palette <- unlist(plot_style$palette %||% c("#2f756f", "#d7953f", "#b44b3f"))
+fallback_palette <- c("#2f756f", "#d7953f", "#5a6f9f", "#b44b3f", "#6c7a77", "#7b6aa8", "#3c8c5f", "#c46a42", "#4b5f5b")
+palette <- unlist(plot_style$palette %||% fallback_palette)
+palette <- unique(c(palette, fallback_palette))
 if (length(palette) < length(levels(records$group))) {
-  palette <- rep(palette, length.out = length(levels(records$group)))
+  palette <- unique(c(palette, grDevices::hcl.colors(length(levels(records$group)), "Dark 3")))
 }
-palette <- palette[seq_len(length(levels(records$group)))]
+palette <- unname(palette[seq_len(length(levels(records$group)))])
 
 font_family <- plot_style$font_family %||% "sans"
 base_font_size <- as.numeric(plot_style$base_font_size %||% 12)
@@ -489,6 +641,7 @@ metrics <- c(
     event_counts = event_counts,
     median_survival_days = median_survival,
     cox_models = cox_models,
+    signature_interaction_cox_models = signature_interaction_cox_models,
     cutpoint_details = payload$cutpoint_details,
     warnings = warnings,
     software_versions = software_versions

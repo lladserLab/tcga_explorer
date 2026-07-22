@@ -277,6 +277,7 @@ def audit_core_results(metrics: dict, median_status: dict) -> dict:
         "hr_conf_high": metrics.get("hr_conf_high"),
         "hr_p_value": metrics.get("hr_p_value"),
         "cox_models": metrics.get("cox_models") or [],
+        "signature_interaction_cox_models": metrics.get("signature_interaction_cox_models") or [],
         "expression_distribution": metrics.get("expression_distribution"),
         "expression_distribution_a": metrics.get("expression_distribution_a"),
         "expression_distribution_b": metrics.get("expression_distribution_b"),
@@ -343,6 +344,7 @@ def render_audit_html(report: dict) -> str:
     medians = results.get("median_survival_days") or {}
     median_status = results.get("median_survival_status") or {}
     cox_models = results.get("cox_models") or []
+    interaction_models = results.get("signature_interaction_cox_models") or []
     artifacts = report.get("artifacts") or {}
     warnings = quality.get("warnings") or []
 
@@ -369,6 +371,20 @@ def render_audit_html(report: dict) -> str:
         f"<td>{esc(model.get('reason'))}</td>"
         "</tr>"
         for model in cox_models
+    )
+    interaction_rows = "\n".join(
+        "<tr>"
+        f"<td>{esc(model.get('label') or model.get('model'))}</td>"
+        f"<td>{esc(', '.join(model.get('covariates') or []) or 'none')}</td>"
+        f"<td>{esc(model.get('n_patients'))}</td>"
+        f"<td>{esc(model.get('n_events'))}</td>"
+        f"<td>{esc((model.get('interaction_term') or {}).get('hazard_ratio'))}</td>"
+        f"<td>{esc((model.get('interaction_term') or {}).get('p_value'))}</td>"
+        f"<td>{esc(model.get('ph_global_p_value'))}</td>"
+        f"<td>{esc(model.get('status'))}</td>"
+        f"<td>{esc(model.get('reason'))}</td>"
+        "</tr>"
+        for model in interaction_models
     )
     artifact_rows = "\n".join(
         "<tr>"
@@ -431,6 +447,12 @@ def render_audit_html(report: dict) -> str:
   <table>
     <thead><tr><th>Model</th><th>Covariates</th><th>Patients</th><th>Events</th><th>HR</th><th>p</th><th>PH global p</th><th>Status</th><th>Reason</th></tr></thead>
     <tbody>{cox_rows}</tbody>
+  </table>
+
+  <h2>Two-Signature Interaction Cox Models</h2>
+  <table>
+    <thead><tr><th>Model</th><th>Covariates</th><th>Patients</th><th>Events</th><th>Interaction HR</th><th>Interaction p</th><th>PH global p</th><th>Status</th><th>Reason</th></tr></thead>
+    <tbody>{interaction_rows}</tbody>
   </table>
 
   <h2>Warnings And Limitations</h2>
@@ -611,11 +633,13 @@ def write_methodology_txt(
         "- Group differences were tested with the log-rank test using survival::survdiff.",
         "- When exactly two expression groups were present, Cox proportional hazards models were fitted with survival::coxph to estimate hazard ratios and 95% confidence intervals.",
         "- Cox models attempted: univariable expression group; expression group adjusted for pathologic stage; expression group adjusted for tumor grade; expression group adjusted for both stage and grade. Adjusted models were reported only when complete covariate data and model rank were sufficient.",
+        interaction_method_text(metrics),
         f"- Log-rank p-value: {format_optional(metrics.get('logrank_p_value'))}",
         f"- Hazard ratio: {format_optional(metrics.get('hazard_ratio'))}",
         f"- Hazard ratio 95% CI: {format_optional(metrics.get('hr_conf_low'))} to {format_optional(metrics.get('hr_conf_high'))}",
         f"- Cox model p-value: {format_optional(metrics.get('hr_p_value'))}",
         f"- Cox adjustment models available: {format_cox_models(metrics.get('cox_models'))}",
+        f"- Signature interaction Cox models available: {format_cox_models(metrics.get('signature_interaction_cox_models'))}",
         "",
         "Plot Generation",
         "- Kaplan-Meier plots were generated in R with survminer::ggsurvplot and ggplot2.",
@@ -715,6 +739,18 @@ def csv_methodology_text(request_payload: dict) -> str:
             "and selected metadata."
         )
     return "- CSV contains the exact patient-level records used for the analysis, including expression value, survival time, event status, assigned group and selected metadata."
+
+
+def interaction_method_text(metrics: dict) -> str:
+    models = metrics.get("signature_interaction_cox_models") or []
+    if not models:
+        return "- Two-signature interaction Cox models were not applicable for this analysis."
+    return (
+        "- For two-signature analyses, continuous Cox interaction models were fitted as "
+        "Surv(time, event) ~ signature_A_z + signature_B_z + signature_A_z:signature_B_z, "
+        "with additional stage/grade-adjusted variants when complete covariate data and model rank were sufficient. "
+        "Signature scores were z-scored within the analyzed patient set before fitting."
+    )
 
 
 def endpoint_method_text(endpoint: str, source: str | None) -> str:
