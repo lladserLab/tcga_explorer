@@ -90,12 +90,22 @@ to survive downstream only when the BH-adjusted log-rank p-value, univariable
 Cox p-value, adjusted Cox p-value and RMST p-value are all <= 0.05, with no
 flagged adjusted proportional-hazards test.
 
-Case 1 has been run and stored under
-`docs/publication/benchmark/kirc_ca9_cutpoint_benchmark/`. CA9 in TCGA-KIRC has
-nominal log-rank/RMST evidence for selected cutpoints, but no dichotomization
-survives the full downstream rule after adjusted Cox and PH checks. This should
-be presented as a robustness/audit demonstration, not as a positive biomarker
-claim.
+Cases 1-4 have been run through
+`scripts/publication/run_single_gene_benchmark_suite.py`. The aggregate table is
+stored at `docs/publication/benchmark/single_gene_benchmark_overview.md`. Across
+six single-gene endpoint scenarios, only BRCA/MKI67-PFI and SKCM/PDCD1-OS have
+at least one cutpoint that survives the full downstream rule. CA9/KIRC-OS,
+BRCA/MKI67-OS, LUAD/CD274-OS and LUAD/CD274-PFI should be presented as
+robustness/audit demonstrations rather than positive biomarker claims.
+
+Cases 5-7 have been run through
+`scripts/publication/run_feature_benchmarks.py`. The aggregate table is stored
+at `docs/publication/benchmark/feature_benchmarks/feature_benchmark_summary.md`.
+The KIRC hypoxia signature shows nominal log-rank and RMST evidence but fails
+adjusted Cox and PH criteria; the SKCM effector x exhaustion interaction is not
+significant; and the CA9 pan-cancer scan finds 8/32 cohorts at FDR<0.10 with a
+modest heterogeneous random-effects estimate. Treat these as workflow
+benchmarks, not biological discovery claims.
 
 For the two-signature case, report both the crossed KM groups and the continuous
 Cox interaction term `signature_A_z:signature_B_z`, including adjusted models

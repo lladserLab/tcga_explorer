@@ -1,7 +1,9 @@
-# TCGA-KIRC CA9 Cutpoint Benchmark
+# TCGA-KIRC CA9 OS cutpoint benchmark
 
-- Run started: 2026-07-22T12:38:56Z
-- Run finished: 2026-07-22T12:38:56Z
+- Run started: 2026-07-22T15:53:58Z
+- Run finished: 2026-07-22T15:53:58Z
+- Completed analyses: 5/5
+- Cached analyses in this run: 5/5
 - API base URL: `http://localhost:3000/tcga_explorer`
 - Cohort: `TCGA-KIRC`
 - Gene: `CA9`

@@ -1,0 +1,583 @@
+{
+  "cached": true,
+  "cohort": "TCGA-SKCM",
+  "cutpoint_method": "combined_median",
+  "downloads": {
+    "audit_html": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/audit_html",
+    "audit_json": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/audit_json",
+    "csv": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/csv",
+    "json": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/json",
+    "png": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/png",
+    "svg": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/svg",
+    "txt": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/txt",
+    "zip": "/api/analyses/d0ea3f2ec99b4609813e367c9c62fd15/download/zip"
+  },
+  "error": null,
+  "expression_scale": "log2_tpm",
+  "expression_scale_label": "log2(TPM + 1)",
+  "gene_symbol": "Effector x Exhaustion",
+  "id": "d0ea3f2ec99b4609813e367c9c62fd15",
+  "metrics": {
+    "audit_report": {
+      "generated_at": "2026-07-22T15:47:11.537461+00:00",
+      "patient_records_sha256": "6e79ec2a726ad12af5750bd06c712602968827fef1337ba869603c7941b71032",
+      "reproducibility_hash": "c68689df877d8df6981df6b04f007ba2254733e327e8c4b0bf40edc5cce082d5",
+      "schema_version": "tcga-explorer-analysis-audit-v1"
+    },
+    "combined_signature": {
+      "group_levels": [
+        "Low_Low",
+        "Low_High",
+        "High_Low",
+        "High_High"
+      ],
+      "label": "Effector x Exhaustion",
+      "method": "median",
+      "sample_overlap": 453,
+      "signature_a": {
+        "genes": [
+          {
+            "query": "CD8A",
+            "resolved_symbol": "CD8A",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "GZMB",
+            "resolved_symbol": "GZMB",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "PRF1",
+            "resolved_symbol": "PRF1",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "IFNG",
+            "resolved_symbol": "IFNG",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CXCL9",
+            "resolved_symbol": "CXCL9",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CXCL10",
+            "resolved_symbol": "CXCL10",
+            "status": "exact",
+            "weight": 1.0
+          }
+        ],
+        "label": "ZSCORE(CD8A+GZMB+PRF1+IFNG+CXCL9+CXCL10)",
+        "method": "zscore",
+        "name": "Effector",
+        "sample_overlap": 473
+      },
+      "signature_b": {
+        "genes": [
+          {
+            "query": "PDCD1",
+            "resolved_symbol": "PDCD1",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CTLA4",
+            "resolved_symbol": "CTLA4",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "LAG3",
+            "resolved_symbol": "LAG3",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "HAVCR2",
+            "resolved_symbol": "HAVCR2",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "TIGIT",
+            "resolved_symbol": "TIGIT",
+            "status": "exact",
+            "weight": 1.0
+          }
+        ],
+        "label": "ZSCORE(PDCD1+CTLA4+LAG3+HAVCR2+TIGIT)",
+        "method": "zscore",
+        "name": "Exhaustion",
+        "sample_overlap": 473
+      }
+    },
+    "cox_models": [],
+    "cutpoint_details": {
+      "combination": "signature_a_x_signature_b",
+      "method": "median",
+      "signature_a_levels": "Low/High",
+      "signature_a_threshold": -0.05251275729194684,
+      "signature_b_levels": "Low/High",
+      "signature_b_threshold": -0.06882689839063086
+    },
+    "endpoint": "OS",
+    "endpoint_label": "Overall survival",
+    "endpoint_qc": {
+      "available": true,
+      "events": 213,
+      "label": "Overall survival",
+      "patients": 453,
+      "reason": "453 linked patients and 213 events from TCGA-CDR.",
+      "source": "tcga_cdr",
+      "value": "OS"
+    },
+    "endpoint_source": "tcga_cdr",
+    "event_counts": {
+      "High_High": 74,
+      "High_Low": 7,
+      "Low_High": 14,
+      "Low_Low": 118
+    },
+    "expression_distribution_a": {
+      "bins": [
+        {
+          "count": 33,
+          "label": "-1.69--1.27"
+        },
+        {
+          "count": 68,
+          "label": "-1.27--0.84"
+        },
+        {
+          "count": 72,
+          "label": "-0.84--0.42"
+        },
+        {
+          "count": 64,
+          "label": "-0.42-0.01"
+        },
+        {
+          "count": 57,
+          "label": "0.01-0.43"
+        },
+        {
+          "count": 70,
+          "label": "0.43-0.86"
+        },
+        {
+          "count": 47,
+          "label": "0.86-1.28"
+        },
+        {
+          "count": 21,
+          "label": "1.28-1.71"
+        },
+        {
+          "count": 16,
+          "label": "1.71-2.13"
+        },
+        {
+          "count": 5,
+          "label": "2.13-2.56"
+        }
+      ],
+      "max": 2.5573653633089317,
+      "median": -0.05251275729194684,
+      "min": -1.689727369965398,
+      "n": 453,
+      "q1": -0.7543541062446858,
+      "q3": 0.6834811290053944
+    },
+    "expression_distribution_b": {
+      "bins": [
+        {
+          "count": 28,
+          "label": "-1.63--1.23"
+        },
+        {
+          "count": 72,
+          "label": "-1.23--0.83"
+        },
+        {
+          "count": 67,
+          "label": "-0.83--0.43"
+        },
+        {
+          "count": 69,
+          "label": "-0.43--0.03"
+        },
+        {
+          "count": 56,
+          "label": "-0.03-0.37"
+        },
+        {
+          "count": 60,
+          "label": "0.37-0.77"
+        },
+        {
+          "count": 52,
+          "label": "0.77-1.17"
+        },
+        {
+          "count": 28,
+          "label": "1.17-1.57"
+        },
+        {
+          "count": 10,
+          "label": "1.57-1.98"
+        },
+        {
+          "count": 11,
+          "label": "1.98-2.38"
+        }
+      ],
+      "max": 2.375367062355296,
+      "median": -0.06882689839063086,
+      "min": -1.627224810167633,
+      "n": 453,
+      "q1": -0.7297342418189551,
+      "q3": 0.7043528343851457
+    },
+    "expression_scale": "log2_tpm",
+    "expression_scale_label": "log2(TPM + 1)",
+    "group_counts": {
+      "High_High": 202,
+      "High_Low": 24,
+      "Low_High": 24,
+      "Low_Low": 203
+    },
+    "logrank_p_value": 1.1203326065745145e-06,
+    "median_survival_days": {
+      "High_High": 4634,
+      "High_Low": 2454,
+      "Low_High": 2184,
+      "Low_Low": 1525
+    },
+    "median_survival_status": {
+      "High_High": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "High_Low": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "Low_High": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "Low_Low": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      }
+    },
+    "n_events": 213,
+    "n_patients": 453,
+    "quality": {
+      "groups": {
+        "High_High": {
+          "events": 74,
+          "patients": 202
+        },
+        "High_Low": {
+          "events": 7,
+          "patients": 24
+        },
+        "Low_High": {
+          "events": 14,
+          "patients": 24
+        },
+        "Low_Low": {
+          "events": 118,
+          "patients": 203
+        }
+      },
+      "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+      "low_event_groups": []
+    },
+    "rmst": {
+      "reason": "RMST is reported only for two expression groups.",
+      "status": "skipped"
+    },
+    "sample_selection": {
+      "after_user_filters": 473,
+      "complete_endpoint_samples": 457,
+      "complete_os_samples": 457,
+      "duplicate_samples_removed": 4,
+      "endpoint": "OS",
+      "endpoint_label": "Overall survival",
+      "endpoint_source": "tcga_cdr",
+      "input_samples": 473,
+      "missing_endpoint_removed": 16,
+      "missing_os_removed": 16,
+      "priority_order": [
+        "Primary tumor / primary blood-derived cancer",
+        "Recurrent tumor",
+        "Additional new primary",
+        "Metastatic / additional metastatic",
+        "Human tumor original cells",
+        "Normal tissue / normal blood",
+        "Control, cell line, xenograft or unknown"
+      ],
+      "removed_duplicate_sample_types": {
+        "Additional Metastatic": 1,
+        "Metastatic": 2,
+        "Solid Tissue Normal": 1
+      },
+      "retained_patients": 453,
+      "retained_sample_types": {
+        "Metastatic": 351,
+        "Primary Tumor": 102
+      },
+      "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+      "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+      "sample_type_filter_applied": false
+    },
+    "signature": {
+      "label": "Effector x Exhaustion",
+      "method": "combined",
+      "signatures": [
+        {
+          "genes": [
+            {
+              "query": "CD8A",
+              "resolved_symbol": "CD8A",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "GZMB",
+              "resolved_symbol": "GZMB",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "PRF1",
+              "resolved_symbol": "PRF1",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "IFNG",
+              "resolved_symbol": "IFNG",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CXCL9",
+              "resolved_symbol": "CXCL9",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CXCL10",
+              "resolved_symbol": "CXCL10",
+              "status": "exact",
+              "weight": 1.0
+            }
+          ],
+          "label": "ZSCORE(CD8A+GZMB+PRF1+IFNG+CXCL9+CXCL10)",
+          "method": "zscore",
+          "name": "Effector",
+          "sample_overlap": 473
+        },
+        {
+          "genes": [
+            {
+              "query": "PDCD1",
+              "resolved_symbol": "PDCD1",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CTLA4",
+              "resolved_symbol": "CTLA4",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "LAG3",
+              "resolved_symbol": "LAG3",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "HAVCR2",
+              "resolved_symbol": "HAVCR2",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "TIGIT",
+              "resolved_symbol": "TIGIT",
+              "status": "exact",
+              "weight": 1.0
+            }
+          ],
+          "label": "ZSCORE(PDCD1+CTLA4+LAG3+HAVCR2+TIGIT)",
+          "method": "zscore",
+          "name": "Exhaustion",
+          "sample_overlap": 473
+        }
+      ]
+    },
+    "signature_interaction_cox_models": [
+      {
+        "covariates": [],
+        "interaction_term": {
+          "hazard_ratio": 0.9854626925159353,
+          "hr_conf_high": 1.1337301403903621,
+          "hr_conf_low": 0.8565854287038522,
+          "label": "Signature A x Signature B",
+          "log_hr": -0.014644009507825927,
+          "p_value": 0.8377421364343529,
+          "standard_error": 0.07151009720697052,
+          "term": "score_a_z:score_b_z"
+        },
+        "label": "Signature interaction",
+        "model": "signature_interaction",
+        "n_events": 213,
+        "n_patients": 453,
+        "ph_global_p_value": 0.05557485532058043,
+        "score_scale": "within-analysis z-score",
+        "status": "completed",
+        "terms": [
+          {
+            "hazard_ratio": 0.8205766655136043,
+            "hr_conf_high": 1.2607032294902614,
+            "hr_conf_low": 0.5341035449379145,
+            "label": "Signature A score",
+            "log_hr": -0.19774793526234086,
+            "p_value": 0.36675493272751236,
+            "standard_error": 0.21909464794542152,
+            "term": "score_a_z"
+          },
+          {
+            "hazard_ratio": 0.7922892406713459,
+            "hr_conf_high": 1.2289911525419877,
+            "hr_conf_low": 0.5107622130437852,
+            "label": "Signature B score",
+            "log_hr": -0.2328287509701859,
+            "p_value": 0.2986016938737048,
+            "standard_error": 0.22399512750390246,
+            "term": "score_b_z"
+          },
+          {
+            "hazard_ratio": 0.9854626925159353,
+            "hr_conf_high": 1.1337301403903621,
+            "hr_conf_low": 0.8565854287038522,
+            "label": "Signature A x Signature B",
+            "log_hr": -0.014644009507825927,
+            "p_value": 0.8377421364343529,
+            "standard_error": 0.07151009720697052,
+            "term": "score_a_z:score_b_z"
+          }
+        ],
+        "warnings": []
+      },
+      {
+        "covariates": [
+          "stage"
+        ],
+        "interaction_term": {
+          "hazard_ratio": 1.208756115613369,
+          "hr_conf_high": 1.684269441115997,
+          "hr_conf_low": 0.8674926418332456,
+          "label": "Signature A x Signature B",
+          "log_hr": 0.18959182722520007,
+          "p_value": 0.26265690231905264,
+          "standard_error": 0.16925825121054447,
+          "term": "score_a_z:score_b_z"
+        },
+        "label": "Signature interaction adjusted for stage",
+        "model": "signature_interaction_stage_adjusted",
+        "n_events": 47,
+        "n_patients": 121,
+        "ph_global_p_value": 0.7069500879638868,
+        "score_scale": "within-analysis z-score",
+        "status": "completed",
+        "terms": [
+          {
+            "hazard_ratio": 1.1430248792891844,
+            "hr_conf_high": 3.191994792665362,
+            "hr_conf_low": 0.40930701944632664,
+            "label": "Signature A score",
+            "log_hr": 0.13367815123298757,
+            "p_value": 0.7986271744824651,
+            "standard_error": 0.5239728408702076,
+            "term": "score_a_z"
+          },
+          {
+            "hazard_ratio": 0.41268292900655534,
+            "hr_conf_high": 1.1584480824866716,
+            "hr_conf_low": 0.14701323474752184,
+            "label": "Signature B score",
+            "log_hr": -0.8850757072502986,
+            "p_value": 0.09282679031792491,
+            "standard_error": 0.5266203689716862,
+            "term": "score_b_z"
+          },
+          {
+            "hazard_ratio": 1.208756115613369,
+            "hr_conf_high": 1.684269441115997,
+            "hr_conf_low": 0.8674926418332456,
+            "label": "Signature A x Signature B",
+            "log_hr": 0.18959182722520007,
+            "p_value": 0.26265690231905264,
+            "standard_error": 0.16925825121054447,
+            "term": "score_a_z:score_b_z"
+          }
+        ],
+        "warnings": [
+          "Loglik converged before variable  6 ; coefficient may be infinite. "
+        ]
+      },
+      {
+        "covariates": [
+          "grade"
+        ],
+        "label": "Signature interaction adjusted for grade",
+        "model": "signature_interaction_grade_adjusted",
+        "n_events": 0,
+        "n_patients": 0,
+        "reason": "Fewer than 10 complete patients after covariate filtering.",
+        "status": "skipped"
+      },
+      {
+        "covariates": [
+          "stage",
+          "grade"
+        ],
+        "label": "Signature interaction adjusted for stage and grade",
+        "model": "signature_interaction_stage_grade_adjusted",
+        "n_events": 0,
+        "n_patients": 0,
+        "reason": "Fewer than 10 complete patients after covariate filtering.",
+        "status": "skipped"
+      }
+    ],
+    "software_versions": {
+      "R": "R version 4.4.2 (2024-10-31)",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "survRM2": "1.0.4",
+      "survival": "3.8.9",
+      "survminer": "0.5.2",
+      "svglite": "2.2.2"
+    },
+    "time_axis_label": "Time (months)",
+    "time_unit": "months",
+    "warnings": []
+  },
+  "status": "completed",
+  "warnings": [
+    "16 samples were excluded because Overall survival was not usable.",
+    "4 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority."
+  ]
+}

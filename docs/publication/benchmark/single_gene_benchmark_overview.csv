@@ -1,0 +1,7 @@
+benchmark_id,cohort,gene,endpoint,methods_completed,nominal_logrank_methods,bh_methods,adjusted_methods,rmst_methods,ph_flagged_methods,surviving_methods,best_bh_logrank_p,best_adjusted_p,best_rmst_p,decision,summary_path
+kirc_ca9_cutpoints,TCGA-KIRC,CA9,OS,5,3,2,0,3,4,0,0.0024529675604373358,0.058379426078700766,0.0006170093681031949,No method survives,docs/publication/benchmark/kirc_ca9_cutpoint_benchmark/summary.csv
+brca_mki67_os_cutpoints,TCGA-BRCA,MKI67,OS,5,0,0,0,0,5,0,0.1863877212126236,0.09953131426622058,0.5644844617627462,No method survives,docs/publication/benchmark/brca_mki67_os_cutpoint_benchmark/summary.csv
+brca_mki67_pfi_cutpoints,TCGA-BRCA,MKI67,PFI,5,1,1,1,1,0,1,0.013535097458605705,0.00035128797467745516,5.122677945189756e-07,At least one survives,docs/publication/benchmark/brca_mki67_pfi_cutpoint_benchmark/summary.csv
+skcm_pdcd1_os_cutpoints,TCGA-SKCM,PDCD1,OS,5,5,5,2,5,0,2,9.14336114044012e-07,0.0007115349631040444,3.51250218635673e-05,At least one survives,docs/publication/benchmark/skcm_pdcd1_os_cutpoint_benchmark/summary.csv
+luad_cd274_os_cutpoints,TCGA-LUAD,CD274,OS,5,0,0,0,0,0,0,0.33361478121608945,0.25057214558530766,0.09424183637360173,No method survives,docs/publication/benchmark/luad_cd274_os_cutpoint_benchmark/summary.csv
+luad_cd274_pfi_cutpoints,TCGA-LUAD,CD274,PFI,5,1,0,1,1,0,0,0.11037941156357145,0.041619458704734914,0.039962229779636156,No method survives,docs/publication/benchmark/luad_cd274_pfi_cutpoint_benchmark/summary.csv

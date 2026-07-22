@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-LUAD CD274 PFI cutpoint robustness benchmark.}
+\label{tab:luad-cd274-pfi-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 505 & 208 & 0.110 & 0.023 & 0.042 & -294 & Fails BH \\
+Median & 505 & 208 & 0.695 & 0.695 & 0.454 & 84 & Fails BH \\
+Upper Q & 505 & 208 & 0.454 & 0.228 & 0.678 & -184 & Fails BH \\
+Outer Q & 254 & 117 & 0.695 & 0.580 & 0.904 & -124 & Fails BH \\
+75th pct. & 505 & 208 & 0.454 & 0.273 & 0.786 & -171 & Fails BH \\
+\bottomrule
+\end{tabular}
+\end{table}

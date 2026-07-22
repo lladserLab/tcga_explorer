@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Positioning against representative survival-analysis resources.}
+\label{tab:comparator-matrix}
+\begin{tabularx}{\linewidth}{lXX}
+\toprule
+Resource & Main overlap & TCGA Explorer distinction \\
+\midrule
+GEPIA2 & TCGA/GTEx expression survival and signature analysis. & Patient-level audit bundle, PH QC, RMST and cutpoint robustness as exported outputs. \\
+cSurvival & Two-predictor survival interaction, optimal two-predictor cutoffs and gene-set survival. & Not positioned as first two-predictor tool; emphasis is auditability, endpoint provenance and robustness reporting. \\
+DoSurvive & Multi-omic log-rank, Cox, AFT and combined biomarker survival across TCGA endpoints. & Does not claim uniqueness in multivariable survival; adds hashable records, PH/RMST and cutpoint survival checks. \\
+PESSA & ssGSEA gene-set survival with median/optimal cutoffs and Cox outputs. & Simpler transparent signatures plus endpoint/sample audit, PH diagnostics, RMST and robustness summaries. \\
+\bottomrule
+\end{tabularx}
+\end{table}

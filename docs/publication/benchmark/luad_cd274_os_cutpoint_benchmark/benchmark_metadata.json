@@ -6,57 +6,57 @@
     "max_concurrency": 1,
     "total": 5
   },
-  "benchmark_id": "kirc_ca9_cutpoints",
-  "cohort": "TCGA-KIRC",
+  "benchmark_id": "luad_cd274_os_cutpoints",
+  "cohort": "TCGA-LUAD",
   "custom_percentile": 75.0,
   "endpoint": "OS",
   "endpoint_options": {
-    "cohort": "TCGA-KIRC",
+    "cohort": "TCGA-LUAD",
     "endpoints": [
       {
         "available": true,
-        "events": 175,
+        "events": 182,
         "label": "Overall survival",
-        "patients": 531,
-        "reason": "531 linked patients and 175 events from TCGA-CDR.",
+        "patients": 505,
+        "reason": "505 linked patients and 182 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "OS"
       },
       {
         "available": true,
-        "events": 159,
+        "events": 208,
         "label": "Progression-free interval",
-        "patients": 529,
-        "reason": "529 linked patients and 159 events from TCGA-CDR.",
+        "patients": 505,
+        "reason": "505 linked patients and 208 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "PFI"
       },
       {
         "available": true,
-        "events": 15,
+        "events": 90,
         "label": "Disease-free interval",
-        "patients": 115,
-        "reason": "115 linked patients and 15 events from TCGA-CDR.",
+        "patients": 302,
+        "reason": "302 linked patients and 90 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "DFI"
       },
       {
         "available": true,
-        "events": 109,
+        "events": 112,
         "label": "Disease-specific survival",
-        "patients": 520,
-        "reason": "520 linked patients and 109 events from TCGA-CDR.",
+        "patients": 470,
+        "reason": "470 linked patients and 112 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "DSS"
       }
     ]
   },
   "expression_scale": "log2_tpm",
-  "finished_at": "2026-07-22T15:53:58Z",
-  "gene": "CA9",
+  "finished_at": "2026-07-22T15:53:59Z",
+  "gene": "CD274",
   "gene_resolution": {
-    "query": "CA9",
-    "resolved": "CA9",
+    "query": "CD274",
+    "resolved": "CD274",
     "status": "exact",
     "warnings": []
   },
@@ -91,9 +91,9 @@
     "upper_lower_quartile",
     "percentile"
   ],
-  "resolved_gene": "CA9",
+  "resolved_gene": "CD274",
   "robustness_alpha": 0.05,
-  "started_at": "2026-07-22T15:53:58Z",
+  "started_at": "2026-07-22T15:53:59Z",
   "time_unit": "months",
-  "title": "TCGA-KIRC CA9 OS cutpoint benchmark"
+  "title": "TCGA-LUAD CD274 OS cutpoint benchmark"
 }

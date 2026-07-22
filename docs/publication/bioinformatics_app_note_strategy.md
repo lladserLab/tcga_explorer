@@ -112,26 +112,49 @@ Minimum cases for the paper:
 | 7 | Pan-cancer | CA9 | OS | Continuous pan-cancer Cox/FDR workflow. |
 | 8 | Low-event endpoint | Any feasible cohort/marker | DSS or DFI | Endpoint QC and not-reached median handling. |
 
-## Current Benchmark Result
+## Current Benchmark Results
 
-Case 1 has been run through the HTTP API:
-
-```text
-scripts/publication/run_cutpoint_benchmark.py
-```
-
-Output:
+Cases 1-4 have been run through the HTTP API, including endpoint sensitivity
+checks for BRCA/MKI67 and LUAD/CD274:
 
 ```text
-docs/publication/benchmark/kirc_ca9_cutpoint_benchmark/
+scripts/publication/run_single_gene_benchmark_suite.py
 ```
 
-Result summary: CA9 in TCGA-KIRC shows nominal evidence for selected cutpoints
-in log-rank, univariable Cox and RMST, but no dichotomization survives the full
-downstream rule because adjusted Cox and/or PH diagnostics fail. This supports
-the Application Note narrative: TCGA Explorer is not just another
-Kaplan-Meier plotter, but a tool that makes cutoff-dependent exploratory
-signals auditable and harder to overclaim.
+Aggregate output:
+
+```text
+docs/publication/benchmark/single_gene_benchmark_overview.md
+```
+
+Result summary: across six single-gene endpoint scenarios, only BRCA/MKI67-PFI
+and SKCM/PDCD1-OS retain at least one dichotomization after the full downstream
+rule. CA9/KIRC-OS, BRCA/MKI67-OS, LUAD/CD274-OS and LUAD/CD274-PFI show why
+log-rank or RMST evidence alone is not enough. This supports the Application
+Note narrative: TCGA Explorer is not just another Kaplan-Meier plotter, but a
+tool that makes cutoff-dependent exploratory signals auditable and harder to
+overclaim.
+
+Cases 5-7 have also been run through the HTTP API:
+
+```text
+scripts/publication/run_feature_benchmarks.py
+```
+
+Aggregate output:
+
+```text
+docs/publication/benchmark/feature_benchmarks/feature_benchmark_summary.md
+```
+
+Feature benchmark summary: the KIRC hypoxia z-score signature has nominal
+log-rank evidence and an RMST difference but fails adjusted Cox and PH criteria;
+the SKCM effector-by-exhaustion continuous interaction is not significant; and
+the CA9 pan-cancer scan identifies 8/32 cohorts at FDR<0.10 while the KIRC
+reference cohort is not significant and the random-effects estimate is modest
+and heterogeneous. These examples support the software-scope claim that TCGA
+Explorer can audit advanced workflows without overstating any single biomarker
+result.
 
 ## Sources
 

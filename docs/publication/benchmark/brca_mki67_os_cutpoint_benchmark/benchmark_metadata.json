@@ -6,46 +6,46 @@
     "max_concurrency": 1,
     "total": 5
   },
-  "benchmark_id": "kirc_ca9_cutpoints",
-  "cohort": "TCGA-KIRC",
+  "benchmark_id": "brca_mki67_os_cutpoints",
+  "cohort": "TCGA-BRCA",
   "custom_percentile": 75.0,
   "endpoint": "OS",
   "endpoint_options": {
-    "cohort": "TCGA-KIRC",
+    "cohort": "TCGA-BRCA",
     "endpoints": [
       {
         "available": true,
-        "events": 175,
+        "events": 151,
         "label": "Overall survival",
-        "patients": 531,
-        "reason": "531 linked patients and 175 events from TCGA-CDR.",
+        "patients": 1080,
+        "reason": "1080 linked patients and 151 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "OS"
       },
       {
         "available": true,
-        "events": 159,
+        "events": 145,
         "label": "Progression-free interval",
-        "patients": 529,
-        "reason": "529 linked patients and 159 events from TCGA-CDR.",
+        "patients": 1080,
+        "reason": "1080 linked patients and 145 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "PFI"
       },
       {
         "available": true,
-        "events": 15,
+        "events": 84,
         "label": "Disease-free interval",
-        "patients": 115,
-        "reason": "115 linked patients and 15 events from TCGA-CDR.",
+        "patients": 938,
+        "reason": "938 linked patients and 84 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "DFI"
       },
       {
         "available": true,
-        "events": 109,
+        "events": 83,
         "label": "Disease-specific survival",
-        "patients": 520,
-        "reason": "520 linked patients and 109 events from TCGA-CDR.",
+        "patients": 1061,
+        "reason": "1061 linked patients and 83 events from TCGA-CDR.",
         "source": "tcga_cdr",
         "value": "DSS"
       }
@@ -53,10 +53,10 @@
   },
   "expression_scale": "log2_tpm",
   "finished_at": "2026-07-22T15:53:58Z",
-  "gene": "CA9",
+  "gene": "MKI67",
   "gene_resolution": {
-    "query": "CA9",
-    "resolved": "CA9",
+    "query": "MKI67",
+    "resolved": "MKI67",
     "status": "exact",
     "warnings": []
   },
@@ -91,9 +91,9 @@
     "upper_lower_quartile",
     "percentile"
   ],
-  "resolved_gene": "CA9",
+  "resolved_gene": "MKI67",
   "robustness_alpha": 0.05,
   "started_at": "2026-07-22T15:53:58Z",
   "time_unit": "months",
-  "title": "TCGA-KIRC CA9 OS cutpoint benchmark"
+  "title": "TCGA-BRCA MKI67 OS cutpoint benchmark"
 }

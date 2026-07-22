@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-BRCA MKI67 PFI cutpoint robustness benchmark.}
+\label{tab:brca-mki67-pfi-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 1080 & 145 & 0.014 & 0.004 & 3.51e-04 & -2535 & Yes \\
+Median & 1080 & 145 & 0.359 & 0.216 & 0.083 & -147 & Fails BH \\
+Upper Q & 1080 & 145 & 0.384 & 0.385 & 0.352 & 545 & Fails BH \\
+Outer Q & 540 & 71 & 0.328 & 0.133 & 0.057 & -435 & Fails BH \\
+75th pct. & 1080 & 145 & 0.384 & 0.385 & 0.352 & 545 & Fails BH \\
+\bottomrule
+\end{tabular}
+\end{table}

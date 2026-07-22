@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-SKCM PDCD1 OS cutpoint robustness benchmark.}
+\label{tab:skcm-pdcd1-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 453 & 213 & 9.14e-07 & 3.22e-07 & 0.011 & 2139 & Yes \\
+Median & 453 & 213 & 5.27e-06 & 4.59e-06 & 0.094 & 2027 & Fails adjusted \\
+Upper Q & 453 & 213 & 0.003 & 0.003 & 0.132 & 1129 & Fails adjusted \\
+Outer Q & 228 & 110 & 5.27e-06 & 4.71e-06 & 7.12e-04 & 1858 & Yes \\
+75th pct. & 453 & 213 & 0.002 & 0.002 & 0.078 & 1175 & Fails adjusted \\
+\bottomrule
+\end{tabular}
+\end{table}

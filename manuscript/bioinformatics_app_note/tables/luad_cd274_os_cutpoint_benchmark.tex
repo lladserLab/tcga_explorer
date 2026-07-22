@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-LUAD CD274 OS cutpoint robustness benchmark.}
+\label{tab:luad-cd274-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 505 & 182 & 0.334 & 0.068 & 0.251 & -282 & Fails BH \\
+Median & 505 & 182 & 0.962 & 0.962 & 0.651 & -9 & Fails BH \\
+Upper Q & 505 & 182 & 0.605 & 0.364 & 0.495 & -230 & Fails BH \\
+Outer Q & 254 & 103 & 0.962 & 0.771 & 0.978 & -155 & Fails BH \\
+75th pct. & 505 & 182 & 0.605 & 0.336 & 0.431 & -237 & Fails BH \\
+\bottomrule
+\end{tabular}
+\end{table}

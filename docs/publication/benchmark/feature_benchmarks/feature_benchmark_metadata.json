@@ -1,0 +1,61 @@
+{
+  "api_base_url": "http://localhost:3000/tcga_explorer",
+  "feature_rows": [
+    {
+      "adjusted_p_value": 0.11070842390550045,
+      "audit_hash": "f2c52c0594f7f807d412db207daae422733f186df383479752013eccb3c477a8",
+      "cohort": "TCGA-KIRC",
+      "endpoint": "OS",
+      "id": "f1d68b44ac03416299a1e2360f7642d9",
+      "kind": "weighted_signature",
+      "label": "KIRC hypoxia z-score signature",
+      "marker": "ZSCORE(CA9+VEGFA+SLC2A1+LDHA+PGK1)",
+      "n_events": 175,
+      "n_patients": 531,
+      "ph_global_p_value": 0.00299566074975779,
+      "primary_p_value": 0.00021610041762609722,
+      "primary_statistic": "log-rank",
+      "rmst_p_value": 0.0006474877540864504,
+      "status": "completed",
+      "summary": "HR 0.74 (0.51-1.07); RMST delta 569 days"
+    },
+    {
+      "adjusted_p_value": 0.8377421364343529,
+      "audit_hash": "c68689df877d8df6981df6b04f007ba2254733e327e8c4b0bf40edc5cce082d5",
+      "cohort": "TCGA-SKCM",
+      "endpoint": "OS",
+      "id": "d0ea3f2ec99b4609813e367c9c62fd15",
+      "kind": "two_signature",
+      "label": "SKCM effector x exhaustion signatures",
+      "marker": "Effector x Exhaustion",
+      "n_events": 213,
+      "n_patients": 453,
+      "ph_global_p_value": 0.05557485532058043,
+      "primary_p_value": 0.8377421364343529,
+      "primary_statistic": "interaction Cox",
+      "rmst_p_value": null,
+      "status": "completed",
+      "summary": "Interaction HR 0.99; groups 4"
+    },
+    {
+      "adjusted_p_value": 0.3842285714285714,
+      "audit_hash": "pc_97c604137ae71e05964278ca",
+      "cohort": "pan-cancer",
+      "endpoint": "OS",
+      "id": "pc_97c604137ae71e05964278ca",
+      "kind": "pancancer",
+      "label": "CA9 pan-cancer continuous Cox",
+      "marker": "CA9",
+      "n_events": 3149,
+      "n_patients": 10183,
+      "ph_global_p_value": null,
+      "primary_p_value": 0.1681,
+      "primary_statistic": "continuous Cox/FDR",
+      "rmst_p_value": null,
+      "status": "completed",
+      "summary": "8/32 cohorts FDR<0.10; random-effects HR 1.08"
+    }
+  ],
+  "finished_at": "2026-07-22T15:53:58Z",
+  "started_at": "2026-07-22T15:53:58Z"
+}

@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-BRCA MKI67 OS cutpoint robustness benchmark.}
+\label{tab:brca-mki67-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 1080 & 151 & 0.186 & 0.071 & 0.220 & -317 & Fails BH \\
+Median & 1080 & 151 & 0.583 & 0.583 & 0.692 & 128 & Fails BH \\
+Upper Q & 1080 & 151 & 0.186 & 0.113 & 0.100 & 52 & Fails BH \\
+Outer Q & 540 & 88 & 0.428 & 0.343 & 0.356 & 70 & Fails BH \\
+75th pct. & 1080 & 151 & 0.186 & 0.113 & 0.100 & 52 & Fails BH \\
+\bottomrule
+\end{tabular}
+\end{table}

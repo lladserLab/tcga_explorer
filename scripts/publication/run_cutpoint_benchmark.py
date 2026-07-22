@@ -17,12 +17,15 @@ from typing import Any
 DEFAULT_API_BASE_URL = "http://localhost:3000/tcga_explorer"
 DEFAULT_OUTPUT_DIR = Path("docs/publication/benchmark/kirc_ca9_cutpoint_benchmark")
 DEFAULT_LATEX_TABLE = Path("manuscript/bioinformatics_app_note/tables/kirc_ca9_cutpoint_benchmark.tex")
+DEFAULT_BENCHMARK_ID = "kirc_ca9_cutpoints"
 DEFAULT_METHODS = ["maxstat", "median", "upper_quartile", "upper_lower_quartile", "percentile"]
 ROBUSTNESS_ALPHA = 0.05
 
 
 def main() -> int:
     args = parse_args()
+    benchmark_id = args.benchmark_id or slugify(f"{args.cohort}_{args.gene}_{args.endpoint}_cutpoint_benchmark")
+    title = args.title or f"{args.cohort} {args.gene} {args.endpoint} cutpoint benchmark"
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     args.latex_table.parent.mkdir(parents=True, exist_ok=True)
@@ -59,7 +62,8 @@ def main() -> int:
         annotate_robustness(row)
 
     metadata = {
-        "benchmark_id": "kirc_ca9_cutpoint_benchmark",
+        "benchmark_id": benchmark_id,
+        "title": title,
         "started_at": started_at,
         "finished_at": finished_at,
         "api_base_url": args.api_base_url,
@@ -87,7 +91,7 @@ def main() -> int:
     write_json(output_dir / "benchmark_results.raw.json", batch)
     write_csv(output_dir / "summary.csv", rows)
     write_markdown(output_dir / "summary.md", metadata, rows)
-    write_latex_table(args.latex_table, rows)
+    write_latex_table(args.latex_table, metadata, rows)
 
     print(f"Completed {metadata['batch']['completed']}/{metadata['batch']['total']} analyses")
     print(f"Wrote {output_dir / 'summary.csv'}")
@@ -103,6 +107,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--api-base-url", default=DEFAULT_API_BASE_URL)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--latex-table", type=Path, default=DEFAULT_LATEX_TABLE)
+    parser.add_argument("--benchmark-id", default=DEFAULT_BENCHMARK_ID)
+    parser.add_argument("--title", default="")
     parser.add_argument("--cohort", default="TCGA-KIRC")
     parser.add_argument("--gene", default="CA9")
     parser.add_argument("--endpoint", default="OS", choices=["OS", "DSS", "DFI", "PFI"])
@@ -364,17 +370,20 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "code",
     ]
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
+        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
 
 def write_markdown(path: Path, metadata: dict[str, Any], rows: list[dict[str, Any]]) -> None:
+    cached_count = sum(1 for row in rows if row.get("cached"))
     lines = [
-        "# TCGA-KIRC CA9 Cutpoint Benchmark",
+        f"# {metadata['title']}",
         "",
         f"- Run started: {metadata['started_at']}",
         f"- Run finished: {metadata['finished_at']}",
+        f"- Completed analyses: {metadata['batch']['completed']}/{metadata['batch']['total']}",
+        f"- Cached analyses in this run: {cached_count}/{len(rows)}",
         f"- API base URL: `{metadata['api_base_url']}`",
         f"- Cohort: `{metadata['cohort']}`",
         f"- Gene: `{metadata['resolved_gene']}`",
@@ -418,12 +427,14 @@ def write_markdown(path: Path, metadata: dict[str, Any], rows: list[dict[str, An
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_latex_table(path: Path, rows: list[dict[str, Any]]) -> None:
+def write_latex_table(path: Path, metadata: dict[str, Any], rows: list[dict[str, Any]]) -> None:
+    latex_id = latex_escape(str(metadata["benchmark_id"]).replace("_", "-"))
+    caption = latex_escape(str(metadata["title"]).replace("cutpoint benchmark", "cutpoint robustness benchmark"))
     lines = [
         "\\begin{table}[t]",
         "\\centering",
-        "\\caption{TCGA-KIRC CA9 cutpoint robustness benchmark.}",
-        "\\label{tab:kirc-ca9-cutpoints}",
+        f"\\caption{{{caption}.}}",
+        f"\\label{{tab:{latex_id}}}",
         "\\begin{tabular}{lrrrrrrl}",
         "\\toprule",
         "Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\\Delta$ & Decision \\\\",
@@ -464,6 +475,13 @@ def method_label(method: str) -> str:
         "upper_lower_quartile": "Outer Q",
         "percentile": "75th pct.",
     }.get(method, method)
+
+
+def slugify(value: str) -> str:
+    slug = "".join(char.lower() if char.isalnum() else "_" for char in value)
+    while "__" in slug:
+        slug = slug.replace("__", "_")
+    return slug.strip("_")
 
 
 def write_json(path: Path, value: Any) -> None:

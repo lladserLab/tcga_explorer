@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Feature benchmark summary for signatures, two-signature interaction and pan-cancer Cox.}
+\label{tab:feature-benchmark-summary}
+\begin{tabularx}{\linewidth}{llrrX}
+\toprule
+Workflow & Endpoint & n & Events & Summary \\
+\midrule
+KIRC hypoxia signature & OS & 531 & 175 & log-rank p=2.16e-04; adj=0.111; PH=0.003; HR 0.74 (0.51-1.07); RMST +569 d \\
+SKCM effector x exhaustion & OS & 453 & 213 & interaction p=0.838; adj=0.838; PH=0.056; HRint 0.99; groups 4 \\
+CA9 pan-cancer Cox & OS & 10183 & 3149 & Cox p=0.168; FDR=0.384; 8/32 cohorts q below 0.10; RE HR 1.08 \\
+\bottomrule
+\end{tabularx}
+\end{table}

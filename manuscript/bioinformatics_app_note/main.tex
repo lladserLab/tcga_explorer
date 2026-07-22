@@ -70,6 +70,8 @@ Instead, the application packages common TCGA survival workflows with explicit
 endpoint provenance, sample-selection rules, model-quality diagnostics and
 audit artifacts that can be inspected and cited.
 
+\input{tables/comparator_matrix}
+
 \section*{Implementation}
 
 The backend is implemented in Python/FastAPI with R scripts for survival
@@ -117,26 +119,38 @@ verifiable audit bundle with hashes and exact patient rows.
 
 \section*{Benchmarking and Application}
 
-The benchmark will compare TCGA Explorer with GEPIA2, cSurvival, DoSurvive,
-PESSA and programmable TCGA workflows. The benchmark records endpoint
-definitions, patient counts, event counts, cutpoint rules, hazard ratios,
-log-rank p-values, Cox p-values, RMST outputs, PH diagnostics, downloads and
-whether an exact patient-level analysis can be reproduced from exported
-artifacts.
-
-As an initial canary benchmark, we analyzed CA9 in TCGA-KIRC and ran all
-two-group cutpoint methods available in the interface (Table~\ref{tab:kirc-ca9-cutpoints}).
+The benchmark records endpoint definitions, patient counts, event counts,
+cutpoint rules, hazard ratios, log-rank p-values, Cox p-values, RMST outputs,
+PH diagnostics, downloads and whether an exact patient-level analysis can be
+reproduced from exported artifacts. We ran six single-gene endpoint scenarios
+across TCGA-KIRC, TCGA-BRCA, TCGA-SKCM and TCGA-LUAD, applying the five
+two-group cutpoint methods available in the interface
+(Table~\ref{tab:single-gene-benchmark-overview}).
 A signal is considered robust only when the
 BH-adjusted log-rank p-value, univariable Cox p-value, strongest available
 adjusted Cox p-value and RMST p-value are all below 0.05 and the adjusted PH
 global test is not flagged. This criterion is intentionally stricter than a
 single optimized cutpoint and follows current concerns about cutoff-driven
 survival analyses \citep{cutpoints2025}.
-In this canary run, nominal log-rank and RMST evidence was observed for selected
-cutpoints, but no dichotomization survived the full downstream rule, illustrating
-how TCGA Explorer separates exploratory association from robust reporting.
+Across the benchmark, nominal survival evidence was common, but only two
+marker-endpoint settings retained at least one cutpoint after all downstream
+checks, illustrating how TCGA Explorer separates exploratory association from
+robust reporting.
 
-\input{tables/kirc_ca9_cutpoint_benchmark}
+\input{tables/single_gene_benchmark_overview}
+
+We also ran three workflow benchmarks covering the main supported analysis
+surfaces beyond single-gene dichotomization: a weighted hypoxia z-score
+signature in TCGA-KIRC, a two-signature immune effector-by-exhaustion analysis
+in TCGA-SKCM, and a CA9 pan-cancer continuous Cox/FDR scan
+(Table~\ref{tab:feature-benchmark-summary}). These examples are intentionally
+reported as software capability and reproducibility checks rather than as new
+biological discoveries. The hypoxia signature showed nominal log-rank and RMST
+evidence but failed adjusted Cox and PH criteria, the two-signature interaction
+was not significant, and the pan-cancer CA9 scan found cohort-specific FDR
+signals with a modest heterogeneous random-effects estimate.
+
+\input{tables/feature_benchmark_summary}
 
 \section*{Discussion}
 
