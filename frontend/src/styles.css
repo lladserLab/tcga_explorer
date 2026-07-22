@@ -329,6 +329,7 @@ textarea {
 }
 
 .cohort-picker {
+  position: relative;
   min-width: 0;
   display: grid;
   gap: 10px;
@@ -400,12 +401,18 @@ textarea {
 }
 
 .cohort-menu {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + 8px);
+  left: 0;
+  width: min(520px, max(100%, calc(100vw - 48px)));
   display: grid;
   gap: 9px;
   padding: 10px;
   border: 1px solid #d7dddb;
   border-radius: 8px;
   background: #f8faf9;
+  box-shadow: 0 18px 40px rgba(23, 32, 31, 0.16);
 }
 
 .cohort-search {
