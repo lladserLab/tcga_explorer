@@ -1,0 +1,155 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{lineno}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{tabularx}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+\emergencystretch=2em
+
+\linenumbers
+\doublespacing
+
+\title{TCGA Explorer: Auditable and Robust Survival Analysis Workflows for TCGA Transcriptomic Biomarkers}
+\author{
+  Author One$^{1}$, Author Two$^{1}$, and Author Three$^{1}$\\
+  $^{1}$Affiliation placeholder\\
+  Correspondence: email@example.org
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+\textbf{Motivation:}
+Kaplan-Meier web tools are widely used for exploratory TCGA biomarker survival
+analysis, but many analyses remain difficult to reproduce because the exact
+endpoint, patient set, sample-selection rule, cutpoint, package versions and
+model diagnostics are not captured as a single verifiable object.
+\textbf{Results:}
+TCGA Explorer is a Dockerized web application for endpoint-aware TCGA
+transcriptomic survival analysis. It supports TCGA-CDR overall,
+disease-specific, disease-free and progression-free endpoints, one
+RNA-seq sample per participant, single-gene and weighted signature scoring,
+two-signature stratification, Cox models, pan-cancer Cox/FDR scans,
+proportional-hazards diagnostics, restricted mean survival time (RMST) for
+two-group comparisons and a cutpoint robustness panel. Each completed analysis
+exports raw records, methods text and a JSON/HTML audit report with SHA-256
+hashes for reproducibility.
+\textbf{Availability:}
+Source code, Docker deployment instructions and example analyses will be made
+available at the project repository before submission.
+\end{abstract}
+
+\section*{Introduction}
+
+Transcriptomic survival analysis is a common first step in evaluating candidate
+cancer biomarkers. Existing resources make this analysis accessible, including
+GEPIA2 for large-scale expression profiling \citep{gepia22019}, cSurvival for
+biomarker interactions and two-predictor cutpoint discovery
+\citep{csurvival2022}, DoSurvive for multi-omic survival analyses
+\citep{dousurvive2023}, and PESSA for pathway enrichment score-based survival
+analysis using ssGSEA \citep{pessa2024}. These tools have made exploratory
+survival analysis easier, but they usually optimize for interactive results
+rather than verifiable reruns of an exact patient-level analysis.
+
+TCGA Explorer addresses this reproducibility gap. Its contribution is not a new
+Kaplan-Meier estimator, nor a claim that two-biomarker interaction is novel.
+Instead, the application packages common TCGA survival workflows with explicit
+endpoint provenance, sample-selection rules, model-quality diagnostics and
+audit artifacts that can be inspected and cited.
+
+\section*{Implementation}
+
+The backend is implemented in Python/FastAPI with R scripts for survival
+modeling. Expression data are read from cached TCGA RNA-seq matrices, while
+clinical outcomes use the TCGA Pan-Cancer Clinical Data Resource when available
+\citep{liu2018tcga}. The application exposes OS, DSS, DFI and PFI only when
+cohort-level endpoint QC is sufficient. Before modeling, it retains one
+eligible RNA-seq sample per TCGA participant using a documented biospecimen
+priority rule.
+
+Analyses can use single genes, unweighted signatures or weighted z-score
+signatures. Patients may be stratified by median, maximally selected rank
+statistics, tertiles, upper quartile, outer quartiles or a user-selected
+percentile. Two-signature workflows cross the two independently stratified
+scores and also fit continuous z-scored Cox interaction models.
+
+\section*{Reproducible Survival Workflow}
+
+For each completed survival run, TCGA Explorer writes raw patient records,
+Kaplan-Meier plots, Cox outputs, methods text and an audit report. The audit
+report records the request payload, endpoint source, sample filters, exact
+patient rows, software versions, artifact checksums and a reproducibility hash.
+This creates a compact provenance object for supplementary material and review.
+
+The statistical output emphasizes model interpretation and quality control.
+Two-group analyses report log-rank p-values, univariable and stage/grade
+adjusted Cox models, and proportional-hazards tests from \texttt{cox.zph}. They
+also report RMST using \texttt{survRM2::rmst2}, with tau defined as the smaller
+maximum follow-up time across groups. RMST complements hazard ratios with an
+interpretable time-scale effect and responds to concerns about overreliance on
+single dichotomized Kaplan-Meier p-values \citep{rmstBiomarker2016}.
+
+\begin{figure}[t]
+\centering
+\fbox{\begin{minipage}{0.92\linewidth}
+\textbf{TCGA Explorer workflow.}
+User request $\rightarrow$ endpoint and sample QC $\rightarrow$ expression or
+signature scoring $\rightarrow$ stratification and continuous Cox models
+$\rightarrow$ KM, Cox, PH, RMST and robustness summaries $\rightarrow$
+verifiable audit bundle with hashes and exact patient rows.
+\end{minipage}}
+\caption{Auditable survival-analysis workflow implemented by TCGA Explorer.}
+\label{fig:workflow}
+\end{figure}
+
+\section*{Benchmarking and Application}
+
+The benchmark will compare TCGA Explorer with GEPIA2, cSurvival, DoSurvive,
+PESSA and programmable TCGA workflows. The benchmark records endpoint
+definitions, patient counts, event counts, cutpoint rules, hazard ratios,
+log-rank p-values, Cox p-values, RMST outputs, PH diagnostics, downloads and
+whether an exact patient-level analysis can be reproduced from exported
+artifacts.
+
+The first benchmark panel will use CA9 in TCGA-KIRC as a canary example and run
+all two-group cutpoint methods. A signal is considered robust only when the
+BH-adjusted log-rank p-value, univariable Cox p-value, strongest available
+adjusted Cox p-value and RMST p-value are all below 0.05 and the adjusted PH
+global test is not flagged. This criterion is intentionally stricter than a
+single optimized cutpoint and follows current concerns about cutoff-driven
+survival analyses \citep{cutpoints2025}.
+
+\section*{Discussion}
+
+TCGA Explorer should be evaluated as a reproducibility-oriented survival
+analysis application. Its strongest novelty is the integration of audit reports,
+endpoint rigor, proportional-hazards diagnostics, RMST and cutpoint robustness
+in an interactive TCGA workflow. Gene-set survival and two-predictor interaction
+already exist in prior tools, so these features are presented as supported
+capabilities rather than the central claim.
+
+\section*{Funding}
+
+Funding placeholder.
+
+\section*{Conflict of Interest}
+
+Conflict-of-interest statement placeholder.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

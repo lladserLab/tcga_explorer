@@ -271,6 +271,7 @@ def audit_core_results(metrics: dict, median_status: dict) -> dict:
         "event_counts": metrics.get("event_counts") or {},
         "median_survival_days": metrics.get("median_survival_days") or {},
         "median_survival_status": median_status,
+        "rmst": metrics.get("rmst"),
         "logrank_p_value": metrics.get("logrank_p_value"),
         "hazard_ratio": metrics.get("hazard_ratio"),
         "hr_conf_low": metrics.get("hr_conf_low"),
@@ -343,6 +344,7 @@ def render_audit_html(report: dict) -> str:
     event_counts = results.get("event_counts") or {}
     medians = results.get("median_survival_days") or {}
     median_status = results.get("median_survival_status") or {}
+    rmst = results.get("rmst") or {}
     cox_models = results.get("cox_models") or []
     interaction_models = results.get("signature_interaction_cox_models") or []
     artifacts = report.get("artifacts") or {}
@@ -372,6 +374,24 @@ def render_audit_html(report: dict) -> str:
         "</tr>"
         for model in cox_models
     )
+    rmst_rows = ""
+    if rmst.get("status") == "completed":
+        rmst_groups = rmst.get("groups") or {}
+        rmst_rows = "\n".join(
+            "<tr>"
+            f"<td>{esc(group)}</td>"
+            f"<td>{esc((item or {}).get('rmst_days'))}</td>"
+            f"<td>{esc((item or {}).get('conf_low'))}</td>"
+            f"<td>{esc((item or {}).get('conf_high'))}</td>"
+            "</tr>"
+            for group, item in rmst_groups.items()
+        )
+    else:
+        rmst_rows = (
+            "<tr>"
+            f"<td colspan=\"4\">{esc(rmst.get('reason') or 'RMST was not estimated for this analysis.')}</td>"
+            "</tr>"
+        )
     interaction_rows = "\n".join(
         "<tr>"
         f"<td>{esc(model.get('label') or model.get('model'))}</td>"
@@ -447,6 +467,23 @@ def render_audit_html(report: dict) -> str:
   <table>
     <thead><tr><th>Model</th><th>Covariates</th><th>Patients</th><th>Events</th><th>HR</th><th>p</th><th>PH global p</th><th>Status</th><th>Reason</th></tr></thead>
     <tbody>{cox_rows}</tbody>
+  </table>
+
+  <h2>Restricted Mean Survival Time</h2>
+  <table>
+    {rows([
+        ("Status", rmst.get("status")),
+        ("Method", rmst.get("method")),
+        ("Tau days", rmst.get("tau_days")),
+        ("Tau rule", rmst.get("tau_rule")),
+        ("Comparison", f"{rmst.get('comparison_group')} vs {rmst.get('reference_group')}" if rmst.get("comparison_group") else None),
+        ("RMST difference days", (rmst.get("difference") or {}).get("estimate_days")),
+        ("RMST difference p-value", (rmst.get("difference") or {}).get("p_value")),
+    ])}
+  </table>
+  <table>
+    <thead><tr><th>Group</th><th>RMST days</th><th>Lower 95%</th><th>Upper 95%</th></tr></thead>
+    <tbody>{rmst_rows}</tbody>
   </table>
 
   <h2>Two-Signature Interaction Cox Models</h2>
@@ -633,11 +670,16 @@ def write_methodology_txt(
         "- Group differences were tested with the log-rank test using survival::survdiff.",
         "- When exactly two expression groups were present, Cox proportional hazards models were fitted with survival::coxph to estimate hazard ratios and 95% confidence intervals.",
         "- Cox models attempted: univariable expression group; expression group adjusted for pathologic stage; expression group adjusted for tumor grade; expression group adjusted for both stage and grade. Adjusted models were reported only when complete covariate data and model rank were sufficient.",
+        rmst_method_text(metrics),
         interaction_method_text(metrics),
         f"- Log-rank p-value: {format_optional(metrics.get('logrank_p_value'))}",
         f"- Hazard ratio: {format_optional(metrics.get('hazard_ratio'))}",
         f"- Hazard ratio 95% CI: {format_optional(metrics.get('hr_conf_low'))} to {format_optional(metrics.get('hr_conf_high'))}",
         f"- Cox model p-value: {format_optional(metrics.get('hr_p_value'))}",
+        f"- RMST status: {format_optional((metrics.get('rmst') or {}).get('status'))}",
+        f"- RMST tau in days: {format_optional((metrics.get('rmst') or {}).get('tau_days'))}",
+        f"- RMST difference in days: {format_optional(((metrics.get('rmst') or {}).get('difference') or {}).get('estimate_days'))}",
+        f"- RMST difference p-value: {format_optional(((metrics.get('rmst') or {}).get('difference') or {}).get('p_value'))}",
         f"- Cox adjustment models available: {format_cox_models(metrics.get('cox_models'))}",
         f"- Signature interaction Cox models available: {format_cox_models(metrics.get('signature_interaction_cox_models'))}",
         "",
@@ -680,11 +722,22 @@ def write_methodology_txt(
         [
             "",
             "Suggested citation wording",
-            f"Kaplan-Meier survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). When multiple eligible RNA-seq barcodes were available for the same TCGA participant, one sample was retained using a TCGA biospecimen priority rule before expression stratification. Gene expression was transformed as described above, patients were stratified according to the selected cutpoint rule, and survival differences were assessed with log-rank tests. For two-group comparisons, hazard ratios were estimated with Cox proportional hazards models, including univariable and stage/grade-adjusted models when covariate data were available. Plots were generated in R using survival, survminer and ggplot2.",
+            f"Kaplan-Meier survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). When multiple eligible RNA-seq barcodes were available for the same TCGA participant, one sample was retained using a TCGA biospecimen priority rule before expression stratification. Gene expression was transformed as described above, patients were stratified according to the selected cutpoint rule, and survival differences were assessed with log-rank tests. For two-group comparisons, hazard ratios were estimated with Cox proportional hazards models, including univariable and stage/grade-adjusted models when covariate data were available; restricted mean survival time was estimated with survRM2 when available. Plots were generated in R using survival, survminer and ggplot2.",
             "",
         ]
     )
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def rmst_method_text(metrics: dict) -> str:
+    rmst = metrics.get("rmst") or {}
+    if rmst.get("status") == "completed":
+        return (
+            "- Restricted mean survival time was estimated with survRM2::rmst2 for two-group comparisons. "
+            f"The truncation time tau was {format_optional(rmst.get('tau_days'))} days, defined as the {rmst.get('tau_rule') or 'analysis-specific follow-up limit'}."
+        )
+    reason = rmst.get("reason") or "not applicable"
+    return f"- Restricted mean survival time was not estimated: {reason}"
 
 
 def expression_method_text(expression_scale: str, expression_scale_label: str) -> str:

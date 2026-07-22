@@ -30,3 +30,6 @@ clinical/*
 !clinical/.gitkeep
 jcga/*
 !jcga/.gitkeep
+
+# Generated manuscript outputs
+manuscript/bioinformatics_app_note/build/

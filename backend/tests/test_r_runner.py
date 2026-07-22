@@ -86,6 +86,14 @@ def test_write_audit_report_creates_json_html_and_not_reached_status(tmp_path) -
             "group_counts": {"High": 1},
             "event_counts": {"High": 0},
             "median_survival_days": {"High": None},
+            "rmst": {
+                "status": "completed",
+                "method": "survRM2::rmst2",
+                "tau_days": 100.0,
+                "reference_group": "Low",
+                "comparison_group": "High",
+                "difference": {"estimate_days": 12.0, "p_value": 0.04},
+            },
             "logrank_p_value": 1.0,
             "cox_models": [],
             "sample_selection": {"retained_patients": 1},
@@ -99,5 +107,6 @@ def test_write_audit_report_creates_json_html_and_not_reached_status(tmp_path) -
 
     assert audit["schema_version"] == "tcga-explorer-analysis-audit-v1"
     assert audit["median_survival_status"]["High"]["status"] == "not_reached"
+    assert "rmst" in (tmp_path / "analysis-1" / "audit_report.json").read_text()
     assert (tmp_path / "analysis-1" / "audit_report.json").exists()
     assert (tmp_path / "analysis-1" / "audit_report.html").exists()

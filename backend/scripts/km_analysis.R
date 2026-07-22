@@ -110,6 +110,7 @@ p_value <- 1 - pchisq(survdiff_fit$chisq, length(survdiff_fit$n) - 1)
 cox_metrics <- list()
 cox_models <- list()
 signature_interaction_cox_models <- list()
+rmst <- list(status = "skipped", reason = "RMST is reported only for two expression groups.")
 cox_warning_messages <- c()
 
 cox_skip <- function(model_id, label, covariates, reason, data = records) {
@@ -248,6 +249,148 @@ if (length(levels(records$group)) == 2) {
       hr_p_value = univariable_model$p_value
     )
   }
+}
+
+numeric_or_na <- function(value) {
+  value <- suppressWarnings(as.numeric(value))
+  if (length(value) == 0 || !is.finite(value[[1]])) {
+    return(NA_real_)
+  }
+  unname(value[[1]])
+}
+
+rmst_cell <- function(table, row_index, column_name) {
+  if (is.null(table) || !column_name %in% colnames(table) || is.na(row_index)) {
+    return(NA_real_)
+  }
+  numeric_or_na(table[[column_name]][row_index])
+}
+
+extract_rmst_group <- function(value) {
+  if (is.null(value)) {
+    return(list())
+  }
+  if (!is.null(value$rmst)) {
+    rmst_values <- value$rmst
+    return(list(
+      rmst_days = numeric_or_na(rmst_values[["Est."]]),
+      standard_error = numeric_or_na(rmst_values[["se"]]),
+      conf_low = numeric_or_na(rmst_values[["lower .95"]]),
+      conf_high = numeric_or_na(rmst_values[["upper .95"]])
+    ))
+  }
+  table <- if (!is.null(value$result)) {
+    as.data.frame(value$result, check.names = FALSE)
+  } else {
+    as.data.frame(value, check.names = FALSE)
+  }
+  row_index <- grep("^RMST", rownames(table))[1]
+  if (is.na(row_index)) {
+    row_index <- 1
+  }
+  list(
+    rmst_days = rmst_cell(table, row_index, "Est."),
+    standard_error = rmst_cell(table, row_index, "se"),
+    conf_low = rmst_cell(table, row_index, "lower .95"),
+    conf_high = rmst_cell(table, row_index, "upper .95")
+  )
+}
+
+extract_rmst_result_row <- function(table, pattern) {
+  if (is.null(table) || nrow(table) == 0) {
+    return(list())
+  }
+  row_index <- grep(pattern, rownames(table))[1]
+  if (is.na(row_index)) {
+    return(list())
+  }
+  list(
+    estimate = rmst_cell(table, row_index, "Est."),
+    conf_low = rmst_cell(table, row_index, "lower .95"),
+    conf_high = rmst_cell(table, row_index, "upper .95"),
+    p_value = rmst_cell(table, row_index, "p")
+  )
+}
+
+fit_rmst <- function() {
+  data <- records[, c("time_days", "event", "group"), drop = FALSE]
+  data <- data[is.finite(data$time_days) & data$time_days > 0 & !is.na(data$event) & !is.na(data$group), , drop = FALSE]
+  data$group <- droplevels(factor(data$group, levels = group_levels))
+  if (nrow(data) < 10) {
+    return(list(status = "skipped", reason = "Fewer than 10 complete patients after filtering.", n_patients = nrow(data)))
+  }
+  if (length(levels(data$group)) != 2) {
+    return(list(status = "skipped", reason = "RMST is reported only for two expression groups.", n_patients = nrow(data)))
+  }
+  if (sum(data$event, na.rm = TRUE) < 1) {
+    return(list(status = "skipped", reason = "No events after filtering.", n_patients = nrow(data)))
+  }
+  if (!requireNamespace("survRM2", quietly = TRUE)) {
+    return(list(status = "skipped", reason = "R package survRM2 is not installed.", n_patients = nrow(data), n_events = sum(data$event, na.rm = TRUE)))
+  }
+  max_followup_by_group <- tapply(data$time_days, data$group, max, na.rm = TRUE)
+  tau_days <- min(max_followup_by_group)
+  if (!is.finite(tau_days) || tau_days <= 0) {
+    return(list(status = "skipped", reason = "Could not determine a finite RMST truncation time.", n_patients = nrow(data), n_events = sum(data$event, na.rm = TRUE)))
+  }
+  reference_group <- levels(data$group)[[1]]
+  comparison_group <- levels(data$group)[[2]]
+  arm <- ifelse(data$group == comparison_group, 1, 0)
+  fit <- tryCatch(
+    survRM2::rmst2(time = data$time_days, status = data$event, arm = arm, tau = tau_days),
+    error = function(e) e
+  )
+  if (inherits(fit, "error")) {
+    return(list(
+      status = "failed",
+      reason = conditionMessage(fit),
+      n_patients = nrow(data),
+      n_events = sum(data$event, na.rm = TRUE),
+      tau_days = tau_days
+    ))
+  }
+  unadjusted <- if (is.null(fit$unadjusted.result)) data.frame() else as.data.frame(fit$unadjusted.result, check.names = FALSE)
+  difference <- extract_rmst_result_row(unadjusted, "^RMST.*\\-")
+  ratio <- extract_rmst_result_row(unadjusted, "^RMST.*\\/")
+  rmtl_ratio <- extract_rmst_result_row(unadjusted, "^RMTL.*\\/")
+  groups <- list()
+  groups[[reference_group]] <- extract_rmst_group(fit$RMST.arm0)
+  groups[[comparison_group]] <- extract_rmst_group(fit$RMST.arm1)
+  list(
+    status = "completed",
+    method = "survRM2::rmst2",
+    tau_days = tau_days,
+    tau_time_unit = tau_days / time_divisor,
+    time_unit = time_unit,
+    tau_rule = "minimum of the maximum observed follow-up time across the two expression groups",
+    reference_group = reference_group,
+    comparison_group = comparison_group,
+    n_patients = nrow(data),
+    n_events = sum(data$event, na.rm = TRUE),
+    groups = groups,
+    difference = list(
+      estimate_days = difference$estimate,
+      conf_low = difference$conf_low,
+      conf_high = difference$conf_high,
+      p_value = difference$p_value
+    ),
+    ratio = list(
+      estimate = ratio$estimate,
+      conf_low = ratio$conf_low,
+      conf_high = ratio$conf_high,
+      p_value = ratio$p_value
+    ),
+    rmtl_ratio = list(
+      estimate = rmtl_ratio$estimate,
+      conf_low = rmtl_ratio$conf_low,
+      conf_high = rmtl_ratio$conf_high,
+      p_value = rmtl_ratio$p_value
+    )
+  )
+}
+
+if (length(levels(records$group)) == 2) {
+  rmst <- fit_rmst()
 }
 
 interaction_cox_skip <- function(model_id, label, covariates, reason, data = records) {
@@ -623,7 +766,8 @@ software_versions <- list(
   survival = as.character(packageVersion("survival")),
   survminer = as.character(packageVersion("survminer")),
   ggplot2 = as.character(packageVersion("ggplot2")),
-  svglite = as.character(packageVersion("svglite"))
+  svglite = as.character(packageVersion("svglite")),
+  survRM2 = if (requireNamespace("survRM2", quietly = TRUE)) as.character(packageVersion("survRM2")) else "not available"
 )
 
 metrics <- c(
@@ -640,6 +784,7 @@ metrics <- c(
     group_counts = group_counts,
     event_counts = event_counts,
     median_survival_days = median_survival,
+    rmst = rmst,
     cox_models = cox_models,
     signature_interaction_cox_models = signature_interaction_cox_models,
     cutpoint_details = payload$cutpoint_details,

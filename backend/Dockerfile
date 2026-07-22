@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "pkgs <- c('jsonlite','survival','survminer','ggplot2','svglite'); install.packages(pkgs, repos='https://cloud.r-project.org'); missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)]; if (length(missing)) stop('Missing R packages: ', paste(missing, collapse=', '))"
+RUN Rscript -e "pkgs <- c('jsonlite','survival','survminer','ggplot2','svglite','survRM2'); install.packages(pkgs, repos='https://cloud.r-project.org'); missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)]; if (length(missing)) stop('Missing R packages: ', paste(missing, collapse=', '))"
 
 WORKDIR /app
 

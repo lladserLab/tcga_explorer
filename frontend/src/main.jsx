@@ -1981,6 +1981,7 @@ function ComparePlotCell({ row, running, onDownload }) {
         <span>p {formatP(metrics.logrank_p_value)}</span>
         <span>BH {formatP(row.bh)}</span>
         <span>HR {formatHr(metrics)}</span>
+        <span>RMST Δ {formatRmstDelta(metrics.rmst)}</span>
         <span>{formatInteger(metrics.n_patients)} pts / {formatInteger(metrics.n_events)} events</span>
       </div>
       <div className="mini-downloads">
@@ -2018,7 +2019,7 @@ function CutpointRobustnessSummary({ rows, methods }) {
         </div>
         <div>
           <span>Decision rule</span>
-          <strong>BH + Cox + adjusted Cox + PH</strong>
+          <strong>BH + Cox + adjusted Cox + RMST + PH</strong>
         </div>
       </div>
       <table>
@@ -2031,6 +2032,8 @@ function CutpointRobustnessSummary({ rows, methods }) {
             <th>BH log-rank</th>
             <th>Cox p</th>
             <th>Adjusted p</th>
+            <th>RMST delta</th>
+            <th>RMST p</th>
             <th>PH global p</th>
             <th>Direction</th>
             <th>Survives</th>
@@ -2051,6 +2054,8 @@ function CutpointRobustnessSummary({ rows, methods }) {
                 <td className={robustness.bhPass ? "pass-cell" : "fail-cell"}>{formatP(row.bh)}</td>
                 <td className={robustness.coxPass ? "pass-cell" : "fail-cell"}>{formatP(univariable?.p_value)}</td>
                 <td className={robustness.adjustedPass ? "pass-cell" : "fail-cell"}>{formatP(adjustedModel?.p_value)}</td>
+                <td>{formatRmstDelta(metrics.rmst)}</td>
+                <td className={robustness.rmstPass ? "pass-cell" : "fail-cell"}>{formatP(metrics.rmst?.difference?.p_value)}</td>
                 <td className={robustness.phOk ? "pass-cell" : "fail-cell"}>{formatP(adjustedModel?.ph_global_p_value)}</td>
                 <td>{robustness.direction}</td>
                 <td>
@@ -2064,7 +2069,7 @@ function CutpointRobustnessSummary({ rows, methods }) {
         </tbody>
       </table>
       <div className="method-note">
-        {`A dichotomization survives when BH-adjusted log-rank p, univariable Cox p and the strongest available adjusted Cox p are all <= ${ROBUSTNESS_ALPHA}, and the adjusted PH global test is not flagged.`}
+        {`A dichotomization survives when BH-adjusted log-rank p, univariable Cox p, the strongest available adjusted Cox p and RMST p are all <= ${ROBUSTNESS_ALPHA}, and the adjusted PH global test is not flagged.`}
       </div>
     </div>
   );
@@ -3846,6 +3851,7 @@ function AnalysisResult({ analysis, onDownload }) {
         <Metric label="Events" value={metrics.n_events} />
         <Metric label="Log-rank p" value={formatP(metrics.logrank_p_value)} />
         <Metric label="Hazard ratio" value={formatHr(metrics)} />
+        <Metric label="RMST delta" value={formatRmstDelta(metrics.rmst)} />
       </div>
 
       <div className="result-details">
@@ -3854,6 +3860,7 @@ function AnalysisResult({ analysis, onDownload }) {
       </div>
 
       <CoxModelTable models={metrics.cox_models} />
+      <RmstTable rmst={metrics.rmst} />
       <AuditSummary audit={metrics.audit_report} />
 
       {combinedSignature && <CombinedSignatureSummary combined={combinedSignature} />}
@@ -3946,6 +3953,65 @@ function CoxModelTable({ models }) {
       <div className="method-note">
         Adjusted models use complete cases for the listed covariates; stage and grade are fitted as categorical terms.
       </div>
+    </div>
+  );
+}
+
+function RmstTable({ rmst }) {
+  if (!rmst) return null;
+  if (rmst.status === "skipped" && String(rmst.reason || "").includes("two expression groups")) {
+    return null;
+  }
+  const completed = rmst.status === "completed";
+  const groups = Object.entries(rmst.groups || {});
+  return (
+    <div className="detail-section rmst-table">
+      <h3>Restricted mean survival time</h3>
+      {completed ? (
+        <>
+          <div className="rmst-summary">
+            <div>
+              <span>Tau</span>
+              <strong>{formatDays(rmst.tau_days)}</strong>
+            </div>
+            <div>
+              <span>Comparison</span>
+              <strong>{rmst.comparison_group} vs {rmst.reference_group}</strong>
+            </div>
+            <div>
+              <span>RMST delta</span>
+              <strong>{formatRmstDelta(rmst)}</strong>
+            </div>
+            <div>
+              <span>RMST p</span>
+              <strong>{formatP(rmst.difference?.p_value)}</strong>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th>RMST days</th>
+                <th>95% CI</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groups.map(([group, item]) => (
+                <tr key={group}>
+                  <td>{group}</td>
+                  <td>{formatDays(item?.rmst_days)}</td>
+                  <td>{formatRmstCi(item)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="method-note">
+            Tau is set to the smaller maximum follow-up time across the two expression groups.
+          </div>
+        </>
+      ) : (
+        <div className="method-note">RMST was not estimated: {rmst.reason || formatLabel(rmst.status)}.</div>
+      )}
     </div>
   );
 }
@@ -4671,6 +4737,8 @@ function cutpointRobustness(row) {
   const bhPass = Number.isFinite(row.bh) && row.bh <= ROBUSTNESS_ALPHA;
   const coxPass = Number.isFinite(univariable?.p_value) && univariable.p_value <= ROBUSTNESS_ALPHA;
   const adjustedPass = Number.isFinite(adjusted?.p_value) && adjusted.p_value <= ROBUSTNESS_ALPHA;
+  const rmstPValue = Number(metrics.rmst?.difference?.p_value);
+  const rmstPass = metrics.rmst?.status === "completed" && Number.isFinite(rmstPValue) && rmstPValue <= ROBUSTNESS_ALPHA;
   const phValue = adjusted?.ph_global_p_value;
   const phOk = phValue === undefined || phValue === null || !Number.isFinite(Number(phValue)) || Number(phValue) >= ROBUSTNESS_ALPHA;
   const hr = Number(univariable?.hazard_ratio);
@@ -4679,13 +4747,15 @@ function cutpointRobustness(row) {
   if (!bhPass) reason = "Fails BH";
   else if (!coxPass) reason = "Fails Cox";
   else if (!adjustedPass) reason = "Fails adjusted";
+  else if (!rmstPass) reason = "Fails RMST";
   else if (!phOk) reason = "PH flagged";
   return {
-    survives: bhPass && coxPass && adjustedPass && phOk,
+    survives: bhPass && coxPass && adjustedPass && rmstPass && phOk,
     reason,
     bhPass,
     coxPass,
     adjustedPass,
+    rmstPass,
     phOk,
     direction,
   };
@@ -4851,6 +4921,27 @@ function formatMedianSurvivalDays(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return "Not reached";
   return Math.round(number).toLocaleString();
+}
+
+function formatDays(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "...";
+  return Math.round(number).toLocaleString();
+}
+
+function formatRmstDelta(rmst) {
+  if (rmst?.status !== "completed") return "...";
+  const value = Number(rmst.difference?.estimate_days);
+  if (!Number.isFinite(value)) return "...";
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${Math.round(value).toLocaleString()} days`;
+}
+
+function formatRmstCi(item) {
+  const low = Number(item?.conf_low);
+  const high = Number(item?.conf_high);
+  if (!Number.isFinite(low) || !Number.isFinite(high)) return "...";
+  return `${Math.round(low).toLocaleString()}-${Math.round(high).toLocaleString()}`;
 }
 
 function isMedianNotReached(value) {
