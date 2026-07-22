@@ -1179,140 +1179,13 @@ function App() {
               </label>
             </div>
 
-            <div className="axis-control">
-              <span>Plot X-axis</span>
-              <div>
-                {["days", "months", "years"].map((unit) => (
-                  <button
-                    key={unit}
-                    type="button"
-                    className={form.time_unit === unit ? "selected" : ""}
-                    onClick={() => updateForm("time_unit", unit)}
-                  >
-                    {unit}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="switch-row">
-              <SwitchField
-                label="Confidence interval"
-                checked={form.show_confidence_interval}
-                onChange={(checked) => updateForm("show_confidence_interval", checked)}
-              />
-              <SwitchField
-                label="Risk table"
-                checked={form.show_risk_table}
-                onChange={(checked) => updateForm("show_risk_table", checked)}
-              />
-            </div>
-
-            <PanelHeader
-              icon={<Palette size={18} />}
-              title="Plot style"
-              description="Customize colors and typography for exported PNG and SVG artifacts."
+            <PlotOutputControls
+              form={form}
+              updateForm={updateForm}
+              updatePlotStyle={updatePlotStyle}
+              updatePaletteColor={updatePaletteColor}
+              plotTitlePlaceholder={`${plotCancerName} overall survival`}
             />
-
-            <div className="color-grid">
-              <ColorField
-                label="Low / group 1"
-                value={form.plot_style.palette[0]}
-                onChange={(value) => updatePaletteColor(0, value)}
-              />
-              <ColorField
-                label="Mid / group 2"
-                value={form.plot_style.palette[1]}
-                onChange={(value) => updatePaletteColor(1, value)}
-              />
-              <ColorField
-                label="High / group 3"
-                value={form.plot_style.palette[2]}
-                onChange={(value) => updatePaletteColor(2, value)}
-              />
-            </div>
-
-            <div className="range-grid">
-              <label className="field">
-                <span>Font family</span>
-                <select
-                  value={form.plot_style.font_family}
-                  onChange={(event) => updatePlotStyle("font_family", event.target.value)}
-                >
-                  <option value="sans">Sans</option>
-                  <option value="serif">Serif</option>
-                  <option value="mono">Mono</option>
-                </select>
-              </label>
-              <div className="axis-control two-options">
-                <span>Plot shape</span>
-                <div>
-                  {[
-                    { value: "rectangular", label: "Rectangular" },
-                    { value: "square", label: "Square" },
-                  ].map((shape) => (
-                    <button
-                      key={shape.value}
-                      type="button"
-                      className={form.plot_style.plot_aspect === shape.value ? "selected" : ""}
-                      onClick={() => updatePlotStyle("plot_aspect", shape.value)}
-                    >
-                      {shape.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <label className="field">
-                <span>Base font size</span>
-                <input
-                  type="number"
-                  min="8"
-                  max="20"
-                  value={form.plot_style.base_font_size}
-                  onChange={(event) => updatePlotStyle("base_font_size", event.target.value)}
-                />
-              </label>
-              <label className="field">
-                <span>Axis values size</span>
-                <input
-                  type="number"
-                  min="6"
-                  max="24"
-                  value={form.plot_style.axis_text_size}
-                  onChange={(event) => updatePlotStyle("axis_text_size", event.target.value)}
-                />
-              </label>
-              <label className="field">
-                <span>Axis titles size</span>
-                <input
-                  type="number"
-                  min="6"
-                  max="26"
-                  value={form.plot_style.axis_title_size}
-                  onChange={(event) => updatePlotStyle("axis_title_size", event.target.value)}
-                />
-              </label>
-              <SwitchField
-                label="Plot grid"
-                checked={form.plot_style.show_grid}
-                onChange={(checked) => updatePlotStyle("show_grid", checked)}
-              />
-              <SwitchField
-                label="Plot title"
-                checked={form.plot_style.show_title}
-                onChange={(checked) => updatePlotStyle("show_title", checked)}
-              />
-              {form.plot_style.show_title && (
-                <label className="field wide">
-                <span>Plot title</span>
-                <input
-                  value={form.plot_style.plot_title}
-                  onChange={(event) => updatePlotStyle("plot_title", event.target.value)}
-                  placeholder={`${plotCancerName} overall survival`}
-                />
-                </label>
-              )}
-            </div>
 
             <div className="run-summary">
               <div>
@@ -1388,6 +1261,9 @@ function App() {
             endpointOptions={endpointOptions}
             selectedEndpoint={selectedEndpoint}
             onSelectEndpoint={(value) => updateForm("endpoint", value)}
+            updateForm={updateForm}
+            updatePlotStyle={updatePlotStyle}
+            updatePaletteColor={updatePaletteColor}
             compare={compare}
             setCompare={setCompare}
             cutpoints={CUTPOINTS}
@@ -1773,6 +1649,162 @@ function CombinedSignatureBuilder({
   );
 }
 
+function PlotOutputControls({
+  form,
+  updateForm,
+  updatePlotStyle,
+  updatePaletteColor,
+  plotTitlePlaceholder,
+  showOutputHeader = false,
+}) {
+  return (
+    <div className="plot-output-controls">
+      {showOutputHeader && (
+        <PanelHeader
+          icon={<Image size={18} />}
+          title="Plot output"
+          description="Set the time axis, risk table and plot appearance for all comparison runs."
+        />
+      )}
+
+      <div className="axis-control">
+        <span>Plot X-axis</span>
+        <div>
+          {["days", "months", "years"].map((unit) => (
+            <button
+              key={unit}
+              type="button"
+              className={form.time_unit === unit ? "selected" : ""}
+              onClick={() => updateForm("time_unit", unit)}
+            >
+              {unit}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="switch-row">
+        <SwitchField
+          label="Confidence interval"
+          checked={form.show_confidence_interval}
+          onChange={(checked) => updateForm("show_confidence_interval", checked)}
+        />
+        <SwitchField
+          label="Risk table"
+          checked={form.show_risk_table}
+          onChange={(checked) => updateForm("show_risk_table", checked)}
+        />
+      </div>
+
+      <PanelHeader
+        icon={<Palette size={18} />}
+        title="Plot style"
+        description="Customize colors and typography for exported PNG and SVG artifacts."
+      />
+
+      <div className="color-grid">
+        <ColorField
+          label="Low / group 1"
+          value={form.plot_style.palette[0]}
+          onChange={(value) => updatePaletteColor(0, value)}
+        />
+        <ColorField
+          label="Mid / group 2"
+          value={form.plot_style.palette[1]}
+          onChange={(value) => updatePaletteColor(1, value)}
+        />
+        <ColorField
+          label="High / group 3"
+          value={form.plot_style.palette[2]}
+          onChange={(value) => updatePaletteColor(2, value)}
+        />
+      </div>
+
+      <div className="range-grid">
+        <label className="field">
+          <span>Font family</span>
+          <select
+            value={form.plot_style.font_family}
+            onChange={(event) => updatePlotStyle("font_family", event.target.value)}
+          >
+            <option value="sans">Sans</option>
+            <option value="serif">Serif</option>
+            <option value="mono">Mono</option>
+          </select>
+        </label>
+        <div className="axis-control two-options">
+          <span>Plot shape</span>
+          <div>
+            {[
+              { value: "rectangular", label: "Rectangular" },
+              { value: "square", label: "Square" },
+            ].map((shape) => (
+              <button
+                key={shape.value}
+                type="button"
+                className={form.plot_style.plot_aspect === shape.value ? "selected" : ""}
+                onClick={() => updatePlotStyle("plot_aspect", shape.value)}
+              >
+                {shape.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <label className="field">
+          <span>Base font size</span>
+          <input
+            type="number"
+            min="8"
+            max="20"
+            value={form.plot_style.base_font_size}
+            onChange={(event) => updatePlotStyle("base_font_size", event.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span>Axis values size</span>
+          <input
+            type="number"
+            min="6"
+            max="24"
+            value={form.plot_style.axis_text_size}
+            onChange={(event) => updatePlotStyle("axis_text_size", event.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span>Axis titles size</span>
+          <input
+            type="number"
+            min="6"
+            max="26"
+            value={form.plot_style.axis_title_size}
+            onChange={(event) => updatePlotStyle("axis_title_size", event.target.value)}
+          />
+        </label>
+        <SwitchField
+          label="Plot grid"
+          checked={form.plot_style.show_grid}
+          onChange={(checked) => updatePlotStyle("show_grid", checked)}
+        />
+        <SwitchField
+          label="Plot title"
+          checked={form.plot_style.show_title}
+          onChange={(checked) => updatePlotStyle("show_title", checked)}
+        />
+        {form.plot_style.show_title && (
+          <label className="field wide">
+            <span>Plot title</span>
+            <input
+              value={form.plot_style.plot_title}
+              onChange={(event) => updatePlotStyle("plot_title", event.target.value)}
+              placeholder={plotTitlePlaceholder}
+            />
+          </label>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function CompareAnalyses({
   form,
   cohorts,
@@ -1787,6 +1819,9 @@ function CompareAnalyses({
   endpointOptions,
   selectedEndpoint,
   onSelectEndpoint,
+  updateForm,
+  updatePlotStyle,
+  updatePaletteColor,
   compare,
   setCompare,
   cutpoints,
@@ -1866,7 +1901,6 @@ function CompareAnalyses({
               signature_genes: [],
               cutpoint_method: method,
               custom_percentile: method === "percentile" ? Number(form.custom_percentile) : null,
-              plot_style: { ...basePayload.plot_style, show_title: false, plot_title: null },
             },
           };
         }),
@@ -1946,6 +1980,14 @@ function CompareAnalyses({
             </button>
           ))}
         </div>
+        <PlotOutputControls
+          form={form}
+          updateForm={updateForm}
+          updatePlotStyle={updatePlotStyle}
+          updatePaletteColor={updatePaletteColor}
+          plotTitlePlaceholder={`${selectedCohort ? getCohortName(selectedCohort.id) : "Cancer"} comparison`}
+          showOutputHeader
+        />
         <div className="run-summary static">
           <div>
             <span>Comparison scope</span>
