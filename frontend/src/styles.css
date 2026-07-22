@@ -1077,8 +1077,7 @@ textarea {
   animation: enter 220ms ease both;
 }
 
-.summary-actions,
-.compare-controls {
+.summary-actions {
   display: grid;
   grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
   gap: 16px;
@@ -1089,9 +1088,128 @@ textarea {
   background: #ffffff;
 }
 
+.compare-controls {
+  display: grid;
+  gap: 0;
+  align-items: stretch;
+  padding: 18px;
+  border: 1px solid #d7dddb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
 .compare-page {
   display: grid;
   gap: 16px;
+}
+
+.compare-section {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid #e4e8e6;
+}
+
+.compare-section:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 0;
+}
+
+.compare-section > .panel-header,
+.compare-section .plot-output-controls > .panel-header:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.compare-control-grid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+  gap: 14px 16px;
+  align-items: start;
+}
+
+.compare-marker-grid {
+  grid-template-columns: minmax(320px, 480px) minmax(360px, 1fr);
+}
+
+.compare-control-block,
+.compare-method-panel {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.compare-control-block.wide {
+  grid-column: 1 / -1;
+}
+
+.compare-control-label {
+  min-height: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.compare-control-label span {
+  color: #3d4a48;
+  font-size: 13px;
+  font-weight: 760;
+}
+
+.compare-control-label strong {
+  color: #63716f;
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.compare-percentile-field {
+  max-width: 220px;
+}
+
+.compare-disclosure {
+  min-width: 0;
+}
+
+.compare-disclosure summary {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  color: #17201f;
+  font-size: 14px;
+  font-weight: 760;
+}
+
+.compare-disclosure summary::marker {
+  color: #63716f;
+}
+
+.compare-disclosure summary strong {
+  color: #63716f;
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.compare-filter-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.compare-filter-grid .range-grid {
+  max-width: 640px;
+}
+
+.compare-run-section .run-summary {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 220px) minmax(220px, 260px);
+  align-items: center;
 }
 
 .pancancer-page,
@@ -3730,6 +3848,9 @@ dd {
   .summary-layout,
   .summary-actions,
   .compare-controls,
+  .compare-control-grid,
+  .compare-marker-grid,
+  .compare-run-section .run-summary,
   .pancancer-controls,
   .pancancer-layout,
   .immune-atlas-grid,
