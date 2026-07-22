@@ -22,10 +22,13 @@ Official constraints checked:
 - Main manuscript PDF: `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_app_note.pdf`.
 - Supplement source: `manuscript/bioinformatics_app_note/supplementary.tex`.
 - Supplement PDF: `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_supplement.pdf`.
+- Both PDFs rebuild successfully with
+  `make -C manuscript/bioinformatics_app_note clean all`.
 - One workflow figure is included as reproducible LaTeX/TikZ source:
   `manuscript/bioinformatics_app_note/figures/workflow.tex`.
 - Line numbering, double spacing and 12-point manuscript font are enabled.
-- Main manuscript is below the Application Note word budget.
+- Main manuscript is below the Application Note word budget. `texcount` reports
+  853 main-text words for `main.tex` on 2026-07-22.
 - Literature-backed comparator matrix is available in
   `docs/publication/comparator_matrix.md`.
 - Reproducible benchmark scripts are available:
@@ -38,6 +41,10 @@ Official constraints checked:
   `manuscript/bioinformatics_app_note/submission/artifact_manifest.md`.
 - Narrative avoids unsupported novelty claims around two-biomarker survival
   interaction and gene-set survival.
+- In-app Help & Methods and repository `CHANGELOG.md` document the active
+  analysis behavior and methodological version history.
+- Final owner-decision tracker:
+  `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`.
 
 ## Blocking Before Submission
 

@@ -11,6 +11,8 @@ feature/bioinformatics-readiness-20260721-210041
 Submission-package lineage at time of writing includes:
 
 ```text
+d1c0064 Document v0.1.0 functional baseline
+e62446c Add methods help and changelog
 53f837a Prepare Bioinformatics submission package
 dc19150 Add publication benchmark suite and comparator matrix
 c671ef0 Add publication cutpoint benchmark evidence
@@ -27,6 +29,7 @@ f3ad3f2 Add RMST reporting and Bioinformatics manuscript draft
 | Supplement | `manuscript/bioinformatics_app_note/supplementary.tex` | Supplementary comparator and benchmark details. |
 | Main benchmark tables | `manuscript/bioinformatics_app_note/tables/` | Generated LaTeX tables used by manuscript and supplement. |
 | Build instructions | `manuscript/bioinformatics_app_note/README.md` | Manuscript build and journal-constraint notes. |
+| Methods changelog | `CHANGELOG.md` | Functional and methodological version history for the application. |
 
 Generated PDFs are intentionally ignored by git and rebuilt with:
 
@@ -42,6 +45,7 @@ make -C manuscript/bioinformatics_app_note clean all
 | Cover letter draft | `manuscript/bioinformatics_app_note/submission/cover_letter_draft.md` | Editable cover letter with explicit placeholders. |
 | Reviewer guide | `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md` | End-to-end reproduction instructions for reviewers. |
 | Artifact manifest | `manuscript/bioinformatics_app_note/submission/artifact_manifest.md` | This file. |
+| Final decision tracker | `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md` | Owner-provided metadata and availability decisions required before submission. |
 
 ## Benchmark Evidence
 
@@ -73,3 +77,16 @@ These items require project-owner decisions before journal submission:
 - Reviewer-accessible or public repository URL.
 - Public web-demo URL or Docker-only reviewer access statement.
 - Stable archive DOI or release URL.
+
+## Current Validation Snapshot
+
+Validated on 2026-07-22:
+
+- `make -C manuscript/bioinformatics_app_note clean all` completed.
+- Main PDF output:
+  `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_app_note.pdf`.
+- Supplement PDF output:
+  `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_supplement.pdf`.
+- `texcount -inc -brief main.tex supplementary.tex` reports 853 main-text words
+  for `main.tex`.
+- Benchmark scripts compile with `python3 -m py_compile`.

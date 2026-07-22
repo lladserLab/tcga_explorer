@@ -124,6 +124,12 @@ Generated files:
   `manuscript/bioinformatics_app_note/submission/submission_readiness_checklist.md`;
 - cover letter draft:
   `manuscript/bioinformatics_app_note/submission/cover_letter_draft.md`.
+- reviewer reproduction guide:
+  `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md`;
+- final submission decision tracker:
+  `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`;
+- user-facing Help & Methods page in the app and repository `CHANGELOG.md` with
+  v0.1.0 functional baseline plus methodological version history.
 
 External blockers before submission:
 

@@ -173,6 +173,10 @@ Generated manuscript artifacts:
   `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md`;
 - artifact manifest:
   `manuscript/bioinformatics_app_note/submission/artifact_manifest.md`.
+- final submission decision tracker:
+  `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`;
+- in-app Help & Methods page plus repository `CHANGELOG.md` for user-facing
+  parameter explanations and methodological version history.
 
 Current external blockers before journal submission:
 

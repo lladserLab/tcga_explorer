@@ -65,5 +65,7 @@ license and public web demo.
   guide for reviewers.
 - `submission/artifact_manifest.md`: map of manuscript, benchmark and
   submission support files.
+- `submission/final_submission_decisions.md`: final author, license,
+  repository, demo and DOI decisions that must be supplied before submission.
 - `figures/workflow.tex`: reproducible vector source for Figure 1.
 - `supplementary.tex`: supplementary comparator and benchmark tables.
