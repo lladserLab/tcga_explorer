@@ -37,7 +37,7 @@ from app.pancancer import (
     meta_analysis_from_rows,
     summarize_pancancer_results,
 )
-from app.r_runner import compute_maxstat_cutpoint, ensure_svg_artifact, run_r_km, stable_hash
+from app.r_runner import compute_maxstat_cutpoint, ensure_svg_artifact, run_r_km, stable_hash, write_audit_report
 from app.r_runner import run_r_pancancer_cox
 from app.schemas import (
     AnalysisBatchItemOut,
@@ -65,8 +65,8 @@ from app.survival import (
 )
 
 settings = get_settings()
-ANALYSIS_PIPELINE_VERSION = "clinical-adjusted-cox-v4.0"
-COMBINED_SIGNATURE_PIPELINE_VERSION = "combined-signatures-clinical-adjusted-cox-v2.0"
+ANALYSIS_PIPELINE_VERSION = "clinical-adjusted-cox-audit-v4.1"
+COMBINED_SIGNATURE_PIPELINE_VERSION = "combined-signatures-clinical-adjusted-cox-audit-v2.1"
 PANCANCER_PIPELINE_VERSION = "pancancer-cox-v1.0"
 ENDPOINT_LABELS = {
     "OS": "Overall survival",
@@ -618,6 +618,7 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
             max_time_days=request.filters.max_time_days,
         )
         validate_records(records, endpoint_label)
+        analysis_data_dates = dataset_dates(db, load_cache_manifest(settings.derived_expression_dir))
         metrics = run_r_km(
             settings=settings,
             analysis_id=analysis_id,
@@ -637,7 +638,7 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
             time_unit=request.time_unit,
             request_payload=payload,
             analysis_warnings=warnings,
-            data_dates=dataset_dates(db, load_cache_manifest(settings.derived_expression_dir)),
+            data_dates=analysis_data_dates,
             sample_selection=sample_selection,
         )
         metrics["endpoint"] = request.endpoint
@@ -649,6 +650,30 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
         metrics["expression_distribution"] = expression_distribution(filtered, expression)
         metrics["quality"] = quality_summary(records)
         artifacts = metrics.pop("artifact_paths")
+        audit_artifacts = {
+            key: value
+            for key, value in artifacts.items()
+            if key != "json"
+        }
+        audit_artifacts["methodology"] = str(methodology_path(analysis_id))
+        audit = write_audit_report(
+            settings=settings,
+            analysis_id=analysis_id,
+            request_payload=payload,
+            metrics=metrics,
+            records=records,
+            artifact_paths=audit_artifacts,
+            analysis_warnings=warnings,
+            data_dates=analysis_data_dates,
+        )
+        metrics["median_survival_status"] = audit["median_survival_status"]
+        metrics["audit_report"] = {
+            "schema_version": audit["schema_version"],
+            "generated_at": audit["generated_at"],
+            "reproducibility_hash": audit["reproducibility_hash"],
+            "patient_records_sha256": audit["patient_records_sha256"],
+        }
+        Path(artifacts["json"]).write_text(json.dumps(metrics, ensure_ascii=False, allow_nan=False, indent=2), encoding="utf-8")
         job.status = "completed"
         job.metrics = metrics
         job.warnings = warnings + metrics.get("warnings", [])
@@ -762,6 +787,7 @@ def _create_combined_analysis(request: CombinedSignatureAnalysisRequest, db: Ses
             max_time_days=request.filters.max_time_days,
         )
         validate_records(records, endpoint_label)
+        analysis_data_dates = dataset_dates(db, load_cache_manifest(settings.derived_expression_dir))
         metrics = run_r_km(
             settings=settings,
             analysis_id=analysis_id,
@@ -781,7 +807,7 @@ def _create_combined_analysis(request: CombinedSignatureAnalysisRequest, db: Ses
             time_unit=request.time_unit,
             request_payload=payload,
             analysis_warnings=warnings,
-            data_dates=dataset_dates(db, load_cache_manifest(settings.derived_expression_dir)),
+            data_dates=analysis_data_dates,
             sample_selection=sample_selection,
         )
         metrics["endpoint"] = request.endpoint
@@ -815,6 +841,30 @@ def _create_combined_analysis(request: CombinedSignatureAnalysisRequest, db: Ses
         metrics["expression_distribution_b"] = expression_distribution(samples_with_both_scores, expression_b)
         metrics["quality"] = quality_summary(records)
         artifacts = metrics.pop("artifact_paths")
+        audit_artifacts = {
+            key: value
+            for key, value in artifacts.items()
+            if key != "json"
+        }
+        audit_artifacts["methodology"] = str(methodology_path(analysis_id))
+        audit = write_audit_report(
+            settings=settings,
+            analysis_id=analysis_id,
+            request_payload=payload,
+            metrics=metrics,
+            records=records,
+            artifact_paths=audit_artifacts,
+            analysis_warnings=warnings,
+            data_dates=analysis_data_dates,
+        )
+        metrics["median_survival_status"] = audit["median_survival_status"]
+        metrics["audit_report"] = {
+            "schema_version": audit["schema_version"],
+            "generated_at": audit["generated_at"],
+            "reproducibility_hash": audit["reproducibility_hash"],
+            "patient_records_sha256": audit["patient_records_sha256"],
+        }
+        Path(artifacts["json"]).write_text(json.dumps(metrics, ensure_ascii=False, allow_nan=False, indent=2), encoding="utf-8")
         job.status = "completed"
         job.metrics = metrics
         job.warnings = warnings + metrics.get("warnings", [])
@@ -1030,6 +1080,9 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "cox_png": str(cox_forest_png_path),
         "cox_svg": str(cox_forest_svg_path),
         "csv": job.csv_path,
+        "json": job.json_path,
+        "audit_json": str(audit_report_json_path(analysis_id)),
+        "audit_html": str(audit_report_html_path(analysis_id)),
         "txt": str(methodology_path(analysis_id)),
         "methodology": str(methodology_path(analysis_id)),
     }
@@ -1044,6 +1097,9 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "cox_png": "image/png",
         "cox_svg": "image/svg+xml",
         "csv": "text/csv",
+        "json": "application/json",
+        "audit_json": "application/json",
+        "audit_html": "text/html",
         "txt": "text/plain",
         "methodology": "text/plain",
     }[kind]
@@ -1051,6 +1107,8 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "methodology": f"{analysis_id}.methodology.txt",
         "cox_png": f"{analysis_id}.cox_forest.png",
         "cox_svg": f"{analysis_id}.cox_forest.svg",
+        "audit_json": f"{analysis_id}.audit_report.json",
+        "audit_html": f"{analysis_id}.audit_report.html",
     }.get(kind, f"{analysis_id}.{kind}")
     return FileResponse(path, media_type=media_type, filename=filename)
 
@@ -1066,7 +1124,10 @@ def analysis_zip_response(job: AnalysisJob, db: Session) -> Response:
         ("plot.png", job.png_path),
         ("plot.svg", job.svg_path),
         ("raw_data.csv", job.csv_path),
+        ("metrics.json", job.json_path),
         ("methodology.txt", str(methodology_path(job.id))),
+        ("audit_report.json", str(audit_report_json_path(job.id))),
+        ("audit_report.html", str(audit_report_html_path(job.id))),
     ]
     optional_files = [
         ("cox_forest.png", str(settings.artifact_dir / job.id / "cox_forest.png")),
@@ -1854,12 +1915,27 @@ def _maxstat_records(
 
 
 def _artifacts_exist(job: AnalysisJob) -> bool:
-    paths = [job.png_path, job.csv_path, job.json_path, str(methodology_path(job.id))]
+    paths = [
+        job.png_path,
+        job.csv_path,
+        job.json_path,
+        str(methodology_path(job.id)),
+        str(audit_report_json_path(job.id)),
+        str(audit_report_html_path(job.id)),
+    ]
     return all(path and Path(path).exists() for path in paths)
 
 
 def methodology_path(analysis_id: str) -> Path:
     return settings.artifact_dir / analysis_id / "methodology.txt"
+
+
+def audit_report_json_path(analysis_id: str) -> Path:
+    return settings.artifact_dir / analysis_id / "audit_report.json"
+
+
+def audit_report_html_path(analysis_id: str) -> Path:
+    return settings.artifact_dir / analysis_id / "audit_report.html"
 
 
 def analysis_out(job: AnalysisJob) -> AnalysisOut:
@@ -1869,10 +1945,15 @@ def analysis_out(job: AnalysisJob) -> AnalysisOut:
             "png": f"/api/analyses/{job.id}/download/png",
             "svg": f"/api/analyses/{job.id}/download/svg",
             "csv": f"/api/analyses/{job.id}/download/csv",
+            "json": f"/api/analyses/{job.id}/download/json",
             "zip": f"/api/analyses/{job.id}/download/zip",
         }
         if methodology_path(job.id).exists():
             downloads["txt"] = f"/api/analyses/{job.id}/download/txt"
+        if audit_report_json_path(job.id).exists():
+            downloads["audit_json"] = f"/api/analyses/{job.id}/download/audit_json"
+        if audit_report_html_path(job.id).exists():
+            downloads["audit_html"] = f"/api/analyses/{job.id}/download/audit_html"
         if (settings.artifact_dir / job.id / "cox_forest.png").exists():
             downloads["cox_png"] = f"/api/analyses/{job.id}/download/cox_png"
             downloads["cox_svg"] = f"/api/analyses/{job.id}/download/cox_svg"

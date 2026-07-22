@@ -99,12 +99,14 @@ The updater uses the GDC API to compare remote `file_id`, `md5sum`, `file_size`,
 - A small HGNC-style alias map resolves common legacy symbols such as `P53` to `TP53` and reports the resolution as a warning.
 - Plot export styling supports custom group colors, font family, base font size, axis tick/title font sizes, grid visibility, and optional plot title.
 - PNG is generated immediately for display; SVG is generated on demand when downloaded to reduce initial plot-generation time.
-- Result downloads show non-blocking background status notices, and each completed analysis can be downloaded as a ZIP bundle with PNG, SVG, CSV, and methodology TXT.
+- Result downloads show non-blocking background status notices, and each completed analysis can be downloaded as a ZIP bundle with PNG, SVG, CSV, metrics JSON, methodology TXT, audit JSON, and audit HTML.
 - Plot X-axis can be displayed in days, months, or years.
 - OS is available as a fallback from `vital_status`, `days_to_death`, `days_to_last_follow_up`, and `days_to_last_known_disease_status` when TCGA-CDR is not configured.
 - TCGA-CDR endpoints are exposed only when the selected cohort has sufficient linked patients and events.
 - Analysis outputs are written under `./artifacts/<analysis_id>/`.
 - Each analysis writes a parameter-specific REMARK-style `methodology.txt` with data source, endpoint, cohort selection, marker measurement, stratification, statistical methods, limitations, warnings, and software versions for manuscript methods drafting.
+- Each analysis writes `audit_report.json` and `audit_report.html` with request parameters, endpoint source/QC, sample-selection details, exact patient records, group/event counts, Cox outputs, proportional-hazards QC where estimable, software versions, artifact checksums, and reproducibility hashes.
+- Bioinformatics Application Note readiness, comparator positioning and the benchmark protocol are documented in `docs/BIOINFORMATICS_PUBLICATION_READINESS.md`.
 - Results are exploratory research outputs and are not intended for clinical decision-making.
 - `TCGA-CHOL` is the available biliary tract/cholangiocarcinoma cohort. There is no explicit gallbladder cancer cohort in the current TCGA cohort summary table.
 - RNA bulk expression availability is documented in `docs/RNA_BULK_TRANSFORMATIONS.md`; GDC cache-derived matrices are stored under `./derived/rna_bulk/matrices`.

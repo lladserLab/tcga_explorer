@@ -188,6 +188,24 @@ fit_cox_model <- function(model_id, label, covariates) {
   if (!is.finite(hazard_ratio) || !is.finite(hr_conf_low) || !is.finite(hr_conf_high)) {
     return(cox_skip(model_id, label, covariates, "Model did not produce finite HR confidence intervals.", data))
   }
+  ph_test <- tryCatch(cox.zph(fit), error = function(e) e)
+  ph_p_value <- NA_real_
+  ph_global_p_value <- NA_real_
+  if (inherits(ph_test, "error")) {
+    model_warnings <- c(model_warnings, paste("cox.zph failed:", conditionMessage(ph_test)))
+  } else if (!is.null(ph_test$table) && "p" %in% colnames(ph_test$table)) {
+    ph_table <- ph_test$table
+    group_ph_rows <- grep("^group", rownames(ph_table))
+    if (length(group_ph_rows) == 1) {
+      ph_p_value <- unname(ph_table[group_ph_rows[[1]], "p"])
+    }
+    if ("GLOBAL" %in% rownames(ph_table)) {
+      ph_global_p_value <- unname(ph_table["GLOBAL", "p"])
+    }
+    if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
+      model_warnings <- c(model_warnings, "Global proportional hazards test p < 0.05; inspect time-varying effects.")
+    }
+  }
   if (length(model_warnings)) {
     cox_warning_messages <<- c(cox_warning_messages, paste(label, paste(unique(model_warnings), collapse = " | "), sep = ": "))
   }
@@ -206,6 +224,8 @@ fit_cox_model <- function(model_id, label, covariates) {
     hr_conf_low = hr_conf_low,
     hr_conf_high = hr_conf_high,
     p_value = p_value,
+    ph_p_value = ph_p_value,
+    ph_global_p_value = ph_global_p_value,
     warnings = as.list(unique(model_warnings))
   )
 }

@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import html
 import importlib.metadata
 import json
 import math
@@ -70,6 +71,21 @@ def run_r_km(
     cox_forest_svg_path = analysis_dir / "cox_forest.svg"
     csv_path = analysis_dir / "raw_data.csv"
     methodology_path = analysis_dir / "methodology.txt"
+    clear_stale_analysis_artifacts(
+        [
+            output_path,
+            png_path,
+            svg_path,
+            cox_forest_png_path,
+            cox_forest_svg_path,
+            csv_path,
+            methodology_path,
+            analysis_dir / "audit_report.json",
+            analysis_dir / "audit_report.html",
+            analysis_dir / "svg_input.json",
+            analysis_dir / "svg_metrics.json",
+        ]
+    )
 
     write_records_csv(records, csv_path)
     payload = {
@@ -143,6 +159,294 @@ def run_r_km(
         "txt": str(methodology_path),
     }
     return metrics
+
+
+def clear_stale_analysis_artifacts(paths: list[Path]) -> None:
+    for path in paths:
+        try:
+            if path.exists() and path.is_file():
+                path.unlink()
+        except OSError:
+            continue
+
+
+def write_audit_report(
+    settings: Settings,
+    analysis_id: str,
+    request_payload: dict,
+    metrics: dict,
+    records: list[SurvivalRecord],
+    artifact_paths: dict,
+    analysis_warnings: list[str] | None = None,
+    data_dates: dict | None = None,
+) -> dict:
+    analysis_dir = settings.artifact_dir / analysis_id
+    analysis_dir.mkdir(parents=True, exist_ok=True)
+    json_path = analysis_dir / "audit_report.json"
+    html_path = analysis_dir / "audit_report.html"
+    generated_at = datetime.now(timezone.utc).isoformat()
+    record_payload = [record.as_dict() for record in records]
+    record_digest = stable_hash({"records": record_payload})
+    median_status = median_survival_status(metrics)
+    core_results = audit_core_results(metrics, median_status)
+    reproducibility_payload = {
+        "request": request_payload,
+        "data_dates": data_dates or {},
+        "record_digest": record_digest,
+        "core_results": core_results,
+    }
+    report = {
+        "schema_version": "tcga-explorer-analysis-audit-v1",
+        "report_type": "survival_analysis_audit",
+        "analysis_id": analysis_id,
+        "generated_at": generated_at,
+        "reproducibility_hash": stable_hash(reproducibility_payload),
+        "pipeline": {
+            "version": request_payload.get("pipeline_version"),
+            "software_versions": software_versions(metrics),
+        },
+        "data": {
+            "cohort": request_payload.get("cohort"),
+            "data_dates": data_dates or {},
+            "endpoint": {
+                "value": metrics.get("endpoint") or request_payload.get("endpoint"),
+                "label": metrics.get("endpoint_label"),
+                "source": metrics.get("endpoint_source"),
+                "qc": metrics.get("endpoint_qc"),
+            },
+            "expression_scale": {
+                "value": metrics.get("expression_scale") or request_payload.get("expression_scale"),
+                "label": metrics.get("expression_scale_label"),
+            },
+        },
+        "analysis_design": {
+            "gene_symbol": request_payload.get("gene_symbol"),
+            "reported_marker": metrics.get("signature", {}).get("label") or request_payload.get("gene_symbol"),
+            "signature": metrics.get("signature"),
+            "combined_signature": metrics.get("combined_signature"),
+            "cutpoint_method": request_payload.get("cutpoint_method") or request_payload.get("combination_method"),
+            "cutpoint_details": metrics.get("cutpoint_details"),
+            "filters": request_payload.get("filters") or {},
+            "time_unit": metrics.get("time_unit") or request_payload.get("time_unit"),
+            "plot_style": request_payload.get("plot_style") or {},
+        },
+        "cohort_selection": {
+            "sample_selection": metrics.get("sample_selection"),
+            "patient_record_count": len(record_payload),
+            "patient_records_sha256": record_digest,
+            "patient_records": record_payload,
+        },
+        "results": core_results,
+        "quality": {
+            "summary": metrics.get("quality"),
+            "warnings": list(dict.fromkeys((analysis_warnings or []) + (metrics.get("warnings") or []))),
+            "limitations": [
+                "Retrospective exploratory analysis based on public TCGA cohort data.",
+                "Kaplan-Meier grouping does not establish causality and is sensitive to cutpoint choice.",
+                "Optimized cutpoints such as maxstat can overestimate apparent significance unless externally validated.",
+                "Clinical adjustment is limited to imported covariates and does not include treatment or tumor purity.",
+            ],
+        },
+        "artifacts": audit_artifact_manifest(artifact_paths),
+    }
+    report = json_safe_value(report)
+    json_path.write_text(json.dumps(report, ensure_ascii=False, allow_nan=False, indent=2), encoding="utf-8")
+    html_path.write_text(render_audit_html(report), encoding="utf-8")
+    return {
+        "json": str(json_path),
+        "html": str(html_path),
+        "schema_version": report["schema_version"],
+        "generated_at": generated_at,
+        "reproducibility_hash": report["reproducibility_hash"],
+        "patient_records_sha256": record_digest,
+        "median_survival_status": median_status,
+    }
+
+
+def audit_core_results(metrics: dict, median_status: dict) -> dict:
+    return {
+        "n_patients": metrics.get("n_patients"),
+        "n_events": metrics.get("n_events"),
+        "group_counts": metrics.get("group_counts") or {},
+        "event_counts": metrics.get("event_counts") or {},
+        "median_survival_days": metrics.get("median_survival_days") or {},
+        "median_survival_status": median_status,
+        "logrank_p_value": metrics.get("logrank_p_value"),
+        "hazard_ratio": metrics.get("hazard_ratio"),
+        "hr_conf_low": metrics.get("hr_conf_low"),
+        "hr_conf_high": metrics.get("hr_conf_high"),
+        "hr_p_value": metrics.get("hr_p_value"),
+        "cox_models": metrics.get("cox_models") or [],
+        "expression_distribution": metrics.get("expression_distribution"),
+        "expression_distribution_a": metrics.get("expression_distribution_a"),
+        "expression_distribution_b": metrics.get("expression_distribution_b"),
+    }
+
+
+def median_survival_status(metrics: dict) -> dict:
+    medians = metrics.get("median_survival_days") or {}
+    status = {}
+    for group, value in medians.items():
+        if value is None:
+            status[group] = {
+                "status": "not_reached",
+                "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+            }
+        else:
+            status[group] = {
+                "status": "estimated",
+                "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+            }
+    return status
+
+
+def audit_artifact_manifest(paths: dict) -> dict:
+    manifest = {}
+    for label, raw_path in sorted(paths.items()):
+        if not raw_path:
+            continue
+        path = Path(raw_path)
+        if not path.exists() or not path.is_file():
+            continue
+        manifest[label] = {
+            "filename": path.name,
+            "bytes": path.stat().st_size,
+            "sha256": file_sha256(path),
+        }
+    return manifest
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def render_audit_html(report: dict) -> str:
+    def esc(value) -> str:
+        if value is None:
+            return ""
+        return html.escape(str(value), quote=True)
+
+    def rows(items: list[tuple[str, object]]) -> str:
+        return "\n".join(f"<tr><th>{esc(label)}</th><td>{esc(value)}</td></tr>" for label, value in items)
+
+    results = report.get("results") or {}
+    data = report.get("data") or {}
+    endpoint = data.get("endpoint") or {}
+    analysis = report.get("analysis_design") or {}
+    quality = report.get("quality") or {}
+    group_counts = results.get("group_counts") or {}
+    event_counts = results.get("event_counts") or {}
+    medians = results.get("median_survival_days") or {}
+    median_status = results.get("median_survival_status") or {}
+    cox_models = results.get("cox_models") or []
+    artifacts = report.get("artifacts") or {}
+    warnings = quality.get("warnings") or []
+
+    group_rows = "\n".join(
+        "<tr>"
+        f"<td>{esc(group)}</td>"
+        f"<td>{esc(group_counts.get(group))}</td>"
+        f"<td>{esc(event_counts.get(group))}</td>"
+        f"<td>{esc('not reached' if medians.get(group) is None else medians.get(group))}</td>"
+        f"<td>{esc((median_status.get(group) or {}).get('status'))}</td>"
+        "</tr>"
+        for group in group_counts
+    )
+    cox_rows = "\n".join(
+        "<tr>"
+        f"<td>{esc(model.get('label') or model.get('model'))}</td>"
+        f"<td>{esc(', '.join(model.get('covariates') or []) or 'none')}</td>"
+        f"<td>{esc(model.get('n_patients'))}</td>"
+        f"<td>{esc(model.get('n_events'))}</td>"
+        f"<td>{esc(model.get('hazard_ratio'))}</td>"
+        f"<td>{esc(model.get('p_value'))}</td>"
+        f"<td>{esc(model.get('ph_global_p_value'))}</td>"
+        f"<td>{esc(model.get('status'))}</td>"
+        f"<td>{esc(model.get('reason'))}</td>"
+        "</tr>"
+        for model in cox_models
+    )
+    artifact_rows = "\n".join(
+        "<tr>"
+        f"<td>{esc(label)}</td>"
+        f"<td>{esc(item.get('filename'))}</td>"
+        f"<td>{esc(item.get('bytes'))}</td>"
+        f"<td><code>{esc(item.get('sha256'))}</code></td>"
+        "</tr>"
+        for label, item in artifacts.items()
+    )
+    warning_items = "\n".join(f"<li>{esc(warning)}</li>" for warning in warnings) or "<li>None reported.</li>"
+    json_payload = html.escape(json.dumps(report, ensure_ascii=False, indent=2), quote=False)
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>TCGA Explorer audit report {esc(report.get('analysis_id'))}</title>
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 32px; color: #17211f; background: #fbfcfb; }}
+    h1 {{ font-size: 28px; margin-bottom: 4px; }}
+    h2 {{ font-size: 18px; margin-top: 28px; }}
+    table {{ border-collapse: collapse; width: 100%; margin: 12px 0; background: #ffffff; }}
+    th, td {{ border: 1px solid #d9e1de; padding: 8px 10px; text-align: left; vertical-align: top; }}
+    th {{ background: #eef3f1; }}
+    code, pre {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
+    pre {{ overflow: auto; padding: 16px; background: #111816; color: #edf5f2; border-radius: 6px; }}
+    .hash {{ color: #41524e; word-break: break-all; }}
+  </style>
+</head>
+<body>
+  <h1>TCGA Explorer Survival Analysis Audit Report</h1>
+  <p class="hash">Analysis ID: <code>{esc(report.get('analysis_id'))}</code></p>
+  <p class="hash">Reproducibility hash: <code>{esc(report.get('reproducibility_hash'))}</code></p>
+
+  <h2>Analysis Summary</h2>
+  <table>
+    {rows([
+        ("Generated at", report.get("generated_at")),
+        ("Cohort", data.get("cohort")),
+        ("Marker", analysis.get("reported_marker")),
+        ("Endpoint", f"{endpoint.get('label')} ({endpoint.get('value')})"),
+        ("Endpoint source", endpoint.get("source")),
+        ("Expression scale", (data.get("expression_scale") or {}).get("label")),
+        ("Cutpoint method", analysis.get("cutpoint_method")),
+        ("Patients", results.get("n_patients")),
+        ("Events", results.get("n_events")),
+        ("Log-rank p-value", results.get("logrank_p_value")),
+        ("Hazard ratio", results.get("hazard_ratio")),
+    ])}
+  </table>
+
+  <h2>Survival Groups</h2>
+  <table>
+    <thead><tr><th>Group</th><th>Patients</th><th>Events</th><th>Median days</th><th>Median status</th></tr></thead>
+    <tbody>{group_rows}</tbody>
+  </table>
+
+  <h2>Cox Models</h2>
+  <table>
+    <thead><tr><th>Model</th><th>Covariates</th><th>Patients</th><th>Events</th><th>HR</th><th>p</th><th>PH global p</th><th>Status</th><th>Reason</th></tr></thead>
+    <tbody>{cox_rows}</tbody>
+  </table>
+
+  <h2>Warnings And Limitations</h2>
+  <ul>{warning_items}</ul>
+
+  <h2>Artifacts</h2>
+  <table>
+    <thead><tr><th>Artifact</th><th>Filename</th><th>Bytes</th><th>SHA-256</th></tr></thead>
+    <tbody>{artifact_rows}</tbody>
+  </table>
+
+  <h2>Full Audit JSON</h2>
+  <pre>{json_payload}</pre>
+</body>
+</html>
+"""
 
 
 def run_r_pancancer_cox(

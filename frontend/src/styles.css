@@ -3343,6 +3343,19 @@ textarea {
   line-height: 1.35;
 }
 
+.audit-summary {
+  overflow: hidden;
+}
+
+.audit-summary code {
+  display: inline-block;
+  max-width: min(100%, 760px);
+  color: #263431;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .combined-signature-summary td span {
   color: #63716f;
   font-size: 12px;

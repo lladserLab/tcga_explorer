@@ -3736,7 +3736,10 @@ function AnalysisResult({ analysis, onDownload }) {
           <DownloadLink href={downloads.csv} icon={<FileSpreadsheet size={16} />} label="CSV" onDownload={onDownload} />
           <DownloadLink href={downloads.cox_png} icon={<BarChart3 size={16} />} label="Cox PNG" onDownload={onDownload} />
           <DownloadLink href={downloads.cox_svg} icon={<ArrowDownToLine size={16} />} label="Cox SVG" onDownload={onDownload} />
+          <DownloadLink href={downloads.json} icon={<FileText size={16} />} label="Metrics JSON" onDownload={onDownload} />
           <DownloadLink href={downloads.txt} icon={<FileText size={16} />} label="Method TXT" onDownload={onDownload} />
+          <DownloadLink href={downloads.audit_json} icon={<ClipboardList size={16} />} label="Audit JSON" onDownload={onDownload} />
+          <DownloadLink href={downloads.audit_html} icon={<ClipboardList size={16} />} label="Audit HTML" onDownload={onDownload} />
           <DownloadLink href={downloads.zip} icon={<Archive size={16} />} label="ZIP" onDownload={onDownload} />
         </div>
       </div>
@@ -3754,6 +3757,7 @@ function AnalysisResult({ analysis, onDownload }) {
       </div>
 
       <CoxModelTable models={metrics.cox_models} />
+      <AuditSummary audit={metrics.audit_report} />
 
       {combinedSignature && <CombinedSignatureSummary combined={combinedSignature} />}
 
@@ -3822,6 +3826,7 @@ function CoxModelTable({ models }) {
             <th>Events</th>
             <th>HR</th>
             <th>p</th>
+            <th>PH global p</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -3834,6 +3839,7 @@ function CoxModelTable({ models }) {
               <td>{formatInteger(model.n_events)}</td>
               <td>{model.status === "completed" ? formatHrValues(model) : "..."}</td>
               <td>{model.status === "completed" ? formatP(model.p_value) : "..."}</td>
+              <td>{model.status === "completed" ? formatP(model.ph_global_p_value) : "..."}</td>
               <td>{model.status === "completed" ? "Completed" : model.reason || formatLabel(model.status)}</td>
             </tr>
           ))}
@@ -3841,6 +3847,36 @@ function CoxModelTable({ models }) {
       </table>
       <div className="method-note">
         Adjusted models use complete cases for the listed covariates; stage and grade are fitted as categorical terms.
+      </div>
+    </div>
+  );
+}
+
+function AuditSummary({ audit }) {
+  if (!audit?.reproducibility_hash) return null;
+  return (
+    <div className="detail-section audit-summary">
+      <h3>Reproducibility audit</h3>
+      <dl>
+        <div>
+          <dt>Schema</dt>
+          <dd>{audit.schema_version || "..."}</dd>
+        </div>
+        <div>
+          <dt>Generated</dt>
+          <dd>{formatDateTime(audit.generated_at)}</dd>
+        </div>
+        <div>
+          <dt>Analysis hash</dt>
+          <dd><code>{audit.reproducibility_hash}</code></dd>
+        </div>
+        <div>
+          <dt>Patient records hash</dt>
+          <dd><code>{audit.patient_records_sha256 || "..."}</code></dd>
+        </div>
+      </dl>
+      <div className="method-note">
+        The audit report captures parameters, endpoint source, sample selection, patient records, Cox/QC outputs, software versions and artifact checksums.
       </div>
     </div>
   );
@@ -3907,6 +3943,7 @@ function signatureGenesLabel(genes) {
 function GroupTable({ metrics }) {
   const groups = Object.keys(metrics.group_counts || {});
   if (!groups.length) return null;
+  const notReachedGroups = groups.filter((group) => isMedianNotReached(metrics.median_survival_days?.[group]));
   return (
     <div className="detail-section">
       <h3>Survival groups</h3>
@@ -3930,6 +3967,11 @@ function GroupTable({ metrics }) {
           ))}
         </tbody>
       </table>
+      {!!notReachedGroups.length && (
+        <div className="method-note">
+          Median survival is marked as not reached when the Kaplan-Meier curve stays above 50% survival for that group.
+        </div>
+      )}
     </div>
   );
 }
@@ -4624,6 +4666,12 @@ function formatMedianSurvivalDays(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return "Not reached";
   return Math.round(number).toLocaleString();
+}
+
+function isMedianNotReached(value) {
+  if (value === undefined || value === "") return false;
+  if (value === null) return true;
+  return !Number.isFinite(Number(value));
 }
 
 function formatExpressionValue(value) {
