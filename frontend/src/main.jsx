@@ -1943,204 +1943,217 @@ function CompareAnalyses({
   return (
     <section className="compare-page">
       <div className="compare-controls" aria-label="Comparison controls">
-        <section className="compare-section">
-          <PanelHeader
-            icon={<Database size={18} />}
-            title="Dataset and endpoint"
-            description="Shared cancer cohort, survival endpoint and RNA expression scale."
-          />
-          <div className="compare-control-grid">
-            <div className="compare-control-block">
-              <div className="compare-control-label">
-                <span>Cohort</span>
-              </div>
-              <CohortPicker
-                cohorts={cohorts}
-                visibleCohorts={visibleCohorts}
-                selectedCohort={selectedCohort}
-                selectedCohortId={selectedCohortId}
-                query={cohortQuery}
-                setQuery={setCohortQuery}
-                open={cohortPickerOpen}
-                setOpen={setCohortPickerOpen}
-                onSelect={onSelectCohort}
-              />
-            </div>
-            <div className="compare-control-block">
-              <div className="compare-control-label">
-                <span>Survival endpoint</span>
-                <strong>{selectedEndpoint.available ? "Available" : "Unavailable"}</strong>
-              </div>
-              <EndpointSelector
-                endpoints={endpointOptions}
-                selected={form.endpoint}
-                onSelect={onSelectEndpoint}
-              />
-            </div>
-            <div className="compare-control-block wide">
-              <div className="compare-control-label">
-                <span>RNA expression scale</span>
-                <strong>{expressionScale.label}</strong>
-              </div>
-              <div className="scale-grid" aria-label="RNA expression scale">
-                {expressionScales.map((item) => (
-                  <button
-                    key={item.value}
-                    type="button"
-                    className={form.expression_scale === item.value ? "selected" : ""}
-                    onClick={() => updateForm("expression_scale", item.value)}
-                    title={expressionTooltip(item.value)}
-                  >
-                    <strong>{item.label}</strong>
-                    <span>{item.note}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="compare-section">
-          <PanelHeader
-            icon={<Dna size={18} />}
-            title="Markers and cutpoints"
-            description="Genes populate matrix rows; cutpoint methods populate matrix columns."
-          />
-          <div className="compare-control-grid compare-marker-grid">
-            <GeneSelector
-              label="Genes to compare"
-              value={compare.genes}
-              onChange={(value) => setCompare((current) => ({ ...current, genes: value }))}
-              draft={compareGeneQuery}
-              setDraft={setCompareGeneQuery}
-              suggestions={compareGeneSuggestions}
-              placeholder="Type TP53, KRAS, EGFR..."
-              help="Select genes for the comparison matrix. Each selected gene becomes one row."
+        <div className="compare-main-flow">
+          <section className="compare-section">
+            <PanelHeader
+              icon={<Database size={18} />}
+              title="1. Dataset and endpoint"
+              description="Shared cohort, outcome and expression scale for every matrix cell."
             />
-            <div className="compare-method-panel">
-              <div className="compare-control-label">
-                <span>Cutpoint methods</span>
-                <strong>{selectedMethods.length} selected / {selectedDichotomizationCount} dichotomizing</strong>
-              </div>
-              <div className="method-grid compact">
-                {cutpoints.map((item) => (
-                  <button
-                    key={item.value}
-                    type="button"
-                    className={selectedMethods.includes(item.value) ? "selected" : ""}
-                    onClick={() => toggleMethod(item.value)}
-                    title={cutpointTooltip(item.value)}
-                  >
-                    <strong>{item.label}</strong>
-                    <span>{item.help}</span>
-                  </button>
-                ))}
-              </div>
-              <label className="field compare-percentile-field">
-                <span>Percentile threshold</span>
-                <input
-                  type="number"
-                  min="1"
-                  max="99"
-                  value={form.custom_percentile}
-                  onChange={(event) => updateForm("custom_percentile", event.target.value)}
+            <div className="compare-control-grid">
+              <div className="compare-control-block">
+                <div className="compare-control-label">
+                  <span>Cohort</span>
+                </div>
+                <CohortPicker
+                  cohorts={cohorts}
+                  visibleCohorts={visibleCohorts}
+                  selectedCohort={selectedCohort}
+                  selectedCohortId={selectedCohortId}
+                  query={cohortQuery}
+                  setQuery={setCohortQuery}
+                  open={cohortPickerOpen}
+                  setOpen={setCohortPickerOpen}
+                  onSelect={onSelectCohort}
                 />
-              </label>
+              </div>
+              <div className="compare-control-block">
+                <div className="compare-control-label">
+                  <span>Survival endpoint</span>
+                  <strong>{selectedEndpoint.available ? "Available" : "Unavailable"}</strong>
+                </div>
+                <EndpointSelector
+                  endpoints={endpointOptions}
+                  selected={form.endpoint}
+                  onSelect={onSelectEndpoint}
+                />
+              </div>
+              <div className="compare-control-block wide">
+                <div className="compare-control-label">
+                  <span>RNA expression scale</span>
+                  <strong>{expressionScale.label}</strong>
+                </div>
+                <div className="scale-grid" aria-label="RNA expression scale">
+                  {expressionScales.map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      className={form.expression_scale === item.value ? "selected" : ""}
+                      onClick={() => updateForm("expression_scale", item.value)}
+                      title={expressionTooltip(item.value)}
+                    >
+                      <strong>{item.label}</strong>
+                      <span>{item.note}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="compare-section">
-          <details className="compare-disclosure" defaultOpen={activeFilterCount > 0}>
-            <summary>
-              <span>Clinical filters</span>
-              <strong>{activeFilterCount ? `${activeFilterCount} active` : "All eligible patients"}</strong>
-            </summary>
-            <div className="compare-filter-grid">
-              <FilterGroup
-                title="Sample type"
-                values={filters?.sample_types || []}
-                selected={form.filters.sample_types}
-                onToggle={(value) => toggleFilterValue("sample_types", value)}
-                onClear={() => clearFilter("sample_types")}
+          <section className="compare-section">
+            <PanelHeader
+              icon={<Dna size={18} />}
+              title="2. Markers and cutpoints"
+              description="Genes define rows; cutpoint methods define columns."
+            />
+            <div className="compare-control-grid compare-marker-grid">
+              <GeneSelector
+                label="Genes to compare"
+                value={compare.genes}
+                onChange={(value) => setCompare((current) => ({ ...current, genes: value }))}
+                draft={compareGeneQuery}
+                setDraft={setCompareGeneQuery}
+                suggestions={compareGeneSuggestions}
+                placeholder="Type TP53, KRAS, EGFR..."
+                help="Select genes for the comparison matrix. Each selected gene becomes one row."
               />
-              <FilterGroup
-                title="Stage"
-                values={filters?.stages || []}
-                selected={form.filters.stages}
-                onToggle={(value) => toggleFilterValue("stages", value)}
-                onClear={() => clearFilter("stages")}
-              />
-              <FilterGroup
-                title="Grade"
-                values={filters?.grades || []}
-                selected={form.filters.grades}
-                onToggle={(value) => toggleFilterValue("grades", value)}
-                onClear={() => clearFilter("grades")}
-                showWhenEmpty
-                emptyLabel="No grade metadata for this cohort"
-              />
-              <FilterGroup
-                title="Gender"
-                values={filters?.genders || []}
-                selected={form.filters.genders}
-                onToggle={(value) => toggleFilterValue("genders", value)}
-                onClear={() => clearFilter("genders")}
-              />
-              <FilterGroup
-                title="Race"
-                values={filters?.races || []}
-                selected={form.filters.races}
-                onToggle={(value) => toggleFilterValue("races", value)}
-                onClear={() => clearFilter("races")}
-              />
-              <div className="range-grid">
-                <label className="field">
-                  <span>Min age</span>
+              <div className="compare-method-panel">
+                <div className="compare-control-label">
+                  <span>Cutpoint methods</span>
+                  <strong>{selectedMethods.length} selected / {selectedDichotomizationCount} dichotomizing</strong>
+                </div>
+                <div className="method-grid compact">
+                  {cutpoints.map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      className={selectedMethods.includes(item.value) ? "selected" : ""}
+                      onClick={() => toggleMethod(item.value)}
+                      title={cutpointTooltip(item.value)}
+                    >
+                      <strong>{item.label}</strong>
+                      <span>{item.help}</span>
+                    </button>
+                  ))}
+                </div>
+                <label className="field compare-percentile-field">
+                  <span>Percentile threshold</span>
                   <input
-                    value={form.filters.age_min}
-                    onChange={(event) => updateFilters("age_min", event.target.value)}
-                    placeholder={filters?.age_min ? String(Math.floor(filters.age_min)) : ""}
-                  />
-                </label>
-                <label className="field">
-                  <span>Max age</span>
-                  <input
-                    value={form.filters.age_max}
-                    onChange={(event) => updateFilters("age_max", event.target.value)}
-                    placeholder={filters?.age_max ? String(Math.ceil(filters.age_max)) : ""}
-                  />
-                </label>
-                <label className="field wide">
-                  <span>Maximum follow-up days</span>
-                  <input
-                    value={form.filters.max_time_days}
-                    onChange={(event) => updateFilters("max_time_days", event.target.value)}
-                    placeholder={filters?.os_time_max_days ? String(Math.ceil(filters.os_time_max_days)) : ""}
+                    type="number"
+                    min="1"
+                    max="99"
+                    value={form.custom_percentile}
+                    onChange={(event) => updateForm("custom_percentile", event.target.value)}
                   />
                 </label>
               </div>
             </div>
-          </details>
-        </section>
+          </section>
 
-        <section className="compare-section">
-          <PlotOutputControls
-            form={form}
-            updateForm={updateForm}
-            updatePlotStyle={updatePlotStyle}
-            updatePaletteColor={updatePaletteColor}
-            plotTitlePlaceholder={`${selectedCohort ? getCohortName(selectedCohort.id) : "Cancer"} comparison`}
-            showOutputHeader
-          />
-        </section>
+          <section className="compare-section">
+            <details className="compare-disclosure" defaultOpen={activeFilterCount > 0}>
+              <summary>
+                <span>3. Clinical filters</span>
+                <strong>{activeFilterCount ? `${activeFilterCount} active` : "All eligible patients"}</strong>
+              </summary>
+              <div className="compare-filter-grid">
+                <FilterGroup
+                  title="Sample type"
+                  values={filters?.sample_types || []}
+                  selected={form.filters.sample_types}
+                  onToggle={(value) => toggleFilterValue("sample_types", value)}
+                  onClear={() => clearFilter("sample_types")}
+                />
+                <FilterGroup
+                  title="Stage"
+                  values={filters?.stages || []}
+                  selected={form.filters.stages}
+                  onToggle={(value) => toggleFilterValue("stages", value)}
+                  onClear={() => clearFilter("stages")}
+                />
+                <FilterGroup
+                  title="Grade"
+                  values={filters?.grades || []}
+                  selected={form.filters.grades}
+                  onToggle={(value) => toggleFilterValue("grades", value)}
+                  onClear={() => clearFilter("grades")}
+                  showWhenEmpty
+                  emptyLabel="No grade metadata for this cohort"
+                />
+                <FilterGroup
+                  title="Gender"
+                  values={filters?.genders || []}
+                  selected={form.filters.genders}
+                  onToggle={(value) => toggleFilterValue("genders", value)}
+                  onClear={() => clearFilter("genders")}
+                />
+                <FilterGroup
+                  title="Race"
+                  values={filters?.races || []}
+                  selected={form.filters.races}
+                  onToggle={(value) => toggleFilterValue("races", value)}
+                  onClear={() => clearFilter("races")}
+                />
+                <div className="range-grid">
+                  <label className="field">
+                    <span>Min age</span>
+                    <input
+                      value={form.filters.age_min}
+                      onChange={(event) => updateFilters("age_min", event.target.value)}
+                      placeholder={filters?.age_min ? String(Math.floor(filters.age_min)) : ""}
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Max age</span>
+                    <input
+                      value={form.filters.age_max}
+                      onChange={(event) => updateFilters("age_max", event.target.value)}
+                      placeholder={filters?.age_max ? String(Math.ceil(filters.age_max)) : ""}
+                    />
+                  </label>
+                  <label className="field wide">
+                    <span>Maximum follow-up days</span>
+                    <input
+                      value={form.filters.max_time_days}
+                      onChange={(event) => updateFilters("max_time_days", event.target.value)}
+                      placeholder={filters?.os_time_max_days ? String(Math.ceil(filters.os_time_max_days)) : ""}
+                    />
+                  </label>
+                </div>
+              </div>
+            </details>
+          </section>
 
-        <section className="compare-section compare-run-section">
+          <section className="compare-section">
+            <details className="compare-disclosure compare-plot-disclosure">
+              <summary>
+                <span>4. Plot output</span>
+                <strong>{form.time_unit}, {form.plot_style.plot_aspect}, risk table {form.show_risk_table ? "on" : "off"}</strong>
+              </summary>
+              <PlotOutputControls
+                form={form}
+                updateForm={updateForm}
+                updatePlotStyle={updatePlotStyle}
+                updatePaletteColor={updatePaletteColor}
+                plotTitlePlaceholder={`${selectedCohort ? getCohortName(selectedCohort.id) : "Cancer"} comparison`}
+              />
+            </details>
+          </section>
+        </div>
+
+        <aside className="compare-run-panel" aria-label="Run comparison">
           <div className="run-summary static">
             <div>
-              <span>Comparison scope</span>
+              <span>Run setup</span>
               <strong>{genes.length || 0} genes x {selectedMethods.length} methods</strong>
-              <small>{expressionScale.label}; up to {ANALYSIS_BATCH_CONCURRENCY} analyses run in parallel, with BH and Bonferroni adjustment across completed comparisons.</small>
+              <div className="compare-run-facts">
+                <div><span>Cohort</span><strong>{form.cohort || "..."}</strong></div>
+                <div><span>Endpoint</span><strong>{selectedEndpoint.label}</strong></div>
+                <div><span>Scale</span><strong>{expressionScale.label}</strong></div>
+                <div><span>Parallel jobs</span><strong>{ANALYSIS_BATCH_CONCURRENCY}</strong></div>
+              </div>
+              <small>BH and Bonferroni adjustment are applied across completed comparisons.</small>
               {missingRequirements.length ? (
                 <small className="input-requirement">Required: {missingRequirements.join(", ")}.</small>
               ) : (
@@ -2161,7 +2174,7 @@ function CompareAnalyses({
               Run all 5 cutpoint methods
             </button>
           </div>
-        </section>
+        </aside>
       </div>
       {compare.error && <div className="error-box"><AlertCircle size={18} /><span>{compare.error}</span></div>}
       <ComparePlotMatrix
