@@ -29,6 +29,13 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 2px solid #2f756f;
+  outline-offset: 3px;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: 288px minmax(0, 1fr);
@@ -305,7 +312,7 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: #2f756f;
-  box-shadow: 0 0 0 3px rgba(47, 117, 111, 0.14);
+  box-shadow: 0 0 0 3px rgba(47, 117, 111, 0.22);
 }
 
 textarea {
@@ -361,9 +368,10 @@ textarea {
 }
 
 .cohort-trigger:focus-visible {
-  outline: none;
+  outline: 2px solid #2f756f;
+  outline-offset: 3px;
   border-color: #2f756f;
-  box-shadow: 0 0 0 3px rgba(47, 117, 111, 0.14);
+  box-shadow: 0 0 0 3px rgba(47, 117, 111, 0.18);
 }
 
 .cohort-trigger > span {
@@ -951,7 +959,7 @@ textarea {
   width: 40px;
   height: 22px;
   border-radius: 999px;
-  background: #cbd4d1;
+  background: #7f938d;
   transition: background 150ms ease;
 }
 
@@ -1277,6 +1285,12 @@ textarea {
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.compare-controls input,
+.compare-controls select,
+.compare-controls button:not(.primary-button):not(.secondary-button):not(.selected):not(.open) {
+  border-color: #7f938d;
 }
 
 .pancancer-page,
