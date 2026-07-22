@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-KIRC CA9 cutpoint robustness benchmark.}
+\label{tab:kirc-ca9-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+\midrule
+Maxstat & 531 & 175 & 0.002 & 5.69e-04 & 0.058 & 607 & Fails adjusted \\
+Median & 531 & 175 & 0.031 & 0.013 & 0.362 & 427 & Fails adjusted \\
+Upper Q & 531 & 175 & 0.355 & 0.355 & 0.348 & 268 & Fails BH \\
+Outer Q & 266 & 93 & 0.071 & 0.044 & 0.487 & 555 & Fails BH \\
+75th pct. & 531 & 175 & 0.355 & 0.355 & 0.348 & 268 & Fails BH \\
+\bottomrule
+\end{tabular}
+\end{table}

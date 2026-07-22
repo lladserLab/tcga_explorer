@@ -1,0 +1,1781 @@
+{
+  "completed": 5,
+  "failed": 0,
+  "max_concurrency": 1,
+  "results": [
+    {
+      "code": null,
+      "error": null,
+      "index": 0,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-KIRC",
+        "cutpoint_method": "maxstat",
+        "downloads": {
+          "audit_html": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/audit_html",
+          "audit_json": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/audit_json",
+          "cox_png": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/cox_png",
+          "cox_svg": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/cox_svg",
+          "csv": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/csv",
+          "json": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/json",
+          "png": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/png",
+          "svg": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/svg",
+          "txt": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/txt",
+          "zip": "/api/analyses/fbe678227f944a1fab649d344bf4f124/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "CA9",
+        "id": "fbe678227f944a1fab649d344bf4f124",
+        "metrics": {
+          "audit_report": {
+            "generated_at": "2026-07-22T12:36:38.988823+00:00",
+            "patient_records_sha256": "7857b6416321e581c7bf4712032419f099f3c2afbbbbf81b244d7be6e5574ae9",
+            "reproducibility_hash": "188d8bd6eae334683ee941c3187b477456b8506d77bdf6f4faf5a57ff1255a43",
+            "schema_version": "tcga-explorer-analysis-audit-v1"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low",
+              "covariates": [],
+              "hazard_ratio": 0.589133061085736,
+              "hr_conf_high": 0.7959991303663116,
+              "hr_conf_low": 0.4360278176491568,
+              "label": "Univariable",
+              "log_hr": -0.5291032106818687,
+              "model": "univariable",
+              "n_events": 175,
+              "n_patients": 531,
+              "p_value": 0.0005692076209541318,
+              "ph_global_p_value": 0.7602770352397621,
+              "ph_p_value": 0.7602770352397621,
+              "standard_error": 0.1535467117828227,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage"
+              ],
+              "hazard_ratio": 0.6207916560751868,
+              "hr_conf_high": 0.8855170968560692,
+              "hr_conf_low": 0.43520591710858025,
+              "label": "Adjusted for stage",
+              "log_hr": -0.4767597508039904,
+              "model": "stage_adjusted",
+              "n_events": 129,
+              "n_patients": 442,
+              "p_value": 0.008515994991392304,
+              "ph_global_p_value": 0.0065946067402558265,
+              "ph_p_value": 0.46833145543163507,
+              "standard_error": 0.1812156954072312,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "grade"
+              ],
+              "hazard_ratio": 0.7860107677633515,
+              "hr_conf_high": 1.1316862588291101,
+              "hr_conf_low": 0.5459224429208396,
+              "label": "Adjusted for grade",
+              "log_hr": -0.24078478720229946,
+              "model": "grade_adjusted",
+              "n_events": 128,
+              "n_patients": 432,
+              "p_value": 0.1954051045911177,
+              "ph_global_p_value": 0.22774608103100996,
+              "ph_p_value": 0.8551619897134094,
+              "standard_error": 0.1859695254259868,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage",
+                "grade"
+              ],
+              "hazard_ratio": 0.7007768011309184,
+              "hr_conf_high": 1.0126893313722025,
+              "hr_conf_low": 0.48493462880452615,
+              "label": "Adjusted for stage and grade",
+              "log_hr": -0.3555658433169629,
+              "model": "stage_grade_adjusted",
+              "n_events": 127,
+              "n_patients": 429,
+              "p_value": 0.058379426078700766,
+              "ph_global_p_value": 0.005246851791046377,
+              "ph_p_value": 0.5786963575193267,
+              "standard_error": 0.18784801286467792,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  5,6,7,8 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            }
+          ],
+          "cutpoint_details": {
+            "method": "maxstat",
+            "minprop": 0.15,
+            "package": "survminer::surv_cutpoint",
+            "statistic": 3.4306144156545235,
+            "threshold": 8.234944343566895
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 175,
+            "label": "Overall survival",
+            "patients": 531,
+            "reason": "531 linked patients and 175 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 102,
+            "Low": 73
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 21,
+                "label": "0.05-1.10"
+              },
+              {
+                "count": 2,
+                "label": "1.10-2.15"
+              },
+              {
+                "count": 3,
+                "label": "2.15-3.20"
+              },
+              {
+                "count": 2,
+                "label": "3.20-4.26"
+              },
+              {
+                "count": 7,
+                "label": "4.26-5.31"
+              },
+              {
+                "count": 7,
+                "label": "5.31-6.36"
+              },
+              {
+                "count": 25,
+                "label": "6.36-7.41"
+              },
+              {
+                "count": 149,
+                "label": "7.41-8.46"
+              },
+              {
+                "count": 266,
+                "label": "8.46-9.52"
+              },
+              {
+                "count": 49,
+                "label": "9.52-10.57"
+              }
+            ],
+            "max": 10.566875457763672,
+            "median": 8.629610061645508,
+            "min": 0.048933643847703934,
+            "n": 531,
+            "q1": 8.054110050201416,
+            "q3": 9.09068489074707
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 364,
+            "Low": 167
+          },
+          "hazard_ratio": 0.589133061085736,
+          "hr_conf_high": 0.7959991303663116,
+          "hr_conf_low": 0.4360278176491568,
+          "hr_p_value": 0.0005692076209541318,
+          "logrank_p_value": 0.0004905935120874672,
+          "median_survival_days": {
+            "High": null,
+            "Low": 1912
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+              "status": "not_reached"
+            },
+            "Low": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 175,
+          "n_patients": 531,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 102,
+                "patients": 364
+              },
+              "Low": {
+                "events": 73,
+                "patients": 167
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 954.6994455017923,
+              "conf_low": 259.6101639947645,
+              "estimate_days": 607.1548047482784,
+              "p_value": 0.0006170093681031949
+            },
+            "groups": {
+              "High": {
+                "conf_high": 2999.42402648329,
+                "conf_low": 2602.3566664456544,
+                "rmst_days": 2800.8903464644723,
+                "standard_error": 101.2945551983742
+              },
+              "Low": {
+                "conf_high": 2478.9927155342675,
+                "conf_low": 1908.4783678981203,
+                "rmst_days": 2193.735541716194,
+                "standard_error": 145.54204876627628
+              }
+            },
+            "method": "survRM2::rmst2",
+            "n_events": 175,
+            "n_patients": 531,
+            "ratio": {
+              "conf_high": 1.480572380675655,
+              "conf_low": 1.1010170056298016,
+              "estimate": 1.276767547045936,
+              "p_value": 0.0012225843089840296
+            },
+            "reference_group": "Low",
+            "rmtl_ratio": {
+              "conf_high": 0.8416555859438132,
+              "conf_low": 0.5447024625133201,
+              "estimate": 0.6770907400427851,
+              "p_value": 0.00044323080156196694
+            },
+            "status": "completed",
+            "tau_days": 4074,
+            "tau_rule": "minimum of the maximum observed follow-up time across the two expression groups",
+            "tau_time_unit": 133.84804928131416,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 614,
+            "complete_endpoint_samples": 612,
+            "complete_os_samples": 612,
+            "duplicate_samples_removed": 81,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 614,
+            "missing_endpoint_removed": 2,
+            "missing_os_removed": 2,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional - New Primary": 1,
+              "Primary Tumor": 8,
+              "Solid Tissue Normal": 72
+            },
+            "retained_patients": 531,
+            "retained_sample_types": {
+              "Primary Tumor": 531
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "CA9",
+                "resolved_symbol": "CA9",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "CA9",
+            "method": "single"
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+          ]
+        },
+        "status": "completed",
+        "warnings": [
+          "2 samples were excluded because Overall survival was not usable.",
+          "81 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+          "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+        ]
+      },
+      "status": "completed"
+    },
+    {
+      "code": null,
+      "error": null,
+      "index": 1,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-KIRC",
+        "cutpoint_method": "median",
+        "downloads": {
+          "audit_html": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/audit_html",
+          "audit_json": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/audit_json",
+          "cox_png": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/cox_png",
+          "cox_svg": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/cox_svg",
+          "csv": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/csv",
+          "json": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/json",
+          "png": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/png",
+          "svg": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/svg",
+          "txt": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/txt",
+          "zip": "/api/analyses/ede0234860d74ce3b8d36006aff5e4d6/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "CA9",
+        "id": "ede0234860d74ce3b8d36006aff5e4d6",
+        "metrics": {
+          "audit_report": {
+            "generated_at": "2026-07-22T12:36:41.413160+00:00",
+            "patient_records_sha256": "bb669bb6df0671f8dee8b4eeacc068e56bd8c8de86363ea103e4ddfcc6c693a9",
+            "reproducibility_hash": "b823976b65099ddde1fbf46d0a74e724c9d6399fcc7422b0751471a36d651dd6",
+            "schema_version": "tcga-explorer-analysis-audit-v1"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low",
+              "covariates": [],
+              "hazard_ratio": 0.683428468979249,
+              "hr_conf_high": 0.9232359091342277,
+              "hr_conf_low": 0.5059102095035746,
+              "label": "Univariable",
+              "log_hr": -0.38063328231193894,
+              "model": "univariable",
+              "n_events": 175,
+              "n_patients": 531,
+              "p_value": 0.013121611408119736,
+              "ph_global_p_value": 0.608782865044678,
+              "ph_p_value": 0.608782865044678,
+              "standard_error": 0.1534532251997832,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage"
+              ],
+              "hazard_ratio": 0.7282601558091081,
+              "hr_conf_high": 1.0351428504141318,
+              "hr_conf_low": 0.5123571633875681,
+              "label": "Adjusted for stage",
+              "log_hr": -0.31709693774157033,
+              "model": "stage_adjusted",
+              "n_events": 129,
+              "n_patients": 442,
+              "p_value": 0.07715343470485055,
+              "ph_global_p_value": 0.005284777728007528,
+              "ph_p_value": 0.591216286838488,
+              "standard_error": 0.1794096102951477,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "grade"
+              ],
+              "hazard_ratio": 0.9116929099869205,
+              "hr_conf_high": 1.3062692182687814,
+              "hr_conf_low": 0.6363037193986705,
+              "label": "Adjusted for grade",
+              "log_hr": -0.09245206711679056,
+              "model": "grade_adjusted",
+              "n_events": 128,
+              "n_patients": 432,
+              "p_value": 0.6143578993820074,
+              "ph_global_p_value": 0.22470607782344215,
+              "ph_p_value": 0.8432486499544114,
+              "standard_error": 0.1834866452274139,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage",
+                "grade"
+              ],
+              "hazard_ratio": 0.8438684693842925,
+              "hr_conf_high": 1.2158522726707648,
+              "hr_conf_low": 0.5856912139965369,
+              "label": "Adjusted for stage and grade",
+              "log_hr": -0.169758638492539,
+              "model": "stage_grade_adjusted",
+              "n_events": 127,
+              "n_patients": 429,
+              "p_value": 0.3622664635608334,
+              "ph_global_p_value": 0.004199019289390882,
+              "ph_p_value": 0.7326397546434934,
+              "standard_error": 0.18633195877406408,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  5,6,7,8 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            }
+          ],
+          "cutpoint_details": {
+            "method": "median",
+            "threshold": 8.629610061645508
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 175,
+            "label": "Overall survival",
+            "patients": 531,
+            "reason": "531 linked patients and 175 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 73,
+            "Low": 102
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 21,
+                "label": "0.05-1.10"
+              },
+              {
+                "count": 2,
+                "label": "1.10-2.15"
+              },
+              {
+                "count": 3,
+                "label": "2.15-3.20"
+              },
+              {
+                "count": 2,
+                "label": "3.20-4.26"
+              },
+              {
+                "count": 7,
+                "label": "4.26-5.31"
+              },
+              {
+                "count": 7,
+                "label": "5.31-6.36"
+              },
+              {
+                "count": 25,
+                "label": "6.36-7.41"
+              },
+              {
+                "count": 149,
+                "label": "7.41-8.46"
+              },
+              {
+                "count": 266,
+                "label": "8.46-9.52"
+              },
+              {
+                "count": 49,
+                "label": "9.52-10.57"
+              }
+            ],
+            "max": 10.566875457763672,
+            "median": 8.629610061645508,
+            "min": 0.048933643847703934,
+            "n": 531,
+            "q1": 8.054110050201416,
+            "q3": 9.09068489074707
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 265,
+            "Low": 266
+          },
+          "hazard_ratio": 0.683428468979249,
+          "hr_conf_high": 0.9232359091342277,
+          "hr_conf_low": 0.5059102095035746,
+          "hr_p_value": 0.013121611408119736,
+          "logrank_p_value": 0.012593721055601859,
+          "median_survival_days": {
+            "High": null,
+            "Low": 2299
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+              "status": "not_reached"
+            },
+            "Low": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 175,
+          "n_patients": 531,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 73,
+                "patients": 265
+              },
+              "Low": {
+                "events": 102,
+                "patients": 266
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 754.6392057243206,
+              "conf_low": 99.84750302716435,
+              "estimate_days": 427.24335437574246,
+              "p_value": 0.010536582112606524
+            },
+            "groups": {
+              "High": {
+                "conf_high": 3052.1414382753032,
+                "conf_low": 2588.9490995018964,
+                "rmst_days": 2820.5452688886,
+                "standard_error": 118.16348219329778
+              },
+              "Low": {
+                "conf_high": 2624.713361519408,
+                "conf_low": 2161.890467506307,
+                "rmst_days": 2393.3019145128574,
+                "standard_error": 118.06923434914856
+              }
+            },
+            "method": "survRM2::rmst2",
+            "n_events": 175,
+            "n_patients": 531,
+            "ratio": {
+              "conf_high": 1.337908872909629,
+              "conf_low": 1.038113021023167,
+              "estimate": 1.1785162798663051,
+              "p_value": 0.011152063506400333
+            },
+            "reference_group": "Low",
+            "rmtl_ratio": {
+              "conf_high": 0.9390571162176043,
+              "conf_low": 0.592305668491024,
+              "estimate": 0.7457941089687699,
+              "p_value": 0.012602812759462583
+            },
+            "status": "completed",
+            "tau_days": 4074,
+            "tau_rule": "minimum of the maximum observed follow-up time across the two expression groups",
+            "tau_time_unit": 133.84804928131416,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 614,
+            "complete_endpoint_samples": 612,
+            "complete_os_samples": 612,
+            "duplicate_samples_removed": 81,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 614,
+            "missing_endpoint_removed": 2,
+            "missing_os_removed": 2,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional - New Primary": 1,
+              "Primary Tumor": 8,
+              "Solid Tissue Normal": 72
+            },
+            "retained_patients": 531,
+            "retained_sample_types": {
+              "Primary Tumor": 531
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "CA9",
+                "resolved_symbol": "CA9",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "CA9",
+            "method": "single"
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+          ]
+        },
+        "status": "completed",
+        "warnings": [
+          "2 samples were excluded because Overall survival was not usable.",
+          "81 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+          "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+        ]
+      },
+      "status": "completed"
+    },
+    {
+      "code": null,
+      "error": null,
+      "index": 2,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-KIRC",
+        "cutpoint_method": "upper_quartile",
+        "downloads": {
+          "audit_html": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/audit_html",
+          "audit_json": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/audit_json",
+          "cox_png": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/cox_png",
+          "cox_svg": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/cox_svg",
+          "csv": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/csv",
+          "json": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/json",
+          "png": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/png",
+          "svg": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/svg",
+          "txt": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/txt",
+          "zip": "/api/analyses/b22a7ab7a4d94b0fab864726a7335433/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "CA9",
+        "id": "b22a7ab7a4d94b0fab864726a7335433",
+        "metrics": {
+          "audit_report": {
+            "generated_at": "2026-07-22T12:36:43.820863+00:00",
+            "patient_records_sha256": "6dcab00c7975f2013240269fcd5a1d7bfc37811187fe7aad3d318fc669c71ead",
+            "reproducibility_hash": "bf132d15867f273ea2a7ab8af2a511ab2212e866993c5784ae9ab3ff1e69ff9a",
+            "schema_version": "tcga-explorer-analysis-audit-v1"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low/Medium",
+              "covariates": [],
+              "hazard_ratio": 0.8425672094587298,
+              "hr_conf_high": 1.2115549873120837,
+              "hr_conf_low": 0.5859573109678458,
+              "label": "Univariable",
+              "log_hr": -0.1713018460991288,
+              "model": "univariable",
+              "n_events": 175,
+              "n_patients": 531,
+              "p_value": 0.355281869613294,
+              "ph_global_p_value": 0.09576252359574475,
+              "ph_p_value": 0.09576252359574475,
+              "standard_error": 0.18531284095127123,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low/Medium",
+              "covariates": [
+                "stage"
+              ],
+              "hazard_ratio": 1.047613845766997,
+              "hr_conf_high": 1.6055483269004045,
+              "hr_conf_low": 0.6835638338968523,
+              "label": "Adjusted for stage",
+              "log_hr": 0.04651505021833499,
+              "model": "stage_adjusted",
+              "n_events": 129,
+              "n_patients": 442,
+              "p_value": 0.8309115299430335,
+              "ph_global_p_value": 0.0013583194435180374,
+              "ph_p_value": 0.19966934261191605,
+              "standard_error": 0.2178357807005212,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            },
+            {
+              "contrast": "High vs Low/Medium",
+              "covariates": [
+                "grade"
+              ],
+              "hazard_ratio": 1.2087174204652935,
+              "hr_conf_high": 1.8625552276778021,
+              "hr_conf_low": 0.784405090826658,
+              "label": "Adjusted for grade",
+              "log_hr": 0.18955981434274138,
+              "model": "grade_adjusted",
+              "n_events": 128,
+              "n_patients": 432,
+              "p_value": 0.3902029559508778,
+              "ph_global_p_value": 0.11839977335152822,
+              "ph_p_value": 0.3169528546860889,
+              "standard_error": 0.2206109460910007,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low/Medium",
+              "covariates": [
+                "stage",
+                "grade"
+              ],
+              "hazard_ratio": 1.2315897700629181,
+              "hr_conf_high": 1.902872093265737,
+              "hr_conf_low": 0.7971178762312154,
+              "label": "Adjusted for stage and grade",
+              "log_hr": 0.20830583081652906,
+              "model": "stage_grade_adjusted",
+              "n_events": 127,
+              "n_patients": 429,
+              "p_value": 0.3480235472801331,
+              "ph_global_p_value": 0.0015250895602584372,
+              "ph_p_value": 0.30345886928490146,
+              "standard_error": 0.22197272269416976,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  5,6,7,8 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            }
+          ],
+          "cutpoint_details": {
+            "method": "upper_quartile",
+            "upper_quartile": 9.09068489074707
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 175,
+            "label": "Overall survival",
+            "patients": 531,
+            "reason": "531 linked patients and 175 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 37,
+            "Low/Medium": 138
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 21,
+                "label": "0.05-1.10"
+              },
+              {
+                "count": 2,
+                "label": "1.10-2.15"
+              },
+              {
+                "count": 3,
+                "label": "2.15-3.20"
+              },
+              {
+                "count": 2,
+                "label": "3.20-4.26"
+              },
+              {
+                "count": 7,
+                "label": "4.26-5.31"
+              },
+              {
+                "count": 7,
+                "label": "5.31-6.36"
+              },
+              {
+                "count": 25,
+                "label": "6.36-7.41"
+              },
+              {
+                "count": 149,
+                "label": "7.41-8.46"
+              },
+              {
+                "count": 266,
+                "label": "8.46-9.52"
+              },
+              {
+                "count": 49,
+                "label": "9.52-10.57"
+              }
+            ],
+            "max": 10.566875457763672,
+            "median": 8.629610061645508,
+            "min": 0.048933643847703934,
+            "n": 531,
+            "q1": 8.054110050201416,
+            "q3": 9.09068489074707
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 133,
+            "Low/Medium": 398
+          },
+          "hazard_ratio": 0.8425672094587298,
+          "hr_conf_high": 1.2115549873120837,
+          "hr_conf_low": 0.5859573109678458,
+          "hr_p_value": 0.355281869613294,
+          "logrank_p_value": 0.35471990363875716,
+          "median_survival_days": {
+            "High": null,
+            "Low/Medium": 2601
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+              "status": "not_reached"
+            },
+            "Low/Medium": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 175,
+          "n_patients": 531,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 37,
+                "patients": 133
+              },
+              "Low/Medium": {
+                "events": 138,
+                "patients": 398
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 649.3559114141544,
+              "conf_low": -113.62228689428042,
+              "estimate_days": 267.866812259937,
+              "p_value": 0.16875647160316723
+            },
+            "groups": {
+              "High": {
+                "conf_high": 3138.182975772445,
+                "conf_low": 2476.3017371342407,
+                "rmst_days": 2807.242356453343,
+                "standard_error": 168.8503574195851
+              },
+              "Low/Medium": {
+                "conf_high": 2729.1444543398925,
+                "conf_low": 2349.606634046919,
+                "rmst_days": 2539.375544193406,
+                "standard_error": 96.8226516626631
+              }
+            },
+            "method": "survRM2::rmst2",
+            "n_events": 175,
+            "n_patients": 531,
+            "ratio": {
+              "conf_high": 1.2710754290342077,
+              "conf_low": 0.9614675408171033,
+              "estimate": 1.10548530833592,
+              "p_value": 0.15907427385325762
+            },
+            "reference_group": "Low/Medium",
+            "rmtl_ratio": {
+              "conf_high": 1.1020950364240523,
+              "conf_low": 0.6182495242424865,
+              "estimate": 0.8254512292916985,
+              "p_value": 0.1933392484400963
+            },
+            "status": "completed",
+            "tau_days": 4074,
+            "tau_rule": "minimum of the maximum observed follow-up time across the two expression groups",
+            "tau_time_unit": 133.84804928131416,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 614,
+            "complete_endpoint_samples": 612,
+            "complete_os_samples": 612,
+            "duplicate_samples_removed": 81,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 614,
+            "missing_endpoint_removed": 2,
+            "missing_os_removed": 2,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional - New Primary": 1,
+              "Primary Tumor": 8,
+              "Solid Tissue Normal": 72
+            },
+            "retained_patients": 531,
+            "retained_sample_types": {
+              "Primary Tumor": 531
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "CA9",
+                "resolved_symbol": "CA9",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "CA9",
+            "method": "single"
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+          ]
+        },
+        "status": "completed",
+        "warnings": [
+          "2 samples were excluded because Overall survival was not usable.",
+          "81 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+          "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+        ]
+      },
+      "status": "completed"
+    },
+    {
+      "code": null,
+      "error": null,
+      "index": 3,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-KIRC",
+        "cutpoint_method": "upper_lower_quartile",
+        "downloads": {
+          "audit_html": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/audit_html",
+          "audit_json": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/audit_json",
+          "cox_png": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/cox_png",
+          "cox_svg": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/cox_svg",
+          "csv": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/csv",
+          "json": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/json",
+          "png": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/png",
+          "svg": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/svg",
+          "txt": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/txt",
+          "zip": "/api/analyses/d4b761863dcf4eef9877d4e9d6c37f62/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "CA9",
+        "id": "d4b761863dcf4eef9877d4e9d6c37f62",
+        "metrics": {
+          "audit_report": {
+            "generated_at": "2026-07-22T12:36:46.087364+00:00",
+            "patient_records_sha256": "d441459b9efcf2eb0d0d77cd83eb491b92060d294c07ef0fad69f13c17f814fd",
+            "reproducibility_hash": "3a11010be3acca984c36269025e038c3729ced9fc97413f557c01463af91adf5",
+            "schema_version": "tcga-explorer-analysis-audit-v1"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low",
+              "covariates": [],
+              "hazard_ratio": 0.6526177751259465,
+              "hr_conf_high": 0.9890593409298891,
+              "hr_conf_low": 0.43062124059200585,
+              "label": "Univariable",
+              "log_hr": -0.42676365779583,
+              "model": "univariable",
+              "n_events": 93,
+              "n_patients": 266,
+              "p_value": 0.044238492627272814,
+              "ph_global_p_value": 0.3818017986422019,
+              "ph_p_value": 0.3818017986422019,
+              "standard_error": 0.2121277293134648,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage"
+              ],
+              "hazard_ratio": 0.7484287057445537,
+              "hr_conf_high": 1.2154105312930805,
+              "hr_conf_low": 0.4608694043374188,
+              "label": "Adjusted for stage",
+              "log_hr": -0.28977932916525057,
+              "model": "stage_adjusted",
+              "n_events": 71,
+              "n_patients": 225,
+              "p_value": 0.24144582287173383,
+              "ph_global_p_value": 0.12235227945279102,
+              "ph_p_value": 0.6362821438099273,
+              "standard_error": 0.24738272669786177,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "grade"
+              ],
+              "hazard_ratio": 0.8836451487460617,
+              "hr_conf_high": 1.4658612619015194,
+              "hr_conf_low": 0.5326757512437134,
+              "label": "Adjusted for grade",
+              "log_hr": -0.12369971237887224,
+              "model": "grade_adjusted",
+              "n_events": 70,
+              "n_patients": 218,
+              "p_value": 0.631932106627076,
+              "ph_global_p_value": 0.22429932938599192,
+              "ph_p_value": 0.6714442692406377,
+              "standard_error": 0.2582408034955685,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2,3,4 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage",
+                "grade"
+              ],
+              "hazard_ratio": 0.8320433275558511,
+              "hr_conf_high": 1.3978940584395694,
+              "hr_conf_low": 0.49524217858326436,
+              "label": "Adjusted for stage and grade",
+              "log_hr": -0.1838707631276124,
+              "model": "stage_grade_adjusted",
+              "n_events": 69,
+              "n_patients": 217,
+              "p_value": 0.4873114970312503,
+              "ph_global_p_value": 0.09329442824084154,
+              "ph_p_value": 0.7228605177614178,
+              "standard_error": 0.26471793734925414,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  5,6,7 ; coefficient may be infinite. "
+              ]
+            }
+          ],
+          "cutpoint_details": {
+            "lower_quartile": 8.054110050201416,
+            "method": "upper_lower_quartile",
+            "upper_quartile": 9.09068489074707
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 175,
+            "label": "Overall survival",
+            "patients": 531,
+            "reason": "531 linked patients and 175 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 37,
+            "Low": 56
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 21,
+                "label": "0.05-1.10"
+              },
+              {
+                "count": 2,
+                "label": "1.10-2.15"
+              },
+              {
+                "count": 3,
+                "label": "2.15-3.20"
+              },
+              {
+                "count": 2,
+                "label": "3.20-4.26"
+              },
+              {
+                "count": 7,
+                "label": "4.26-5.31"
+              },
+              {
+                "count": 7,
+                "label": "5.31-6.36"
+              },
+              {
+                "count": 25,
+                "label": "6.36-7.41"
+              },
+              {
+                "count": 149,
+                "label": "7.41-8.46"
+              },
+              {
+                "count": 266,
+                "label": "8.46-9.52"
+              },
+              {
+                "count": 49,
+                "label": "9.52-10.57"
+              }
+            ],
+            "max": 10.566875457763672,
+            "median": 8.629610061645508,
+            "min": 0.048933643847703934,
+            "n": 531,
+            "q1": 8.054110050201416,
+            "q3": 9.09068489074707
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 133,
+            "Low": 133
+          },
+          "hazard_ratio": 0.6526177751259465,
+          "hr_conf_high": 0.9890593409298891,
+          "hr_conf_low": 0.43062124059200585,
+          "hr_p_value": 0.044238492627272814,
+          "logrank_p_value": 0.042569175174899554,
+          "median_survival_days": {
+            "High": null,
+            "Low": 1986
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+              "status": "not_reached"
+            },
+            "Low": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 93,
+          "n_patients": 266,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 37,
+                "patients": 133
+              },
+              "Low": {
+                "events": 56,
+                "patients": 133
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 1018.7432988126168,
+              "conf_low": 90.61505656815172,
+              "estimate_days": 554.6791776903842,
+              "p_value": 0.019146075275350522
+            },
+            "groups": {
+              "High": {
+                "conf_high": 3138.182975772445,
+                "conf_low": 2476.3017371342407,
+                "rmst_days": 2807.242356453343,
+                "standard_error": 168.8503574195851
+              },
+              "Low": {
+                "conf_high": 2577.884273986799,
+                "conf_low": 1927.242083539118,
+                "rmst_days": 2252.5631787629586,
+                "standard_error": 165.98320060467032
+              }
+            },
+            "method": "survRM2::rmst2",
+            "n_events": 93,
+            "n_patients": 266,
+            "ratio": {
+              "conf_high": 1.5016465096188714,
+              "conf_low": 1.0342800402569585,
+              "estimate": 1.2462435606334452,
+              "p_value": 0.020650259295761204
+            },
+            "reference_group": "Low",
+            "rmtl_ratio": {
+              "conf_high": 0.9543765567216157,
+              "conf_low": 0.5068028874442462,
+              "estimate": 0.6954716346880097,
+              "p_value": 0.02450170035482726
+            },
+            "status": "completed",
+            "tau_days": 4074,
+            "tau_rule": "minimum of the maximum observed follow-up time across the two expression groups",
+            "tau_time_unit": 133.84804928131416,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 614,
+            "complete_endpoint_samples": 612,
+            "complete_os_samples": 612,
+            "duplicate_samples_removed": 81,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 614,
+            "missing_endpoint_removed": 2,
+            "missing_os_removed": 2,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional - New Primary": 1,
+              "Primary Tumor": 8,
+              "Solid Tissue Normal": 72
+            },
+            "retained_patients": 531,
+            "retained_sample_types": {
+              "Primary Tumor": 531
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "CA9",
+                "resolved_symbol": "CA9",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "CA9",
+            "method": "single"
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7 ; coefficient may be infinite. "
+          ]
+        },
+        "status": "completed",
+        "warnings": [
+          "2 samples were excluded because Overall survival was not usable.",
+          "81 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7 ; coefficient may be infinite. "
+        ]
+      },
+      "status": "completed"
+    },
+    {
+      "code": null,
+      "error": null,
+      "index": 4,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-KIRC",
+        "cutpoint_method": "percentile",
+        "downloads": {
+          "audit_html": "/api/analyses/62531792f36546868725d70913d4c3e3/download/audit_html",
+          "audit_json": "/api/analyses/62531792f36546868725d70913d4c3e3/download/audit_json",
+          "cox_png": "/api/analyses/62531792f36546868725d70913d4c3e3/download/cox_png",
+          "cox_svg": "/api/analyses/62531792f36546868725d70913d4c3e3/download/cox_svg",
+          "csv": "/api/analyses/62531792f36546868725d70913d4c3e3/download/csv",
+          "json": "/api/analyses/62531792f36546868725d70913d4c3e3/download/json",
+          "png": "/api/analyses/62531792f36546868725d70913d4c3e3/download/png",
+          "svg": "/api/analyses/62531792f36546868725d70913d4c3e3/download/svg",
+          "txt": "/api/analyses/62531792f36546868725d70913d4c3e3/download/txt",
+          "zip": "/api/analyses/62531792f36546868725d70913d4c3e3/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "CA9",
+        "id": "62531792f36546868725d70913d4c3e3",
+        "metrics": {
+          "audit_report": {
+            "generated_at": "2026-07-22T12:36:48.479457+00:00",
+            "patient_records_sha256": "43de205c7d3b146b7e8972c9697524f3d3f7b1f79e03d213a6eb89ef4d2ab105",
+            "reproducibility_hash": "516bd794208c68059febe283ed85ca098466bcdd735e8dd683b4e2377a19e1b1",
+            "schema_version": "tcga-explorer-analysis-audit-v1"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low",
+              "covariates": [],
+              "hazard_ratio": 0.8425672094587298,
+              "hr_conf_high": 1.2115549873120837,
+              "hr_conf_low": 0.5859573109678458,
+              "label": "Univariable",
+              "log_hr": -0.1713018460991288,
+              "model": "univariable",
+              "n_events": 175,
+              "n_patients": 531,
+              "p_value": 0.355281869613294,
+              "ph_global_p_value": 0.09576252359574475,
+              "ph_p_value": 0.09576252359574475,
+              "standard_error": 0.18531284095127123,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage"
+              ],
+              "hazard_ratio": 1.047613845766997,
+              "hr_conf_high": 1.6055483269004045,
+              "hr_conf_low": 0.6835638338968523,
+              "label": "Adjusted for stage",
+              "log_hr": 0.04651505021833499,
+              "model": "stage_adjusted",
+              "n_events": 129,
+              "n_patients": 442,
+              "p_value": 0.8309115299430335,
+              "ph_global_p_value": 0.0013583194435180374,
+              "ph_p_value": 0.19966934261191605,
+              "standard_error": 0.2178357807005212,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "grade"
+              ],
+              "hazard_ratio": 1.2087174204652935,
+              "hr_conf_high": 1.8625552276778021,
+              "hr_conf_low": 0.784405090826658,
+              "label": "Adjusted for grade",
+              "log_hr": 0.18955981434274138,
+              "model": "grade_adjusted",
+              "n_events": 128,
+              "n_patients": 432,
+              "p_value": 0.3902029559508778,
+              "ph_global_p_value": 0.11839977335152822,
+              "ph_p_value": 0.3169528546860889,
+              "standard_error": 0.2206109460910007,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. "
+              ]
+            },
+            {
+              "contrast": "High vs Low",
+              "covariates": [
+                "stage",
+                "grade"
+              ],
+              "hazard_ratio": 1.2315897700629181,
+              "hr_conf_high": 1.902872093265737,
+              "hr_conf_low": 0.7971178762312154,
+              "label": "Adjusted for stage and grade",
+              "log_hr": 0.20830583081652906,
+              "model": "stage_grade_adjusted",
+              "n_events": 127,
+              "n_patients": 429,
+              "p_value": 0.3480235472801331,
+              "ph_global_p_value": 0.0015250895602584372,
+              "ph_p_value": 0.30345886928490146,
+              "standard_error": 0.22197272269416976,
+              "status": "completed",
+              "term": "groupHigh",
+              "warnings": [
+                "Loglik converged before variable  5,6,7,8 ; coefficient may be infinite. ",
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            }
+          ],
+          "cutpoint_details": {
+            "method": "percentile",
+            "percentile": 75,
+            "threshold": 9.09068489074707
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 175,
+            "label": "Overall survival",
+            "patients": 531,
+            "reason": "531 linked patients and 175 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 37,
+            "Low": 138
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 21,
+                "label": "0.05-1.10"
+              },
+              {
+                "count": 2,
+                "label": "1.10-2.15"
+              },
+              {
+                "count": 3,
+                "label": "2.15-3.20"
+              },
+              {
+                "count": 2,
+                "label": "3.20-4.26"
+              },
+              {
+                "count": 7,
+                "label": "4.26-5.31"
+              },
+              {
+                "count": 7,
+                "label": "5.31-6.36"
+              },
+              {
+                "count": 25,
+                "label": "6.36-7.41"
+              },
+              {
+                "count": 149,
+                "label": "7.41-8.46"
+              },
+              {
+                "count": 266,
+                "label": "8.46-9.52"
+              },
+              {
+                "count": 49,
+                "label": "9.52-10.57"
+              }
+            ],
+            "max": 10.566875457763672,
+            "median": 8.629610061645508,
+            "min": 0.048933643847703934,
+            "n": 531,
+            "q1": 8.054110050201416,
+            "q3": 9.09068489074707
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 133,
+            "Low": 398
+          },
+          "hazard_ratio": 0.8425672094587298,
+          "hr_conf_high": 1.2115549873120837,
+          "hr_conf_low": 0.5859573109678458,
+          "hr_p_value": 0.355281869613294,
+          "logrank_p_value": 0.35471990363875716,
+          "median_survival_days": {
+            "High": null,
+            "Low": 2601
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached.",
+              "status": "not_reached"
+            },
+            "Low": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 175,
+          "n_patients": 531,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 37,
+                "patients": 133
+              },
+              "Low": {
+                "events": 138,
+                "patients": 398
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 649.3559114141544,
+              "conf_low": -113.62228689428042,
+              "estimate_days": 267.866812259937,
+              "p_value": 0.16875647160316723
+            },
+            "groups": {
+              "High": {
+                "conf_high": 3138.182975772445,
+                "conf_low": 2476.3017371342407,
+                "rmst_days": 2807.242356453343,
+                "standard_error": 168.8503574195851
+              },
+              "Low": {
+                "conf_high": 2729.1444543398925,
+                "conf_low": 2349.606634046919,
+                "rmst_days": 2539.375544193406,
+                "standard_error": 96.8226516626631
+              }
+            },
+            "method": "survRM2::rmst2",
+            "n_events": 175,
+            "n_patients": 531,
+            "ratio": {
+              "conf_high": 1.2710754290342077,
+              "conf_low": 0.9614675408171033,
+              "estimate": 1.10548530833592,
+              "p_value": 0.15907427385325762
+            },
+            "reference_group": "Low",
+            "rmtl_ratio": {
+              "conf_high": 1.1020950364240523,
+              "conf_low": 0.6182495242424865,
+              "estimate": 0.8254512292916985,
+              "p_value": 0.1933392484400963
+            },
+            "status": "completed",
+            "tau_days": 4074,
+            "tau_rule": "minimum of the maximum observed follow-up time across the two expression groups",
+            "tau_time_unit": 133.84804928131416,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 614,
+            "complete_endpoint_samples": 612,
+            "complete_os_samples": 612,
+            "duplicate_samples_removed": 81,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 614,
+            "missing_endpoint_removed": 2,
+            "missing_os_removed": 2,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional - New Primary": 1,
+              "Primary Tumor": 8,
+              "Solid Tissue Normal": 72
+            },
+            "retained_patients": 531,
+            "retained_sample_types": {
+              "Primary Tumor": 531
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "CA9",
+                "resolved_symbol": "CA9",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "CA9",
+            "method": "single"
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+            "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+          ]
+        },
+        "status": "completed",
+        "warnings": [
+          "2 samples were excluded because Overall survival was not usable.",
+          "81 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for stage: Loglik converged before variable  2 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects.",
+          "Cox model warning: Adjusted for grade: Loglik converged before variable  2,3,4,5 ; coefficient may be infinite. ",
+          "Cox model warning: Adjusted for stage and grade: Loglik converged before variable  5,6,7,8 ; coefficient may be infinite.  | Global proportional hazards test p < 0.05; inspect time-varying effects."
+        ]
+      },
+      "status": "completed"
+    }
+  ],
+  "total": 5
+}

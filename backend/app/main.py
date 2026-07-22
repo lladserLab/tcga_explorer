@@ -65,8 +65,8 @@ from app.survival import (
 )
 
 settings = get_settings()
-ANALYSIS_PIPELINE_VERSION = "clinical-adjusted-cox-audit-v4.1"
-COMBINED_SIGNATURE_PIPELINE_VERSION = "combined-signatures-interaction-cox-audit-v2.2"
+ANALYSIS_PIPELINE_VERSION = "clinical-adjusted-cox-audit-rmst-v4.2"
+COMBINED_SIGNATURE_PIPELINE_VERSION = "combined-signatures-interaction-cox-audit-rmst-v2.3"
 PANCANCER_PIPELINE_VERSION = "pancancer-cox-v1.0"
 ENDPOINT_LABELS = {
     "OS": "Overall survival",

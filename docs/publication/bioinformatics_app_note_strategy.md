@@ -112,6 +112,27 @@ Minimum cases for the paper:
 | 7 | Pan-cancer | CA9 | OS | Continuous pan-cancer Cox/FDR workflow. |
 | 8 | Low-event endpoint | Any feasible cohort/marker | DSS or DFI | Endpoint QC and not-reached median handling. |
 
+## Current Benchmark Result
+
+Case 1 has been run through the HTTP API:
+
+```text
+scripts/publication/run_cutpoint_benchmark.py
+```
+
+Output:
+
+```text
+docs/publication/benchmark/kirc_ca9_cutpoint_benchmark/
+```
+
+Result summary: CA9 in TCGA-KIRC shows nominal evidence for selected cutpoints
+in log-rank, univariable Cox and RMST, but no dichotomization survives the full
+downstream rule because adjusted Cox and/or PH diagnostics fail. This supports
+the Application Note narrative: TCGA Explorer is not just another
+Kaplan-Meier plotter, but a tool that makes cutoff-dependent exploratory
+signals auditable and harder to overclaim.
+
 ## Sources
 
 - Bioinformatics author guidelines: https://academic.oup.com/bioinformatics/pages/author-guidelines

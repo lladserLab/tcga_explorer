@@ -124,13 +124,19 @@ log-rank p-values, Cox p-values, RMST outputs, PH diagnostics, downloads and
 whether an exact patient-level analysis can be reproduced from exported
 artifacts.
 
-The first benchmark panel will use CA9 in TCGA-KIRC as a canary example and run
-all two-group cutpoint methods. A signal is considered robust only when the
+As an initial canary benchmark, we analyzed CA9 in TCGA-KIRC and ran all
+two-group cutpoint methods available in the interface (Table~\ref{tab:kirc-ca9-cutpoints}).
+A signal is considered robust only when the
 BH-adjusted log-rank p-value, univariable Cox p-value, strongest available
 adjusted Cox p-value and RMST p-value are all below 0.05 and the adjusted PH
 global test is not flagged. This criterion is intentionally stricter than a
 single optimized cutpoint and follows current concerns about cutoff-driven
 survival analyses \citep{cutpoints2025}.
+In this canary run, nominal log-rank and RMST evidence was observed for selected
+cutpoints, but no dichotomization survived the full downstream rule, illustrating
+how TCGA Explorer separates exploratory association from robust reporting.
+
+\input{tables/kirc_ca9_cutpoint_benchmark}
 
 \section*{Discussion}
 

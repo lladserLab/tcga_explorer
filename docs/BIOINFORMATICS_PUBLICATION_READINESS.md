@@ -90,6 +90,13 @@ to survive downstream only when the BH-adjusted log-rank p-value, univariable
 Cox p-value, adjusted Cox p-value and RMST p-value are all <= 0.05, with no
 flagged adjusted proportional-hazards test.
 
+Case 1 has been run and stored under
+`docs/publication/benchmark/kirc_ca9_cutpoint_benchmark/`. CA9 in TCGA-KIRC has
+nominal log-rank/RMST evidence for selected cutpoints, but no dichotomization
+survives the full downstream rule after adjusted Cox and PH checks. This should
+be presented as a robustness/audit demonstration, not as a positive biomarker
+claim.
+
 For the two-signature case, report both the crossed KM groups and the continuous
 Cox interaction term `signature_A_z:signature_B_z`, including adjusted models
 when stage and grade complete-case data are sufficient.
