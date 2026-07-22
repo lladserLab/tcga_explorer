@@ -32,6 +32,10 @@ Official constraints checked:
   `scripts/publication/run_single_gene_benchmark_suite.py` and
   `scripts/publication/run_feature_benchmarks.py`.
 - Benchmark outputs are stored in `docs/publication/benchmark/`.
+- Reviewer reproduction guide:
+  `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md`.
+- Submission artifact manifest:
+  `manuscript/bioinformatics_app_note/submission/artifact_manifest.md`.
 - Narrative avoids unsupported novelty claims around two-biomarker survival
   interaction and gene-set survival.
 

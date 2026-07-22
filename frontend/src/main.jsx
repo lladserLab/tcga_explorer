@@ -648,6 +648,7 @@ function App() {
     setCohortPickerOpen(false);
     setCohortQuery("");
     setAnalysisResults([]);
+    setCompare((current) => ({ ...current, results: [], error: "" }));
     setError("");
   }
 
@@ -1375,7 +1376,18 @@ function App() {
         ) : activePage === "compare" ? (
           <CompareAnalyses
             form={form}
-            updateForm={updateForm}
+            cohorts={cohorts}
+            visibleCohorts={visibleCohorts}
+            selectedCohort={selectedCohort}
+            selectedCohortId={form.cohort}
+            cohortQuery={cohortQuery}
+            setCohortQuery={setCohortQuery}
+            cohortPickerOpen={cohortPickerOpen}
+            setCohortPickerOpen={setCohortPickerOpen}
+            onSelectCohort={selectCohort}
+            endpointOptions={endpointOptions}
+            selectedEndpoint={selectedEndpoint}
+            onSelectEndpoint={(value) => updateForm("endpoint", value)}
             compare={compare}
             setCompare={setCompare}
             cutpoints={CUTPOINTS}
@@ -1761,7 +1773,28 @@ function CombinedSignatureBuilder({
   );
 }
 
-function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale, suggestionCohort, canRun, onDownload }) {
+function CompareAnalyses({
+  form,
+  cohorts,
+  visibleCohorts,
+  selectedCohort,
+  selectedCohortId,
+  cohortQuery,
+  setCohortQuery,
+  cohortPickerOpen,
+  setCohortPickerOpen,
+  onSelectCohort,
+  endpointOptions,
+  selectedEndpoint,
+  onSelectEndpoint,
+  compare,
+  setCompare,
+  cutpoints,
+  expressionScale,
+  suggestionCohort,
+  canRun,
+  onDownload,
+}) {
   const selectedMethods = compare.methods;
   const [compareGeneQuery, setCompareGeneQuery] = useState("");
   const [compareGeneSuggestions, setCompareGeneSuggestions] = useState([]);
@@ -1769,6 +1802,13 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
   const genes = uniqueGeneSymbols(effectiveCompareInput);
   const adjusted = useMemo(() => adjustCompareResults(compare.results), [compare.results]);
   const selectedCutpoints = cutpoints.filter((item) => selectedMethods.includes(item.value));
+  const missingRequirements = [];
+  if (!form.cohort) missingRequirements.push("select a cancer cohort");
+  if (form.cohort && !canRun) missingRequirements.push("select an available survival endpoint");
+  if (!genes.length) missingRequirements.push("add at least one gene");
+  if (!selectedMethods.length) missingRequirements.push("select at least one method");
+  const canRunSelectedMethods = canRun && genes.length > 0 && selectedMethods.length > 0 && !compare.running;
+  const canRunAllDichotomizations = canRun && genes.length > 0 && !compare.running;
 
   useEffect(() => {
     const searchTerm = currentGeneSearchTerm(compareGeneQuery);
@@ -1795,7 +1835,13 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
 
   async function runCompare(methodOverride = null) {
     const methodsToRun = methodOverride || selectedMethods;
-    if (!canRun || !genes.length || !methodsToRun.length) return;
+    if (!canRun || !genes.length || !methodsToRun.length) {
+      setCompare((current) => ({
+        ...current,
+        error: `Cannot run comparison: ${missingRequirements.join(", ") || "check inputs"}.`,
+      }));
+      return;
+    }
     const normalizedGenes = uniqueGeneSymbols(effectiveCompareInput);
     setCompareGeneQuery("");
     setCompare((current) => ({
@@ -1850,6 +1896,32 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
   return (
     <section className="compare-page">
       <div className="compare-controls">
+        <PanelHeader
+          icon={<Database size={18} />}
+          title="Dataset"
+          description="Choose the cancer cohort used for every comparison below."
+        />
+        <CohortPicker
+          cohorts={cohorts}
+          visibleCohorts={visibleCohorts}
+          selectedCohort={selectedCohort}
+          selectedCohortId={selectedCohortId}
+          query={cohortQuery}
+          setQuery={setCohortQuery}
+          open={cohortPickerOpen}
+          setOpen={setCohortPickerOpen}
+          onSelect={onSelectCohort}
+        />
+        <PanelHeader
+          icon={<Activity size={18} />}
+          title="Survival endpoint"
+          description="Choose the TCGA-CDR endpoint used by all comparison runs."
+        />
+        <EndpointSelector
+          endpoints={endpointOptions}
+          selected={form.endpoint}
+          onSelect={onSelectEndpoint}
+        />
         <GeneSelector
           label="Genes to compare"
           value={compare.genes}
@@ -1879,19 +1951,24 @@ function CompareAnalyses({ form, compare, setCompare, cutpoints, expressionScale
             <span>Comparison scope</span>
             <strong>{genes.length || 0} genes x {selectedMethods.length} methods</strong>
             <small>{expressionScale.label}; up to {ANALYSIS_BATCH_CONCURRENCY} analyses run in parallel, with BH and Bonferroni adjustment across completed comparisons.</small>
+            {missingRequirements.length ? (
+              <small className="input-requirement">Required: {missingRequirements.join(", ")}.</small>
+            ) : (
+              <small className="input-requirement">Ready for {form.cohort}, {selectedEndpoint.label}; robustness runs maxstat, median, upper quartile, outer quartiles and percentile.</small>
+            )}
           </div>
-          <button className="primary-button" onClick={() => runCompare()} disabled={!canRun || !genes.length || !selectedMethods.length || compare.running}>
+          <button className="primary-button" onClick={() => runCompare()} disabled={!canRunSelectedMethods}>
             {compare.running ? <Loader2 className="spin" size={18} /> : <Play size={18} />}
-            Run comparison
+            Run selected methods
           </button>
           <button
             className="secondary-button"
             onClick={() => runCompare(DICHOTOMIZATION_METHODS)}
-            disabled={!canRun || !genes.length || compare.running}
-            title="Run maxstat, median, upper quartile, outer quartiles and the selected custom percentile."
+            disabled={!canRunAllDichotomizations}
+            title="Run all five two-group cutpoint methods: maxstat, median, upper quartile, outer quartiles and the selected custom percentile."
           >
             {compare.running ? <Loader2 className="spin" size={18} /> : <SlidersHorizontal size={18} />}
-            Run dichotomization robustness
+            Run all 5 cutpoint methods
           </button>
         </div>
       </div>

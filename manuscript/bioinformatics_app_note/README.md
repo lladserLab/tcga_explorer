@@ -61,5 +61,9 @@ license and public web demo.
 - `submission/submission_readiness_checklist.md`: current go/no-go checklist
   against Bioinformatics Application Note requirements.
 - `submission/cover_letter_draft.md`: reviewer-facing cover letter draft.
+- `submission/reviewer_reproduction_guide.md`: end-to-end local reproduction
+  guide for reviewers.
+- `submission/artifact_manifest.md`: map of manuscript, benchmark and
+  submission support files.
 - `figures/workflow.tex`: reproducible vector source for Figure 1.
 - `supplementary.tex`: supplementary comparator and benchmark tables.

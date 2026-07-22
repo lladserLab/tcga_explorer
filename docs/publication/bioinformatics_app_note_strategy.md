@@ -169,6 +169,10 @@ Generated manuscript artifacts:
   `manuscript/bioinformatics_app_note/submission/submission_readiness_checklist.md`;
 - cover letter draft:
   `manuscript/bioinformatics_app_note/submission/cover_letter_draft.md`.
+- reviewer reproduction guide:
+  `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md`;
+- artifact manifest:
+  `manuscript/bioinformatics_app_note/submission/artifact_manifest.md`.
 
 Current external blockers before journal submission:
 

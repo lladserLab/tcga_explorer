@@ -1037,6 +1037,11 @@ textarea {
   font-size: 12px;
 }
 
+.run-summary .input-requirement {
+  color: #7b4b19;
+  font-weight: 700;
+}
+
 .primary-button {
   width: 100%;
   border: 0;
