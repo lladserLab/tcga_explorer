@@ -531,3 +531,8 @@ useful context but do not override this ledger.
   supplementary tables and a 4/4-page OUP preview; 109/109 required artifacts
   and the 480-entry archive verify successfully. R2-24 remains the sole
   owner-controlled closeout item.
+- Preserved the validated implementation in checkpoint commit
+  `039a91201b363de8fce586f18ff993fe5646762e` and pushed it without rewriting
+  history to
+  `origin/feature/bioinformatics-readiness-20260721-210041`. This is a recovery
+  checkpoint, not the final citable release or publication tag.
