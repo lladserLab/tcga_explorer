@@ -124,24 +124,39 @@ Technical parameter definitions belong in the supplement and Help/Methods view.
 
 ### 3. Case Studies and Evaluation
 
-Use cases should test the reporting contract rather than advertise significant
-biomarkers:
+Technical reconstruction and the full registered sensitivity panel precede the
+biological cases without being numbered as cases. They must retain all
+supported, unsupported, nonlinear, sparse-event and PH-discordant results.
 
-- robust across cutpoints: CDC20/LIHC;
-- associated but PH-flagged: EMP3/LGG;
-- grouped separation without continuous interaction: BAP1/PRAME/UVM;
-- pooled pan-cancer association constrained by heterogeneity: BIRC5;
-- external direction agreement without exact statistical replication:
-  CA9/KIRC.
+The four biological cases have a deliberate evidence balance:
+
+- literature-aligned single marker: CDC20/LIHC;
+- cross-cohort, cross-assay corroboration: BUB1B--PINK1/ACC;
+- literature-aligned pan-cancer pattern with explicit heterogeneity: BIRC5;
+- the sole deliberately non-confirmatory case: BAP1/PRAME/UVM.
+
+The case set is selected post hoc for exposition and must be labelled as such.
+It cannot replace the frozen 11-scenario panel or the complete mapping of all 17
+Paper Examples.
 
 Use concise declarative titles that identify the analysis or biological
 context, following the function of GRNContext headings such as `Case 1: PTTG1
 in Liver Hepatocellular Cancer (TCGA-LIHC)` without copying their wording.
-TCGA-TRACE uses `Case 1: Analysis Record Reconstruction`, `Case 2: Cutpoint
-and PH Sensitivity`, `Case 3: BAP1/PRAME in Uveal Melanoma` and `Case 4:
-BIRC5 Across TCGA Cohorts`. Do not phrase subsection titles as questions.
+TCGA-TRACE uses `Case 1: CDC20 in Hepatocellular Cancer`, `Case 2:
+BUB1B--PINK1 in ACC`, `Case 3: BIRC5 Across TCGA Cohorts` and `Case 4:
+BAP1/PRAME in Uveal Melanoma`. Do not phrase subsection titles as questions.
 Each case should follow `context -> result -> diagnostic qualification ->
 interpretation`.
+
+The evidence language must distinguish:
+
+- directional workflow concordance when TCGA is shared with the source study;
+- cross-cohort, cross-assay corroboration for the independent Brazilian ACC
+  qRT-PCR anchor;
+- broad pattern agreement rather than a universal effect for heterogeneous
+  pan-cancer BIRC5 estimates; and
+- non-confirmation of an RNA interaction for BAP1/PRAME, without contradicting
+  the published protein-assay result.
 
 ### 4. Future Plans
 

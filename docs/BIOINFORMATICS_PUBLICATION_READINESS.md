@@ -42,20 +42,12 @@ optimal cutoffs for two continuous predictors.
 
 ## Comparator Matrix
 
-| Tool | Main scope | TCGA-CDR endpoints | Adjusted Cox | Custom signatures | Two-predictor survival | RMST | PH QC in UI | Cutpoint sensitivity | Run export |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| GEPIA2 | TCGA/GTEx expression and survival | Partial/unclear in UI | No focused adjusted workflow | Yes | Limited | No | No | Limited | No |
-| UALCAN | TCGA/CPTAC expression, subgroups, survival | Partial/unclear in UI | No focused adjusted workflow | Limited | Limited | No | No | Limited | No |
-| OncoLnc | TCGA gene survival | No | No | No | No | No | No | Limited/precomputed | Limited |
-| KM Plotter | Survival biomarker screening | Dataset-dependent | Limited | Some gene-set modes | Limited | No | No | Several cutpoint choices | Limited |
-| UCSC Xena | General multi-omics browser | Dataset-dependent | Manual | Manual | Manual | No | Manual | Manual | Limited |
-| cBioPortal | Cancer genomics exploration | Dataset-dependent | Limited | Alteration groups | Alteration/group comparisons | No | No focused workflow | Limited | Limited |
-| cSurvival | Biomarker interactions in cancer outcomes | Dataset-dependent | Yes, selected workflows | Yes, gene and gene-set level | Yes, including two-predictor grouped survival, interaction analysis and optimal two-continuous-predictor cutoffs | No focused output | Not emphasized | Yes for optimal predictor cutoffs | Source/data downloadable, no per-run hash bundle |
-| DoSurvive | Prognostic biomarker database/web tool | Dataset-dependent | Yes, including multivariable Cox workflows | Yes; mRNA, miRNA, lncRNA, protein and methylation | Yes for single or combined biomarkers | No focused output | Not emphasized | Selected workflows | Downloadable outputs, no per-run hash bundle |
-| PESSA | Pathway enrichment score survival | Dataset-dependent | Cox support for dichotomous and continuous ssGSEA scores | Yes, MSigDB gene sets scored by ssGSEA | No primary interaction workflow | No focused output reported | Yes, `cox.zph` for continuous Cox | Median and optimal cutoffs | Downloadable outputs; no comparable per-run reconstruction bundle reported |
-| TCGAbiolinks | R package for TCGA workflows | Yes if configured | Programmable | Programmable | Programmable | Programmable | Programmable | Programmable | Script-level |
-| TCGAplot | R package for pan-cancer analysis | Dataset-dependent | Programmable | Yes | No focused UI | No focused output | Programmable | Programmable | Script-level |
-| TCGA-TRACE | TCGA survival webapp | Yes, endpoint QC exposed | Yes | Yes, including z-score and weighted scores | Yes, but not unique versus cSurvival/DoSurvive | Yes for two-group analyses | Yes | Yes | Yes, JSON/HTML with hashes and exact patient records |
+The former binary feature table was removed because unverified “No” entries
+overstated what could be inferred from papers and changing interfaces.
+Supplementary Table S1 uses a strength-first comparison across the 12 closest
+resources, and the surrounding text covers eight additional direct or adjacent
+systems. It records stronger comparator domains and a narrow residual point for
+TCGA-TRACE; it is not a product ranking or exhaustive feature audit.
 
 Sources used to frame the comparison:
 
@@ -67,7 +59,16 @@ Sources used to frame the comparison:
 - KM Plotter: https://kmplot.com/
 - UCSC Xena: https://xena.ucsc.edu/kaplan-survival-analysis
 - cBioPortal: https://docs.cbioportal.org/user-guide/faq/
+- TIMER2.0: https://pmc.ncbi.nlm.nih.gov/articles/PMC7319575/
+- SurvExpress: https://pmc.ncbi.nlm.nih.gov/articles/PMC3774754/
 - PESSA: https://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1012024
+- PrognoScan: https://link.springer.com/article/10.1186/1755-8794-2-18
+- ESurv: https://www.jmir.org/2020/5/e16084
+- GSCA: https://academic.oup.com/bib/article/24/1/bbac558/6957252
+- TCGEx: https://doi.org/10.1038/s44319-025-00407-7
+- Survival Genie 2: https://doi.org/10.1186/s13073-026-01651-9
+- CaPSSA: https://academic.oup.com/bioinformatics/article/35/24/5341/5522011
+- SurvBoard: https://academic.oup.com/bib/article/26/5/bbaf521/8269886
 - TCGAbiolinks: https://academic.oup.com/nar/article/44/8/e71/2465925
 - TCGAplot: https://link.springer.com/article/10.1186/s12859-023-05615-3
 - TCGA-CDR: https://gdc.cancer.gov/about-data/publications/PanCan-Clinical-2018
@@ -103,8 +104,9 @@ For the frozen publication sensitivity panel, each single-marker case runs four
 nonredundant two-group rules: maxstat, median, upper quartile and outer
 quartiles. Custom percentile remains user-configurable and therefore lacks one
 prespecified publication value; tertiles remain a three-group method. The
-interface and benchmark summaries show suite-wide BH q, univariable and adjusted
-Cox, fixed-horizon RMST, marker-term PH and global PH separately. They are not
+interface and benchmark summaries show within-scenario grouped Holm p-values,
+across-scenario continuous/spline BH q-values, univariable and adjusted Cox,
+fixed-horizon RMST, marker-term PH and global PH separately. They are not
 combined into a retention score because the association summaries are
 correlated and PH is an assumption diagnostic. Maxstat remains exploratory: its
 selection-adjusted rank-test p-value is shown when available, while grouped HR,
@@ -113,11 +115,14 @@ confidence interval and RMST outputs remain post-selection.
 The single-gene panel has been run through
 `scripts/publication/run_single_gene_benchmark_suite.py`. The aggregate table is
 stored at `docs/publication/benchmark/single_gene_benchmark_overview.md`. The
-suite now contains 11 scenarios. The main manuscript reports literature-anchored
-LIHC/CDC20, LUAD/BIRC5, UVM/BAP1, SKCM/TMEM176B and LGG/EMP3 examples; the full
-supplementary overview preserves all earlier positive, null and discordant
-cases. The descriptive rule is a benchmark reporting convention, not an
-application gate.
+suite now contains 11 scenarios. The main manuscript uses LIHC/CDC20 and
+pan-cancer BIRC5 as within-TCGA literature concordance, ACC/BUB1B--PINK1 as the
+only cross-cohort/cross-assay directional corroboration, and UVM/BAP1--PRAME as
+the sole non-confirmatory case. This four-case set was selected post hoc for
+exposition, not inference. The full supplementary
+overview preserves all positive, null, nonlinear, low-information and
+PH-discordant cases. The descriptive rule is a benchmark reporting convention,
+not an application gate.
 
 The feature workflows have been run through
 `scripts/publication/run_feature_benchmarks.py`. The aggregate table is stored

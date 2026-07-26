@@ -57,6 +57,34 @@ METHOD_SUBSECTIONS = [
     r"\subsection{Survival analyses}",
     r"\subsection{Web server and run record}",
 ]
+EXPECTED_CASE_TITLES = [
+    "Case 1: CDC20 in Hepatocellular Cancer",
+    "Case 2: BUB1B--PINK1 in ACC",
+    "Case 3: BIRC5 Across TCGA Cohorts",
+    "Case 4: BAP1/PRAME in Uveal Melanoma",
+]
+COMPARATOR_CITATION_KEYS = [
+    "gepia22019",
+    "kmplotter2021",
+    "ualcan2022",
+    "csurvival2022",
+    "dousurvive2023",
+    "pessa2024",
+    "xena2020",
+    "cbioportal2012",
+    "timer2020",
+    "survexpress2013",
+    "tcgabiolinks2016",
+    "tcgaplot2023",
+    "prognoscan2009",
+    "oncolnc2016",
+    "capssa2019",
+    "esurv2020",
+    "gsca2023",
+    "tcgex2025",
+    "survboard2025",
+    "survivalGenie2026",
+]
 SCREENSHOTS = [
     MANUSCRIPT_DIR / "figures/tcga_trace_ui_analysis.png",
     MANUSCRIPT_DIR / "figures/tcga_trace_ui_multiverse.png",
@@ -91,6 +119,7 @@ def main(argv: list[str] | None = None) -> int:
     check_title_and_structure(main_text, failures, notes)
     check_abstract(main_text, failures, notes)
     check_main_floats(main_text, failures, notes)
+    check_evidence_narrative(main_text, supplement_text, failures, notes)
     check_paper_example_coverage(supplement_text, failures, notes)
     check_supplement(supplement_text, failures, notes)
     check_supplement_order_and_cutpoints(
@@ -198,6 +227,65 @@ def check_title_and_structure(text: str, failures: list[str], notes: list[str]) 
             )
         if not question_titles and not long_titles:
             notes.append("four concise declarative case-study headings are present")
+        if case_titles != EXPECTED_CASE_TITLES:
+            failures.append(
+                "case-study sequence does not match the evidence narrative: "
+                + " | ".join(case_titles)
+            )
+
+
+def check_evidence_narrative(
+    main_text: str,
+    supplement_text: str,
+    failures: list[str],
+    notes: list[str],
+) -> None:
+    required_main = [
+        r"\subsection*{Technical validation}",
+        "retains supported, unsupported, nonlinear, sparse-event and PH-discordant",
+        "chosen post hoc for explanation",
+        "This was the deliberately non-confirmatory case.",
+    ]
+    missing_main = [marker for marker in required_main if marker not in main_text]
+    if missing_main:
+        failures.append(
+            "main manuscript does not preserve the declared evidence narrative: "
+            + ", ".join(missing_main)
+        )
+
+    missing_comparators = [
+        key for key in COMPARATOR_CITATION_KEYS if key not in supplement_text
+    ]
+    if missing_comparators:
+        failures.append(
+            "supplement comparator positioning is missing source key(s): "
+            + ", ".join(missing_comparators)
+        )
+
+    required_supplement = [
+        "positioning exercise rather than a",
+        "representative rather than exhaustive",
+        "No independent feature audit of every comparator version was",
+        "two show within-TCGA literature concordance",
+        "one provides cross-cohort/cross-assay directional corroboration",
+        "deliberately non-confirmatory",
+        "Only the ACC case uses a cohort and assay",
+    ]
+    missing_supplement = [
+        marker for marker in required_supplement if marker not in supplement_text
+    ]
+    if missing_supplement:
+        failures.append(
+            "supplement does not state comparator/case-study boundaries: "
+            + ", ".join(missing_supplement)
+        )
+
+    if not missing_main and not missing_comparators and not missing_supplement:
+        notes.append(
+            "evidence narrative keeps technical validation separate, three "
+            "literature-aligned cases with only one orthogonal corroboration, "
+            "one non-confirmatory case and 20 source-based comparator positions"
+        )
 
 
 def check_abstract(text: str, failures: list[str], notes: list[str]) -> None:

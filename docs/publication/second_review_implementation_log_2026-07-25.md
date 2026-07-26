@@ -632,3 +632,33 @@ useful context but do not override this ledger.
   rebuilt non-strict review archive verifies 480 entries and 479 manifest
   files; its checksum is emitted beside the archive rather than embedded in an
   input file that would make the checksum self-referential.
+
+## 2026-07-26 Narrative and Comparator Audit
+
+- Re-audited the manuscript's central claim against current and historical
+  survival resources. The source register now covers 20 direct or adjacent
+  systems, adding PrognoScan, OncoLnc, ESurv, GSCA, TCGEx, Survival Genie 2,
+  CaPSSA and SurvBoard to the 12-resource compact comparison.
+- Replaced adversarial product language with scope-specific boundaries. The
+  supplement now states explicitly where competing systems are broader or
+  methodologically stronger and prohibits inferring product-wide absence from
+  a paper or one accessed interface.
+- Reframed the biological evidence as two within-TCGA literature-concordance
+  cases, one cross-cohort/cross-assay directional corroboration and one
+  deliberately non-confirmatory case. Only ACC has an orthogonal literature
+  cohort and assay, and it remains a directional comparison rather than an
+  external patient-level rerun.
+- Preserved the anti-selection safeguard: the four cases are labelled post hoc
+  exposition, while the complete 11-scenario panel and all 17 Paper Examples
+  retain supported, null, nonlinear, sparse-event and PH-discordant outputs.
+- Added `docs/publication/narrative_peer_review_audit_2026-07-26.md` as the
+  concise critical handoff for scientific coauthors and external reviewers.
+- Rebuilt the manuscript and supplement. The OUP preview remains 4/4 pages;
+  the supplement contains eight tables, no figures and 20 pages after the
+  expanded literature audit.
+- Verified 135/135 publication tests, editorial compliance and 109/109
+  submission artifacts. GitHub Actions run `30188451618` failed its isolated
+  capsule job at documentation-only commit `593c6d6`, although the exact
+  command passed locally from an isolated worktree of that commit and the
+  hosted `docker-checks` job passed. The failure remains open pending a passing
+  subsequent hosted run; R2-24 remains owner-controlled.

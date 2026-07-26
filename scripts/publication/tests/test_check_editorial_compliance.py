@@ -44,10 +44,10 @@ def test_title_and_structure_accept_writing_blueprint() -> None:
         "\\subsection{Survival analyses}\n"
         "\\subsection{Web server and run record}\n"
         "\\section{Case Studies and Evaluation}\n"
-        "\\subsection{Case 1: Analysis Reconstruction}\n"
-        "\\subsection{Case 2: Cutpoint Sensitivity}\n"
-        "\\subsection{Case 3: BAP1/PRAME in UVM}\n"
-        "\\subsection{Case 4: BIRC5 Across TCGA}\n"
+        "\\subsection{Case 1: CDC20 in Hepatocellular Cancer}\n"
+        "\\subsection{Case 2: BUB1B--PINK1 in ACC}\n"
+        "\\subsection{Case 3: BIRC5 Across TCGA Cohorts}\n"
+        "\\subsection{Case 4: BAP1/PRAME in Uveal Melanoma}\n"
         "\\section{Future Plans}\n"
     )
     failures: list[str] = []
@@ -70,9 +70,9 @@ def test_title_and_structure_rejects_question_case_heading() -> None:
         "\\subsection{Web server and run record}\n"
         "\\section{Case Studies and Evaluation}\n"
         "\\subsection{Case 1: Can Records Be Rebuilt?}\n"
-        "\\subsection{Case 2: Cutpoint Sensitivity}\n"
-        "\\subsection{Case 3: BAP1/PRAME in UVM}\n"
-        "\\subsection{Case 4: BIRC5 Across TCGA}\n"
+        "\\subsection{Case 2: BUB1B--PINK1 in ACC}\n"
+        "\\subsection{Case 3: BIRC5 Across TCGA Cohorts}\n"
+        "\\subsection{Case 4: BAP1/PRAME in Uveal Melanoma}\n"
         "\\section{Future Plans}\n"
     )
     failures: list[str] = []
@@ -80,6 +80,51 @@ def test_title_and_structure_rejects_question_case_heading() -> None:
     checker.check_title_and_structure(text, failures, [])
 
     assert any("declarative rather than questions" in failure for failure in failures)
+
+
+def test_evidence_narrative_accepts_declared_case_balance() -> None:
+    main_text = "\n".join(
+        [
+            r"\subsection*{Technical validation}",
+            "The panel retains supported, unsupported, nonlinear, sparse-event and PH-discordant results.",
+            "The cases were chosen post hoc for explanation.",
+            "This was the deliberately non-confirmatory case.",
+        ]
+    )
+    supplement_text = "\n".join(
+        [
+            "This is a positioning exercise rather than a head-to-head benchmark.",
+            "The resources are representative rather than exhaustive.",
+            "No independent feature audit of every comparator version was performed.",
+            "two show within-TCGA literature concordance",
+            "one provides cross-cohort/cross-assay directional corroboration",
+            "one is deliberately non-confirmatory",
+            "Only the ACC case uses a cohort and assay",
+            *checker.COMPARATOR_CITATION_KEYS,
+        ]
+    )
+    failures: list[str] = []
+    notes: list[str] = []
+
+    checker.check_evidence_narrative(main_text, supplement_text, failures, notes)
+
+    assert failures == []
+    assert any("only one orthogonal corroboration" in note for note in notes)
+
+
+def test_evidence_narrative_rejects_missing_comparator_and_case_boundary() -> None:
+    failures: list[str] = []
+
+    checker.check_evidence_narrative(
+        r"\subsection*{Technical validation}",
+        "positioning exercise rather than a benchmark",
+        failures,
+        [],
+    )
+
+    assert any("declared evidence narrative" in failure for failure in failures)
+    assert any("missing source key" in failure for failure in failures)
+    assert any("comparator/case-study boundaries" in failure for failure in failures)
 
 
 def test_main_floats_accepts_one_vector_figure_without_tables(

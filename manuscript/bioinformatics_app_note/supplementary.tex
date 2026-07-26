@@ -88,7 +88,8 @@ the smaller of five years and the 75th percentile of observed endpoint times in
 the unstratified, expression-complete eligible cohort. Both groups must support
 the horizon and retain at least five participants at risk. Sensitivity
 estimates use 0.75, 0.90 and 1.00 times that fixed horizon; reported differences
-are comparison minus reference (high minus low for standard two-group runs).
+are comparison minus reference (high minus low for standard two-group runs)
+\citep{rmstBiomarker2016}.
 
 \section*{Competing-Risk Estimands}
 
@@ -122,53 +123,123 @@ Detailed AI-assistance disclosure pending independent author rewrite and verific
 \section*{Comparison with Existing Resources}
 
 The comparison is restricted to capabilities described in peer-reviewed papers
-or current official interfaces. It does not use basic survival analysis,
-two-predictor analysis, ssGSEA or PH testing as novelty claims. In particular,
-PESSA reports continuous Cox models and \texttt{cox.zph} Schoenfeld tests
-\citep{pessa2024}, and cSurvival implements joint analysis and optimized
-cutoffs for two continuous predictors \citep{csurvival2022}.
+or current official interfaces. It is a positioning exercise rather than a
+head-to-head performance benchmark, and it does not use basic survival
+analysis, two-predictor analysis, ssGSEA or PH testing as novelty claims.
+``Residual comparison point'' means that the cited source did not establish the
+complete TCGA-TRACE reporting contract as one output; it does not prove that a
+capability is absent from every current version. The resources are
+representative rather than exhaustive.
 
 \begin{table}[H]
 \centering
 \begingroup
 \setstretch{1.0}
-\footnotesize
-\renewcommand{\arraystretch}{1.0}
-\caption{Evidence-based positioning against representative web resources. The
-right column states the narrower reporting function evaluated for TCGA-TRACE,
-not an assertion that a comparator lacks all provenance or downloads.}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.95}
+\caption{Evidence-based positioning against representative web and
+programmable resources. The right column defines a residual comparison point,
+not a claim that a resource lacks all provenance, diagnostics or downloads.}
 \label{tab:supp-comparator-matrix}
-\begin{tabularx}{\linewidth}{lXX}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{1.9cm}XX}
 \toprule
-Resource & Established capability & TCGA-TRACE comparison point \\
+Resource & Established scope & Residual comparison point \\
 \midrule
-GEPIA2 & TCGA/GTEx expression, survival maps and gene/signature
-analysis~\citep{gepia22019}. & One machine-verifiable bundle joining the exact
-eligible cohort, expression components, diagnostics and result hashes. \\
-cBioPortal & Multidimensional cancer-genomics exploration, survival analysis,
-public APIs and persistent sessions~\citep{cbioportal2012,cbioportalApi2026}. &
-Used here as a reproducible external TCGA cross-pipeline comparator; shared TCGA
-origin is not independent validation. \\
-cSurvival & Two-predictor interaction, optimized two-predictor cutoffs and
-gene-set survival~\citep{csurvival2022}. & These are prior art; TCGA-TRACE tests
-reconstruction and integrates TCGA-CDR/sample-selection provenance with RMST
-and cutpoint panels. \\
-DoSurvive & Single and combined multi-omic biomarkers, log-rank, Cox, AFT and
-four endpoint types~\citep{dousurvive2023}. & Multi-biomarker and endpoint
-breadth are prior art; the evaluated difference is the server-signed,
-reconstructable run record. \\
-PESSA & ssGSEA, median/optimal grouping, continuous and grouped Cox, and
-Schoenfeld PH tests across 238 datasets~\citep{pessa2024}. & PH and gene-set
-survival are prior art; TCGA-TRACE records source-expression hashes, scoring
-components, selected GDC identifiers and RMST. \\
-KM Plotter & Large-scale screening across RNA, protein and DNA
-assays~\citep{kmplotter2021,kmplotterWeb2026}. & TCGA-TRACE is narrower in data
-breadth and centers each TCGA run on endpoint/sample provenance and executable
-audit verification. \\
+GEPIA2 & Gene, isoform, subtype and signature survival with an
+API~\citep{gepia22019}. & Standardized bundle of the exact cohort, RNA samples,
+score components, diagnostics and result hashes. \\
+KM Plotter & Broad RNA, protein and DNA survival
+screening~\citep{kmplotter2021,kmplotterWeb2026}. & TCGA-TRACE is narrower in
+assay breadth and instead tests endpoint/sample provenance and executable
+verification. \\
+UALCAN & TCGA, CPTAC and related cancer-omics exploration with patient-survival
+plots~\citep{ualcan2022}. & Run-level TCGA-CDR provenance, model diagnostics and
+reconstructable score/result artifacts. \\
+cSurvival & Two-predictor interaction, optimized cutoffs, gene sets and
+cell-line integration~\citep{csurvival2022}. & Its paper identifies one-query
+execution and user-managed outer multiplicity; TCGA-TRACE adds a declared
+multiverse and signed run bundle. \\
+DoSurvive & Combined multi-omic biomarkers, log-rank, Cox, AFT and four
+endpoints~\citep{dousurvive2023}. & TCGA-TRACE does not match its omics breadth;
+it evaluates endpoint/sample provenance and independent rerun artifacts. \\
+PESSA & ssGSEA, median/optimal grouping, continuous/grouped Cox and Schoenfeld
+tests across 238 datasets~\citep{pessa2024}. & TCGA-TRACE uses simpler scores
+but binds component values, RMST, diagnostics and source identifiers to the
+run. \\
+UCSC Xena & Flexible multi-omic visualization and survival stratification on
+hosted or custom data~\citep{xena2020,xenaSurvival2026}. & A standardized
+survival-specific export rather than reconstruction through a manual browser
+state. \\
+cBioPortal & Multidimensional genomics, survival, APIs and shareable
+sessions~\citep{cbioportal2012,cbioportalApi2026}. & Used here for a
+cross-pipeline TCGA check; shared TCGA data are not independent validation. \\
+TIMER2.0 & Immune estimation, exploration and outcome modules for TCGA and
+user data~\citep{timer2020}. & TCGA-TRACE claims neither immune-method nor
+outcome-portal novelty; it tests the narrower run-record contract. \\
+SurvExpress & Gene-signature risk groups and survival across cancer
+datasets~\citep{survexpress2013}. & Explicit TCGA-CDR endpoint, sample-selection
+and executable audit provenance. \\
+TCGAbiolinks & Programmable GDC acquisition and integrative TCGA analysis in
+R~\citep{tcgabiolinks2016}. & This is the stronger flexibility baseline;
+TCGA-TRACE standardizes an interactive run and exports standalone R
+re-execution. \\
+TCGAplot & Programmable TCGA multi-omic and pan-cancer analyses in
+R~\citep{tcgaplot2023}. & TCGA-TRACE is less general and focuses on
+endpoint-aware survival records and fixed verification outputs. \\
 \bottomrule
 \end{tabularx}
 \endgroup
 \end{table}
+
+\begingroup
+\small
+\setstretch{1.15}
+The compact table emphasizes resources closest to the submitted workflow.
+Additional source classes materially constrain the novelty claim. PrognoScan
+curated multi-cohort microarray survival and corrected its within-search
+minimum-\(p\) cutpoint, while explicitly warning about cohort, platform and
+random-error heterogeneity \citep{prognoscan2009}. OncoLnc linked TCGA mRNA,
+miRNA and lncRNA expression to downloadable survival data
+\citep{oncolnc2016}. ESurv added continuous analysis, user data and penalized
+multi-omic signature construction beside median and optimized grouping
+\citep{esurv2020}. These are established precedents for gene screening,
+cross-dataset interrogation, optimized grouping and downloadable coupled data.
+
+Gene-set and broader transcriptomic systems also exceed TCGA-TRACE in important
+dimensions. GSCA applies GSVA to gene sets across genomic, immunogenomic and
+pharmacogenomic modules \citep{gsca2023}; TCGEx combines survival modelling
+with enrichment, clustering, machine learning and user datasets
+\citep{tcgex2025}; and Survival Genie 2 spans 132 adult and paediatric datasets
+and connects single-cell-derived markers, modules and ligand--receptor pairs to
+bulk survival cohorts \citep{survivalGenie2026}. CaPSSA provides interactive
+patient stratification by mutation, copy number and expression
+\citep{capssa2019}. SurvBoard addresses a different target---standardized
+benchmarking of multi-omic survival prediction, including calibration and
+cross-program evaluation---rather than interactive marker-association records
+\citep{survboard2025}.
+
+The recurring boundaries are therefore methodological scope, not generic
+software defects. Outcome-optimized grouping still requires explicit
+selection and multiplicity interpretation; broad portals prioritize assay,
+dataset or pathway coverage; and programmable workflows can be fully
+reproducible but leave endpoint harmonization, sample selection and reporting
+structure to the analyst. TCGA-TRACE does not resolve biological confounding,
+external validation or predictive-model benchmarking. It tests whether one
+TCGA marker-analysis run can preserve its cohort construction, estimands,
+diagnostics, specification family and executable reconstruction together.
+
+The comparison therefore does not support a claim that TCGA-TRACE is broader or
+statistically more advanced than these resources. PESSA has stronger
+pathway-scoring and dataset breadth, KM Plotter has broader assay screening,
+cSurvival has purpose-built two-predictor cutoff algorithms, Survival Genie 2
+has broader dataset and single-cell-derived input support, and the R packages
+offer greater programmable flexibility. The tested contribution is the
+integration of endpoint and sample provenance, specification-level
+multiplicity, diagnostics, executable reconstruction and a server-origin
+receipt. No independent feature audit of every comparator version was
+performed.
+\endgroup
 
 \section*{Paper Examples and Feature Definitions}
 
@@ -186,6 +257,14 @@ are \path{ACC/BUB1B-PINK1/OS}, \path{UVM/BAP1xPRAME/DSS},
 \path{PAN-CANCER/CA9/OS}. Thus, Tables S4--S6 cover all 17 web examples,
 including null and discordant outputs; the complete per-method records remain
 in the accompanying CSV and JSON files.
+
+The four biological cases in the main text were selected for exposition after
+the frozen outputs were available: two show within-TCGA literature concordance,
+one provides cross-cohort/cross-assay directional corroboration, and one is
+deliberately non-confirmatory. Only the ACC case uses a cohort and assay
+independent of the TCGA-TRACE analysis; none is prospective clinical
+validation. This presentation set does not define a multiplicity family and
+does not replace the complete registered panel.
 
 All examples use log2(TPM + 1). Mean and weighted signatures are complete-case
 averages of raw transformed expression. Z-score signatures standardize each
@@ -313,7 +392,8 @@ The same scenarios are crossed with four nonredundant two-group rules:
 maxstat, median, upper quartile and outer quartiles. The custom
 percentile and three-group tertile options remain available in the application
 but were excluded from this frozen two-group panel to avoid a redundant
-publication comparison. Holm adjustment is applied within each
+publication comparison \citep{altmanRoyston2006,cutpoints2025}. Holm adjustment
+is applied within each
 marker--endpoint scenario to these four dependent sensitivities. Maxstat
 contributes its Lau94 selection-adjusted rank-test p-value; the other rules
 contribute their log-rank p-values. Lau94 values are bounded to \([0,1]\), with

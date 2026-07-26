@@ -1,6 +1,6 @@
 # TCGA-TRACE Bioinformatics Application Note Strategy
 
-Status: working strategy, July 24, 2026.
+Status: working strategy, July 26, 2026.
 
 ## Critical Diagnosis
 
@@ -30,10 +30,12 @@ methodological gap.
 
 ## Claims That Survive Reviewer Scrutiny
 
-1. **Traceable survival analyses.** Existing TCGA survival web tools usually
-   expose plots, tables and downloads, but not a complete reproducibility bundle
-   with exact patient rows, parameter hash, artifact checksums and package
-   versions.
+1. **Traceable survival analyses.** The reviewed comparator sources describe
+   strong plots, tables, downloads, APIs or code workflows. None of those cited
+   sources establishes the same complete run artifact evaluated here: exact
+   patient rows, selected samples, scoring components, diagnostics, software,
+   executable rerun and server receipt together. This is a source-based
+   comparison, not proof of absence from every current release.
 2. **PH diagnostics within the audited run.** TCGA-TRACE reports `cox.zph`
    diagnostics automatically for fitted Cox models and binds them to the run
    record. PH testing itself is prior art, including in PESSA.
@@ -49,19 +51,19 @@ methodological gap.
 
 ## Comparator Matrix
 
-| Tool | Main scope | Key overlap | Correct comparison point |
-| --- | --- | --- | --- |
-| GEPIA2 | TCGA/GTEx expression and survival | Web-based expression survival workflows | Does not expose a standardized patient-level run bundle or PH diagnostics in the survival UI. |
-| UALCAN | TCGA/CPTAC expression, subgroups and survival | TCGA biomarker exploration | Strong portal, but not designed around reproducible survival payloads and hashes. |
-| OncoLnc | TCGA gene survival | TCGA survival associations | Primarily precomputed gene-level survival results; limited run-level provenance. |
-| KM Plotter | Survival biomarker screening | Marker survival plots across datasets | Strong screening tool; limited endpoint/sample provenance and PH reporting in UI. |
-| UCSC Xena | General multi-omics browser | Custom exploration of TCGA-like matrices | Powerful browser, but manual workflows are less reproducible by default. |
-| cBioPortal | Cancer genomics exploration | Clinical-genomic subgroup survival | Broad portal; not focused on traceable transcriptomic survival workflows. |
-| cSurvival | Biomarker interactions in cancer outcomes | Two-predictor joint survival, optimal two-predictor cutoffs, gene sets | Must be acknowledged as prior art for two-biomarker interaction; TCGA-TRACE differs by run traceability, PH QC, CDR endpoint workflow and RMST/sensitivity reporting. |
-| DoSurvive | Prognostic biomarker database/web tool | Multivariate survival with mRNA, miRNA, lncRNA, protein and methylation; OS/DSS/DFI/PFI | Strong overlap in multivariable survival; TCGA-TRACE should not claim uniqueness there. |
-| PESSA | Pathway enrichment score-based survival | ssGSEA scores, median/optimal cutoffs, grouped/continuous Cox and `cox.zph` in 238 datasets | Stronger gene-set scoring and PH prior art; TCGA-TRACE uses simpler scores and focuses on reconstructable cohort/scoring provenance plus RMST. |
-| TCGAbiolinks | R package for TCGA workflows | Programmable TCGA data acquisition/analysis | Reproducible by code, but not a ready web workflow with standardized run records. |
-| TCGAplot | R package for pan-cancer analysis | Pan-cancer analysis | Programmable R workflow, not an endpoint-aware web application with exported run records. |
+The manuscript uses a strength-first comparison. Supplementary Table S1 keeps
+the 12 closest resources compact; the surrounding text covers PrognoScan,
+OncoLnc, ESurv, GSCA, TCGEx, Survival Genie 2, CaPSSA and SurvBoard. It
+explicitly recognizes that PESSA and GSCA are stronger for pathway scoring, KM
+Plotter and Survival Genie 2 for assay/dataset breadth, cSurvival for
+two-predictor cutoff algorithms, TCGEx for general transcriptomic exploration,
+SurvBoard for predictive-model benchmarking, and the R packages for
+programmable flexibility. The residual TCGA-TRACE comparison point is the
+integrated reporting contract, not greater analytical breadth.
+
+The dated, source-by-source interpretations are maintained in
+`docs/publication/comparator_matrix.md`. No negative product-wide claim may be
+copied into the paper without a current independent feature audit.
 
 ## Journal Positioning
 
@@ -103,21 +105,22 @@ Use as supporting capabilities:
 - pan-cancer primary Cox/FDR plus family-specific ordinal clinical sensitivity
   and meta-analysis.
 
-## Benchmark Cases
+## Evidence Architecture
 
-Current manuscript-facing cases:
+Technical reconstruction and the complete registered panel are reported before
+the numbered biological cases. The four cases are a post hoc presentation set,
+not an inferential family:
 
-| Case | Cohort | Marker/signature | Endpoint | Output needed |
-| --- | --- | --- | --- | --- |
-| 1 | TCGA-LIHC | CDC20 | OS | Stable positive-control cutpoint panel. |
-| 2 | TCGA-LUAD | BIRC5 | OS | Cutpoint-dependent positive-control panel. |
-| 3 | TCGA-UVM | BAP1 | DSS | Transcript-level control with low event count reported. |
-| 4 | TCGA-SKCM | TMEM176B | OS | Literature-prioritized exploratory marker. |
-| 5 | TCGA-LGG | EMP3 | OS | PH-discordant diagnostic case. |
-| 6 | TCGA-ACC | `(BUB1B - PINK1)/2` | OS | Signed weighted-score workflow. |
-| 7 | TCGA-UVM | BAP1 x PRAME | DSS | Separate four-group separation from the continuous interaction term. |
-| 8 | Pan-cancer | BIRC5 | OS | Continuous Cox/FDR and heterogeneous meta-analysis. |
-| 9 | Supplementary diagnostics | CA9, MKI67, PDCD1, CD274, hypoxia and immune signatures | OS/PFI | Preserve null, endpoint-sensitive and discordant results. |
+| Case | Cohort | Marker/signature | Evidence role |
+| --- | --- | --- | --- |
+| 1 | TCGA-LIHC | CDC20 | Directional workflow concordance with a TCGA/ICGC literature anchor |
+| 2 | TCGA-ACC | `(BUB1B - PINK1)/2` | Cross-cohort, cross-assay agreement with an independent Brazilian qRT-PCR study |
+| 3 | Pan-cancer | BIRC5 | Literature-aligned adverse pattern, bounded by high heterogeneity and prediction intervals |
+| 4 | TCGA-UVM | BAP1 x PRAME | Sole deliberately non-confirmatory interaction case |
+
+The supplement preserves the complete 11-scenario single-gene panel and all 17
+Paper Examples, including EMP3 PH discordance, CA9 nonlinearity, low-event
+BAP1, endpoint sensitivities and null outputs.
 
 ## Current Benchmark Results
 
@@ -134,12 +137,14 @@ docs/publication/benchmark/single_gene_benchmark_overview.md
 ```
 
 Result summary: the formal panel contains 11 single-gene endpoint scenarios
-crossed with four nonredundant two-group methods (44 analyses). Suite-wide BH
-correction applies to the 44 log-rank tests. LIHC/CDC20, LUAD/BIRC5, UVM/BAP1,
-SKCM/TMEM176B and LGG/EMP3 illustrate stable, cutpoint-dependent, low-event and
-PH-discordant outputs. The supplement preserves all scenarios, including null
-results. The application shows BH, Cox, RMST, marker-term PH and global PH
-separately because they do not form independent pass/fail barriers.
+crossed with four nonredundant two-group methods (44 grouped analyses). Holm
+controls the four grouped tests within each scenario; BH is applied separately
+across 11 continuous-linear and 11 spline-nonlinearity hypotheses. LIHC/CDC20,
+LUAD/BIRC5, UVM/BAP1, SKCM/TMEM176B and LGG/EMP3 illustrate stable,
+cutpoint-dependent, low-event and PH-discordant outputs. The supplement
+preserves all scenarios, including null results. Cox, RMST, marker-term PH and
+global PH remain separate because they do not form independent pass/fail
+barriers.
 
 The two SKCM single-gene examples also have primary/metastatic sample-rule
 sensitivity records. PDCD1 and TMEM176B produce different BH, adjusted-Cox and
@@ -148,10 +153,11 @@ The manuscript therefore treats SKCM sample composition as a reported
 sensitivity setting.
 
 The executable audit benchmark covers single-gene, weighted-signature and
-crossed-signature runs. It passed 22/22, 23/23 and 20/20 checks, respectively,
-including score reconstruction and deterministic R re-execution at absolute
-tolerance \(10^{-8}\); all three targeted mutations were detected. This is the
-primary empirical support for the manuscript's reporting-contract claim.
+crossed-signature runs. Three frozen runs and six isolated arm64/amd64 reruns
+matched core outputs under quantity-specific absolute-plus-relative
+tolerances. Bound-field, artifact-boundary and Ed25519 mutation tests state
+their threat-model limits explicitly. This is the primary empirical support for
+the manuscript's reporting-contract claim.
 
 The statistical calibration benchmark separately evaluates the revised
 evidence profile without defining a pass/fail score. In 2,000 observed-cohort
@@ -252,6 +258,13 @@ article label.
 - PESSA: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012024
 - DoSurvive: https://pmc.ncbi.nlm.nih.gov/articles/PMC10440714/
 - GEPIA2: https://academic.oup.com/nar/article/47/W1/W556/5494747
+- PrognoScan: https://link.springer.com/article/10.1186/1755-8794-2-18
+- ESurv: https://www.jmir.org/2020/5/e16084
+- GSCA: https://academic.oup.com/bib/article/24/1/bbac558/6957252
+- TCGEx: https://doi.org/10.1038/s44319-025-00407-7
+- Survival Genie 2: https://doi.org/10.1186/s13073-026-01651-9
+- CaPSSA: https://academic.oup.com/bioinformatics/article/35/24/5341/5522011
+- SurvBoard: https://academic.oup.com/bib/article/26/5/bbaf521/8269886
 - TCGA-CDR: https://gdc.cancer.gov/about-data/publications/PanCan-Clinical-2018
 - RMST biomarker paper: https://www.oncotarget.com/article/6121/text/
 - Cutpoint methods comparison: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0338425
