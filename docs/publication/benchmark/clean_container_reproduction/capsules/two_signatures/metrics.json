@@ -30,6 +30,1079 @@
     "status": "skipped",
     "reason": "RMST is reported only for two expression groups."
   },
+  "competing_risks": {
+    "applicable": true,
+    "status": "completed",
+    "reason": null,
+    "endpoint": "DSS",
+    "coding": {
+      "source": "TCGA-CDR Supplemental Table S1, ExtraEndpoints",
+      "source_status_column": "DSS_cr",
+      "source_time_column": "DSS.time.cr",
+      "status_field": "competing_risk_status",
+      "status_codes": {
+        "0": "censored",
+        "1": "death from the index cancer",
+        "2": "death from another cause"
+      },
+      "cause_specific_contract": "Kaplan-Meier and Cox outputs use event == 1 and censor status 2 at the recorded competing-event time.",
+      "cumulative_incidence_contract": "Cumulative incidence retains status 2 as a competing event and compares event-of-interest subdistributions with Gray's test.",
+      "fine_gray_contract": "Fine-Gray models estimate proportional subdistribution hazard ratios for status 1 while retaining status 2 in the risk-set construction."
+    },
+    "population_note": "Grouped outputs use the post-cutpoint cohort; continuous outputs use the unstratified expression-complete eligible cohort.",
+    "continuous_predictor": {
+      "scale": "within-analysis z-score",
+      "center": null,
+      "standard_deviation": null,
+      "effect_unit": "subdistribution hazard ratio per +1 SD expression"
+    },
+    "cumulative_incidence": {
+      "status": "completed",
+      "method": "cmprsk::cuminc nonparametric cumulative incidence",
+      "variance": "Aalen asymptotic variance",
+      "n_patients": 80,
+      "n_events_of_interest": 21,
+      "n_competing_events": 2,
+      "n_censored": 57,
+      "confidence_intervals": {
+        "level": 0.95,
+        "method": "pointwise normal interval from Aalen variance",
+        "truncated_to_probability_range": true
+      },
+      "horizon_support": {
+        "at_risk_definition": "observed endpoint time greater than or equal to the horizon",
+        "minimum_per_group": 5
+      },
+      "group_summary": {
+        "Low_Low": {
+          "group": "Low_Low",
+          "patients": 19,
+          "events_of_interest": 7,
+          "competing_events": 0,
+          "censored": 12
+        },
+        "Low_High": {
+          "group": "Low_High",
+          "patients": 21,
+          "events_of_interest": 10,
+          "competing_events": 1,
+          "censored": 10
+        },
+        "High_Low": {
+          "group": "High_Low",
+          "patients": 21,
+          "events_of_interest": 1,
+          "competing_events": 1,
+          "censored": 19
+        },
+        "High_High": {
+          "group": "High_High",
+          "patients": 19,
+          "events_of_interest": 3,
+          "competing_events": 0,
+          "censored": 16
+        }
+      },
+      "gray_test": {
+        "status": "completed",
+        "method": "Gray K-sample test (rho=0)",
+        "statistic": 13.696380327112415,
+        "degrees_of_freedom": 3,
+        "p_value": 0.0033489604043145382
+      },
+      "horizons": [
+        {
+          "time_days": 365.25,
+          "time_years": 1,
+          "minimum_at_risk": 14,
+          "support_threshold": 5,
+          "supported_all_groups": true,
+          "groups": {
+            "Low_Low": {
+              "estimate": 0.11578947368421053,
+              "standard_error": 0.08001231053327285,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.27261072064926006,
+              "n_at_risk": 14,
+              "support_threshold": 5,
+              "supported": true
+            },
+            "Low_High": {
+              "estimate": 0.11458333333333333,
+              "standard_error": 0.07872072256079607,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.26887311438946326,
+              "n_at_risk": 15,
+              "support_threshold": 5,
+              "supported": true
+            },
+            "High_Low": {
+              "estimate": 0,
+              "standard_error": 0,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0,
+              "n_at_risk": 19,
+              "support_threshold": 5,
+              "supported": true
+            },
+            "High_High": {
+              "estimate": 0.058823529411764705,
+              "standard_error": 0.058823529411764705,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.17411552850235607,
+              "n_at_risk": 16,
+              "support_threshold": 5,
+              "supported": true
+            }
+          }
+        },
+        {
+          "time_days": 1095.75,
+          "time_years": 3,
+          "minimum_at_risk": 4,
+          "support_threshold": 5,
+          "supported_all_groups": false,
+          "groups": {
+            "Low_Low": {
+              "estimate": 0.37990430622009563,
+              "standard_error": 0.12917613425665828,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0.1267237354149348,
+              "conf_high": 0.6330848770252564,
+              "n_at_risk": 6,
+              "support_threshold": 5,
+              "supported": true
+            },
+            "Low_High": {
+              "estimate": 0.4537119708994709,
+              "standard_error": 0.13791816362708662,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0.18339733737647917,
+              "conf_high": 0.7240266044224626,
+              "n_at_risk": 4,
+              "support_threshold": 5,
+              "supported": false
+            },
+            "High_Low": {
+              "estimate": 0,
+              "standard_error": 0,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0,
+              "n_at_risk": 8,
+              "support_threshold": 5,
+              "supported": true
+            },
+            "High_High": {
+              "estimate": 0.19117647058823528,
+              "standard_error": 0.10425718745650964,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.3955168031324352,
+              "n_at_risk": 8,
+              "support_threshold": 5,
+              "supported": true
+            }
+          }
+        },
+        {
+          "time_days": 1826.25,
+          "time_years": 5,
+          "minimum_at_risk": 0,
+          "support_threshold": 5,
+          "supported_all_groups": false,
+          "groups": {
+            "Low_Low": {
+              "estimate": 0.586602870813397,
+              "standard_error": 0.2239207608087085,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0.14772624423752045,
+              "conf_high": 1,
+              "n_at_risk": 1,
+              "support_threshold": 5,
+              "supported": false
+            },
+            "Low_High": {
+              "estimate": 0.9360532407407407,
+              "standard_error": 0.19205054928849577,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0.5596410809241545,
+              "conf_high": 1,
+              "n_at_risk": 0,
+              "support_threshold": 5,
+              "supported": false
+            },
+            "High_Low": {
+              "estimate": 0.2,
+              "standard_error": 0.2,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.5919927969080108,
+              "n_at_risk": 1,
+              "support_threshold": 5,
+              "supported": false
+            },
+            "High_High": {
+              "estimate": 0.19117647058823528,
+              "standard_error": 0.10425718745650964,
+              "confidence_level": 0.95,
+              "confidence_method": "pointwise normal interval from Aalen variance",
+              "conf_low": 0,
+              "conf_high": 0.3955168031324352,
+              "n_at_risk": 1,
+              "support_threshold": 5,
+              "supported": false
+            }
+          }
+        }
+      ],
+      "curves": [
+        {
+          "group": "Low_Low",
+          "cause_code": 1,
+          "cause": "death from the index cancer",
+          "time_days": [
+            0,
+            40,
+            40,
+            114,
+            114,
+            398,
+            398,
+            453,
+            453,
+            606,
+            606,
+            636,
+            636,
+            1314,
+            1314,
+            1862
+          ],
+          "estimate": [
+            0,
+            0,
+            0.05263157894736842,
+            0.05263157894736842,
+            0.11578947368421053,
+            0.11578947368421053,
+            0.17894736842105263,
+            0.17894736842105263,
+            0.2421052631578947,
+            0.2421052631578947,
+            0.3110047846889952,
+            0.3110047846889952,
+            0.37990430622009563,
+            0.37990430622009563,
+            0.586602870813397,
+            0.586602870813397
+          ],
+          "variance": [
+            0,
+            0,
+            0.0027700831024930752,
+            0.0027700831024930752,
+            0.006401969836872884,
+            0.006401969836872884,
+            0.009508985496322259,
+            0.009508985496322259,
+            0.012091250504693018,
+            0.012091250504693018,
+            0.014739913079357564,
+            0.014739913079357564,
+            0.016686473661494203,
+            0.016686473661494203,
+            0.05014050712115085,
+            0.05014050712115085
+          ],
+          "conf_low": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.026587187571471438,
+            0.026587187571471438,
+            0.0730493915688501,
+            0.0730493915688501,
+            0.1267237354149348,
+            0.1267237354149348,
+            0.14772624423752045,
+            0.14772624423752045
+          ],
+          "conf_high": [
+            0,
+            0,
+            0.15578757813368704,
+            0.15578757813368704,
+            0.27261072064926006,
+            0.27261072064926006,
+            0.3700713496758905,
+            0.3700713496758905,
+            0.457623338744318,
+            0.457623338744318,
+            0.5489601778091402,
+            0.5489601778091402,
+            0.6330848770252564,
+            0.6330848770252564,
+            1,
+            1
+          ],
+          "confidence_level": 0.95,
+          "confidence_method": "pointwise normal interval from Aalen variance"
+        },
+        {
+          "group": "Low_High",
+          "cause_code": 1,
+          "cause": "death from the index cancer",
+          "time_days": [
+            0,
+            149,
+            149,
+            241,
+            241,
+            415,
+            415,
+            455,
+            455,
+            808,
+            808,
+            873,
+            873,
+            945,
+            945,
+            1113,
+            1113,
+            1269,
+            1269,
+            1396,
+            1396,
+            1396
+          ],
+          "estimate": [
+            0,
+            0,
+            0.05555555555555555,
+            0.05555555555555555,
+            0.11458333333333333,
+            0.11458333333333333,
+            0.1736111111111111,
+            0.1736111111111111,
+            0.2326388888888889,
+            0.2326388888888889,
+            0.30298032407407405,
+            0.30298032407407405,
+            0.37332175925925926,
+            0.37332175925925926,
+            0.4537119708994709,
+            0.4537119708994709,
+            0.5742972883597883,
+            0.5742972883597883,
+            0.7551752645502645,
+            0.7551752645502645,
+            0.9360532407407407,
+            0.9360532407407407
+          ],
+          "variance": [
+            0,
+            0,
+            0.00308641975308642,
+            0.00308641975308642,
+            0.006196952160493827,
+            0.006196952160493827,
+            0.008882512431412894,
+            0.008882512431412894,
+            0.011143179574427509,
+            0.011143179574427509,
+            0.014182706364926809,
+            0.014182706364926809,
+            0.016452832417416297,
+            0.016452832417416297,
+            0.01902141985826784,
+            0.01902141985826784,
+            0.026230620755905196,
+            0.026230620755905196,
+            0.04156680426187842,
+            0.04156680426187842,
+            0.03688341348201295,
+            0.03688341348201295
+          ],
+          "conf_low": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.02574262148233772,
+            0.02574262148233772,
+            0.0695659233468208,
+            0.0695659233468208,
+            0.1219199330620615,
+            0.1219199330620615,
+            0.18339733737647917,
+            0.18339733737647917,
+            0.25686406786285554,
+            0.25686406786285554,
+            0.3555790097131366,
+            0.3555790097131366,
+            0.5596410809241545,
+            0.5596410809241545
+          ],
+          "conf_high": [
+            0,
+            0,
+            0.16444244358555854,
+            0.16444244358555854,
+            0.26887311438946326,
+            0.26887311438946326,
+            0.35833199712451314,
+            0.35833199712451314,
+            0.43953515629544004,
+            0.43953515629544004,
+            0.5363947248013273,
+            0.5363947248013273,
+            0.624723585456457,
+            0.624723585456457,
+            0.7240266044224626,
+            0.7240266044224626,
+            0.8917305088567211,
+            0.8917305088567211,
+            1,
+            1,
+            1,
+            1
+          ],
+          "confidence_level": 0.95,
+          "confidence_method": "pointwise normal interval from Aalen variance"
+        },
+        {
+          "group": "High_Low",
+          "cause_code": 1,
+          "cause": "death from the index cancer",
+          "time_days": [
+            0,
+            1377,
+            1377,
+            2600
+          ],
+          "estimate": [
+            0,
+            0,
+            0.2,
+            0.2
+          ],
+          "variance": [
+            0,
+            0,
+            0.04,
+            0.04
+          ],
+          "conf_low": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "conf_high": [
+            0,
+            0,
+            0.5919927969080108,
+            0.5919927969080108
+          ],
+          "confidence_level": 0.95,
+          "confidence_method": "pointwise normal interval from Aalen variance"
+        },
+        {
+          "group": "High_High",
+          "cause_code": 1,
+          "cause": "death from the index cancer",
+          "time_days": [
+            0,
+            82,
+            82,
+            389,
+            389,
+            730,
+            730,
+            2499
+          ],
+          "estimate": [
+            0,
+            0,
+            0.058823529411764705,
+            0.058823529411764705,
+            0.11764705882352941,
+            0.11764705882352941,
+            0.19117647058823528,
+            0.19117647058823528
+          ],
+          "variance": [
+            0,
+            0,
+            0.0034602076124567475,
+            0.0034602076124567475,
+            0.0065014057093425595,
+            0.0065014057093425595,
+            0.01086956113634179,
+            0.01086956113634179
+          ],
+          "conf_low": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "conf_high": [
+            0,
+            0,
+            0.17411552850235607,
+            0.17411552850235607,
+            0.27568149275824216,
+            0.27568149275824216,
+            0.3955168031324352,
+            0.3955168031324352
+          ],
+          "confidence_level": 0.95,
+          "confidence_method": "pointwise normal interval from Aalen variance"
+        }
+      ]
+    },
+    "grouped_fine_gray_models": [
+      {
+        "model": "fine_gray_grouped_univariable",
+        "label": "Grouped Fine-Gray",
+        "status": "completed",
+        "reason": null,
+        "method": "cmprsk::crr proportional subdistribution hazards",
+        "estimand": "subdistribution hazard ratio for the event-of-interest cumulative incidence",
+        "variance": "cmprsk weighted estimating-equation variance",
+        "censoring_distribution": "estimated separately by expression group",
+        "failcode": 1,
+        "cencode": 0,
+        "marker": "group",
+        "marker_reference": "Low_Low",
+        "marker_effect_unit": "group contrast against the first declared group",
+        "n_patients": 80,
+        "n_events_of_interest": 21,
+        "n_competing_events": 2,
+        "parameter_count": 3,
+        "events_per_parameter": 7,
+        "covariates": [],
+        "covariate_encoding": [],
+        "marker_terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.31091330664169614,
+            "standard_error": 0.47794349219127974,
+            "subdistribution_hazard_ratio": 1.364670908153751,
+            "shr_conf_low": 0.5348126797533732,
+            "shr_conf_high": 3.482203691243798,
+            "p_value": 0.5153543523133188
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.3689240554152176,
+            "standard_error": 0.9994923258475982,
+            "subdistribution_hazard_ratio": 0.09358136048798717,
+            "shr_conf_low": 0.013195320538498057,
+            "shr_conf_high": 0.6636800527302247,
+            "p_value": 0.01778196126075132
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -1.0627848403873048,
+            "standard_error": 0.7401732039029462,
+            "subdistribution_hazard_ratio": 0.3454923283914186,
+            "shr_conf_low": 0.08098448690375235,
+            "shr_conf_high": 1.4739236308206227,
+            "p_value": 0.15104228104631592
+          }
+        ],
+        "terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.31091330664169614,
+            "standard_error": 0.47794349219127974,
+            "subdistribution_hazard_ratio": 1.364670908153751,
+            "shr_conf_low": 0.5348126797533732,
+            "shr_conf_high": 3.482203691243798,
+            "p_value": 0.5153543523133188
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.3689240554152176,
+            "standard_error": 0.9994923258475982,
+            "subdistribution_hazard_ratio": 0.09358136048798717,
+            "shr_conf_low": 0.013195320538498057,
+            "shr_conf_high": 0.6636800527302247,
+            "p_value": 0.01778196126075132
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -1.0627848403873048,
+            "standard_error": 0.7401732039029462,
+            "subdistribution_hazard_ratio": 0.3454923283914186,
+            "shr_conf_low": 0.08098448690375235,
+            "shr_conf_high": 1.4739236308206227,
+            "p_value": 0.15104228104631592
+          }
+        ],
+        "warnings": [
+          "Only 7.0 events of interest per fitted parameter; interpret as low-information evidence."
+        ]
+      },
+      {
+        "model": "fine_gray_grouped_stage_adjusted",
+        "label": "Grouped Fine-Gray adjusted for ordinal stage",
+        "status": "completed",
+        "reason": null,
+        "method": "cmprsk::crr proportional subdistribution hazards",
+        "estimand": "subdistribution hazard ratio for the event-of-interest cumulative incidence",
+        "variance": "cmprsk weighted estimating-equation variance",
+        "censoring_distribution": "estimated separately by expression group",
+        "failcode": 1,
+        "cencode": 0,
+        "marker": "group",
+        "marker_reference": "Low_Low",
+        "marker_effect_unit": "group contrast against the first declared group",
+        "n_patients": 79,
+        "n_events_of_interest": 20,
+        "n_competing_events": 2,
+        "parameter_count": 4,
+        "events_per_parameter": 5,
+        "covariates": [
+          "stage_ordinal"
+        ],
+        "covariate_encoding": {
+          "stage_ordinal": {
+            "source": "stage",
+            "encoded_name": "stage_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "mapped_patients": 79,
+            "observed_scores": [
+              2,
+              3,
+              4
+            ],
+            "unmapped_values": []
+          }
+        },
+        "marker_terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.38119235063187634,
+            "standard_error": 0.5881106590400969,
+            "subdistribution_hazard_ratio": 1.4640291852667,
+            "shr_conf_low": 0.46232676238642934,
+            "shr_conf_high": 4.6360748061587715,
+            "p_value": 0.5168786706898235
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.1712035174706203,
+            "standard_error": 1.1051623621018003,
+            "subdistribution_hazard_ratio": 0.11404028481149751,
+            "shr_conf_low": 0.013072010413226379,
+            "shr_conf_high": 0.9948880201876756,
+            "p_value": 0.04946039048115163
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -0.9227987210805609,
+            "standard_error": 0.8100140155540215,
+            "subdistribution_hazard_ratio": 0.39740525675607336,
+            "shr_conf_low": 0.08123598064732583,
+            "shr_conf_high": 1.944100838555698,
+            "p_value": 0.25460391346225536
+          }
+        ],
+        "terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.38119235063187634,
+            "standard_error": 0.5881106590400969,
+            "subdistribution_hazard_ratio": 1.4640291852667,
+            "shr_conf_low": 0.46232676238642934,
+            "shr_conf_high": 4.6360748061587715,
+            "p_value": 0.5168786706898235
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.1712035174706203,
+            "standard_error": 1.1051623621018003,
+            "subdistribution_hazard_ratio": 0.11404028481149751,
+            "shr_conf_low": 0.013072010413226379,
+            "shr_conf_high": 0.9948880201876756,
+            "p_value": 0.04946039048115163
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -0.9227987210805609,
+            "standard_error": 0.8100140155540215,
+            "subdistribution_hazard_ratio": 0.39740525675607336,
+            "shr_conf_low": 0.08123598064732583,
+            "shr_conf_high": 1.944100838555698,
+            "p_value": 0.25460391346225536
+          },
+          {
+            "term": "stage_ordinal",
+            "marker_term": false,
+            "contrast": null,
+            "comparison_level": null,
+            "reference_level": null,
+            "log_subdistribution_hazard_ratio": 0.8836093253204657,
+            "standard_error": 0.505279086537011,
+            "subdistribution_hazard_ratio": 2.4196171503545747,
+            "shr_conf_low": 0.8987777569863794,
+            "shr_conf_high": 6.513898579244342,
+            "p_value": 0.08033337964843512
+          }
+        ],
+        "warnings": [
+          "Only 5.0 events of interest per fitted parameter; interpret as low-information evidence."
+        ]
+      },
+      {
+        "model": "fine_gray_grouped_grade_adjusted",
+        "label": "Grouped Fine-Gray adjusted for ordinal grade",
+        "status": "skipped",
+        "reason": "Fewer than 10 complete patients after model-specific filtering.",
+        "covariates": [
+          "grade_ordinal"
+        ],
+        "covariate_encoding": {
+          "grade_ordinal": {
+            "source": "grade",
+            "encoded_name": "grade_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "unmapped_values": []
+          }
+        },
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_grouped_stage_grade_adjusted",
+        "label": "Grouped Fine-Gray adjusted for ordinal stage and grade",
+        "status": "skipped",
+        "reason": "Fewer than 10 complete patients after model-specific filtering.",
+        "covariates": [
+          "stage_ordinal",
+          "grade_ordinal"
+        ],
+        "covariate_encoding": {
+          "stage_ordinal": {
+            "source": "stage",
+            "encoded_name": "stage_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "mapped_patients": 79,
+            "observed_scores": [
+              2,
+              3,
+              4
+            ],
+            "unmapped_values": []
+          },
+          "grade_ordinal": {
+            "source": "grade",
+            "encoded_name": "grade_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "unmapped_values": []
+          }
+        },
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_grouped_user_adjusted",
+        "label": "Grouped Fine-Gray user-adjusted for Age",
+        "status": "completed",
+        "reason": null,
+        "method": "cmprsk::crr proportional subdistribution hazards",
+        "estimand": "subdistribution hazard ratio for the event-of-interest cumulative incidence",
+        "variance": "cmprsk weighted estimating-equation variance",
+        "censoring_distribution": "estimated separately by expression group",
+        "failcode": 1,
+        "cencode": 0,
+        "marker": "group",
+        "marker_reference": "Low_Low",
+        "marker_effect_unit": "group contrast against the first declared group",
+        "n_patients": 80,
+        "n_events_of_interest": 21,
+        "n_competing_events": 2,
+        "parameter_count": 4,
+        "events_per_parameter": 5.25,
+        "covariates": [
+          "age_at_index_per_10y"
+        ],
+        "covariate_encoding": {
+          "age_at_index_per_10y": {
+            "source": "age_at_index",
+            "encoded_name": "age_at_index_per_10y",
+            "type": "continuous_numeric",
+            "unit": "10-year increase",
+            "coding": "Age at index is modeled continuously after division by 10; the hazard ratio is per 10-year increase.",
+            "mapped_patients": 80,
+            "observed_range_years": [
+              22,
+              86
+            ]
+          }
+        },
+        "marker_terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.39022021625112147,
+            "standard_error": 0.4869680693827665,
+            "subdistribution_hazard_ratio": 1.4773060848719164,
+            "shr_conf_low": 0.5688038332317685,
+            "shr_conf_high": 3.836882139136923,
+            "p_value": 0.4229428939059612
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.27631100827061,
+            "standard_error": 1.0143983307790159,
+            "subdistribution_hazard_ratio": 0.10266222914025933,
+            "shr_conf_low": 0.014058962270043609,
+            "shr_conf_high": 0.749666518026328,
+            "p_value": 0.024832328148063486
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -0.8289858149959263,
+            "standard_error": 0.7896244636628217,
+            "subdistribution_hazard_ratio": 0.4364917452984646,
+            "shr_conf_low": 0.09286380467318821,
+            "shr_conf_high": 2.0516609715077543,
+            "p_value": 0.29378791452467495
+          }
+        ],
+        "terms": [
+          {
+            "term": "groupLow_High",
+            "marker_term": true,
+            "contrast": "Low_High vs Low_Low",
+            "comparison_level": "Low_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": 0.39022021625112147,
+            "standard_error": 0.4869680693827665,
+            "subdistribution_hazard_ratio": 1.4773060848719164,
+            "shr_conf_low": 0.5688038332317685,
+            "shr_conf_high": 3.836882139136923,
+            "p_value": 0.4229428939059612
+          },
+          {
+            "term": "groupHigh_Low",
+            "marker_term": true,
+            "contrast": "High_Low vs Low_Low",
+            "comparison_level": "High_Low",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -2.27631100827061,
+            "standard_error": 1.0143983307790159,
+            "subdistribution_hazard_ratio": 0.10266222914025933,
+            "shr_conf_low": 0.014058962270043609,
+            "shr_conf_high": 0.749666518026328,
+            "p_value": 0.024832328148063486
+          },
+          {
+            "term": "groupHigh_High",
+            "marker_term": true,
+            "contrast": "High_High vs Low_Low",
+            "comparison_level": "High_High",
+            "reference_level": "Low_Low",
+            "log_subdistribution_hazard_ratio": -0.8289858149959263,
+            "standard_error": 0.7896244636628217,
+            "subdistribution_hazard_ratio": 0.4364917452984646,
+            "shr_conf_low": 0.09286380467318821,
+            "shr_conf_high": 2.0516609715077543,
+            "p_value": 0.29378791452467495
+          },
+          {
+            "term": "age_at_index_per_10y",
+            "marker_term": false,
+            "contrast": null,
+            "comparison_level": null,
+            "reference_level": null,
+            "log_subdistribution_hazard_ratio": 0.3085470284440626,
+            "standard_error": 0.1798108555792826,
+            "subdistribution_hazard_ratio": 1.3614455347072534,
+            "shr_conf_low": 0.9570728448354098,
+            "shr_conf_high": 1.9366696631049816,
+            "p_value": 0.08617059275313939
+          }
+        ],
+        "warnings": [
+          "Only 5.2 events of interest per fitted parameter; interpret as low-information evidence."
+        ]
+      }
+    ],
+    "continuous_fine_gray_models": [
+      {
+        "model": "fine_gray_continuous_univariable",
+        "label": "Continuous Fine-Gray per +1 SD expression",
+        "status": "skipped",
+        "reason": "Missing competing-risk model fields: time_days, competing_risk_status",
+        "covariates": [],
+        "covariate_encoding": [],
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_continuous_stage_adjusted",
+        "label": "Continuous Fine-Gray adjusted for ordinal stage",
+        "status": "skipped",
+        "reason": "Missing competing-risk model fields: time_days, competing_risk_status, stage",
+        "covariates": [
+          "stage"
+        ],
+        "covariate_encoding": [],
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_continuous_grade_adjusted",
+        "label": "Continuous Fine-Gray adjusted for ordinal grade",
+        "status": "skipped",
+        "reason": "Missing competing-risk model fields: time_days, competing_risk_status, grade",
+        "covariates": [
+          "grade"
+        ],
+        "covariate_encoding": [],
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_continuous_stage_grade_adjusted",
+        "label": "Continuous Fine-Gray adjusted for ordinal stage and grade",
+        "status": "skipped",
+        "reason": "Missing competing-risk model fields: time_days, competing_risk_status, stage, grade",
+        "covariates": [
+          "stage",
+          "grade"
+        ],
+        "covariate_encoding": [],
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      },
+      {
+        "model": "fine_gray_continuous_user_adjusted",
+        "label": "Continuous Fine-Gray user-adjusted for Age",
+        "status": "skipped",
+        "reason": "Missing competing-risk model fields: time_days, competing_risk_status, age_at_index",
+        "covariates": [
+          "age_at_index"
+        ],
+        "covariate_encoding": [],
+        "n_patients": 0,
+        "n_events_of_interest": 0,
+        "n_competing_events": 0
+      }
+    ]
+  },
   "clinical_adjustment": {
     "status": "requested",
     "requested_covariates": [
@@ -140,7 +1213,31 @@
           "p_value": 0.6370237913969757
         }
       ],
+      "ph_p_value": 0.17472391904061038,
       "ph_global_p_value": 0.4311057110034102,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.17472391904061038,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "Signature A x Signature B",
+        "status": "not_triggered",
+        "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+      },
       "warnings": [
         "Low-information Cox model: 7.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
       ]
@@ -256,10 +1353,179 @@
           "p_value": 0.8094189771482455
         }
       ],
+      "ph_p_value": 0.030915418209664335,
       "ph_global_p_value": 0.027660110650787384,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.030915418209664335,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "Signature A x Signature B",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.030915418209664335,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Signature A x Signature B",
+            "n_patients": 79,
+            "n_events": 20,
+            "support": {
+              "early_events": 5,
+              "late_events": 15,
+              "at_risk_at_split": 63
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ score_a_z * score_b_z +     stage_ordinal + score_a_z:score_b_z:late_period + cluster(split_id)",
+            "parameter_count": 5,
+            "events_per_parameter": 4,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 79,
+                "n_events": 5,
+                "log_hr": 0.26115272482308727,
+                "standard_error": 0.26267182662327443,
+                "hazard_ratio": 1.298425952165488,
+                "hr_conf_low": 0.7759442570233509,
+                "hr_conf_high": 2.172720447373733,
+                "p_value": 0.32011736434000676
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 63,
+                "n_events": 15,
+                "log_hr": -0.021103411435443475,
+                "standard_error": 0.19543065652141764,
+                "hazard_ratio": 0.9791177073663866,
+                "hr_conf_low": 0.6675503507666384,
+                "hr_conf_high": 1.4361036343961724,
+                "p_value": 0.9140082728355249
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -0.28225613625853074,
+              "standard_error": 0.26495138556474873,
+              "hazard_ratio_ratio": 0.7540805124338699,
+              "hr_ratio_conf_low": 0.4486324561623285,
+              "hr_ratio_conf_high": 1.2674905959696727,
+              "p_value": 0.28673434454332736
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.030915418209664335,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Signature A x Signature B",
+            "n_patients": 79,
+            "n_events": 20,
+            "support": {
+              "early_events": 20,
+              "late_events": 0,
+              "at_risk_at_split": 3
+            },
+            "status": "skipped",
+            "reason": "The late period had 0 events; at least 5 are required. Only 3 patients entered the late period; at least 10 are required."
+          }
+        ],
+        "n_patients": 79,
+        "n_events": 20,
+        "support": {
+          "early_events": 13,
+          "late_events": 7,
+          "at_risk_at_split": 43
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ score_a_z * score_b_z +     stage_ordinal + score_a_z:score_b_z:late_period + cluster(split_id)",
+        "parameter_count": 5,
+        "events_per_parameter": 4,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 79,
+            "n_events": 13,
+            "log_hr": 0.33581671399637675,
+            "standard_error": 0.21176771801478167,
+            "hazard_ratio": 1.399082569056452,
+            "hr_conf_low": 0.9238178245093985,
+            "hr_conf_high": 2.1188506901532373,
+            "p_value": 0.11278954331070733
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 43,
+            "n_events": 7,
+            "log_hr": -0.8197726704967678,
+            "standard_error": 0.2960285309937794,
+            "hazard_ratio": 0.4405317889965566,
+            "hr_conf_low": 0.2466024064852192,
+            "hr_conf_high": 0.7869682209615367,
+            "p_value": 0.005618803268989971
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.1555893844931446,
+          "standard_error": 0.32837597196895446,
+          "hazard_ratio_ratio": 0.3148719015873762,
+          "hr_ratio_conf_low": 0.16543209624671912,
+          "hr_ratio_conf_high": 0.5993051932400729,
+          "p_value": 0.0004330059951863256
+        },
+        "warnings": []
+      },
       "warnings": [
         "Low-information Cox model: 5.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.",
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Interaction-specific proportional hazards test p < 0.05; interpret the average interaction HR with the prespecified two-year temporal diagnostic."
       ]
     },
     {
@@ -432,9 +1698,179 @@
           "p_value": 0.14840783322680862
         }
       ],
+      "ph_p_value": 0.047893485428600766,
       "ph_global_p_value": 0.18173200016193894,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.047893485428600766,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "Signature A x Signature B",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.047893485428600766,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Signature A x Signature B",
+            "n_patients": 80,
+            "n_events": 21,
+            "support": {
+              "early_events": 5,
+              "late_events": 16,
+              "at_risk_at_split": 64
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ score_a_z * score_b_z +     age_at_index_per_10y + score_a_z:score_b_z:late_period +     cluster(split_id)",
+            "parameter_count": 5,
+            "events_per_parameter": 4.2,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 80,
+                "n_events": 5,
+                "log_hr": 0.4960497417029116,
+                "standard_error": 0.25117553538148896,
+                "hazard_ratio": 1.6422212426682847,
+                "hr_conf_low": 1.0037617964191556,
+                "hr_conf_high": 2.6867834774066104,
+                "p_value": 0.04827806181109345
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 64,
+                "n_events": 16,
+                "log_hr": 0.2585754112943419,
+                "standard_error": 0.1990727035885357,
+                "hazard_ratio": 1.2950838101168833,
+                "hr_conf_low": 0.8766916734439929,
+                "hr_conf_high": 1.9131493158113286,
+                "p_value": 0.1939784624413061
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -0.23747433040856972,
+              "standard_error": 0.2094872182354947,
+              "hazard_ratio_ratio": 0.7886171342008877,
+              "hr_ratio_conf_low": 0.5230586219335019,
+              "hr_ratio_conf_high": 1.1890005408118238,
+              "p_value": 0.2569631346494979
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.047893485428600766,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Signature A x Signature B",
+            "n_patients": 80,
+            "n_events": 21,
+            "support": {
+              "early_events": 21,
+              "late_events": 0,
+              "at_risk_at_split": 3
+            },
+            "status": "skipped",
+            "reason": "The late period had 0 events; at least 5 are required. Only 3 patients entered the late period; at least 10 are required."
+          }
+        ],
+        "n_patients": 80,
+        "n_events": 21,
+        "support": {
+          "early_events": 13,
+          "late_events": 8,
+          "at_risk_at_split": 44
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ score_a_z * score_b_z +     age_at_index_per_10y + score_a_z:score_b_z:late_period +     cluster(split_id)",
+        "parameter_count": 5,
+        "events_per_parameter": 4.2,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 80,
+            "n_events": 13,
+            "log_hr": 0.6170174082408814,
+            "standard_error": 0.20965673792396655,
+            "hazard_ratio": 1.853391878549524,
+            "hr_conf_low": 1.2288733239247707,
+            "hr_conf_high": 2.795293370436627,
+            "p_value": 0.003250602947949439
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 44,
+            "n_events": 8,
+            "log_hr": -0.1746585878447804,
+            "standard_error": 0.21627922899113775,
+            "hazard_ratio": 0.8397436705299544,
+            "hr_conf_low": 0.5496035453724871,
+            "hr_conf_high": 1.2830510977093506,
+            "p_value": 0.4193435653496422
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -0.7916759960856617,
+          "standard_error": 0.1823750705760471,
+          "hazard_ratio_ratio": 0.4530847902426026,
+          "hr_ratio_conf_low": 0.3169140853114511,
+          "hr_ratio_conf_high": 0.6477649200963603,
+          "p_value": 1.4188594635614276e-05
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
+        "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.",
+        "Interaction-specific proportional hazards test p < 0.05; interpret the average interaction HR with the prespecified two-year temporal diagnostic."
       ]
     }
   ],
@@ -456,7 +1892,8 @@
     "ggplot2": "4.0.3",
     "svglite": "2.2.2",
     "survRM2": "1.0.4",
-    "coxphf": "1.13.4"
+    "coxphf": "1.13.4",
+    "cmprsk": "2.2.12"
   },
   "sample_selection": {
     "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
@@ -501,6 +1938,11 @@
     },
     "removed_duplicate_sample_types": {}
   },
+  "external_covariates": {
+    "status": "not_provided",
+    "schema_version": null,
+    "selected_covariates": []
+  },
   "endpoint_source": "tcga_cdr",
   "endpoint_qc": {
     "value": "DSS",
@@ -509,6 +1951,8 @@
     "source": "tcga_cdr",
     "patients": 80,
     "events": 21,
+    "competing_events": 2,
+    "competing_risk_available": true,
     "reason": "80 linked patients and 21 events from TCGA-CDR."
   },
   "signature": {
@@ -760,9 +2204,25 @@
     }
   },
   "audit_report": {
-    "schema_version": "tcga-trace-analysis-audit-v3",
-    "generated_at": "2026-07-25T18:19:24.480676+00:00",
-    "reproducibility_hash": "007047e76dc972985df9f8857525c3cfc25ee052ed6930305402bf5a09ce8c5e",
-    "patient_records_sha256": "ea916ac12de3b9bfbb8dd05611d61ce980a5607fe840f2466c2a2a8df041636a"
+    "schema_version": "tcga-trace-analysis-audit-v4",
+    "generated_at": "2026-07-26T17:44:20.020330+00:00",
+    "reproducibility_hash": "d7a223f7f27992f2d5664b96e23d87d8e02bf6e73427af38ed84405614b17909",
+    "server_attestation": {
+      "status": "detached_receipt",
+      "schema_version": "tcga-trace-server-attestation-v1",
+      "algorithm": "Ed25519",
+      "canonicalization": "tcga-trace-canonical-json-v1",
+      "issuer": "https://apps.cienciavida.org/tcga_explorer",
+      "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+      "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+      "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/85c2c2f3b8e64708a92fa5d4b9f530ae/download/attestation",
+      "receipt_filename": "attestation_receipt.json",
+      "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+      "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time.",
+      "issued_at": "2026-07-26T17:44:20.038686+00:00",
+      "audit_report_sha256": "65f6a5389d5fef085c44b2a64eecea2a564d9cc61bc1f194d0f88382e8d72d38",
+      "signed_payload_sha256": "c4a4c77ff7e2c5754725bd906ef3c42254f4a9c160576bb481790b1d624f8146"
+    },
+    "patient_records_sha256": "38e69951d7be87a684f6e81119ee2cc1bb08c64c50b64efad45cd6bb8abda51e"
   }
 }

@@ -22,7 +22,7 @@ Journal policies can change. Recheck these pages immediately before upload.
 | Requirement | Current state | Status |
 | --- | --- | --- |
 | Maximum length | Four journal pages. Five pages is 25% over the limit and is liable to immediate return. | OUP `modern,large` preview is 4/4 pages. |
-| Approximate content budget | About 2,600 words without a figure or 2,000 words plus one figure. | Main sum count is 1,998, including 1,840 text words and one figure; OUP preview remains 4/4 pages. |
+| Approximate content budget | About 2,600 words without a figure or 2,000 words plus one figure. | Main sum count is 1,841, including 1,660 text words and one figure; OUP preview remains 4/4 pages. |
 | Initial review format | At least 12-point type, double spacing and line numbers. | Enabled in `main.tex`; review PDF is 12 pages. |
 | Revised/final format | OUP authoring template. | Preview uses the Bioinformatics mapping: numbered sections, `modern,large`, author-date citations and `Applications Note` article label. |
 | Abstract | Headings must be `Summary`, `Availability and Implementation`, `Contact` and `Supplementary Information`; Summary is one or two sentences. | Four headings are in order; Summary has two sentences. |
@@ -30,7 +30,7 @@ Journal policies can change. Recheck these pages immediately before upload.
 | Accessibility | Figure alt text must follow the legend. | Figure 1 includes inline alt text after its legend; the standalone accessibility source is also retained. |
 | Supplement | Submit as one separate file, with items cited from the manuscript. | One supplementary PDF with 8 essential tables and no figures; all tables precede the references. |
 | Cover letter | Required at submission. | Draft exists; author-led rewrite and final sign-off are pending. |
-| Data Availability | Required statement. | Prepared with the public GitHub URL and Zenodo as the archive; final license and version-specific DOI are pending. |
+| Data Availability | Required statement. | Prepared with the public GitHub URL, MIT license and Zenodo as the archive; the version-specific DOI is pending. |
 
 The current instructions do not state a separate numerical maximum for
 supplementary tables or figures. The supplement retains eight essential, cited
@@ -79,10 +79,10 @@ gate rather than a production-page guarantee.
   structure review; it is not a scientific comparator or manuscript citation.
 - `check_submission_artifacts.py` verifies the complete technical handoff.
 - Backend, publication-script, standalone-script and frontend tests pass:
-  `138 + 133 + 15 + 15`. The standalone suite comprises 14 CLI tests across
+  `140 + 136 + 15 + 15`. The standalone suite comprises 14 CLI tests across
   all six public compute families plus one server-attestation verifier test.
 - The artifact checker reports `109/109`; the compact review archive verifies
-  480 entries.
+  485 entries.
 - Frozen capsules pass 6/6 network-disabled clean-container reruns across
   native arm64 and locally emulated amd64. Hosted amd64 CI independently passed
   both jobs for commit `00c3aaeb18ce5871b69122641db0bf3810b2d1d1` in run
@@ -96,7 +96,6 @@ until every item below is resolved:
 - Corresponding-author name and institutional email.
 - Submitting-author name and ORCID.
 - CRediT contribution statement.
-- Complete top-level software license.
 - Exact submitted code state tagged and pushed to the public GitHub repository.
 - Passing independent clean-reproduction CI run for that exact commit.
 - Tagged release archived on Zenodo with its stable version-specific DOI/URL.
@@ -115,10 +114,10 @@ until every item below is resolved:
   manuscript and detailed supplementary disclosure, following the current OUP
   AI policy.
 
-Author order, affiliations, funding, conflict declaration, public repository
-and public demo URL are already supplied. The APC, ISCB discount or waiver
-route remains an operational owner decision on the journal timeline, but it
-does not block construction of the reviewer package.
+Author order, affiliations, funding, conflict declaration, MIT license, public
+repository and public demo URL are already supplied. The APC, ISCB discount or
+waiver route remains an operational owner decision on the journal timeline,
+but it does not block construction of the reviewer package.
 
 The last two points are submission blockers. Bioinformatics requires AI used
 to generate content, write code or process data to be disclosed in both the
@@ -132,26 +131,24 @@ guidance.
 
 1. Copy and complete
    `submission/owner_metadata.template.json`.
-2. Select the full license text and save it outside the repository until the
-   owner/institution approves it.
-3. Validate without editing:
+2. Validate without editing:
 
 ```sh
 scripts/publication/finalize_submission_package.py \
   path/to/owner_metadata.json \
-  --license-source path/to/LICENSE \
+  --license-source LICENSE \
   --dry-run
 ```
 
-4. Apply owner metadata, run the strict gate and generate the final archive:
+3. Apply owner metadata, run the strict gate and generate the final archive:
 
 ```sh
 scripts/publication/finalize_submission_package.py \
   path/to/owner_metadata.json \
-  --license-source path/to/LICENSE
+  --license-source LICENSE
 ```
 
-5. Commit and push only the reviewed submission files, create a release tag,
+4. Commit and push only the reviewed submission files, create a release tag,
    archive that exact release, insert the resulting DOI and rerun the
    finalizer. Deploy it with `APP_RELEASE_COMMIT` and `APP_RELEASE_REF`, then
    run `.github/workflows/release-readiness.yml` against that exact tag and

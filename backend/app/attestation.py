@@ -213,10 +213,18 @@ def attestation_keyset(settings: Settings) -> dict[str, Any]:
     documents[active.key_id] = active_document
     keys = []
     for key_id, document in sorted(documents.items()):
+        stored_status = str(document.get("status") or "").lower()
+        status = (
+            "active"
+            if key_id == active.key_id
+            else "revoked"
+            if stored_status == "revoked"
+            else "retired"
+        )
         keys.append(
             {
                 **document,
-                "status": "active" if key_id == active.key_id else "retired",
+                "status": status,
             }
         )
     return {
@@ -289,6 +297,15 @@ def verify_attestation_receipt(
         {
             "receipt": key_id,
             "key_document": key_document.get("key_id"),
+        },
+    )
+    key_status = str(key_document.get("status") or "").lower()
+    add(
+        "key_status",
+        key_status in {"active", "retired"},
+        {
+            "status": key_status or "missing",
+            "accepted": ["active", "retired"],
         },
     )
     add(

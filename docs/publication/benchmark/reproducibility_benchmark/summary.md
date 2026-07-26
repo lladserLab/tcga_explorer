@@ -5,9 +5,9 @@ The integrity threat model is accidental drift, corruption or incomplete transfe
 
 | Analysis | Type | Patients | Internal checks | Numeric comparisons | Max abs. error | Max rel. error | Isolated reruns | Status |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Single gene | single | 365 | 40/40 | 170 | 1.14e-13 | 4e-14 | 2/2 | passed |
-| Weighted signature | weighted | 79 | 43/43 | 131 | 2.84e-14 | 7.39e-15 | 2/2 | passed |
-| Two signatures | combined_signatures | 80 | 42/42 | 159 | 4.06e-14 | 5.82e-14 | 2/2 | passed |
+| Single gene | single | 365 | 42/42 | 750 | 1.14e-13 | 5.53e-14 | 2/2 | passed |
+| Weighted signature | weighted | 79 | 41/41 | 155 | 2.84e-14 | 7.39e-15 | 2/2 | passed |
+| Two signatures | combined_signatures | 80 | 42/42 | 902 | 6.48e-14 | 7.99e-14 | 2/2 | passed |
 
 ## Clean-Container Reproduction
 

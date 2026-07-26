@@ -25,34 +25,51 @@
           "selected_model_caution_count": 0
         },
         "downloads": {
-          "audit_html": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/audit_html",
-          "audit_json": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/audit_json",
-          "continuous_csv": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/continuous_csv",
-          "continuous_png": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/continuous_png",
-          "continuous_svg": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/continuous_svg",
-          "cox_png": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/cox_png",
-          "cox_svg": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/cox_svg",
-          "csv": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/csv",
-          "json": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/json",
-          "png": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/png",
-          "r_script": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/r_script",
-          "reproduction_manifest": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/reproduction_manifest",
-          "svg": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/svg",
-          "txt": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/txt",
-          "zip": "/api/v1/analyses/204eebf3c01a4a5bbf7cef4befe803f2/download/zip"
+          "attestation": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/attestation",
+          "audit_html": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/audit_html",
+          "audit_json": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/audit_json",
+          "continuous_csv": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/continuous_csv",
+          "continuous_png": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/continuous_png",
+          "continuous_svg": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/continuous_svg",
+          "cox_png": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/cox_png",
+          "cox_svg": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/cox_svg",
+          "csv": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/csv",
+          "json": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/json",
+          "png": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/png",
+          "r_script": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/r_script",
+          "reproduction_manifest": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/reproduction_manifest",
+          "svg": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/svg",
+          "txt": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/txt",
+          "zip": "/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/zip"
         },
         "error": null,
         "expression_scale": "log2_tpm",
         "expression_scale_label": "log2(TPM + 1)",
         "gene_symbol": "CD274",
-        "id": "204eebf3c01a4a5bbf7cef4befe803f2",
+        "id": "047d0ecda3074545a5bfe1610dafecc6",
         "metrics": {
           "audit_report": {
-            "continuous_patient_records_sha256": "f13bb1725f6bd6989e06121e1d2e9f628a32db44961ca9721edd82877cb768f9",
-            "generated_at": "2026-07-25T17:51:28.760632+00:00",
-            "patient_records_sha256": "9a4365305f92a18cbb4fee882bc75b9d89516bf1b7b5a4683daf2fd3205ab100",
-            "reproducibility_hash": "918d6ffa598c724cc53ec6ffe65dcd10ec9f1dd019fb5218c74bb49f3a28d8c5",
-            "schema_version": "tcga-trace-analysis-audit-v3"
+            "continuous_patient_records_sha256": "de541631dca4170c7aba4c8f0c1b6e9b094d117fb878cb1864f84a32cd010ab1",
+            "generated_at": "2026-07-26T17:24:19.021719+00:00",
+            "patient_records_sha256": "a384a4afb02fb19aab9e5a4747257883e3d8dd421ed2a9e1355f3299aa2847d4",
+            "reproducibility_hash": "43bffc6d98dc429af98761516852ee906bddd7e25f1a47d662587f318942139c",
+            "schema_version": "tcga-trace-analysis-audit-v4",
+            "server_attestation": {
+              "algorithm": "Ed25519",
+              "audit_report_sha256": "dcc443ff816488fcd9ea08b77f00cde714fa8c981ce9e4953cf35155568fea5e",
+              "canonicalization": "tcga-trace-canonical-json-v1",
+              "issued_at": "2026-07-26T17:24:19.075051+00:00",
+              "issuer": "https://apps.cienciavida.org/tcga_explorer",
+              "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "receipt_filename": "attestation_receipt.json",
+              "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/047d0ecda3074545a5bfe1610dafecc6/download/attestation",
+              "schema_version": "tcga-trace-server-attestation-v1",
+              "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+              "signed_payload_sha256": "8c6d2835a05c3d5bd74b57918afda838e7254030905a3ffa466710865a890a3f",
+              "status": "detached_receipt",
+              "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
+            }
           },
           "clinical_adjustment": {
             "continuous_model": "continuous_user_adjusted",
@@ -63,6 +80,11 @@
               "age_at_index"
             ],
             "status": "requested"
+          },
+          "competing_risks": {
+            "applicable": false,
+            "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+            "status": "not_applicable"
           },
           "continuous_analysis": {
             "cutpoint_independent": true,
@@ -111,6 +133,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9785706468372924,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -175,6 +220,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9951571790453776,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -298,6 +366,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.6453904362686137,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               }
             ],
@@ -316,7 +407,22 @@
               "aic_linear": 1947.8242163579864,
               "aic_spline": 1950.707203758554,
               "degrees_freedom": 3,
+              "events_per_parameter": 60.666666666666664,
               "implementation": "splines::ns with linear tails",
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 60.666666666666664,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 182,
+                "parameter_count": 3,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
               "knot_percentiles": [
                 5,
                 35,
@@ -547,6 +653,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.9011230299301644,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -608,6 +737,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.6728434571537228,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -728,6 +880,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.6425885384758251,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             }
           ],
@@ -749,6 +924,8 @@
           "endpoint_label": "Overall survival",
           "endpoint_qc": {
             "available": true,
+            "competing_events": 0,
+            "competing_risk_available": false,
             "events": 182,
             "label": "Overall survival",
             "patients": 505,
@@ -813,6 +990,11 @@
           },
           "expression_scale": "log2_tpm",
           "expression_scale_label": "log2(TPM + 1)",
+          "external_covariates": {
+            "schema_version": null,
+            "selected_covariates": [],
+            "status": "not_provided"
+          },
           "group_counts": {
             "High": 76,
             "Low": 429
@@ -1014,6 +1196,7 @@
           "signature_interaction_cox_models": [],
           "software_versions": {
             "R": "R version 4.4.2 (2024-10-31)",
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -1087,34 +1270,51 @@
           "selected_model_caution_count": 0
         },
         "downloads": {
-          "audit_html": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/audit_html",
-          "audit_json": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/audit_json",
-          "continuous_csv": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/continuous_csv",
-          "continuous_png": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/continuous_png",
-          "continuous_svg": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/continuous_svg",
-          "cox_png": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/cox_png",
-          "cox_svg": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/cox_svg",
-          "csv": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/csv",
-          "json": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/json",
-          "png": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/png",
-          "r_script": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/r_script",
-          "reproduction_manifest": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/reproduction_manifest",
-          "svg": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/svg",
-          "txt": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/txt",
-          "zip": "/api/v1/analyses/aaa1cceb5cd04ca59a9d59b694221062/download/zip"
+          "attestation": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/attestation",
+          "audit_html": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/audit_html",
+          "audit_json": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/audit_json",
+          "continuous_csv": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/continuous_csv",
+          "continuous_png": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/continuous_png",
+          "continuous_svg": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/continuous_svg",
+          "cox_png": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/cox_png",
+          "cox_svg": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/cox_svg",
+          "csv": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/csv",
+          "json": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/json",
+          "png": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/png",
+          "r_script": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/r_script",
+          "reproduction_manifest": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/reproduction_manifest",
+          "svg": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/svg",
+          "txt": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/txt",
+          "zip": "/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/zip"
         },
         "error": null,
         "expression_scale": "log2_tpm",
         "expression_scale_label": "log2(TPM + 1)",
         "gene_symbol": "CD274",
-        "id": "aaa1cceb5cd04ca59a9d59b694221062",
+        "id": "477eff5db4574eb9976fa508c4bd2ace",
         "metrics": {
           "audit_report": {
-            "continuous_patient_records_sha256": "f13bb1725f6bd6989e06121e1d2e9f628a32db44961ca9721edd82877cb768f9",
-            "generated_at": "2026-07-25T17:51:31.871787+00:00",
-            "patient_records_sha256": "ac02621f429d7b9ebbc84c5ffcb402a8ef7cfe621cfa50d1d32e10d9d4c9d1d1",
-            "reproducibility_hash": "1797b1e98a6dc61cc1ef8d955e3db12c39a925e3a21612742e341eed01896bc3",
-            "schema_version": "tcga-trace-analysis-audit-v3"
+            "continuous_patient_records_sha256": "de541631dca4170c7aba4c8f0c1b6e9b094d117fb878cb1864f84a32cd010ab1",
+            "generated_at": "2026-07-26T17:24:22.358221+00:00",
+            "patient_records_sha256": "16159691c1bd981d977d3c6c6ebebdb791b1afad1effe6bac3b000b48b24246a",
+            "reproducibility_hash": "0ebdfe5895a8000a8f40aed52a1fd687c9b8de218092cabf31fb75d855314fbc",
+            "schema_version": "tcga-trace-analysis-audit-v4",
+            "server_attestation": {
+              "algorithm": "Ed25519",
+              "audit_report_sha256": "428bf11cf1a3a8b60dca7fe19d68e40f45e5dfbc28ea7d117bb46ba7f0423609",
+              "canonicalization": "tcga-trace-canonical-json-v1",
+              "issued_at": "2026-07-26T17:24:22.409934+00:00",
+              "issuer": "https://apps.cienciavida.org/tcga_explorer",
+              "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "receipt_filename": "attestation_receipt.json",
+              "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/477eff5db4574eb9976fa508c4bd2ace/download/attestation",
+              "schema_version": "tcga-trace-server-attestation-v1",
+              "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+              "signed_payload_sha256": "c3ec5c9a93269bf995b8fb179addc6a384728f6c8e7ad5cbda7c0da48bac7f98",
+              "status": "detached_receipt",
+              "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
+            }
           },
           "clinical_adjustment": {
             "continuous_model": "continuous_user_adjusted",
@@ -1125,6 +1325,11 @@
               "age_at_index"
             ],
             "status": "requested"
+          },
+          "competing_risks": {
+            "applicable": false,
+            "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+            "status": "not_applicable"
           },
           "continuous_analysis": {
             "cutpoint_independent": true,
@@ -1173,6 +1378,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9785706468372924,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -1237,6 +1465,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9951571790453776,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -1360,6 +1611,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.6453904362686137,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               }
             ],
@@ -1378,7 +1652,22 @@
               "aic_linear": 1947.8242163579864,
               "aic_spline": 1950.707203758554,
               "degrees_freedom": 3,
+              "events_per_parameter": 60.666666666666664,
               "implementation": "splines::ns with linear tails",
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 60.666666666666664,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 182,
+                "parameter_count": 3,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
               "knot_percentiles": [
                 5,
                 35,
@@ -1609,6 +1898,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.8695159878176911,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -1670,6 +1982,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.795832894531088,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -1790,6 +2125,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.6366439132018431,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             }
           ],
@@ -1801,6 +2159,8 @@
           "endpoint_label": "Overall survival",
           "endpoint_qc": {
             "available": true,
+            "competing_events": 0,
+            "competing_risk_available": false,
             "events": 182,
             "label": "Overall survival",
             "patients": 505,
@@ -1865,6 +2225,11 @@
           },
           "expression_scale": "log2_tpm",
           "expression_scale_label": "log2(TPM + 1)",
+          "external_covariates": {
+            "schema_version": null,
+            "selected_covariates": [],
+            "status": "not_provided"
+          },
           "group_counts": {
             "High": 252,
             "Low": 253
@@ -2066,6 +2431,7 @@
           "signature_interaction_cox_models": [],
           "software_versions": {
             "R": "R version 4.4.2 (2024-10-31)",
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -2139,34 +2505,51 @@
           "selected_model_caution_count": 0
         },
         "downloads": {
-          "audit_html": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/audit_html",
-          "audit_json": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/audit_json",
-          "continuous_csv": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/continuous_csv",
-          "continuous_png": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/continuous_png",
-          "continuous_svg": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/continuous_svg",
-          "cox_png": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/cox_png",
-          "cox_svg": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/cox_svg",
-          "csv": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/csv",
-          "json": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/json",
-          "png": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/png",
-          "r_script": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/r_script",
-          "reproduction_manifest": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/reproduction_manifest",
-          "svg": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/svg",
-          "txt": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/txt",
-          "zip": "/api/v1/analyses/5a5bd09a93b24a7999185c349b987e7b/download/zip"
+          "attestation": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/attestation",
+          "audit_html": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/audit_html",
+          "audit_json": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/audit_json",
+          "continuous_csv": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/continuous_csv",
+          "continuous_png": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/continuous_png",
+          "continuous_svg": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/continuous_svg",
+          "cox_png": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/cox_png",
+          "cox_svg": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/cox_svg",
+          "csv": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/csv",
+          "json": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/json",
+          "png": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/png",
+          "r_script": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/r_script",
+          "reproduction_manifest": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/reproduction_manifest",
+          "svg": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/svg",
+          "txt": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/txt",
+          "zip": "/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/zip"
         },
         "error": null,
         "expression_scale": "log2_tpm",
         "expression_scale_label": "log2(TPM + 1)",
         "gene_symbol": "CD274",
-        "id": "5a5bd09a93b24a7999185c349b987e7b",
+        "id": "201d896fdcd949c0926b6766786eac01",
         "metrics": {
           "audit_report": {
-            "continuous_patient_records_sha256": "f13bb1725f6bd6989e06121e1d2e9f628a32db44961ca9721edd82877cb768f9",
-            "generated_at": "2026-07-25T17:51:35.017141+00:00",
-            "patient_records_sha256": "47f83d53c1b0e41c733ce12708c97b62b946cb3195777109c3c6f324af4c4def",
-            "reproducibility_hash": "ba36302288bb50bc563e3b493cb5d6c3d7c056e22dd57ff6613cf28ee0557e51",
-            "schema_version": "tcga-trace-analysis-audit-v3"
+            "continuous_patient_records_sha256": "de541631dca4170c7aba4c8f0c1b6e9b094d117fb878cb1864f84a32cd010ab1",
+            "generated_at": "2026-07-26T17:24:25.688595+00:00",
+            "patient_records_sha256": "1b0002e40e197fb5d1fa7f6678b3bde8d974fe7d08688de2a8477662bacd5154",
+            "reproducibility_hash": "ac8be22e87109fe13822d57d1a652192af80e9161364b3642069beb54139db9d",
+            "schema_version": "tcga-trace-analysis-audit-v4",
+            "server_attestation": {
+              "algorithm": "Ed25519",
+              "audit_report_sha256": "9f72cb6c734928032cbf92a63628065b9ec2032add8a745f7307a37a3941d6b1",
+              "canonicalization": "tcga-trace-canonical-json-v1",
+              "issued_at": "2026-07-26T17:24:25.767784+00:00",
+              "issuer": "https://apps.cienciavida.org/tcga_explorer",
+              "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "receipt_filename": "attestation_receipt.json",
+              "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/201d896fdcd949c0926b6766786eac01/download/attestation",
+              "schema_version": "tcga-trace-server-attestation-v1",
+              "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+              "signed_payload_sha256": "3589969f29a9f53cd6ec6826c38db48723437ec8978d28d9dc46fede769f48ab",
+              "status": "detached_receipt",
+              "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
+            }
           },
           "clinical_adjustment": {
             "continuous_model": "continuous_user_adjusted",
@@ -2177,6 +2560,11 @@
               "age_at_index"
             ],
             "status": "requested"
+          },
+          "competing_risks": {
+            "applicable": false,
+            "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+            "status": "not_applicable"
           },
           "continuous_analysis": {
             "cutpoint_independent": true,
@@ -2225,6 +2613,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9785706468372924,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -2289,6 +2700,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9951571790453776,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -2412,6 +2846,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.6453904362686137,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               }
             ],
@@ -2430,7 +2887,22 @@
               "aic_linear": 1947.8242163579864,
               "aic_spline": 1950.707203758554,
               "degrees_freedom": 3,
+              "events_per_parameter": 60.666666666666664,
               "implementation": "splines::ns with linear tails",
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 60.666666666666664,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 182,
+                "parameter_count": 3,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
               "knot_percentiles": [
                 5,
                 35,
@@ -2661,6 +3133,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low/Medium",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.9832257424852963,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -2722,6 +3217,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low/Medium",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.9439451266132232,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -2842,6 +3360,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low/Medium",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.8042399322996453,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             }
           ],
@@ -2853,6 +3394,8 @@
           "endpoint_label": "Overall survival",
           "endpoint_qc": {
             "available": true,
+            "competing_events": 0,
+            "competing_risk_available": false,
             "events": 182,
             "label": "Overall survival",
             "patients": 505,
@@ -2917,6 +3460,11 @@
           },
           "expression_scale": "log2_tpm",
           "expression_scale_label": "log2(TPM + 1)",
+          "external_covariates": {
+            "schema_version": null,
+            "selected_covariates": [],
+            "status": "not_provided"
+          },
           "group_counts": {
             "High": 127,
             "Low/Medium": 378
@@ -3118,6 +3666,7 @@
           "signature_interaction_cox_models": [],
           "software_versions": {
             "R": "R version 4.4.2 (2024-10-31)",
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -3191,34 +3740,51 @@
           "selected_model_caution_count": 0
         },
         "downloads": {
-          "audit_html": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/audit_html",
-          "audit_json": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/audit_json",
-          "continuous_csv": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/continuous_csv",
-          "continuous_png": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/continuous_png",
-          "continuous_svg": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/continuous_svg",
-          "cox_png": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/cox_png",
-          "cox_svg": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/cox_svg",
-          "csv": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/csv",
-          "json": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/json",
-          "png": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/png",
-          "r_script": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/r_script",
-          "reproduction_manifest": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/reproduction_manifest",
-          "svg": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/svg",
-          "txt": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/txt",
-          "zip": "/api/v1/analyses/714b96acf9f74135beaffc7dd91deb60/download/zip"
+          "attestation": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/attestation",
+          "audit_html": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/audit_html",
+          "audit_json": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/audit_json",
+          "continuous_csv": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/continuous_csv",
+          "continuous_png": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/continuous_png",
+          "continuous_svg": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/continuous_svg",
+          "cox_png": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/cox_png",
+          "cox_svg": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/cox_svg",
+          "csv": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/csv",
+          "json": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/json",
+          "png": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/png",
+          "r_script": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/r_script",
+          "reproduction_manifest": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/reproduction_manifest",
+          "svg": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/svg",
+          "txt": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/txt",
+          "zip": "/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/zip"
         },
         "error": null,
         "expression_scale": "log2_tpm",
         "expression_scale_label": "log2(TPM + 1)",
         "gene_symbol": "CD274",
-        "id": "714b96acf9f74135beaffc7dd91deb60",
+        "id": "405f158f86fd4a1d9925f045bb624006",
         "metrics": {
           "audit_report": {
-            "continuous_patient_records_sha256": "f13bb1725f6bd6989e06121e1d2e9f628a32db44961ca9721edd82877cb768f9",
-            "generated_at": "2026-07-25T17:51:37.996831+00:00",
-            "patient_records_sha256": "8471461c4f67464dee41221b4ece676806e65e090c5a28803f704012437c0c5a",
-            "reproducibility_hash": "374a41e4040311cfdfa82b44d508672fa37319f7a98ee1b9803909d8044a5429",
-            "schema_version": "tcga-trace-analysis-audit-v3"
+            "continuous_patient_records_sha256": "de541631dca4170c7aba4c8f0c1b6e9b094d117fb878cb1864f84a32cd010ab1",
+            "generated_at": "2026-07-26T17:24:28.904411+00:00",
+            "patient_records_sha256": "301bb7b275c9c061868132c54edd1af4150672252daafdabde90410bb012464f",
+            "reproducibility_hash": "ac0177288854a1d90890b4da230227231334f93cf3cef5b79fc4bbe6a6f613a4",
+            "schema_version": "tcga-trace-analysis-audit-v4",
+            "server_attestation": {
+              "algorithm": "Ed25519",
+              "audit_report_sha256": "02d3bb607043bbd21b870478399f681d1eae489900a9d3bfe4a774b2d05c83e9",
+              "canonicalization": "tcga-trace-canonical-json-v1",
+              "issued_at": "2026-07-26T17:24:28.948496+00:00",
+              "issuer": "https://apps.cienciavida.org/tcga_explorer",
+              "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+              "receipt_filename": "attestation_receipt.json",
+              "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/405f158f86fd4a1d9925f045bb624006/download/attestation",
+              "schema_version": "tcga-trace-server-attestation-v1",
+              "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+              "signed_payload_sha256": "0f9955e3326c7394f6b2360482a201ad5ff7c0eaed55ac01a7f98ba84c2c8214",
+              "status": "detached_receipt",
+              "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
+            }
           },
           "clinical_adjustment": {
             "continuous_model": "continuous_user_adjusted",
@@ -3229,6 +3795,11 @@
               "age_at_index"
             ],
             "status": "requested"
+          },
+          "competing_risks": {
+            "applicable": false,
+            "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+            "status": "not_applicable"
           },
           "continuous_analysis": {
             "cutpoint_independent": true,
@@ -3277,6 +3848,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9785706468372924,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -3341,6 +3935,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.9951571790453776,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               },
               {
@@ -3464,6 +4081,29 @@
                 "status": "completed",
                 "term": "expression_z",
                 "ties": "efron",
+                "time_varying_effect": {
+                  "analysis_role": "primary",
+                  "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                  "effect_label": "Expression per +1 SD",
+                  "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                  "method": "Prespecified two-period Cox marker effect",
+                  "min_at_risk_at_split": 10,
+                  "min_events_per_period": 5,
+                  "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                  "sensitivity_split_years": [
+                    1,
+                    5
+                  ],
+                  "split_days": 730.5,
+                  "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                  "split_years": 2,
+                  "status": "not_triggered",
+                  "ties": "efron",
+                  "trigger": "Marker-specific cox.zph p < 0.05",
+                  "trigger_alpha": 0.05,
+                  "trigger_ph_p_value": 0.6453904362686137,
+                  "variance": "participant-clustered robust sandwich"
+                },
                 "warnings": []
               }
             ],
@@ -3482,7 +4122,22 @@
               "aic_linear": 1947.8242163579864,
               "aic_spline": 1950.707203758554,
               "degrees_freedom": 3,
+              "events_per_parameter": 60.666666666666664,
               "implementation": "splines::ns with linear tails",
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 60.666666666666664,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 182,
+                "parameter_count": 3,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
               "knot_percentiles": [
                 5,
                 35,
@@ -3713,6 +4368,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.7196894868153466,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -3774,6 +4452,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.6836399719596531,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             },
             {
@@ -3894,6 +4595,29 @@
               "status": "completed",
               "term": "groupHigh",
               "ties": "efron",
+              "time_varying_effect": {
+                "analysis_role": "primary",
+                "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+                "effect_label": "High vs Low",
+                "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+                "method": "Prespecified two-period Cox marker effect",
+                "min_at_risk_at_split": 10,
+                "min_events_per_period": 5,
+                "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+                "sensitivity_split_years": [
+                  1,
+                  5
+                ],
+                "split_days": 730.5,
+                "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+                "split_years": 2,
+                "status": "not_triggered",
+                "ties": "efron",
+                "trigger": "Marker-specific cox.zph p < 0.05",
+                "trigger_alpha": 0.05,
+                "trigger_ph_p_value": 0.9192235377098797,
+                "variance": "participant-clustered robust sandwich"
+              },
               "warnings": []
             }
           ],
@@ -3906,6 +4630,8 @@
           "endpoint_label": "Overall survival",
           "endpoint_qc": {
             "available": true,
+            "competing_events": 0,
+            "competing_risk_available": false,
             "events": 182,
             "label": "Overall survival",
             "patients": 505,
@@ -3970,6 +4696,11 @@
           },
           "expression_scale": "log2_tpm",
           "expression_scale_label": "log2(TPM + 1)",
+          "external_covariates": {
+            "schema_version": null,
+            "selected_covariates": [],
+            "status": "not_provided"
+          },
           "group_counts": {
             "High": 127,
             "Low": 127
@@ -4171,6 +4902,7 @@
           "signature_interaction_cox_models": [],
           "software_versions": {
             "R": "R version 4.4.2 (2024-10-31)",
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",

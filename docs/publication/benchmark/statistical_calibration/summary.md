@@ -32,6 +32,20 @@ This benchmark evaluates the revised evidence profile; it does not calibrate or 
 
 Rates are operating characteristics of different estimands. In particular, the PH column measures diagnostic sensitivity rather than biomarker association power.
 
+## Linear-PH Association Power
+
+The same 2,000 linear-PH replicates compare the cutpoint-independent primary test with valid method-specific grouped tests:
+
+| Continuous Cox | Maxstat Lau94 | Median | Upper quartile | Outer quartiles | Grouped Holm family |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 99.2% (98.8-99.5) | 94.3% (93.3-95.3) | 93.9% (92.8-94.9) | 93.5% (92.3-94.5) | 97.8% (97.1-98.4) | 96.4% (95.4-97.1) |
+
+This strong linear alternative supports the continuous Cox model as the primary association test in this design; it is not a claim of universal power dominance. Outer-quartile grouping increases contrast while discarding the middle half of participants.
+
+## Null Calibration Interpretation
+
+For the observed-cohort permutation, the Wilson intervals for continuous Cox, spline nonlinearity and marker PH include 0.05. The grouped Holm family and Lau94 intervals lie below 0.05, whereas naive maxstat lies far above it. Holm therefore controls the declared 0.05 familywise level conservatively under these dependent cutpoints; lack of grouped support is not evidence of absence of a continuous effect.
+
 ## Dependence of Grouped Summaries
 
 Under observed-cohort expression permutation with a median split:

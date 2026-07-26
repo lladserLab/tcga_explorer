@@ -1,14 +1,27 @@
 {
-  "schema_version": "tcga-trace-analysis-audit-v3",
+  "schema_version": "tcga-trace-analysis-audit-v4",
   "report_type": "survival_analysis_audit",
-  "analysis_id": "a9b10394b0e74132859f8fe428e135af",
-  "generated_at": "2026-07-25T18:19:21.438486+00:00",
-  "reproducibility_hash": "dd267fde950e5147cb5fea76e5b7af6a33fe467ee35482c30b52d7574ed3c6b1",
+  "analysis_id": "3375cd134d28419581df52a8bacb4b53",
+  "generated_at": "2026-07-26T17:44:16.532481+00:00",
+  "reproducibility_hash": "63faae5e22faeda5d35ee6937da3c4091ca9e68ee846ae874059fb48f82277fc",
   "integrity_scope": {
     "threat_model": "Detect accidental analysis drift, file corruption and incomplete transfer relative to the values recorded in this export.",
-    "not_an_authenticity_proof": "These are unsigned SHA-256 digests. An exporter who can alter content and recompute every digest is outside scope; independent attestation is required to establish origin or resist adversarial forgery.",
+    "not_an_authenticity_proof": "SHA-256 digests alone do not prove origin. When present, the detached Ed25519 server receipt binds the exact audit report to the public key published by the declared HTTPS issuer; it does not establish scientific correctness or an append-only publication time.",
     "reproducibility_hash_boundary": "The reproducibility hash binds the fields named in reproducibility_hash_definition.payload_fields.",
     "artifact_boundary": "Rendered plots and methodology files are outside the reproducibility hash and are protected separately by artifact byte counts and SHA-256 checksums."
+  },
+  "server_attestation": {
+    "status": "detached_receipt",
+    "schema_version": "tcga-trace-server-attestation-v1",
+    "algorithm": "Ed25519",
+    "canonicalization": "tcga-trace-canonical-json-v1",
+    "issuer": "https://apps.cienciavida.org/tcga_explorer",
+    "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+    "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+    "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/attestation",
+    "receipt_filename": "attestation_receipt.json",
+    "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+    "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
   },
   "reproducibility_hash_definition": {
     "algorithm": "sha256 over canonical JSON with sorted keys and compact separators",
@@ -54,6 +67,8 @@
     "adjustment_covariates": [
       "age_at_index"
     ],
+    "external_covariates": null,
+    "external_adjustment_covariates": [],
     "time_unit": "months",
     "show_confidence_interval": true,
     "show_risk_table": false,
@@ -88,7 +103,7 @@
         "x_axis_title": null
       }
     },
-    "pipeline_version": "expression-complete-integrity-contract-v6.5",
+    "pipeline_version": "server-attested-competing-risk-contract-v6.13",
     "data_version": {
       "tcga_cdr": {
         "manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
@@ -106,7 +121,7 @@
     }
   },
   "pipeline": {
-    "version": "expression-complete-integrity-contract-v6.5",
+    "version": "server-attested-competing-risk-contract-v6.13",
     "software_versions": {
       "Python": "3.12.3",
       "FastAPI": "0.115.6",
@@ -121,7 +136,8 @@
       "R/ggplot2": "4.0.3",
       "R/svglite": "2.2.2",
       "R/survRM2": "1.0.4",
-      "R/coxphf": "1.13.4"
+      "R/coxphf": "1.13.4",
+      "R/cmprsk": "2.2.12"
     }
   },
   "data": {
@@ -130,9 +146,9 @@
       "source_summary_file": "2026-04-22T16:16:36+00:00",
       "source_latest_metadata_file": "2026-04-22T16:16:36+00:00",
       "database_imported_at": "2026-04-27T16:45:36.888931+00:00",
-      "rna_cache_generated_at": "2026-07-25T18:19:03.290528+00:00",
+      "rna_cache_generated_at": "2026-07-26T17:25:09.418157+00:00",
       "tcga_cdr_source_file": "2026-04-27T16:45:29.753288+00:00",
-      "tcga_cdr_imported_at": "2026-04-27T16:45:38.378020+00:00",
+      "tcga_cdr_imported_at": "2026-07-26T00:15:57.567523+00:00",
       "data_through_date": null,
       "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264"
     },
@@ -147,7 +163,13 @@
         "source": "tcga_cdr",
         "patients": 79,
         "events": 28,
+        "competing_events": 0,
+        "competing_risk_available": false,
         "reason": "79 linked patients and 28 events from TCGA-CDR."
+      },
+      "estimand_context": {
+        "endpoint": "OS",
+        "competing_risk_context_applicable": false
       }
     },
     "expression_scale": {
@@ -1751,6 +1773,20 @@
     "adjustment_covariates": [
       "age_at_index"
     ],
+    "external_adjustment_covariates": [],
+    "external_covariates": {
+      "status": "not_provided",
+      "schema_version": null,
+      "source_label": null,
+      "selected_covariates": [],
+      "selected_definitions": [],
+      "quality_control": {
+        "status": "not_provided",
+        "schema_version": null,
+        "selected_covariates": []
+      },
+      "coding": []
+    },
     "clinical_adjustment": {
       "status": "requested",
       "requested_covariates": [
@@ -1760,6 +1796,14 @@
       "grouped_model": "user_adjusted",
       "continuous_model": "continuous_user_adjusted",
       "interaction_model": "signature_interaction_user_adjusted"
+    },
+    "score_transportability": {
+      "applicable": false,
+      "score_methods": [
+        "weighted"
+      ],
+      "status": "not_applicable",
+      "reason": "No z-score signature method was requested."
     },
     "time_unit": "months",
     "plot_style": {
@@ -1839,7 +1883,7 @@
       "removed_duplicate_sample_types": {}
     },
     "patient_record_count": 79,
-    "patient_records_sha256": "860e92e5bff85d12ce37fdfc5ab618de46fdc9b7f40ce3167a24c93fe94e5a69",
+    "patient_records_sha256": "a65f4d03d2e14ba9e0b33fdbbdaf77074e1ae0afa1af3561d34d75ca1d178381",
     "patient_records": [
       {
         "patient_id": "TCGA-OR-A5J1",
@@ -1853,12 +1897,16 @@
         "group_b": null,
         "time_days": 1355.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 58.0
+        "age_at_index": 58.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J2",
@@ -1872,12 +1920,16 @@
         "group_b": null,
         "time_days": 1677.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 44.0
+        "age_at_index": 44.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J3",
@@ -1891,12 +1943,16 @@
         "group_b": null,
         "time_days": 2091.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J5",
@@ -1910,12 +1966,16 @@
         "group_b": null,
         "time_days": 365.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J7",
@@ -1929,12 +1989,16 @@
         "group_b": null,
         "time_days": 490.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J8",
@@ -1948,12 +2012,16 @@
         "group_b": null,
         "time_days": 579.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 66.0
+        "age_at_index": 66.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J9",
@@ -1967,12 +2035,16 @@
         "group_b": null,
         "time_days": 1352.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 22.0
+        "age_at_index": 22.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JA",
@@ -1986,12 +2058,16 @@
         "group_b": null,
         "time_days": 922.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JB",
@@ -2005,12 +2081,16 @@
         "group_b": null,
         "time_days": 551.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JC",
@@ -2024,12 +2104,16 @@
         "group_b": null,
         "time_days": 1750.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": null,
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JD",
@@ -2043,12 +2127,16 @@
         "group_b": null,
         "time_days": 3038.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 57.0
+        "age_at_index": 57.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JE",
@@ -2062,12 +2150,16 @@
         "group_b": null,
         "time_days": 2105.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 17.0
+        "age_at_index": 17.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JF",
@@ -2081,12 +2173,16 @@
         "group_b": null,
         "time_days": 2015.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 69.0
+        "age_at_index": 69.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JG",
@@ -2100,12 +2196,16 @@
         "group_b": null,
         "time_days": 541.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JI",
@@ -2119,12 +2219,16 @@
         "group_b": null,
         "time_days": 2331.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 22.0
+        "age_at_index": 22.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JJ",
@@ -2138,12 +2242,16 @@
         "group_b": null,
         "time_days": 490.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JK",
@@ -2157,12 +2265,16 @@
         "group_b": null,
         "time_days": 1497.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 49.0
+        "age_at_index": 49.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JL",
@@ -2176,12 +2288,16 @@
         "group_b": null,
         "time_days": 2056.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JM",
@@ -2195,12 +2311,16 @@
         "group_b": null,
         "time_days": 562.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 25.0
+        "age_at_index": 25.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JO",
@@ -2214,12 +2334,16 @@
         "group_b": null,
         "time_days": 1194.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 26.0
+        "age_at_index": 26.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JP",
@@ -2233,12 +2357,16 @@
         "group_b": null,
         "time_days": 464.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 40.0
+        "age_at_index": 40.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JQ",
@@ -2252,12 +2380,16 @@
         "group_b": null,
         "time_days": 1103.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 26.0
+        "age_at_index": 26.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JR",
@@ -2271,12 +2403,16 @@
         "group_b": null,
         "time_days": 3688.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 45.0
+        "age_at_index": 45.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JS",
@@ -2290,12 +2426,16 @@
         "group_b": null,
         "time_days": 383.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JT",
@@ -2309,12 +2449,16 @@
         "group_b": null,
         "time_days": 907.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JV",
@@ -2328,12 +2472,16 @@
         "group_b": null,
         "time_days": 2023.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JW",
@@ -2347,12 +2495,16 @@
         "group_b": null,
         "time_days": 2202.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 47.0
+        "age_at_index": 47.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JX",
@@ -2366,12 +2518,16 @@
         "group_b": null,
         "time_days": 950.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 50.0
+        "age_at_index": 50.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JZ",
@@ -2385,12 +2541,16 @@
         "group_b": null,
         "time_days": 822.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 60.0
+        "age_at_index": 60.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K0",
@@ -2404,12 +2564,16 @@
         "group_b": null,
         "time_days": 1029.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 69.0
+        "age_at_index": 69.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K1",
@@ -2423,12 +2587,16 @@
         "group_b": null,
         "time_days": 3289.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 48.0
+        "age_at_index": 48.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K2",
@@ -2442,12 +2610,16 @@
         "group_b": null,
         "time_days": 994.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 32.0
+        "age_at_index": 32.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K3",
@@ -2461,12 +2633,16 @@
         "group_b": null,
         "time_days": 3465.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K4",
@@ -2480,12 +2656,16 @@
         "group_b": null,
         "time_days": 1082.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 64.0
+        "age_at_index": 64.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K5",
@@ -2499,12 +2679,16 @@
         "group_b": null,
         "time_days": 498.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 59.0
+        "age_at_index": 59.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K6",
@@ -2518,12 +2702,16 @@
         "group_b": null,
         "time_days": 1493.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 56.0
+        "age_at_index": 56.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K8",
@@ -2537,12 +2725,16 @@
         "group_b": null,
         "time_days": 749.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 39.0
+        "age_at_index": 39.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K9",
@@ -2556,12 +2748,16 @@
         "group_b": null,
         "time_days": 344.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KO",
@@ -2575,12 +2771,16 @@
         "group_b": null,
         "time_days": 1414.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 39.0
+        "age_at_index": 39.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KT",
@@ -2594,12 +2794,16 @@
         "group_b": null,
         "time_days": 2895.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 44.0
+        "age_at_index": 44.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KU",
@@ -2613,12 +2817,16 @@
         "group_b": null,
         "time_days": 4673.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KV",
@@ -2632,12 +2840,16 @@
         "group_b": null,
         "time_days": 3878.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 17.0
+        "age_at_index": 17.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KW",
@@ -2651,12 +2863,16 @@
         "group_b": null,
         "time_days": 2076.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KX",
@@ -2670,12 +2886,16 @@
         "group_b": null,
         "time_days": 1364.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 25.0
+        "age_at_index": 25.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KY",
@@ -2689,12 +2909,16 @@
         "group_b": null,
         "time_days": 391.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KZ",
@@ -2708,12 +2932,16 @@
         "group_b": null,
         "time_days": 125.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 42.0
+        "age_at_index": 42.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L3",
@@ -2727,12 +2955,16 @@
         "group_b": null,
         "time_days": 4628.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 67.0
+        "age_at_index": 67.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L4",
@@ -2746,12 +2978,16 @@
         "group_b": null,
         "time_days": 967.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 48.0
+        "age_at_index": 48.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L5",
@@ -2765,12 +3001,16 @@
         "group_b": null,
         "time_days": 1317.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IIA",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 77.0
+        "age_at_index": 77.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L6",
@@ -2784,12 +3024,16 @@
         "group_b": null,
         "time_days": 861.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 60.0
+        "age_at_index": 60.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L8",
@@ -2803,12 +3047,16 @@
         "group_b": null,
         "time_days": 885.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L9",
@@ -2822,12 +3070,16 @@
         "group_b": null,
         "time_days": 871.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LA",
@@ -2841,12 +3093,16 @@
         "group_b": null,
         "time_days": 719.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LB",
@@ -2860,12 +3116,16 @@
         "group_b": null,
         "time_days": 1204.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 59.0
+        "age_at_index": 59.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LC",
@@ -2879,12 +3139,16 @@
         "group_b": null,
         "time_days": 159.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 71.0
+        "age_at_index": 71.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LD",
@@ -2898,12 +3162,16 @@
         "group_b": null,
         "time_days": 1197.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LE",
@@ -2917,12 +3185,16 @@
         "group_b": null,
         "time_days": 662.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 14.0
+        "age_at_index": 14.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LG",
@@ -2936,12 +3208,16 @@
         "group_b": null,
         "time_days": 1589.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 46.0
+        "age_at_index": 46.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LH",
@@ -2955,12 +3231,16 @@
         "group_b": null,
         "time_days": 2385.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LJ",
@@ -2974,12 +3254,16 @@
         "group_b": null,
         "time_days": 1105.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 54.0
+        "age_at_index": 54.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LK",
@@ -2993,12 +3277,16 @@
         "group_b": null,
         "time_days": 2740.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 62.0
+        "age_at_index": 62.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LL",
@@ -3012,12 +3300,16 @@
         "group_b": null,
         "time_days": 1613.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 75.0
+        "age_at_index": 75.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LM",
@@ -3031,12 +3323,16 @@
         "group_b": null,
         "time_days": 1858.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LN",
@@ -3050,12 +3346,16 @@
         "group_b": null,
         "time_days": 2342.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 31.0
+        "age_at_index": 31.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LO",
@@ -3069,12 +3369,16 @@
         "group_b": null,
         "time_days": 2405.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LP",
@@ -3088,12 +3392,16 @@
         "group_b": null,
         "time_days": 1857.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LR",
@@ -3107,12 +3415,16 @@
         "group_b": null,
         "time_days": 853.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LS",
@@ -3126,12 +3438,16 @@
         "group_b": null,
         "time_days": 1096.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 34.0
+        "age_at_index": 34.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LT",
@@ -3145,12 +3461,16 @@
         "group_b": null,
         "time_days": 549.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 57.0
+        "age_at_index": 57.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-P6-A5OF",
@@ -3164,12 +3484,16 @@
         "group_b": null,
         "time_days": 207.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PA-A5YG",
@@ -3183,12 +3507,16 @@
         "group_b": null,
         "time_days": 756.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 51.0
+        "age_at_index": 51.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5H8",
@@ -3202,12 +3530,16 @@
         "group_b": null,
         "time_days": 3623.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 42.0
+        "age_at_index": 42.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5H9",
@@ -3221,12 +3553,16 @@
         "group_b": null,
         "time_days": 616.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "asian",
-        "age_at_index": 27.0
+        "age_at_index": 27.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5HA",
@@ -3240,12 +3576,16 @@
         "group_b": null,
         "time_days": 1201.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "Unknown",
-        "age_at_index": 63.0
+        "age_at_index": 63.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5HB",
@@ -3259,12 +3599,16 @@
         "group_b": null,
         "time_days": 1293.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": null,
         "grade": null,
         "gender": "male",
         "race": "Unknown",
-        "age_at_index": 63.0
+        "age_at_index": 63.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OU-A5PI",
@@ -3278,12 +3622,16 @@
         "group_b": null,
         "time_days": 1171.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-P6-A5OG",
@@ -3297,12 +3645,16 @@
         "group_b": null,
         "time_days": 383.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 45.0
+        "age_at_index": 45.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J6",
@@ -3316,12 +3668,16 @@
         "group_b": null,
         "time_days": 2703.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "black or african american",
-        "age_at_index": 29.0
+        "age_at_index": 29.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JY",
@@ -3335,18 +3691,22 @@
         "group_b": null,
         "time_days": 552.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 68.0
+        "age_at_index": 68.0,
+        "external_covariates": {}
       }
     ],
     "stratified_patient_record_count": 79,
-    "stratified_patient_records_sha256": "860e92e5bff85d12ce37fdfc5ab618de46fdc9b7f40ce3167a24c93fe94e5a69",
+    "stratified_patient_records_sha256": "a65f4d03d2e14ba9e0b33fdbbdaf77074e1ae0afa1af3561d34d75ca1d178381",
     "continuous_patient_record_count": 79,
-    "continuous_patient_records_sha256": "925e4731858d69821a21e0a37acc047c6a6d6a46db9778db139557aad1d30c42",
+    "continuous_patient_records_sha256": "d4d1d958c2164a94ae7f154f271b27081a01b31abd6cd2473bfb7279fdb38a5a",
     "continuous_patient_records": [
       {
         "patient_id": "TCGA-OR-A5J1",
@@ -3360,12 +3720,16 @@
         "group_b": null,
         "time_days": 1355.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 58.0
+        "age_at_index": 58.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J2",
@@ -3379,12 +3743,16 @@
         "group_b": null,
         "time_days": 1677.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 44.0
+        "age_at_index": 44.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J3",
@@ -3398,12 +3766,16 @@
         "group_b": null,
         "time_days": 2091.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J5",
@@ -3417,12 +3789,16 @@
         "group_b": null,
         "time_days": 365.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J7",
@@ -3436,12 +3812,16 @@
         "group_b": null,
         "time_days": 490.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J8",
@@ -3455,12 +3835,16 @@
         "group_b": null,
         "time_days": 579.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 66.0
+        "age_at_index": 66.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J9",
@@ -3474,12 +3858,16 @@
         "group_b": null,
         "time_days": 1352.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 22.0
+        "age_at_index": 22.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JA",
@@ -3493,12 +3881,16 @@
         "group_b": null,
         "time_days": 922.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JB",
@@ -3512,12 +3904,16 @@
         "group_b": null,
         "time_days": 551.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JC",
@@ -3531,12 +3927,16 @@
         "group_b": null,
         "time_days": 1750.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": null,
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JD",
@@ -3550,12 +3950,16 @@
         "group_b": null,
         "time_days": 3038.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 57.0
+        "age_at_index": 57.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JE",
@@ -3569,12 +3973,16 @@
         "group_b": null,
         "time_days": 2105.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 17.0
+        "age_at_index": 17.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JF",
@@ -3588,12 +3996,16 @@
         "group_b": null,
         "time_days": 2015.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 69.0
+        "age_at_index": 69.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JG",
@@ -3607,12 +4019,16 @@
         "group_b": null,
         "time_days": 541.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JI",
@@ -3626,12 +4042,16 @@
         "group_b": null,
         "time_days": 2331.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 22.0
+        "age_at_index": 22.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JJ",
@@ -3645,12 +4065,16 @@
         "group_b": null,
         "time_days": 490.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JK",
@@ -3664,12 +4088,16 @@
         "group_b": null,
         "time_days": 1497.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 49.0
+        "age_at_index": 49.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JL",
@@ -3683,12 +4111,16 @@
         "group_b": null,
         "time_days": 2056.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JM",
@@ -3702,12 +4134,16 @@
         "group_b": null,
         "time_days": 562.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 25.0
+        "age_at_index": 25.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JO",
@@ -3721,12 +4157,16 @@
         "group_b": null,
         "time_days": 1194.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 26.0
+        "age_at_index": 26.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JP",
@@ -3740,12 +4180,16 @@
         "group_b": null,
         "time_days": 464.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 40.0
+        "age_at_index": 40.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JQ",
@@ -3759,12 +4203,16 @@
         "group_b": null,
         "time_days": 1103.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 26.0
+        "age_at_index": 26.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JR",
@@ -3778,12 +4226,16 @@
         "group_b": null,
         "time_days": 3688.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 45.0
+        "age_at_index": 45.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JS",
@@ -3797,12 +4249,16 @@
         "group_b": null,
         "time_days": 383.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JT",
@@ -3816,12 +4272,16 @@
         "group_b": null,
         "time_days": 907.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 65.0
+        "age_at_index": 65.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JV",
@@ -3835,12 +4295,16 @@
         "group_b": null,
         "time_days": 2023.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JW",
@@ -3854,12 +4318,16 @@
         "group_b": null,
         "time_days": 2202.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 47.0
+        "age_at_index": 47.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JX",
@@ -3873,12 +4341,16 @@
         "group_b": null,
         "time_days": 950.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 50.0
+        "age_at_index": 50.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JZ",
@@ -3892,12 +4364,16 @@
         "group_b": null,
         "time_days": 822.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 60.0
+        "age_at_index": 60.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K0",
@@ -3911,12 +4387,16 @@
         "group_b": null,
         "time_days": 1029.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 69.0
+        "age_at_index": 69.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K1",
@@ -3930,12 +4410,16 @@
         "group_b": null,
         "time_days": 3289.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 48.0
+        "age_at_index": 48.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K2",
@@ -3949,12 +4433,16 @@
         "group_b": null,
         "time_days": 994.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 32.0
+        "age_at_index": 32.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K3",
@@ -3968,12 +4456,16 @@
         "group_b": null,
         "time_days": 3465.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K4",
@@ -3987,12 +4479,16 @@
         "group_b": null,
         "time_days": 1082.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 64.0
+        "age_at_index": 64.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K5",
@@ -4006,12 +4502,16 @@
         "group_b": null,
         "time_days": 498.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 59.0
+        "age_at_index": 59.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K6",
@@ -4025,12 +4525,16 @@
         "group_b": null,
         "time_days": 1493.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 56.0
+        "age_at_index": 56.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K8",
@@ -4044,12 +4548,16 @@
         "group_b": null,
         "time_days": 749.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 39.0
+        "age_at_index": 39.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5K9",
@@ -4063,12 +4571,16 @@
         "group_b": null,
         "time_days": 344.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KO",
@@ -4082,12 +4594,16 @@
         "group_b": null,
         "time_days": 1414.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 39.0
+        "age_at_index": 39.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KT",
@@ -4101,12 +4617,16 @@
         "group_b": null,
         "time_days": 2895.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 44.0
+        "age_at_index": 44.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KU",
@@ -4120,12 +4640,16 @@
         "group_b": null,
         "time_days": 4673.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KV",
@@ -4139,12 +4663,16 @@
         "group_b": null,
         "time_days": 3878.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 17.0
+        "age_at_index": 17.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KW",
@@ -4158,12 +4686,16 @@
         "group_b": null,
         "time_days": 2076.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KX",
@@ -4177,12 +4709,16 @@
         "group_b": null,
         "time_days": 1364.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 25.0
+        "age_at_index": 25.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KY",
@@ -4196,12 +4732,16 @@
         "group_b": null,
         "time_days": 391.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5KZ",
@@ -4215,12 +4755,16 @@
         "group_b": null,
         "time_days": 125.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 42.0
+        "age_at_index": 42.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L3",
@@ -4234,12 +4778,16 @@
         "group_b": null,
         "time_days": 4628.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 67.0
+        "age_at_index": 67.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L4",
@@ -4253,12 +4801,16 @@
         "group_b": null,
         "time_days": 967.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 48.0
+        "age_at_index": 48.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L5",
@@ -4272,12 +4824,16 @@
         "group_b": null,
         "time_days": 1317.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IIA",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 77.0
+        "age_at_index": 77.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L6",
@@ -4291,12 +4847,16 @@
         "group_b": null,
         "time_days": 861.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 60.0
+        "age_at_index": 60.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L8",
@@ -4310,12 +4870,16 @@
         "group_b": null,
         "time_days": 885.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5L9",
@@ -4329,12 +4893,16 @@
         "group_b": null,
         "time_days": 871.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LA",
@@ -4348,12 +4916,16 @@
         "group_b": null,
         "time_days": 719.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LB",
@@ -4367,12 +4939,16 @@
         "group_b": null,
         "time_days": 1204.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 59.0
+        "age_at_index": 59.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LC",
@@ -4386,12 +4962,16 @@
         "group_b": null,
         "time_days": 159.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 71.0
+        "age_at_index": 71.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LD",
@@ -4405,12 +4985,16 @@
         "group_b": null,
         "time_days": 1197.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 52.0
+        "age_at_index": 52.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LE",
@@ -4424,12 +5008,16 @@
         "group_b": null,
         "time_days": 662.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 14.0
+        "age_at_index": 14.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LG",
@@ -4443,12 +5031,16 @@
         "group_b": null,
         "time_days": 1589.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 46.0
+        "age_at_index": 46.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LH",
@@ -4462,12 +5054,16 @@
         "group_b": null,
         "time_days": 2385.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 36.0
+        "age_at_index": 36.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LJ",
@@ -4481,12 +5077,16 @@
         "group_b": null,
         "time_days": 1105.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 54.0
+        "age_at_index": 54.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LK",
@@ -4500,12 +5100,16 @@
         "group_b": null,
         "time_days": 2740.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 62.0
+        "age_at_index": 62.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LL",
@@ -4519,12 +5123,16 @@
         "group_b": null,
         "time_days": 1613.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 75.0
+        "age_at_index": 75.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LM",
@@ -4538,12 +5146,16 @@
         "group_b": null,
         "time_days": 1858.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 23.0
+        "age_at_index": 23.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LN",
@@ -4557,12 +5169,16 @@
         "group_b": null,
         "time_days": 2342.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 31.0
+        "age_at_index": 31.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LO",
@@ -4576,12 +5192,16 @@
         "group_b": null,
         "time_days": 2405.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 61.0
+        "age_at_index": 61.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LP",
@@ -4595,12 +5215,16 @@
         "group_b": null,
         "time_days": 1857.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 37.0
+        "age_at_index": 37.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LR",
@@ -4614,12 +5238,16 @@
         "group_b": null,
         "time_days": 853.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 30.0
+        "age_at_index": 30.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LS",
@@ -4633,12 +5261,16 @@
         "group_b": null,
         "time_days": 1096.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": null,
-        "age_at_index": 34.0
+        "age_at_index": 34.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5LT",
@@ -4652,12 +5284,16 @@
         "group_b": null,
         "time_days": 549.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "male",
         "race": null,
-        "age_at_index": 57.0
+        "age_at_index": 57.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-P6-A5OF",
@@ -4671,12 +5307,16 @@
         "group_b": null,
         "time_days": 207.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage III",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 55.0
+        "age_at_index": 55.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PA-A5YG",
@@ -4690,12 +5330,16 @@
         "group_b": null,
         "time_days": 756.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 51.0
+        "age_at_index": 51.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5H8",
@@ -4709,12 +5353,16 @@
         "group_b": null,
         "time_days": 3623.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "male",
         "race": "white",
-        "age_at_index": 42.0
+        "age_at_index": 42.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5H9",
@@ -4728,12 +5376,16 @@
         "group_b": null,
         "time_days": 616.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "asian",
-        "age_at_index": 27.0
+        "age_at_index": 27.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5HA",
@@ -4747,12 +5399,16 @@
         "group_b": null,
         "time_days": 1201.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage I",
         "grade": null,
         "gender": "male",
         "race": "Unknown",
-        "age_at_index": 63.0
+        "age_at_index": 63.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-PK-A5HB",
@@ -4766,12 +5422,16 @@
         "group_b": null,
         "time_days": 1293.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": null,
         "grade": null,
         "gender": "male",
         "race": "Unknown",
-        "age_at_index": 63.0
+        "age_at_index": 63.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OU-A5PI",
@@ -4785,12 +5445,16 @@
         "group_b": null,
         "time_days": 1171.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 53.0
+        "age_at_index": 53.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-P6-A5OG",
@@ -4804,12 +5468,16 @@
         "group_b": null,
         "time_days": 383.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 45.0
+        "age_at_index": 45.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5J6",
@@ -4823,12 +5491,16 @@
         "group_b": null,
         "time_days": 2703.0,
         "event": 0,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage II",
         "grade": null,
         "gender": "female",
         "race": "black or african american",
-        "age_at_index": 29.0
+        "age_at_index": 29.0,
+        "external_covariates": {}
       },
       {
         "patient_id": "TCGA-OR-A5JY",
@@ -4842,12 +5514,16 @@
         "group_b": null,
         "time_days": 552.0,
         "event": 1,
+        "competing_risk_status": null,
+        "competing_event": null,
+        "competing_risk_source": null,
         "sample_type": "Primary Tumor",
         "stage": "Stage IV",
         "grade": null,
         "gender": "female",
         "race": "white",
-        "age_at_index": 68.0
+        "age_at_index": 68.0,
+        "external_covariates": {}
       }
     ]
   },
@@ -4966,6 +5642,11 @@
         }
       ]
     },
+    "competing_risks": {
+      "applicable": false,
+      "status": "not_applicable",
+      "reason": "The selected endpoint has no TCGA-CDR competing-risk status."
+    },
     "continuous_analysis": {
       "status": "completed",
       "reason": null,
@@ -5025,6 +5706,29 @@
           "p_value": 3.663969453500922e-07,
           "ph_p_value": 0.29543075396158824,
           "ph_global_p_value": 0.29543075396158824,
+          "time_varying_effect": {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "primary",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.29543075396158824,
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 2,
+            "split_days": 730.5,
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Expression per +1 SD",
+            "status": "not_triggered",
+            "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+          },
           "warnings": []
         },
         {
@@ -5089,6 +5793,29 @@
           "p_value": 0.0003017896594362776,
           "ph_p_value": 0.7273824472210692,
           "ph_global_p_value": 0.5317373004362114,
+          "time_varying_effect": {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "primary",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.7273824472210692,
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 2,
+            "split_days": 730.5,
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Expression per +1 SD",
+            "status": "not_triggered",
+            "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+          },
           "warnings": []
         },
         {
@@ -5212,199 +5939,37 @@
           "p_value": 5.578429807157165e-07,
           "ph_p_value": 0.2654652539181786,
           "ph_global_p_value": 0.5208172017970246,
+          "time_varying_effect": {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "primary",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.2654652539181786,
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 2,
+            "split_days": 730.5,
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "Expression per +1 SD",
+            "status": "not_triggered",
+            "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+          },
           "warnings": []
         }
       ],
       "spline": {
-        "status": "completed",
-        "method": "restricted cubic spline",
-        "implementation": "splines::ns with linear tails",
+        "status": "skipped",
+        "reason": "Fewer than 30 events were available for the three-degree-of-freedom spline model.",
         "n_patients": 79,
-        "n_events": 28,
-        "degrees_freedom": 3,
-        "nonlinear_degrees_freedom": 2,
-        "knot_percentiles": [
-          5,
-          35,
-          65,
-          95
-        ],
-        "knots_expression": [
-          -2.2635465949773788,
-          -1.5879737198352815,
-          -0.9420943528413772,
-          -0.1519127637147913
-        ],
-        "knots_z": [
-          -1.4897315939468865,
-          -0.5575041875775334,
-          0.3337489536821156,
-          1.4241256702389362
-        ],
-        "reference_percentile": 50,
-        "reference_expression": -1.1314820647239685,
-        "reference_z": 0.07241161770722312,
-        "overall_p_value": 6.110438805528095e-06,
-        "nonlinearity_chisq": 1.5100107818759625,
-        "nonlinearity_p_value": 0.4700080809392933,
-        "aic_linear": 192.2476739209275,
-        "aic_spline": 194.73766313905153,
-        "ph_global_p_value": 0.24610591759449188,
-        "profile": [
-          {
-            "percentile": 5,
-            "expression_value": -2.2635465949773788,
-            "expression_z": -1.4897315939468865,
-            "hazard_ratio": 0.5220917067875844,
-            "hr_conf_low": 0.1097625280199351,
-            "hr_conf_high": 2.483358895003466
-          },
-          {
-            "percentile": 10,
-            "expression_value": -2.1088865399360657,
-            "expression_z": -1.276315177620552,
-            "hazard_ratio": 0.449211491209934,
-            "hr_conf_low": 0.14613148887371255,
-            "hr_conf_high": 1.38088625107653
-          },
-          {
-            "percentile": 15.000000000000002,
-            "expression_value": -1.9528502821922302,
-            "expression_z": -1.0609997302300391,
-            "hazard_ratio": 0.39898671798948127,
-            "hr_conf_low": 0.17340369321644694,
-            "hr_conf_high": 0.9180335100089955
-          },
-          {
-            "percentile": 20,
-            "expression_value": -1.8757129311561584,
-            "expression_z": -0.9545573976016987,
-            "hazard_ratio": 0.38484636198369526,
-            "hr_conf_low": 0.17864513150747593,
-            "hr_conf_high": 0.8290554636574992
-          },
-          {
-            "percentile": 25,
-            "expression_value": -1.75995934009552,
-            "expression_z": -0.7948282640871231,
-            "hazard_ratio": 0.37921434487744565,
-            "hr_conf_low": 0.18063945565369152,
-            "hr_conf_high": 0.7960803404795442
-          },
-          {
-            "percentile": 30,
-            "expression_value": -1.68826459646225,
-            "expression_z": -0.6958962208290201,
-            "hazard_ratio": 0.38680043099368916,
-            "hr_conf_low": 0.1845200308310841,
-            "hr_conf_high": 0.8108310666491594
-          },
-          {
-            "percentile": 35,
-            "expression_value": -1.5879737198352815,
-            "expression_z": -0.5575041875775334,
-            "hazard_ratio": 0.4157335270463709,
-            "hr_conf_low": 0.20336818896340855,
-            "hr_conf_high": 0.8498593924220527
-          },
-          {
-            "percentile": 40,
-            "expression_value": -1.4422231361269948,
-            "expression_z": -0.35638200871767844,
-            "hazard_ratio": 0.5092370034733256,
-            "hr_conf_low": 0.2859507943167447,
-            "hr_conf_high": 0.90687744486292
-          },
-          {
-            "percentile": 45,
-            "expression_value": -1.1884256243705749,
-            "expression_z": -0.006165170781552188,
-            "hazard_ratio": 0.872664493315339,
-            "hr_conf_low": 0.7759819624929722,
-            "hr_conf_high": 0.9813930667237828
-          },
-          {
-            "percentile": 50,
-            "expression_value": -1.1314820647239685,
-            "expression_z": 0.07241161770722312,
-            "hazard_ratio": 1,
-            "hr_conf_low": 1,
-            "hr_conf_high": 1
-          },
-          {
-            "percentile": 55.00000000000001,
-            "expression_value": -1.0764431655406952,
-            "expression_z": 0.14836015282899678,
-            "hazard_ratio": 1.1413960775220153,
-            "hr_conf_low": 1.021558685513621,
-            "hr_conf_high": 1.2752913995612754
-          },
-          {
-            "percentile": 60.00000000000001,
-            "expression_value": -1.0267555952072143,
-            "expression_z": 0.21692435444978114,
-            "hazard_ratio": 1.2845202823067146,
-            "hr_conf_low": 1.0453846531170345,
-            "hr_conf_high": 1.5783590764772772
-          },
-          {
-            "percentile": 65.00000000000001,
-            "expression_value": -0.9420943528413772,
-            "expression_z": 0.3337489536821156,
-            "hazard_ratio": 1.5595257226317092,
-            "hr_conf_low": 1.0994389317395872,
-            "hr_conf_high": 2.2121469499917854
-          },
-          {
-            "percentile": 70,
-            "expression_value": -0.8576657772064202,
-            "expression_z": 0.4502524945785435,
-            "hazard_ratio": 1.8657678837638074,
-            "hr_conf_low": 1.1755271515515173,
-            "hr_conf_high": 2.961301056713124
-          },
-          {
-            "percentile": 75.00000000000001,
-            "expression_value": -0.7003426551818845,
-            "expression_z": 0.6673436943636356,
-            "hazard_ratio": 2.5133877350702503,
-            "hr_conf_low": 1.3816363869757513,
-            "hr_conf_high": 4.572200013224197
-          },
-          {
-            "percentile": 80,
-            "expression_value": -0.5172216039150953,
-            "expression_z": 0.9200336245775473,
-            "hazard_ratio": 3.3923926095511185,
-            "hr_conf_low": 1.7270947597527424,
-            "hr_conf_high": 6.6634025448520395
-          },
-          {
-            "percentile": 85.00000000000001,
-            "expression_value": -0.3990407466888425,
-            "expression_z": 1.083112158468304,
-            "hazard_ratio": 4.038514132718399,
-            "hr_conf_low": 2.001524756620627,
-            "hr_conf_high": 8.148585894937096
-          },
-          {
-            "percentile": 90.00000000000001,
-            "expression_value": -0.31503417491912655,
-            "expression_z": 1.1990333734851015,
-            "hazard_ratio": 4.543433444818291,
-            "hr_conf_low": 2.2123725657823465,
-            "hr_conf_high": 9.330610850434962
-          },
-          {
-            "percentile": 95,
-            "expression_value": -0.1519127637147913,
-            "expression_z": 1.4241256702389362,
-            "hazard_ratio": 5.66751508774718,
-            "hr_conf_low": 2.6330086504565413,
-            "hr_conf_high": 12.199248667212872
-          }
-        ],
-        "warnings": []
+        "n_events": 28
       }
     },
     "logrank_p_value": 0.0004594336801918414,
@@ -5454,6 +6019,29 @@
         "p_value": 0.0012226165776408637,
         "ph_p_value": 0.4854559009133702,
         "ph_global_p_value": 0.4854559009133702,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.4854559009133702,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "High vs Low",
+          "status": "not_triggered",
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+        },
         "warnings": []
       },
       {
@@ -5515,6 +6103,29 @@
         "p_value": 0.004693896985887099,
         "ph_p_value": 0.7220871493619692,
         "ph_global_p_value": 0.7651238959783334,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.7220871493619692,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "High vs Low",
+          "status": "not_triggered",
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+        },
         "warnings": []
       },
       {
@@ -5635,6 +6246,29 @@
         "p_value": 0.0016214610800628407,
         "ph_p_value": 0.4644883395626724,
         "ph_global_p_value": 0.7140768442673899,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.4644883395626724,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "High vs Low",
+          "status": "not_triggered",
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger."
+        },
         "warnings": []
       }
     ],
@@ -5713,19 +6347,14 @@
       "Continuous Cox and spline estimates describe association, not causality, and can remain confounded by unmeasured clinical or biological factors.",
       "Kaplan-Meier grouping does not establish causality and is sensitive to cutpoint choice.",
       "Optimized cutpoints such as maxstat can overestimate apparent significance unless externally validated.",
-      "Clinical adjustment is limited to imported covariates and does not include treatment or tumor purity."
+      "Clinical adjustment is limited to selected imported TCGA fields; treatment, tumor purity, immune composition, molecular subtype and other cohort-specific prognostic variables remain unmodeled unless supplied as external covariates."
     ]
   },
   "artifacts": {
     "continuous_csv": {
       "filename": "continuous_data.csv",
-      "bytes": 10630,
-      "sha256": "ef60d2072eec5b30690d2ad091bbb54fcdd0fafe7201331f50836374bd54ae7d"
-    },
-    "continuous_effect_png": {
-      "filename": "continuous_effect.png",
-      "bytes": 73896,
-      "sha256": "0048b5610d96c1c9329b6c22b1524398b3a0edd15d9ced28de6b3dbfa0e7a678"
+      "bytes": 10927,
+      "sha256": "b8315a40ee6e238eb34fe5f96207ff44a5d8a1d5a23c9b11070ea8019a7bec37"
     },
     "cox_forest_png": {
       "filename": "cox_forest.png",
@@ -5734,18 +6363,18 @@
     },
     "csv": {
       "filename": "raw_data.csv",
-      "bytes": 9958,
-      "sha256": "9bf188be973b8e84d5f99078e89791b5e5af8d12039def424e514d18d590bd96"
+      "bytes": 10255,
+      "sha256": "1f2f624cd8a1c43681c55b0f48d73ff3c6d548e58b282ceb9ef565d577220bbb"
     },
     "input": {
       "filename": "input.json",
-      "bytes": 66890,
-      "sha256": "d6e3336148a152a4e2f8c1d24e84491d0228a5bb3c5be371003092b9de435cca"
+      "bytes": 85300,
+      "sha256": "ad5223031d190eb207c7681bb116ecf500e7d32e297e96d190028c3cda0193da"
     },
     "methodology": {
       "filename": "methodology.txt",
-      "bytes": 11198,
-      "sha256": "ffe3874cb7b68fe0fbd7d1e1ec77e8d91de2449e8c4e537fa17c025ffa361b66"
+      "bytes": 12333,
+      "sha256": "8734c4b6e62eac9dd7c98c72891fe778a62b97558a39962bc3b2dab0b185942d"
     },
     "png": {
       "filename": "plot.png",
@@ -5754,13 +6383,18 @@
     },
     "reproduction_clinical_covariates": {
       "filename": "clinical_covariates.R",
-      "bytes": 7375,
-      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+      "bytes": 15512,
+      "sha256": "fbe83e3349fc418527dfb5dc2dff768f76e7e2d174d0d40a15032ba4c8f4c5a5"
+    },
+    "reproduction_competing_risks": {
+      "filename": "competing_risks.R",
+      "bytes": 28110,
+      "sha256": "cdab59474c4345d839ad52c68dee95a067327329501aca65445362104ec0b323"
     },
     "reproduction_cox_diagnostics": {
       "filename": "cox_diagnostics.R",
-      "bytes": 9065,
-      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+      "bytes": 20451,
+      "sha256": "c1543741cad742657555434465cad9cc65603a096f7b3bbcc7aefda76976ae22"
     },
     "reproduction_dockerfile": {
       "filename": "Dockerfile.reproduce",
@@ -5769,18 +6403,18 @@
     },
     "reproduction_km_analysis": {
       "filename": "km_analysis.R",
-      "bytes": 66975,
-      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+      "bytes": 73548,
+      "sha256": "57753380bbf53e04ea1ea22685c8593aad7f60d1f026bae17bf964c753208291"
     },
     "reproduction_manifest": {
       "filename": "reproduction_manifest.json",
-      "bytes": 2880,
-      "sha256": "b10848e985b6f1f31b63111d28a303f9dc25abe6061d43342acabfc032596dfa"
+      "bytes": 3094,
+      "sha256": "4843236c4d15dc5903e1d5530f2218b6c4e9941974f6e4c3d9fad927ddcd68f1"
     },
     "reproduction_r_runner": {
       "filename": "rerun_analysis.R",
-      "bytes": 7241,
-      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+      "bytes": 7497,
+      "sha256": "512c1d743cea88e96da445db19ad81824d5111ad136794ba6dd70ac355dc580a"
     },
     "reproduction_readme": {
       "filename": "REPRODUCE.md",
@@ -5789,13 +6423,13 @@
     },
     "reproduction_renv_lock": {
       "filename": "renv.lock",
-      "bytes": 204337,
-      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+      "bytes": 204913,
+      "sha256": "594794128bca8309f17313c2a6a3c29a81988ca7b224b273cbef6e39c4521712"
     },
     "txt": {
       "filename": "methodology.txt",
-      "bytes": 11198,
-      "sha256": "ffe3874cb7b68fe0fbd7d1e1ec77e8d91de2449e8c4e537fa17c025ffa361b66"
+      "bytes": 12333,
+      "sha256": "8734c4b6e62eac9dd7c98c72891fe778a62b97558a39962bc3b2dab0b185942d"
     }
   }
 }

@@ -55,7 +55,8 @@ SINGLE_GENE_CASES = [
         "title": "EMP3 in lower-grade glioma",
         "interpretation": (
             "Strong association and RMST differences coexist with marker-specific "
-            "PH cautions; a fixed two-year diagnostic separates early and later effects."
+            "PH cautions; a fixed two-year primary diagnostic and fixed one- and "
+            "five-year sensitivities separate early and later effects."
         ),
     },
     {
@@ -366,10 +367,13 @@ def _compact_method(
     if marker_ph_flagged:
         profile_notes.append("Marker-specific PH caution")
         if selected_temporal.get("status") == "completed":
-            profile_notes.append("Prespecified two-year effect diagnostic completed")
+            profile_notes.append(
+                "Prespecified two-year primary effect diagnostic completed"
+            )
         elif selected_temporal.get("status") == "skipped":
             profile_notes.append(
-                "Prespecified two-year effect diagnostic skipped for insufficient support"
+                "Prespecified two-year primary effect diagnostic skipped for "
+                "insufficient support"
             )
     elif global_ph_flagged:
         profile_notes.append("Global PH caution; marker term is not flagged")

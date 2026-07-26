@@ -6,6 +6,8 @@ permutation,observed_null_permutation,LIHC expression permutation,grouped_family
 permutation,observed_null_permutation,LIHC expression permutation,maxstat_naive,Maxstat naive,792,2000,0.396,0.3747852003560857,0.41761354547841484
 permutation,observed_null_permutation,LIHC expression permutation,maxstat_lau94,Maxstat Lau94,37,2000,0.0185,0.013451349814109875,0.0253947667177367
 permutation,observed_null_permutation,LIHC expression permutation,median_logrank,Median log-rank,107,2000,0.0535,0.044466187536515975,0.06424573568564287
+permutation,observed_null_permutation,LIHC expression permutation,upper_quartile_logrank,Upper-quartile log-rank,114,2000,0.057,0.04766276887822958,0.06803573501296051
+permutation,observed_null_permutation,LIHC expression permutation,outer_quartiles_logrank,Outer-quartiles log-rank,108,2000,0.054,0.0449221548758202,0.0647878512990574
 permutation,observed_null_permutation,LIHC expression permutation,median_cox,Median Cox,105,2000,0.0525,0.04355496702511128,0.06316079029161006
 permutation,observed_null_permutation,LIHC expression permutation,median_rmst,Median RMST,105,2000,0.0525,0.04355496702511128,0.06316079029161006
 simulation,null,Simulated null,continuous_linear,Linear Cox,113,2000,0.0565,0.04720544161779263,0.06749497932067872
@@ -15,6 +17,8 @@ simulation,null,Simulated null,grouped_family_holm,Grouped-family Holm,71,2000,0
 simulation,null,Simulated null,maxstat_naive,Maxstat naive,765,2000,0.3825,0.3614450903394054,0.4040054157716889
 simulation,null,Simulated null,maxstat_lau94,Maxstat Lau94,48,2000,0.024,0.018149556703294482,0.031675472308458304
 simulation,null,Simulated null,median_logrank,Median log-rank,92,2000,0.046,0.0376570233593111,0.05608365557206655
+simulation,null,Simulated null,upper_quartile_logrank,Upper-quartile log-rank,103,2000,0.0515,0.04264472005033882,0.06207487136094505
+simulation,null,Simulated null,outer_quartiles_logrank,Outer-quartiles log-rank,115,2000,0.0575,0.048120313033425496,0.06857627381048334
 simulation,null,Simulated null,median_cox,Median Cox,91,2000,0.0455,0.03720527135020145,0.05553732462845745
 simulation,null,Simulated null,median_rmst,Median RMST,92,2000,0.046,0.0376570233593111,0.05608365557206655
 simulation,linear_ph,Linear PH,continuous_linear,Linear Cox,1985,2000,0.9925,0.9876620858637751,0.9954496225641908
@@ -24,6 +28,8 @@ simulation,linear_ph,Linear PH,grouped_family_holm,Grouped-family Holm,1927,2000
 simulation,linear_ph,Linear PH,maxstat_naive,Maxstat naive,1997,2000,0.9985,0.9955989674442294,0.9994897364163615
 simulation,linear_ph,Linear PH,maxstat_lau94,Maxstat Lau94,1887,2000,0.9435,0.9325050206793213,0.9527945583822073
 simulation,linear_ph,Linear PH,median_logrank,Median log-rank,1878,2000,0.939,0.9276458135951825,0.9486710188918773
+simulation,linear_ph,Linear PH,upper_quartile_logrank,Upper-quartile log-rank,1869,2000,0.9345,0.9228026146574697,0.9445314712551214
+simulation,linear_ph,Linear PH,outer_quartiles_logrank,Outer-quartiles log-rank,1956,2000,0.978,0.9705962109134398,0.9835710918856821
 simulation,linear_ph,Linear PH,median_cox,Median Cox,1873,2000,0.9365,0.9249532738540492,0.9463731438694168
 simulation,linear_ph,Linear PH,median_rmst,Median RMST,1607,2000,0.8035,0.7855107983788351,0.8203255539214444
 simulation,delayed_non_ph,Delayed non-PH,continuous_linear,Linear Cox,1989,2000,0.9945,0.9901779372483848,0.9969261029904561
@@ -33,6 +39,8 @@ simulation,delayed_non_ph,Delayed non-PH,grouped_family_holm,Grouped-family Holm
 simulation,delayed_non_ph,Delayed non-PH,maxstat_naive,Maxstat naive,1999,2000,0.9995,0.9971731374967338,0.9999117322692944
 simulation,delayed_non_ph,Delayed non-PH,maxstat_lau94,Maxstat Lau94,1882,2000,0.941,0.9298033851481019,0.9505057791498329
 simulation,delayed_non_ph,Delayed non-PH,median_logrank,Median log-rank,1870,2000,0.935,0.9233400064867132,0.9449921623785968
+simulation,delayed_non_ph,Delayed non-PH,upper_quartile_logrank,Upper-quartile log-rank,1902,2000,0.951,0.9406443633026171,0.9596264600496927
+simulation,delayed_non_ph,Delayed non-PH,outer_quartiles_logrank,Outer-quartiles log-rank,1940,2000,0.97,0.9615758302685604,0.9766221452870616
 simulation,delayed_non_ph,Delayed non-PH,median_cox,Median Cox,1869,2000,0.9345,0.9228026146574697,0.9445314712551214
 simulation,delayed_non_ph,Delayed non-PH,median_rmst,Median RMST,478,2000,0.239,0.22082092237035655,0.2581797763104574
 simulation,u_shaped_nonlinear,U-shaped nonlinear,continuous_linear,Linear Cox,300,2000,0.15,0.13502252494970823,0.16631940814716878
@@ -42,5 +50,7 @@ simulation,u_shaped_nonlinear,U-shaped nonlinear,grouped_family_holm,Grouped-fam
 simulation,u_shaped_nonlinear,U-shaped nonlinear,maxstat_naive,Maxstat naive,2000,2000,1,0.9980829527187469,0.9999999999999998
 simulation,u_shaped_nonlinear,U-shaped nonlinear,maxstat_lau94,Maxstat Lau94,1982,2000,0.991,0.9858179592983869,0.9942995002714226
 simulation,u_shaped_nonlinear,U-shaped nonlinear,median_logrank,Median log-rank,124,2000,0.062,0.05224755446133823,0.07343177895703933
+simulation,u_shaped_nonlinear,U-shaped nonlinear,upper_quartile_logrank,Upper-quartile log-rank,1654,2000,0.827,0.8098000496879411,0.8429462013901193
+simulation,u_shaped_nonlinear,U-shaped nonlinear,outer_quartiles_logrank,Outer-quartiles log-rank,160,2000,0.08,0.06889957451773436,0.09271074519851809
 simulation,u_shaped_nonlinear,U-shaped nonlinear,median_cox,Median Cox,120,2000,0.06,0.050411197114316506,0.07127580449318606
 simulation,u_shaped_nonlinear,U-shaped nonlinear,median_rmst,Median RMST,119,2000,0.0595,0.04995260683841224,0.07073631181637158

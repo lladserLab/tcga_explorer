@@ -13,7 +13,7 @@
   "funding_statement": "This work was funded by Centro Basal Ciencia & Vida, grant FB210008 from ANID—Agencia Nacional de Investigación y Desarrollo; ANID Fondecyt projects 1251312 to A.L. and 1231629 to A.J.M.M.; and ANID postdoctoral fellowship 3260791 to S.H.-G. Powered@NLHPC: this research was partially supported by the supercomputing infrastructure of the NLHPC (CCSS210001).",
   "conflict_of_interest_statement": "The authors declare no conflicts of interest.",
   "ai_use_disclosure": "REPLACE_WITH_DETAILED_AI_USE_DISCLOSURE_NAMING_TOOLS_VERSIONS_TASKS_AND_INDEPENDENT_AUTHOR_REWRITE_AND_VERIFICATION",
-  "software_license": "REPLACE_WITH_LICENSE_NAME",
+  "software_license": "MIT",
   "repository_url": "https://github.com/lladserLab/tcga_explorer",
   "release_url_or_doi": "REPLACE_WITH_ZENODO_VERSION_DOI_OR_RECORD_URL",
   "demo_or_access_statement": "https://apps.cienciavida.org/tcga_explorer/",

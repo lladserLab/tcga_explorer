@@ -148,16 +148,15 @@ submission or exact-release validation:
 - Submitting-author name/ORCID and CRediT contribution statement.
 - Accurate AI-use disclosure after independent author rewrite and scientific
   verification of the assisted draft.
-- Complete final software license text as a top-level `LICENSE`/`COPYING` file;
-  short stubs and placeholders fail the strict owner-metadata gate.
 - Stable archive DOI or release URL.
 - Two-year software and web-service availability commitment, named support owner and
   support contact.
 - Exact tagged HTTPS browser retest.
 
-The author list, affiliations, funding, conflict declaration, repository URL
-and demo URL are already supplied. The APC, discount or waiver route remains an
-owner operational follow-up but does not block construction of the reviewer
+The author list, affiliations, funding, conflict declaration, MIT license,
+repository URL and demo URL are already supplied. The APC, discount or waiver
+route remains an owner operational follow-up but does not block construction
+of the reviewer
 package.
 
 After these owner-controlled blockers are resolved,
@@ -167,7 +166,7 @@ SHA-256 values for upload checks.
 
 ## Current Validation Snapshot
 
-Validated on 2026-07-25:
+Validated on 2026-07-26:
 
 - `make -C manuscript/bioinformatics_app_note clean all` completed.
 - Main PDF output:
@@ -176,11 +175,11 @@ Validated on 2026-07-25:
   `manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-supplement.pdf`.
 - Synchronized OUP preview output:
   `manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-oup-preview.pdf`.
-- The review, supplement and OUP PDFs are 12, 17 and 4 pages, respectively; the
+- The review, supplement and OUP PDFs are 12, 23 and 4 pages, respectively; the
   OUP rendering is within the four-page Application Note limit.
-- `texcount -inc -sum` reports sum counts of 1,998 for `main.tex` and 3,283
+- `texcount -inc -sum` reports sum counts of 1,841 for `main.tex` and 4,277
   across `supplementary.tex` and its included tables; the corresponding
-  text-word counts are 1,840 and 2,925.
+  text-word counts are 1,660 and 3,916.
 - The main article contains one integrated vector figure with inline alt text
   and no empirical tables. The supplement contains eight tables and no figures,
   with the complete evidence matrix in Table S4 and all tables preceding the
@@ -194,12 +193,12 @@ Validated on 2026-07-25:
 - Owner metadata checker is available; it reports current owner-controlled
   blockers and is intended to pass in strict mode after final metadata,
   complete license text, repository URL and archive DOI edits.
-- Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `133 passed`.
+- Backend tests pass in Docker: `140 passed`.
+- Publication-script tests pass: `136 passed`.
 - Standalone tests pass: `15 passed` (14 CLI plus one attestation verifier).
 - Frontend tests pass: `15 passed`; the production Docker build also passes.
 - Submission artifact checker reports `109/109` artifacts available.
-- The generated TCGA-TRACE review archive passes verification with 480 entries.
+- The generated TCGA-TRACE review archive passes verification with 485 entries.
 - The provisional browser contract passes 24/24 checks across Chromium,
   Firefox/Gecko and WebKit; final tagged-HTTPS repetition remains enforced.
 - Data manifest generated with `--hash-count-matrices`: 33 cohorts, zero

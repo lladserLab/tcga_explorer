@@ -4,7 +4,7 @@
     {
       "adjusted_p_value": 0.0158343910767646,
       "adjustment_status": "Completed: Continuous expression user-adjusted for Age.",
-      "audit_hash": "d7b574de549912a7a03018ba921c718b6cb5a99d1c970a37164a3bcd6465ca12",
+      "audit_hash": "a20e87c873feae50b6da9cce633ef7ba114615c6fa9d122676159e13e5789915",
       "cohort": "TCGA-KIRC",
       "cox_p_value": null,
       "diagnostic_model": "continuous_user_adjusted",
@@ -20,7 +20,7 @@
       "firth_trigger_reasons": "[]",
       "grouped_logrank_p_value": 0.0001234168831825091,
       "heterogeneity_i2": null,
-      "id": "69ec8368e0d74be0ab350707d1386ad7",
+      "id": "a8dbfcf3c30a41f9b08b0cf5bac7136e",
       "information_status": "adequate",
       "interaction_p_value": null,
       "interpretation": "Continuous and grouped summaries are shown together; clinical adjustment, PH and nonlinearity remain separate diagnostics.",
@@ -47,7 +47,7 @@
     {
       "adjusted_p_value": null,
       "adjustment_status": "User-selected interaction adjustment completed.",
-      "audit_hash": "159dcbb071d27ec33357a8ed3e84455db7528217b083f08c171b71780bb2d70e",
+      "audit_hash": "1ae8054d829b67a6eb1f03137e60f8ecd3fb12bfc9595b2554842ba467b259a1",
       "cohort": "TCGA-SKCM",
       "cox_p_value": null,
       "diagnostic_model": "signature_interaction_user_adjusted",
@@ -62,7 +62,7 @@
       "firth_ties": null,
       "firth_trigger_reasons": "[]",
       "heterogeneity_i2": null,
-      "id": "72271ce991d04807ac2b1394e1cc92d1",
+      "id": "37389cdad3fd405b8e3023c666a7e840",
       "information_status": "adequate",
       "interaction_p_value": 0.8374337969697314,
       "interpretation": "Four-group separation is significant, but the continuous interaction term is not.",
@@ -117,11 +117,11 @@
     {
       "adjusted_p_value": 5.578429807157165e-07,
       "adjustment_status": "Completed: Continuous expression user-adjusted for Age.",
-      "audit_hash": "13e2d1fff4a3f9cd418faaa5da02d299b03544989cd721ff91774a90929a8202",
+      "audit_hash": "63faae5e22faeda5d35ee6937da3c4091ca9e68ee846ae874059fb48f82277fc",
       "cohort": "TCGA-ACC",
       "cox_p_value": null,
       "diagnostic_model": "continuous_user_adjusted",
-      "effect_summary": "HR per SD 2.85 (1.90-4.26); nonlinearity p=0.470",
+      "effect_summary": "HR per SD 2.85 (1.90-4.26); nonlinearity p=",
       "endpoint": "OS",
       "events_per_parameter": 14,
       "firth_hr": null,
@@ -133,7 +133,7 @@
       "firth_trigger_reasons": "[]",
       "grouped_logrank_p_value": 0.0004594336801918414,
       "heterogeneity_i2": null,
-      "id": "55c7f5da98b744e2ba62fe199c319e83",
+      "id": "3375cd134d28419581df52a8bacb4b53",
       "information_status": "adequate",
       "interaction_p_value": null,
       "interpretation": "RNA-seq analogue of a published expression contrast; the original qRT-PCR threshold is not replicated.",
@@ -144,7 +144,7 @@
       "meta_p_value": null,
       "n_events": 28,
       "n_patients": 79,
-      "nonlinearity_p_value": 0.4700080809392933,
+      "nonlinearity_p_value": null,
       "opposite_significant": null,
       "parameter_count": 2,
       "ph_global_p_value": 0.5208172017970246,
@@ -160,7 +160,7 @@
     {
       "adjusted_p_value": null,
       "adjustment_status": "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.; Interaction-specific proportional hazards test p < 0.05; interpret the average interaction HR with the prespecified two-year temporal diagnostic.",
-      "audit_hash": "8cd06bd6b09ef9c9232dd9db53ce28d9feeb18c8e8f029a62eb8128297a209ef",
+      "audit_hash": "d7a223f7f27992f2d5664b96e23d87d8e02bf6e73427af38ed84405614b17909",
       "cohort": "TCGA-UVM",
       "cox_p_value": null,
       "diagnostic_model": "signature_interaction_user_adjusted",
@@ -175,7 +175,7 @@
       "firth_ties": "breslow",
       "firth_trigger_reasons": "[\"5.25 events per fitted parameter is below the prespecified threshold of 10.\"]",
       "heterogeneity_i2": null,
-      "id": "4b6f0bfa40a44a7fae8f3c013db24ec5",
+      "id": "85c2c2f3b8e64708a92fa5d4b9f530ae",
       "information_status": "caution",
       "interaction_p_value": 0.6370237913969757,
       "interpretation": "Four-group stratification is supported; the continuous interaction term is not significant.",
@@ -226,7 +226,7 @@
       "summary": "Primary 18/32 FDR hits; stage-adjusted common-scale REML HR 1.20 (HKSJ p=0.005; 95% PI 0.73-1.98)"
     }
   ],
-  "finished_at": "2026-07-26T01:32:27Z",
+  "finished_at": "2026-07-26T17:44:29Z",
   "prespecified_adjustment_covariates": [
     "age_at_index"
   ],
@@ -409,5 +409,5 @@
       "workflow": "CA9 pan-cancer primary + ordinal sensitivity"
     }
   ],
-  "started_at": "2026-07-26T01:31:54Z"
+  "started_at": "2026-07-26T17:44:13Z"
 }

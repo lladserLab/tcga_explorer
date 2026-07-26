@@ -61,6 +61,17 @@ nonstandard categories become missing. Fixed stage/grade fits remain
 auxiliary; an unavailable requested model is not replaced by another
 adjustment.
 
+The default browser path is one gene, OS, log2(TPM+1), no clinical filters,
+age adjustment and a median grouped sensitivity. Continuous Cox is the primary
+display; the spline is added only when its information threshold is met.
+Kaplan--Meier, grouped Cox and RMST remain cutpoint sensitivities. Audit,
+reconstruction and signed-receipt downloads are generated for every completed
+run. Prespecified multiverse execution is a separate explicit action.
+The backend publishes an OpenAPI 3 schema and interactive Swagger/ReDoc
+documentation; the dependency-free \path{scripts/tcga_trace_cli.py} client
+submits, polls, downloads and verifies the same asynchronous analysis
+families.
+
 The frozen benchmarks are generated through the public HTTP interface with:
 
 \begin{verbatim}
@@ -322,6 +333,14 @@ to an exporter without the server private key, conditional on trusting the
 HTTPS or independently archived key fingerprint. It does not establish
 scientific correctness, prespecification, append-only time, or protection
 against server-key compromise.
+The benchmark key's full SHA-256 fingerprint is
+\path{5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643}.
+The HTTPS endpoint is a discovery mechanism; the archived release fingerprint
+is the long-term trust anchor. Routine rotations retain prior key IDs as
+\texttt{retired}; a compromised key is published as \texttt{revoked}, and the
+verifier rejects its trust status even if a historical signature remains
+cryptographically valid. This policy and its limits are versioned with the
+release.
 
 \input{tables/reproducibility_benchmark}
 
@@ -382,11 +401,14 @@ standardized within the analysis, so the primary effect is an HR per one score
 standard deviation. A three-degree-of-freedom restricted cubic spline uses
 knots at the 5th, 35th, 65th and 95th expression percentiles; a
 likelihood-ratio test compares it with the linear model and the effect profile
-uses median expression as reference. BH correction is applied separately to
-the 11 primary linear tests and the 11 nonlinearity tests.
-Six linear tests and two nonlinearity tests (UVM BAP1 and KIRC CA9) had
-suite-family BH \(q<0.05\). These counts summarize distinct prespecified
-families and are not combined into a decision rule.
+uses median expression as reference \citep{harrell2015rms}. The spline's three
+fitted parameters require at least 30 events, corresponding to 10 events per
+parameter; UVM BAP1 (21 events) is therefore explicitly not evaluable. BH
+correction is applied separately to the 11 primary linear tests and the 10
+evaluable nonlinearity tests. The registered catalogue contains six
+BH-supported linear effects and one BH-supported nonlinear effect (KIRC CA9).
+These are descriptions of a panel assembled after exploratory triage, not
+prospective rates or a combined decision rule.
 
 The same scenarios are crossed with four nonredundant two-group rules:
 maxstat, median, upper quartile and outer quartiles. The custom
@@ -401,19 +423,26 @@ the raw approximation and a clamping flag retained; two null-like scenarios
 required this bound. Each row reports the within-scenario Holm p-value,
 univariable and prespecified age-adjusted Cox estimates, fixed-horizon RMST,
 marker-term PH, global PH and, when
-applicable, the selection-adjusted maxstat rank-test p-value. No composite
+applicable, the selection-adjusted maxstat rank-test p-value. The dependent
+four-test Holm family was conservative under null calibration; failure to
+support a grouped family is not evidence that a continuous effect is absent.
+No composite
 retention rule is applied because log-rank, Cox and RMST are correlated
 summaries of the same outcomes, whereas PH evaluates a model assumption. A
 marker-term PH caution modifies interpretation of the HR but does not exclude
 the analysis; a global-only caution may arise from another covariate. For each
-model with marker-term \texttt{cox.zph} \(p<0.05\), a prespecified diagnostic
-splits follow-up at two years (730.5 days) and estimates marker HRs for
-0--2 years and \(>2\) years plus their ratio. The split is never selected from
-expression, event times or effects. The counting-process Cox fit uses Efron
-ties and participant-clustered robust variance and requires at least five
-events in each period and 10 participants at risk at two years; otherwise its
-status and support failure are exported. This diagnostic is not a primary
-test, replacement estimand or retention criterion.
+model with marker-term \texttt{cox.zph} \(p<0.05\)
+\citep{grambschTherneau1994}, a prespecified diagnostic splits follow-up at two
+years (730.5 days) and estimates marker HRs for 0--2 years and \(>2\) years
+plus their ratio. Fixed one- and five-year splits repeat the same diagnostic as
+sensitivities. No split is selected from expression, event times or effects.
+The counting-process Cox fit uses Efron ties and participant-clustered robust
+variance; the late-to-early ratio and confidence interval are Wald contrasts
+of the marker-by-period interaction. Each split requires at least five events
+per period and 10 participants entering the late period; otherwise its status
+and support failure are exported. The two-period model is a coarse
+approximation to a potentially smooth effect and is not a primary test,
+replacement estimand or retention criterion.
 Downstream p-values are not presented as a separate multiplicity-controlled
 confirmatory family. Maxstat-grouped HRs, confidence intervals and RMST
 comparisons remain post-selection. The selected adjusted estimate is the exact
@@ -434,9 +463,29 @@ group-mean expression measured in SD units for each split. The resulting
 continuous-implied group HR was compared with the grouped HR by their absolute
 log-HR ratio. This is a descriptive amplification diagnostic and does not
 correct the grouped estimate or interval for selection. UVM BAP1 maxstat was
-not included because its standard grouped Cox estimate was non-finite. The
-complete diagnostic remains available as a machine-readable CSV; its compact
-scenario-level amplification column is reported in Supplementary Table S4.
+not included because the selected high group had zero events and its standard
+grouped Cox estimate was non-finite. Across the 10 finite scenarios, the median
+of the maxstat-to-median absolute log-HR ratios was 1.80; the median maxstat
+amplification relative to the continuous-implied group contrast was 1.88.
+These are two distinct summary statistics. The complete diagnostic remains
+available as a machine-readable CSV; its compact scenario-level amplification
+column is reported in Supplementary Table S4.
+
+CA9/KIRC illustrates how the nonlinear deliverable should be read. Its
+nonlinearity test had BH \(q=0.022\). Relative to median expression
+(8.630 log2(TPM+1)), profile HRs were 1.89 (1.17--3.06) at the 5th percentile,
+1.42 (1.18--1.71) at the 25th, 0.86 (0.77--0.96) at the 75th and 1.02
+(0.62--1.69) at the 95th. Thus the omnibus result is accompanied by a
+median-referenced shape showing excess risk concentrated at low expression;
+it is not converted into an optimized prognostic threshold.
+
+For the registered UVM BAP1 DSS median split, TCGA-CDR encoded 21
+disease-specific deaths and two other-cause deaths among 80 participants.
+Gray's test gave \(p=0.00046\), and the unadjusted Fine--Gray high-versus-low
+subdistribution HR was 0.17 (0.06--0.52; \(p=0.0016\)). The continuous
+Fine--Gray HR per expression SD was 0.50 (0.38--0.68). With only two competing
+deaths, these estimates are a sensitivity to the cause-specific Cox result,
+not evidence that competing events are fully characterized.
 
 The registered literature anchors cover CDC20/LIHC, BIRC5/LUAD, BAP1/UVM,
 EMP3/LGG, CA9/KIRC, MKI67/BRCA, PDCD1/SKCM, TMEM176B/SKCM and CD274/LUAD
@@ -494,10 +543,17 @@ methods. Within-replicate Holm used the Lau94 p-value for maxstat. Wilson interv
 quantify Monte Carlo uncertainty.
 
 In the observed and simulated null experiments, linear Cox, spline and marker
-PH rejection remained near 5\%; grouped-family rejection was 3.2--4.0\%.
-Naive maxstat rejected 38.2--39.6\%, versus 1.8--2.4\% with Lau94. Power was
-99.2\% for linear Cox under linear PH; the PH diagnostic rejected 88.2\% under
-the delayed effect, and the spline test rejected 100\% under the U-shaped
+PH rejection remained near 5\%, and none of their Wilson intervals excluded
+0.05. Grouped-family rejection was 3.2--3.5\%; both grouped Holm intervals and
+both Lau94 intervals lay below 0.05, documenting conservative calibration
+under the dependent cutpoints. Naive maxstat rejected 38.2--39.6\%, versus
+1.8--2.4\% with Lau94. Under linear PH, power was 99.2\% for continuous Cox,
+94.3\% for Lau94 maxstat, 93.9\% for median, 93.5\% for upper quartile,
+97.8\% for outer quartiles and 96.4\% for the grouped Holm family. This
+alternative supports the continuous-first default in this design but does not
+claim universal power dominance; outer quartiles increase contrast while
+discarding the middle half of participants. The PH diagnostic rejected 88.2\%
+under the delayed effect, and the spline test rejected 100\% under the U-shaped
 effect. Under observed permutation, median-split log-rank and Cox
 \(-\log_{10}p\) values correlated 1.000; their correlations with RMST were
 0.664 and 0.665. These are therefore related summaries, while PH modifies
@@ -523,6 +579,10 @@ cache.
 All jobs in the run shared one isolated client session and remained subject to
 the public contract: two global workers, queue capacity 50, five active jobs
 per client, and request limits of 25 batch analyses and 72 multiverse cells.
+The service returns HTTP 429 with \texttt{Retry-After} when per-client or
+hourly limits are reached and HTTP 503 with \texttt{Retry-After} when the queue
+is full; stale jobs are requeued at most twice. These controls bound process
+creation but the two-job probe is not a saturation load test.
 The two-job probe observed both workers running and 2.53\,s of execution
 overlap. Batch children execute serially within one worker slot. Queue and
 compute intervals came from server timestamps; wall time was measured by the

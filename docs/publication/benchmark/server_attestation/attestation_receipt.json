@@ -2,29 +2,29 @@
   "schema_version": "tcga-trace-server-attestation-v1",
   "payload": {
     "issuer": "https://apps.cienciavida.org/tcga_explorer",
-    "issued_at": "2026-07-26T01:18:52.911638+00:00",
+    "issued_at": "2026-07-26T17:22:16.523672+00:00",
     "subject": {
       "type": "survival_analysis",
-      "id": "ba68bc76e27641268a6566d72324c789"
+      "id": "3695c8ead2134ecb9b2d10c72544c19e"
     },
     "audit_report": {
       "filename": "audit_report.json",
-      "bytes": 258301,
-      "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
+      "bytes": 253172,
+      "sha256": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd",
       "schema_version": "tcga-trace-analysis-audit-v4",
-      "reproducibility_hash": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+      "reproducibility_hash": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117"
     },
     "verification": {
       "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
       "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
-      "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/ba68bc76e27641268a6566d72324c789/download/attestation"
+      "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/3695c8ead2134ecb9b2d10c72544c19e/download/attestation"
     }
   },
   "signature": {
     "algorithm": "Ed25519",
     "canonicalization": "tcga-trace-canonical-json-v1",
     "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
-    "signed_payload_sha256": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
-    "value_base64url": "L-W4TcCqqZn6Z25sLxgTwjEzlXhr1WFCNkr9Hs0l5gFuDYm4UDZ4tCU4HUdc9xka8jCv220odrEVHmOz9WywAw"
+    "signed_payload_sha256": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37",
+    "value_base64url": "LeWlXW8AZ6_R7ZDrLOLMjKBSP6wjCmjwYpUOVv9EsaepvOpK7FG6E_d2-8dSzkm1PPZCYvsnpn_u2Qg__pryCA"
   }
 }

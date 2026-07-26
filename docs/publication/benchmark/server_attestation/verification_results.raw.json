@@ -12,21 +12,21 @@
   },
   "subject": {
     "type": "survival_analysis",
-    "id": "ba68bc76e27641268a6566d72324c789"
+    "id": "3695c8ead2134ecb9b2d10c72544c19e"
   },
   "issuer": "https://apps.cienciavida.org/tcga_explorer",
-  "issued_at": "2026-07-26T01:18:52.911638+00:00",
+  "issued_at": "2026-07-26T17:22:16.523672+00:00",
   "audit_report": {
     "schema_version": "tcga-trace-analysis-audit-v4",
-    "bytes": 258301,
-    "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
-    "reproducibility_hash": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
+    "bytes": 253172,
+    "sha256": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd",
+    "reproducibility_hash": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117",
     "receipt_binding": {
       "filename": "audit_report.json",
-      "bytes": 258301,
-      "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
+      "bytes": 253172,
+      "sha256": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd",
       "schema_version": "tcga-trace-analysis-audit-v4",
-      "reproducibility_hash": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+      "reproducibility_hash": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117"
     }
   },
   "public_key": {
@@ -39,17 +39,17 @@
   },
   "receipt": {
     "schema_version": "tcga-trace-server-attestation-v1",
-    "signed_payload_sha256": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
-    "sha256": "47550e15252b3d3ab6ae46363e3a8ada2ea313b509b5671af11ae5f07c22915e"
+    "signed_payload_sha256": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37",
+    "sha256": "10a51c4786121122fbbd9196997baf6fff047c738b550ad51e3b297f72500edd"
   },
   "frozen_files": {
     "audit_report.json": {
-      "bytes": 258301,
-      "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+      "bytes": 253172,
+      "sha256": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd"
     },
     "attestation_receipt.json": {
       "bytes": 1475,
-      "sha256": "47550e15252b3d3ab6ae46363e3a8ada2ea313b509b5671af11ae5f07c22915e"
+      "sha256": "10a51c4786121122fbbd9196997baf6fff047c738b550ad51e3b297f72500edd"
     },
     "public_key.json": {
       "bytes": 499,
@@ -89,6 +89,17 @@
           }
         },
         {
+          "name": "key_status",
+          "passed": true,
+          "detail": {
+            "status": "active",
+            "accepted": [
+              "active",
+              "retired"
+            ]
+          }
+        },
+        {
           "name": "issuer",
           "passed": true,
           "detail": {
@@ -100,8 +111,8 @@
           "name": "signed_payload_sha256",
           "passed": true,
           "detail": {
-            "observed": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
-            "expected": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee"
+            "observed": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37",
+            "expected": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37"
           }
         },
         {
@@ -121,16 +132,16 @@
           "name": "audit_report_bytes",
           "passed": true,
           "detail": {
-            "observed": 258301,
-            "expected": 258301
+            "observed": 253172,
+            "expected": 253172
           }
         },
         {
           "name": "audit_report_sha256",
           "passed": true,
           "detail": {
-            "observed": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
-            "expected": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+            "observed": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd",
+            "expected": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd"
           }
         },
         {
@@ -150,8 +161,8 @@
           "name": "audit_reproducibility_hash",
           "passed": true,
           "detail": {
-            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
-            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+            "observed": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117",
+            "expected": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117"
           }
         }
       ]
@@ -183,6 +194,17 @@
           }
         },
         {
+          "name": "key_status",
+          "passed": true,
+          "detail": {
+            "status": "active",
+            "accepted": [
+              "active",
+              "retired"
+            ]
+          }
+        },
+        {
           "name": "issuer",
           "passed": true,
           "detail": {
@@ -194,8 +216,8 @@
           "name": "signed_payload_sha256",
           "passed": true,
           "detail": {
-            "observed": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
-            "expected": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee"
+            "observed": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37",
+            "expected": "123728d366df7bbffab4cb88967f065084d3e662029b61f4aa55845ac0224b37"
           }
         },
         {
@@ -215,16 +237,16 @@
           "name": "audit_report_bytes",
           "passed": false,
           "detail": {
-            "observed": 258318,
-            "expected": 258301
+            "observed": 253189,
+            "expected": 253172
           }
         },
         {
           "name": "audit_report_sha256",
           "passed": false,
           "detail": {
-            "observed": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41",
-            "expected": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+            "observed": "34cbbf51d745105b5056f3cf8a3294ba9549906f778172fae8d391e80fd23ae1",
+            "expected": "903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd"
           }
         },
         {
@@ -244,8 +266,8 @@
           "name": "audit_reproducibility_hash",
           "passed": true,
           "detail": {
-            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
-            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+            "observed": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117",
+            "expected": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117"
           }
         }
       ]
@@ -277,6 +299,17 @@
           }
         },
         {
+          "name": "key_status",
+          "passed": true,
+          "detail": {
+            "status": "active",
+            "accepted": [
+              "active",
+              "retired"
+            ]
+          }
+        },
+        {
           "name": "issuer",
           "passed": true,
           "detail": {
@@ -288,8 +321,8 @@
           "name": "signed_payload_sha256",
           "passed": true,
           "detail": {
-            "observed": "dc8a4aeda7d5d91d1ef372c7daaf5d7fc96c006d2ba9502f9ee5a838fc08a776",
-            "expected": "dc8a4aeda7d5d91d1ef372c7daaf5d7fc96c006d2ba9502f9ee5a838fc08a776"
+            "observed": "075f4c84272f5a6ac57056b882d4256bb74fd41a9a2ae1e958981baf9edc038c",
+            "expected": "075f4c84272f5a6ac57056b882d4256bb74fd41a9a2ae1e958981baf9edc038c"
           }
         },
         {
@@ -309,16 +342,16 @@
           "name": "audit_report_bytes",
           "passed": true,
           "detail": {
-            "observed": 258318,
-            "expected": 258318
+            "observed": 253189,
+            "expected": 253189
           }
         },
         {
           "name": "audit_report_sha256",
           "passed": true,
           "detail": {
-            "observed": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41",
-            "expected": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41"
+            "observed": "34cbbf51d745105b5056f3cf8a3294ba9549906f778172fae8d391e80fd23ae1",
+            "expected": "34cbbf51d745105b5056f3cf8a3294ba9549906f778172fae8d391e80fd23ae1"
           }
         },
         {
@@ -338,8 +371,8 @@
           "name": "audit_reproducibility_hash",
           "passed": true,
           "detail": {
-            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
-            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+            "observed": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117",
+            "expected": "6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117"
           }
         }
       ]

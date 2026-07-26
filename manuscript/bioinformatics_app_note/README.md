@@ -66,14 +66,14 @@ class line deliberately omits both `numsec` and `unnumsec`.
 OUP states that author templates do not exactly reproduce final typesetting;
 the preview is therefore a conservative page estimate, not a guarantee of the
 production page count.
-On 2026-07-25:
+On 2026-07-26:
 
 - the OUP `modern,large` preview is 4/4 pages;
 - the main source contains one integrated vector Figure 1 with inline alt text
   and no empirical tables;
-- `texcount -inc -sum` reports sum counts of 1,998 for the main source and
-  3,283 across the supplementary source and its included tables; text-word
-  counts are 1,840 and 2,925;
+- `texcount -inc -sum` reports sum counts of 1,841 for the main source and
+  4,277 across the supplementary source and its included tables; text-word
+  counts are 1,660 and 3,916;
 - the single supplementary PDF contains 8 tables and no figures;
   and the complete 11-scenario evidence matrix remains in Supplementary
   Table S4.
@@ -90,8 +90,8 @@ Before submission, copy and fill
 with `../../scripts/publication/apply_submission_metadata.py`. This updates the
 manuscript, cover letter, Data Availability statement and decision tracker
 without direct LaTeX edits. Author order, affiliations, funding, conflict
-statement, repository and demo URL are already supplied. Corresponding and
-submitting-author details, CRediT roles, AI-use disclosure, software license,
+statement, MIT license, repository and demo URL are already supplied.
+Corresponding and submitting-author details, CRediT roles, AI-use disclosure,
 release DOI/archive and two-year support commitment still require owner
 confirmation. The exact tagged HTTPS cross-browser run also remains. The author
 team must independently review, rewrite

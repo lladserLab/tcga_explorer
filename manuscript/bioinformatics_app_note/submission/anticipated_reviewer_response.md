@@ -31,7 +31,7 @@ reproduction records in one Dockerized web workflow.
 
 | Concern | Current response | Evidence |
 | --- | --- | --- |
-| Software not available during review | The public source location is fixed at `https://github.com/lladserLab/tcga_explorer`, with Docker, CI, tests, reviewer quickstart and artifact checks. The final license, tagged release and version-specific Zenodo DOI remain pre-submission owner actions. | `REVIEWER_QUICKSTART.md`; `.github/workflows/ci.yml`; `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`; `scripts/publication/check_submission_metadata.py`. |
+| Software not available during review | The public source location is fixed at `https://github.com/lladserLab/tcga_explorer`, with an MIT license, Docker, CI, tests, reviewer quickstart and artifact checks. The tagged release and version-specific Zenodo DOI remain pre-submission owner actions. | `LICENSE`; `REVIEWER_QUICKSTART.md`; `.github/workflows/ci.yml`; `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`; `scripts/publication/check_submission_metadata.py`. |
 | Reproducibility hash and origin are not demonstrated | Addressed in two layers. Three frozen analyses and six network-disabled arm64/amd64 reruns demonstrate reconstruction under quantity-aware tolerances; internal check counts are dependent coverage checks, not independent replications. Boundary tests distinguish run-hash, artifact-checksum and intentionally unbound fields. Audit schema v4 additionally emits a detached Ed25519 receipt. A frozen BAP1/UVM DSS report verified against the archived public key; altering the report failed, and recomputing its SHA-256 plus canonical payload SHA-256 still failed the unchanged signature. This authenticates exact report bytes under a trusted key but does not claim scientific correctness, prespecification or append-only time. Hosted Linux/amd64 CI independently repeated the reconstruction contract successfully for commit `00c3aaeb18ce5871b69122641db0bf3810b2d1d1` in run `30188150881`. | `docs/publication/benchmark/reproducibility_benchmark/summary.md`; `docs/publication/benchmark/clean_container_reproduction/summary.md`; `docs/publication/benchmark/server_attestation/summary.md`; `scripts/publication/run_server_attestation_benchmark.py`; `.github/workflows/ci.yml`; `https://github.com/lladserLab/tcga_explorer/actions/runs/30188150881`. |
 | Provenance does not prevent endpoint/cutpoint/scoring cherry-picking | Addressed at two scopes without claiming prespecification. The Multiverse workflow freezes endpoint x scoring x cutpoint choices, separates continuous and grouped multiplicity families, and retains every planned cell and failure. An optional browser-local history records selected ad hoc run events and exports unique continuous, grouped and interaction families with BH and Bonferroni correction. It is disabled by default, excludes patient rows, preserves repeated executions, references managed multiverse and pan-cancer families without recounting them, and states explicitly that the selected post hoc export cannot prove that no other runs occurred. | `backend/app/multiverse.py`; `backend/app/session_history.py`; `backend/tests/test_multiverse.py`; `backend/tests/test_session_history.py`; `frontend/src/sessionHistory.js`; `manuscript/bioinformatics_app_note/supplementary.tex`. |
 | TCGA data versioning is not pinned | Partly addressed. The final benchmark matrices are pinned by count-matrix SHA-256 hashes for 33 cohorts plus TCGA-CDR checksum. The GDC RNA sync manifest is still recorded as missing in this checkout and should be archived if the updater regenerates the final snapshot. | `docs/publication/benchmark/data_snapshot_manifest.json`; `docs/publication/benchmark/README.md`. |
@@ -52,14 +52,14 @@ reproduction records in one Dockerized web workflow.
 
 | Requirement | Status before upload |
 | --- | --- |
-| Public or reviewer-accessible source | Public repository confirmed at `https://github.com/lladserLab/tcga_explorer`; complete release license and immutable archive remain owner actions. |
-| OSI-compatible software license | Owner decision still required. |
+| Public or reviewer-accessible source | Public repository confirmed at `https://github.com/lladserLab/tcga_explorer`; immutable release archive remains an owner action. |
+| OSI-compatible software license | Complete MIT license is present at repository root. |
 | Dockerized review path | Prepared and tested. |
 | Stable archive DOI or release URL | Owner decision still required. |
 | Data snapshot manifest | Prepared with count-matrix hashes and stable manifest hash. |
 | Round-trip reproducibility check | Recorded-environment and clean-container checks pass locally; hosted Linux/amd64 CI run `30188150881` independently passed both `docker-checks` and `Independent clean-capsule reproduction` for commit `00c3aaeb18ce5871b69122641db0bf3810b2d1d1`. |
 | External concordance record | Prepared for KM Plotter KIRC CA9 OS, directional only. |
-| Placeholder-free manuscript metadata | Author order, affiliations, funding and conflict statement are supplied. Corresponding/submitting-author details, CRediT, AI disclosure, license, archive DOI, support ownership and two-year availability commitment remain owner actions. |
+| Placeholder-free manuscript metadata | Author order, affiliations, funding, conflict statement and MIT license are supplied. Corresponding/submitting-author details, CRediT, AI disclosure, archive DOI, support ownership and two-year availability commitment remain owner actions. |
 
 ## Do Not Overclaim
 
@@ -70,5 +70,5 @@ reproduction records in one Dockerized web workflow.
   score or claim that a PH caution negates an association.
 - Do not present z-score or weighted signatures as a pathway-inference replacement
   for ssGSEA.
-- Do not describe the submitted software release as complete until the license,
-  exact release tag and immutable archive URL are supplied.
+- Do not describe the submitted software release as complete until the exact
+  release tag and immutable archive URL are supplied.

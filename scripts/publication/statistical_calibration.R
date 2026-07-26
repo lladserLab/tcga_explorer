@@ -161,7 +161,7 @@ fit_continuous <- function(data) {
       type = 7
     )
   )
-  if (length(unique(knots_raw)) < 4 || sum(data$event) < 15) {
+  if (length(unique(knots_raw)) < 4 || sum(data$event) < 30) {
     return(list(
       cox_p = cox_p,
       ph_p = ph_p,
@@ -565,6 +565,8 @@ metric_columns <- c(
   maxstat_naive = "maxstat_logrank_p",
   maxstat_lau94 = "maxstat_maxstat_corrected_p",
   median_logrank = "median_logrank_p",
+  upper_quartile_logrank = "upper_quartile_logrank_p",
+  outer_quartiles_logrank = "upper_lower_quartile_logrank_p",
   median_cox = "median_cox_p",
   median_rmst = "median_rmst_p"
 )

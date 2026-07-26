@@ -24,7 +24,7 @@ these values to be inserted.
 
 | Field | Why it matters | Final value |
 | --- | --- | --- |
-| Software license | Bioinformatics requires free availability to non-commercial users and encourages an open-source license; TCGA-TRACE release policy requires complete OSI-compatible license text. | TODO |
+| Software license | Bioinformatics requires free availability to non-commercial users and encourages an open-source license; TCGA-TRACE release policy requires complete OSI-compatible license text. | MIT; complete top-level `LICENSE` added 2026-07-26. |
 | Public or reviewer-accessible repository URL | Required for reviewer access and post-publication availability. | `https://github.com/lladserLab/tcga_explorer` |
 | Stable release DOI or archive URL | Needed for a citable submitted version. | Zenodo selected; version-specific DOI pending reservation/publication. |
 | Public demo URL or Docker-only access statement | Needed to tell reviewers how to evaluate the web application. | Public URL supplied: `https://apps.cienciavida.org/tcga_explorer/`; health endpoint verified `ok` on 2026-07-24. Docker instructions remain as a reproducibility fallback. |
@@ -67,7 +67,7 @@ keeps a complete OSI-compatible license as a stricter project release gate.
 
 ## Current Technical Validation Snapshot
 
-Validated on 2026-07-25:
+Validated on 2026-07-26:
 
 - `make -C manuscript/bioinformatics_app_note clean all` completed.
 - The 12-point, double-spaced review PDF is 12 pages; this is not the journal
@@ -75,10 +75,9 @@ Validated on 2026-07-25:
 - The synchronized Bioinformatics OUP `modern,large`, author-date preview is
   4/4 template pages; OUP notes that this is not an exact production-page
   guarantee.
-- The 17-page supplementary PDF contains 8 tables and no figures.
-- `texcount -inc -sum` reports sum counts of 1,998 for `main.tex` and 3,283
-  across `supplementary.tex` and its included tables; text-word counts are
-  1,840 and 2,925.
+- The 23-page supplementary PDF contains 8 tables and no figures.
+- `texcount -inc -sum` reports a sum count of 1,841 for `main.tex`, including
+  1,660 text words and one integrated figure.
 - The technical editorial gate confirms the structured abstract, one integrated
   vector Figure 1 with inline alt text, no main-text tables and sequential
   Supplementary Tables S1--S8.
@@ -88,8 +87,8 @@ Validated on 2026-07-25:
   reproducibility-bundle, owner-metadata, license-template, finalizer,
   screenshot-capture, identity, runtime, OUP-preview, editorial-check and
   submission-archive scripts, plus the standalone public API CLI.
-- Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `133 passed`.
+- Backend tests pass in Docker: `140 passed`.
+- Publication-script tests pass: `136 passed`.
 - Standalone tests pass: `15 passed`: 14 CLI tests covering all six public
   compute families and negative integrity controls, plus one attestation
   verifier test.
@@ -98,7 +97,7 @@ Validated on 2026-07-25:
   the cover-letter draft, Data Availability statement and three current
   reconstruction bundles, the statistical-calibration benchmark and the
   runtime/concurrency benchmark, CLI and bilingual CLI guides.
-- The generated TCGA-TRACE review archive passes verification with 480 entries.
+- The generated TCGA-TRACE review archive passes verification with 485 entries.
 - Provisional browser compatibility passes 24/24 functional checks across
   Chromium, Firefox/Gecko and WebKit; strict finalization still requires the
   exact tagged HTTPS release run.
@@ -134,16 +133,15 @@ Run this after replacing the submission-blocking values above. The APC route
 may remain operationally pending until the journal timeline requires it. The
 low-friction path is to copy
 `manuscript/bioinformatics_app_note/submission/owner_metadata.template.json`,
-fill it outside git if desired, choose or generate the final license text, then
-run the finalizer command below.
+fill it outside git if desired, then run the finalizer command below.
 
-The license source must contain the complete final license text, not a short
-stub such as `MIT` or `Selected license`; the strict gate now rejects incomplete
-or placeholder license files.
+The repository now contains the complete MIT license text. If a separate
+license source is supplied to the finalizer, it must contain the complete text,
+not a short stub such as `MIT` or `Selected license`.
 
 For common permissive options already listed in the release checklist, the
-license text can be generated after the owner chooses the license, year and
-copyright holder:
+license text can be regenerated if the owner changes the year or copyright
+holder:
 
 ```sh
 scripts/publication/write_license_template.py --list
@@ -155,12 +153,12 @@ Then run the final packaging command:
 ```sh
 scripts/publication/finalize_submission_package.py \
   path/to/owner_metadata.json \
-  --license-source path/to/LICENSE \
+  --license-source LICENSE \
   --dry-run
 
 scripts/publication/finalize_submission_package.py \
   path/to/owner_metadata.json \
-  --license-source path/to/LICENSE
+  --license-source LICENSE
 ```
 
 The dry run prints the exact command plan and validates owner metadata plus the

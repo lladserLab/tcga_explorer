@@ -1,3 +1,10 @@
+`%||cov%` <- function(left, right) {
+  if (is.null(left) || length(left) == 0) {
+    return(right)
+  }
+  left
+}
+
 normalize_clinical_text <- function(values) {
   normalized <- toupper(trimws(as.character(values)))
   normalized[is.na(values) | normalized == "" | normalized %in% c("NA", "N/A", "NULL", "NONE", "NOT REPORTED", "UNKNOWN")] <- NA_character_
@@ -174,13 +181,207 @@ normalize_requested_covariates <- function(covariates) {
   requested
 }
 
-prepare_model_covariates <- function(data, covariates) {
+external_covariate_definition_map <- function(definitions) {
+  if (is.null(definitions) || !length(definitions)) {
+    return(list())
+  }
+  mapped <- list()
+  for (definition in definitions) {
+    name <- trimws(as.character(definition$name %||cov% ""))
+    if (!nzchar(name) || !grepl("^[a-z][a-z0-9_]{0,31}$", name)) {
+      stop("Invalid external covariate definition name: ", name)
+    }
+    if (!is.null(mapped[[name]])) {
+      stop("Duplicate external covariate definition: ", name)
+    }
+    mapped[[name]] <- definition
+  }
+  mapped
+}
+
+normalize_requested_external_covariates <- function(covariates, definitions) {
+  requested <- if (is.null(covariates) || !length(covariates)) {
+    character()
+  } else {
+    unique(as.character(unlist(covariates)))
+  }
+  requested <- requested[nzchar(requested)]
+  definition_map <- external_covariate_definition_map(definitions)
+  unsupported <- setdiff(requested, names(definition_map))
+  if (length(unsupported)) {
+    stop(
+      "Undefined external adjustment covariate(s): ",
+      paste(unsupported, collapse = ", ")
+    )
+  }
+  requested
+}
+
+external_covariate_record_name <- function(name) {
+  paste0("external__", name)
+}
+
+external_covariate_encoded_name <- function(name, value_type) {
+  suffix <- switch(
+    value_type,
+    continuous = "per_unit",
+    categorical = "factor",
+    ordinal = "ordinal",
+    stop("Unsupported external covariate type: ", value_type)
+  )
+  paste0("external_", name, "_", suffix)
+}
+
+external_covariate_label <- function(definition) {
+  label <- trimws(as.character(definition$label %||cov% definition$name %||cov% "External covariate"))
+  if (nzchar(label)) label else "External covariate"
+}
+
+prepare_external_model_covariates <- function(data, covariates, definitions) {
+  requested <- normalize_requested_external_covariates(covariates, definitions)
+  definition_map <- external_covariate_definition_map(definitions)
+  encoded <- character()
+  metadata <- list()
+  if (!length(requested)) {
+    return(list(data = data, covariates = encoded, metadata = metadata))
+  }
+
+  for (name in requested) {
+    definition <- definition_map[[name]]
+    value_type <- trimws(as.character(definition$value_type %||cov% ""))
+    raw_name <- external_covariate_record_name(name)
+    if (!raw_name %in% names(data)) {
+      stop("External adjustment field is missing from the analysis records: ", name)
+    }
+    encoded_name <- external_covariate_encoded_name(name, value_type)
+    raw_values <- data[[raw_name]]
+    label <- external_covariate_label(definition)
+    unit <- trimws(as.character(definition$unit %||cov% ""))
+
+    if (value_type == "continuous") {
+      effect_unit <- suppressWarnings(as.numeric(definition$effect_unit %||cov% 1))
+      if (!is.finite(effect_unit) || effect_unit <= 0) {
+        stop("External continuous covariate ", name, " has an invalid effect_unit.")
+      }
+      numeric_values <- suppressWarnings(as.numeric(raw_values))
+      numeric_values[!is.finite(numeric_values)] <- NA_real_
+      encoded_values <- numeric_values / effect_unit
+      data[[encoded_name]] <- encoded_values
+      observed <- numeric_values[is.finite(numeric_values)]
+      metadata[[encoded_name]] <- list(
+        source = name,
+        label = label,
+        encoded_name = encoded_name,
+        type = "continuous_numeric",
+        unit = if (nzchar(unit)) {
+          paste0(effect_unit, " ", unit)
+        } else {
+          paste0(effect_unit, " raw unit(s)")
+        },
+        effect_unit = effect_unit,
+        coding = paste0(
+          "User-supplied numeric values divided by ", effect_unit,
+          "; the hazard ratio is per one declared effect unit."
+        ),
+        mapped_patients = sum(is.finite(encoded_values)),
+        missing_patients = sum(!is.finite(encoded_values)),
+        observed_range = if (length(observed)) as.list(range(observed)) else list()
+      )
+    } else {
+      declared_levels <- as.character(unlist(definition$levels %||cov% list()))
+      if (length(declared_levels) < 2 ||
+          any(!nzchar(declared_levels)) ||
+          anyDuplicated(toupper(declared_levels))) {
+        stop("External covariate ", name, " requires at least two unique declared levels.")
+      }
+      normalized <- trimws(as.character(raw_values))
+      normalized[is.na(raw_values) | !nzchar(normalized)] <- NA_character_
+      canonical <- rep(NA_character_, length(normalized))
+      for (level in declared_levels) {
+        canonical[
+          !is.na(normalized) & toupper(normalized) == toupper(level)
+        ] <- level
+      }
+      unmapped <- sort(unique(normalized[!is.na(normalized) & is.na(canonical)]))
+
+      if (value_type == "categorical") {
+        reference <- trimws(as.character(definition$reference_level %||cov% ""))
+        reference_index <- match(toupper(reference), toupper(declared_levels))
+        if (is.na(reference_index)) {
+          stop("External categorical covariate ", name, " has an invalid reference level.")
+        }
+        canonical_levels <- c(
+          declared_levels[[reference_index]],
+          declared_levels[-reference_index]
+        )
+        encoded_values <- factor(canonical, levels = canonical_levels)
+        data[[encoded_name]] <- encoded_values
+        counts <- table(encoded_values, useNA = "no")
+        metadata[[encoded_name]] <- list(
+          source = name,
+          label = label,
+          encoded_name = encoded_name,
+          type = "categorical_factor",
+          unit = paste(
+            "category relative to",
+            declared_levels[[reference_index]]
+          ),
+          coding = "Treatment contrasts using the explicitly declared reference level.",
+          mapped_patients = sum(!is.na(encoded_values)),
+          missing_patients = sum(is.na(encoded_values)),
+          declared_levels = as.list(declared_levels),
+          observed_levels = as.list(levels(droplevels(encoded_values))),
+          reference_level = declared_levels[[reference_index]],
+          level_counts = as.list(as.integer(counts)),
+          level_count_names = as.list(names(counts)),
+          unmapped_values = as.list(unmapped)
+        )
+      } else if (value_type == "ordinal") {
+        encoded_values <- match(canonical, declared_levels) - 1
+        encoded_values[is.na(canonical)] <- NA_real_
+        data[[encoded_name]] <- encoded_values
+        metadata[[encoded_name]] <- list(
+          source = name,
+          label = label,
+          encoded_name = encoded_name,
+          type = "ordinal_numeric",
+          unit = "one declared-level increase",
+          coding = paste(
+            "Ordered levels map to consecutive scores beginning at zero:",
+            paste(
+              paste0(
+                declared_levels,
+                "=",
+                seq_along(declared_levels) - 1
+              ),
+              collapse = ", "
+            )
+          ),
+          mapped_patients = sum(is.finite(encoded_values)),
+          missing_patients = sum(!is.finite(encoded_values)),
+          declared_levels = as.list(declared_levels),
+          observed_scores = as.list(sort(unique(encoded_values[is.finite(encoded_values)]))),
+          unmapped_values = as.list(unmapped)
+        )
+      } else {
+        stop("Unsupported external covariate type: ", value_type)
+      }
+    }
+    encoded <- c(encoded, encoded_name)
+  }
+
+  list(data = data, covariates = encoded, metadata = metadata)
+}
+
+prepare_model_covariates <- function(
+  data,
+  covariates,
+  external_covariates = character(),
+  external_definitions = list()
+) {
   covariates <- normalize_requested_covariates(covariates)
   encoded <- character()
   metadata <- list()
-  if (!length(covariates)) {
-    return(list(data = data, covariates = encoded, metadata = metadata))
-  }
 
   for (source in covariates) {
     if (!source %in% names(data)) {
@@ -214,6 +415,15 @@ prepare_model_covariates <- function(data, covariates) {
     encoded <- c(encoded, encoded_name)
   }
 
+  external <- prepare_external_model_covariates(
+    data,
+    external_covariates,
+    external_definitions
+  )
+  data <- external$data
+  encoded <- c(encoded, external$covariates)
+  metadata <- c(metadata, external$metadata)
+
   list(data = data, covariates = encoded, metadata = metadata)
 }
 
@@ -226,8 +436,22 @@ model_covariate_has_variation <- function(values) {
   length(unique(observed)) >= 2
 }
 
-clinical_adjustment_label <- function(covariates) {
+clinical_adjustment_label <- function(
+  covariates,
+  external_covariates = character(),
+  external_definitions = list()
+) {
   requested <- normalize_requested_covariates(covariates)
   labels <- unname(CLINICAL_COVARIATE_LABELS[requested])
-  paste(labels, collapse = " + ")
+  external_requested <- normalize_requested_external_covariates(
+    external_covariates,
+    external_definitions
+  )
+  definition_map <- external_covariate_definition_map(external_definitions)
+  external_labels <- vapply(
+    external_requested,
+    function(name) external_covariate_label(definition_map[[name]]),
+    character(1)
+  )
+  paste(c(labels, external_labels), collapse = " + ")
 }

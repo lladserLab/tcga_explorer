@@ -9,12 +9,12 @@ Frozen patient-level inputs were re-executed without the TCGA-TRACE application,
 
 | Environment | Architecture | Analysis | Runtime (s) | Numeric values | Max abs. error | Max rel. error | Differences | Status |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| native | arm64 | Single gene | 3.679 | 170 | 0 | 0 | 0 | passed |
-| native | arm64 | Weighted signature | 3.126 | 131 | 0 | 0 | 0 | passed |
-| native | arm64 | Two signatures | 2.446 | 159 | 4.06e-14 | 5.82e-14 | 0 | passed |
-| linux/amd64 | amd64 | Single gene | 6.551 | 170 | 1.14e-13 | 4e-14 | 0 | passed |
-| linux/amd64 | amd64 | Weighted signature | 5.714 | 131 | 2.84e-14 | 7.39e-15 | 0 | passed |
-| linux/amd64 | amd64 | Two signatures | 4.613 | 159 | 4.33e-15 | 3.43e-14 | 0 | passed |
+| native | arm64 | Single gene | 4.241 | 750 | 0 | 0 | 0 | passed |
+| native | arm64 | Weighted signature | 3.202 | 155 | 0 | 0 | 0 | passed |
+| native | arm64 | Two signatures | 2.931 | 902 | 4.06e-14 | 5.82e-14 | 0 | passed |
+| linux/amd64 | amd64 | Single gene | 10.122 | 750 | 1.14e-13 | 5.53e-14 | 0 | passed |
+| linux/amd64 | amd64 | Weighted signature | 6.072 | 155 | 2.84e-14 | 7.39e-15 | 0 | passed |
+| linux/amd64 | amd64 | Two signatures | 5.571 | 902 | 6.48e-14 | 7.99e-14 | 0 | passed |
 
 ## Negative Controls
 

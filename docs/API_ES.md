@@ -305,21 +305,26 @@ agrupados y RMST siguen siendo resúmenes post-selección. Las pruebas
 la interpretación, sin descartar una asociación.
 Cuando el `cox.zph` específico del marcador tiene p < 0,05, los modelos Cox
 agrupados, continuos, de interacción y pan-cáncer también entregan
-`time_varying_effect`. El diagnóstico usa un único corte fijo en 730,5 días:
+`time_varying_effect`. El diagnóstico usa un corte primario fijo en 730,5 días
+y sensibilidades fijas a 1 y 5 años:
 
 - `status`: `completed`, `skipped`, `failed`, `not_triggered` o
   `not_evaluable`;
 - `periods.early` y `periods.late`: soporte, HR, IC 95% y p de cada período;
 - `change`: razón entre el HR tardío y temprano, IC 95% y p;
 - `support`: eventos a cada lado y pacientes que entran al período tardío; y
+- `sensitivity_analyses`: el mismo contrato para los cortes a 1 y 5 años; y
 - disparador, regla del corte fijo, soporte mínimo, manejo de empates y
   especificación de varianza robusta.
 
 El corte nunca se elige desde la expresión, tiempos de evento, puntos de corte
 ni efectos estimados. Se requieren al menos 5 eventos por período y 10
-pacientes que entren al período tardío. Es un diagnóstico para interpretar PH,
-no una prueba primaria adicional ni una regla de exclusión. Los CSV continuos
-y agrupados del multiverso conservan los mismos campos.
+pacientes que entren al período tardío. La razón es el contraste Wald de la
+interacción marcador-período y cada ajuste en dos períodos es una aproximación
+gruesa a un efecto que podría variar suavemente en el tiempo. Es un diagnóstico
+para interpretar PH, no una prueba primaria adicional ni una regla de
+exclusión. Los CSV continuos y agrupados del multiverso conservan los mismos
+campos.
 
 ### Estimandos con riesgos competitivos
 

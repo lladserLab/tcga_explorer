@@ -1,30 +1,30 @@
 {
   "bundles": [
     {
-      "analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+      "analysis_id": "5bc89f4c26934a34a9c6238898436b4b",
       "analysis_type": "single",
-      "checks": 40,
-      "checks_passed": 40,
+      "checks": 42,
+      "checks_passed": 42,
       "clean_reruns": 2,
       "clean_reruns_passed": 2,
       "expression_artifact_hashed": true,
       "gdc_identifiers": 365,
       "label": "Single gene",
       "max_absolute_error": 1.1369e-13,
-      "max_relative_error": 4.0007e-14,
-      "numeric_comparisons": 170,
+      "max_relative_error": 5.5334e-14,
+      "numeric_comparisons": 750,
       "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
       "patients": 365,
       "r_roundtrip": true,
-      "reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7",
+      "reproducibility_hash": "d5a8381b32f22e23600927c0ad679efbe9af283d009431a6c39e394b0a5a685d",
       "score_reconstructed": true,
       "status": "passed"
     },
     {
-      "analysis_id": "55c7f5da98b744e2ba62fe199c319e83",
+      "analysis_id": "3375cd134d28419581df52a8bacb4b53",
       "analysis_type": "weighted",
-      "checks": 43,
-      "checks_passed": 43,
+      "checks": 41,
+      "checks_passed": 41,
       "clean_reruns": 2,
       "clean_reruns_passed": 2,
       "expression_artifact_hashed": true,
@@ -32,16 +32,16 @@
       "label": "Weighted signature",
       "max_absolute_error": 2.8422e-14,
       "max_relative_error": 7.3914e-15,
-      "numeric_comparisons": 131,
+      "numeric_comparisons": 155,
       "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
       "patients": 79,
       "r_roundtrip": true,
-      "reproducibility_hash": "13e2d1fff4a3f9cd418faaa5da02d299b03544989cd721ff91774a90929a8202",
+      "reproducibility_hash": "63faae5e22faeda5d35ee6937da3c4091ca9e68ee846ae874059fb48f82277fc",
       "score_reconstructed": true,
       "status": "passed"
     },
     {
-      "analysis_id": "4b6f0bfa40a44a7fae8f3c013db24ec5",
+      "analysis_id": "85c2c2f3b8e64708a92fa5d4b9f530ae",
       "analysis_type": "combined_signatures",
       "checks": 42,
       "checks_passed": 42,
@@ -50,13 +50,13 @@
       "expression_artifact_hashed": true,
       "gdc_identifiers": 80,
       "label": "Two signatures",
-      "max_absolute_error": 4.0634e-14,
-      "max_relative_error": 5.8193e-14,
-      "numeric_comparisons": 159,
+      "max_absolute_error": 6.4837e-14,
+      "max_relative_error": 7.9874e-14,
+      "numeric_comparisons": 902,
       "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
       "patients": 80,
       "r_roundtrip": true,
-      "reproducibility_hash": "8cd06bd6b09ef9c9232dd9db53ce28d9feeb18c8e8f029a62eb8128297a209ef",
+      "reproducibility_hash": "d7a223f7f27992f2d5664b96e23d87d8e02bf6e73427af38ed84405614b17909",
       "score_reconstructed": true,
       "status": "passed"
     }
@@ -69,22 +69,22 @@
     "cases": {
       "Single gene": {
         "max_absolute_error": 1.1369e-13,
-        "max_relative_error": 4.0007e-14,
-        "numeric_comparisons": 170,
+        "max_relative_error": 5.5334e-14,
+        "numeric_comparisons": 750,
         "passed": 2,
         "total": 2
       },
       "Two signatures": {
-        "max_absolute_error": 4.0634e-14,
-        "max_relative_error": 5.8193e-14,
-        "numeric_comparisons": 159,
+        "max_absolute_error": 6.4837e-14,
+        "max_relative_error": 7.9874e-14,
+        "numeric_comparisons": 902,
         "passed": 2,
         "total": 2
       },
       "Weighted signature": {
         "max_absolute_error": 2.8422e-14,
         "max_relative_error": 7.3914e-15,
-        "numeric_comparisons": 131,
+        "numeric_comparisons": 155,
         "passed": 2,
         "total": 2
       }

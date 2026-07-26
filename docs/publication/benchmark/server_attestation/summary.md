@@ -5,10 +5,10 @@ Status: **passed**.
 ## Frozen Subject
 
 - Type: `survival_analysis`
-- ID: `ba68bc76e27641268a6566d72324c789`
+- ID: `3695c8ead2134ecb9b2d10c72544c19e`
 - Audit schema: `tcga-trace-analysis-audit-v4`
-- Audit SHA-256: `1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0`
-- Reproducibility hash: `6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b`
+- Audit SHA-256: `903155badd8b3e94e5f604b74310607f6161ed2646128b901620f5b17c3188bd`
+- Reproducibility hash: `6549cad343a51ba60d02e661f2b1d1e4afec7fc6593a9ec406eae0ebafbd9117`
 - Ed25519 key ID: `ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643`
 
 ## Acceptance Controls

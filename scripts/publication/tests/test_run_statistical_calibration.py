@@ -36,6 +36,8 @@ def calibration_result() -> dict:
             "maxstat_naive",
             "maxstat_lau94",
             "median_logrank",
+            "upper_quartile_logrank",
+            "outer_quartiles_logrank",
             "median_cox",
             "median_rmst",
         ):
@@ -124,6 +126,26 @@ def test_latex_labels_naive_maxstat_as_selection_diagnostic(
     assert "naive maxstat column" in text
     assert "only to expose bias" in text
     assert "Grouped Holm" in text
+    assert "Linear-PH power" in text
+
+
+def test_markdown_reports_power_and_null_interval_interpretation(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "summary.md"
+    result = calibration_result()
+
+    calibration.write_markdown(
+        path,
+        result,
+        calibration.result_rows(result),
+    )
+
+    text = path.read_text(encoding="utf-8")
+    assert "Linear-PH Association Power" in text
+    assert "Outer quartiles" in text
+    assert "Null Calibration Interpretation" in text
+    assert "lack of grouped support is not evidence" in text
 
 
 def test_result_rows_preserve_analysis_family() -> None:

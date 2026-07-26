@@ -242,7 +242,20 @@ def test_publication_catalog_covers_main_and_diagnostic_benchmarks():
         method["adjusted_time_varying_effect"].get("status") == "completed"
         for method in emp3["methods"]
     ) == 3
-    assert all(
-        reference["spline"]["nonlinearity_bh_p_value"] is not None
+    evaluable_splines = [
+        reference["spline"]
         for reference in continuous
+        if reference["spline"]["status"] == "completed"
+    ]
+    assert len(evaluable_splines) == 10
+    assert all(
+        spline["nonlinearity_bh_p_value"] is not None
+        for spline in evaluable_splines
     )
+    uvm = next(
+        case
+        for case in catalog["single_gene_cases"]
+        if case["id"] == "uvm-bap1-dss"
+    )
+    assert uvm["continuous"]["spline"]["status"] == "skipped"
+    assert "Fewer than 30 events" in uvm["continuous"]["spline"]["reason"]

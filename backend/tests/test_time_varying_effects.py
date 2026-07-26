@@ -102,6 +102,16 @@ def test_time_varying_effect_recovers_prespecified_early_and_late_effects(
     assert result["periods"]["early"]["hazard_ratio"] > 1.4
     assert result["periods"]["late"]["hazard_ratio"] < 0.8
     assert result["change"]["hazard_ratio_ratio"] < 1
+    assert "Wald contrast" in result["change"]["method"]
+    assert "coarse diagnostic" in result["approximation_note"]
+    assert [
+        sensitivity["split_years"]
+        for sensitivity in result["sensitivity_analyses"]
+    ] == [1, 5]
+    assert all(
+        sensitivity["analysis_role"] == "sensitivity"
+        for sensitivity in result["sensitivity_analyses"]
+    )
 
 
 @pytest.mark.skipif(RSCRIPT is None, reason="Rscript is not installed")

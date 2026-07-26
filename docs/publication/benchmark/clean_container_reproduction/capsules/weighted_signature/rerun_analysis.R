@@ -15,7 +15,7 @@ dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 input_path <- file.path(capsule_dir, "input.json")
 engine_path <- file.path(capsule_dir, "km_analysis.R")
 expected_path <- file.path(capsule_dir, "metrics.json")
-required <- c(input_path, engine_path, file.path(capsule_dir, "clinical_covariates.R"), file.path(capsule_dir, "cox_diagnostics.R"))
+required <- c(input_path, engine_path, file.path(capsule_dir, "clinical_covariates.R"), file.path(capsule_dir, "cox_diagnostics.R"), file.path(capsule_dir, "competing_risks.R"))
 missing <- required[!file.exists(required)]
 if (length(missing)) stop("Missing reproduction files: ", paste(basename(missing), collapse = ", "))
 
@@ -27,6 +27,8 @@ payload$cox_forest_png_path <- file.path(output_dir, "cox_forest.png")
 payload$cox_forest_svg_path <- file.path(output_dir, "cox_forest.svg")
 payload$continuous_effect_png_path <- file.path(output_dir, "continuous_effect.png")
 payload$continuous_effect_svg_path <- file.path(output_dir, "continuous_effect.svg")
+payload$cumulative_incidence_png_path <- file.path(output_dir, "cumulative_incidence.png")
+payload$cumulative_incidence_svg_path <- file.path(output_dir, "cumulative_incidence.svg")
 payload$render_png <- FALSE
 payload$render_svg <- FALSE
 rerun_input <- file.path(output_dir, "input.json")
@@ -40,7 +42,7 @@ if (status != 0L || !file.exists(payload$output_path)) {
   stop("Frozen R analysis failed with status ", status)
 }
 
-core_keys <- fromJSON('["n_patients", "n_events", "group_counts", "event_counts", "median_survival_days", "rmst", "logrank_p_value", "hazard_ratio", "hr_conf_low", "hr_conf_high", "hr_p_value", "cox_models", "signature_interaction_cox_models"]')
+core_keys <- fromJSON('["n_patients", "n_events", "group_counts", "event_counts", "median_survival_days", "rmst", "competing_risks", "logrank_p_value", "hazard_ratio", "hr_conf_low", "hr_conf_high", "hr_p_value", "cox_models", "signature_interaction_cox_models"]')
 tolerance_policy <- fromJSON('{"exact": {"absolute": 0.0, "relative": 0.0}, "probability": {"absolute": 1e-12, "relative": 1e-06}, "effect": {"absolute": 1e-08, "relative": 1e-08}, "time": {"absolute": 1e-06, "relative": 1e-09}, "generic": {"absolute": 1e-10, "relative": 1e-08}}', simplifyVector = FALSE)
 observed <- fromJSON(payload$output_path, simplifyVector = FALSE)
 expected <- if (file.exists(expected_path)) fromJSON(expected_path, simplifyVector = FALSE) else NULL
@@ -132,7 +134,7 @@ result <- list(
   differences = unname(differences),
   r_version = R.version.string,
   package_versions = as.list(vapply(
-    c("jsonlite", "survival", "survminer", "ggplot2", "svglite", "survRM2", "coxphf", "maxstat"),
+    c("jsonlite", "survival", "survminer", "ggplot2", "svglite", "survRM2", "coxphf", "maxstat", "cmprsk"),
     function(package) if (requireNamespace(package, quietly = TRUE)) as.character(packageVersion(package)) else "not available",
     character(1)
   ))

@@ -36,7 +36,7 @@ Before submission, replace the following placeholders:
 - Corresponding author: `[CORRESPONDING AUTHOR NAME AND EMAIL]`
 - Submitting author and ORCID: `[SUBMITTING AUTHOR ORCID]`
 - Repository: `https://github.com/lladserLab/tcga_explorer`
-- Software license: `[SOFTWARE LICENSE]`
+- Software license: `MIT`
 - Release archive: `[ARCHIVAL DOI OR STABLE RELEASE URL]` (Zenodo)
 - Reviewer access: `https://apps.cienciavida.org/tcga_explorer/`
 - AI-use disclosure: `[FINAL PERMITTED AI-USE DISCLOSURE AFTER INDEPENDENT AUTHOR REVIEW]`

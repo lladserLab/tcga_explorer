@@ -7,6 +7,7 @@
     "event_counts",
     "median_survival_days",
     "rmst",
+    "competing_risks",
     "logrank_p_value",
     "hazard_ratio",
     "hr_conf_low",
@@ -21,19 +22,24 @@
   "expected_results_integrity": "Core results are bound by audit_report.json reproducibility_hash; metrics.json is excluded from this manifest to avoid a circular checksum.",
   "files": {
     "input": {
-      "bytes": 300220,
+      "bytes": 383838,
       "filename": "input.json",
-      "sha256": "7b1270af24562b6370728987b184014a82647a2fa57b5fff07697c309e1f2f9c"
+      "sha256": "00fbbf6d7c94e2603a5387588c31cc57c4f0ecc36673007e81718051cbaa3738"
     },
     "reproduction_clinical_covariates": {
-      "bytes": 7375,
+      "bytes": 15512,
       "filename": "clinical_covariates.R",
-      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+      "sha256": "fbe83e3349fc418527dfb5dc2dff768f76e7e2d174d0d40a15032ba4c8f4c5a5"
+    },
+    "reproduction_competing_risks": {
+      "bytes": 28110,
+      "filename": "competing_risks.R",
+      "sha256": "cdab59474c4345d839ad52c68dee95a067327329501aca65445362104ec0b323"
     },
     "reproduction_cox_diagnostics": {
-      "bytes": 9065,
+      "bytes": 20451,
       "filename": "cox_diagnostics.R",
-      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+      "sha256": "c1543741cad742657555434465cad9cc65603a096f7b3bbcc7aefda76976ae22"
     },
     "reproduction_dockerfile": {
       "bytes": 945,
@@ -41,14 +47,14 @@
       "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
     },
     "reproduction_km_analysis": {
-      "bytes": 66975,
+      "bytes": 73548,
       "filename": "km_analysis.R",
-      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+      "sha256": "57753380bbf53e04ea1ea22685c8593aad7f60d1f026bae17bf964c753208291"
     },
     "reproduction_r_runner": {
-      "bytes": 7241,
+      "bytes": 7497,
       "filename": "rerun_analysis.R",
-      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+      "sha256": "512c1d743cea88e96da445db19ad81824d5111ad136794ba6dd70ac355dc580a"
     },
     "reproduction_readme": {
       "bytes": 1209,
@@ -56,9 +62,9 @@
       "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
     },
     "reproduction_renv_lock": {
-      "bytes": 204337,
+      "bytes": 204913,
       "filename": "renv.lock",
-      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+      "sha256": "594794128bca8309f17313c2a6a3c29a81988ca7b224b273cbef6e39c4521712"
     }
   },
   "input": "input.json",

@@ -13,6 +13,9 @@ TCGA-TRACE is the canonical product and release name. The deployed
 `/tcga_explorer` path, current repository slug and selected internal identifiers
 are retained as legacy compatibility surfaces, not as alternate product names;
 see [Project Identity](docs/PROJECT_IDENTITY.md).
+Source code is distributed under the [MIT License](LICENSE).
+The archived trust anchor and rotation/revocation rules are documented in the
+[attestation key policy](docs/ATTESTATION_KEY_POLICY.md).
 
 ## What It Uses
 
@@ -181,6 +184,7 @@ The updater uses the GDC API to compare remote `file_id`, `md5sum`, `file_size`,
 
 ## Notes
 
+- The default Survival interface uses one gene, OS, `log2(TPM + 1)`, no clinical filters, age adjustment and a median split. It presents the continuous Cox estimate first, adds the spline when at least 30 events are available, and treats Kaplan-Meier, grouped Cox and RMST as cutpoint sensitivities. Every completed analysis creates an audit report, reconstruction bundle and signed receipt; a prespecified multiverse is an explicit separate workflow.
 - Expression grouping can use `log2(TPM + 1)`, `log2(CPM + 1)`, `log2(FPKM + 1)`, or `log2(FPKM-UQ + 1)`.
 - Cancer cohorts are shown by full TCGA study name, with the TCGA code kept in parentheses.
 - A Dataset Summary page shows the database creation date, the TCGA data-through date, cohort/sample totals, metadata coverage, ranked dot/donut/histogram/matrix plots, distributions, and a cohort table.
@@ -191,7 +195,8 @@ The updater uses the GDC API to compare remote `file_id`, `md5sum`, `file_size`,
 - Every continuous, grouped and two-signature interaction Cox result reports fitted parameters and events per parameter. Values below 10 are cautioned and values below 5 receive a severe caution.
 - Low-information, unstable, non-finite or extreme standard Cox fits automatically add a `coxphf` Firth sensitivity with profile-likelihood inference. It is displayed beside, never substituted for, the Efron-ties standard estimate.
 - Compare Analyses shows one cutpoint-independent continuous reference per gene, then evaluates maxstat, median, upper quartile, outer quartiles and the selected custom percentile as grouped sensitivities with BH, Cox, RMST and PH diagnostics. No composite retention rule is applied.
-- A marker-specific `cox.zph` p-value below 0.05 triggers an adjacent two-period Cox diagnostic with HRs before and after a fixed 2-year split, their ratio and explicit period support. The split is prespecified rather than optimized and never removes the original model.
+- A marker-specific `cox.zph` p-value below 0.05 triggers an adjacent two-period Cox diagnostic with a fixed 2-year primary split and fixed 1- and 5-year sensitivities. Each supported split reports early/late HRs, the Wald interaction ratio and period support; these coarse temporal summaries never replace the original model.
+- Restricted cubic splines require at least 30 endpoint events for their three fitted parameters and report events per parameter with the same information-status contract as the Cox models.
 - The Multiverse module freezes up to 72 endpoint-by-scoring-by-cutpoint
   specifications before execution. It deduplicates cutpoint-independent
   continuous tests, adjusts continuous and grouped families separately, and

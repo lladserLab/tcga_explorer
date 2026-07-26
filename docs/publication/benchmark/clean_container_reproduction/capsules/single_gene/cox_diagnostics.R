@@ -1,6 +1,395 @@
 MODEL_EPV_CAUTION_THRESHOLD <- 10
 MODEL_EPV_SEVERE_THRESHOLD <- 5
 FIRTH_PENALTY <- 0.5
+TIME_VARYING_PH_ALPHA <- 0.05
+TIME_VARYING_SPLIT_YEARS <- 2
+TIME_VARYING_SPLIT_DAYS <- TIME_VARYING_SPLIT_YEARS * 365.25
+TIME_VARYING_SENSITIVITY_YEARS <- c(1, 5)
+TIME_VARYING_MIN_EVENTS_PER_PERIOD <- 5L
+TIME_VARYING_MIN_AT_RISK_AT_SPLIT <- 10L
+
+format_follow_up_years <- function(years) {
+  if (isTRUE(all.equal(as.numeric(years), 1))) {
+    return("1 year")
+  }
+  sprintf("%g years", as.numeric(years))
+}
+
+time_varying_effect_contract <- function(
+  ph_p_value,
+  split_years = TIME_VARYING_SPLIT_YEARS,
+  analysis_role = "primary"
+) {
+  split_days <- as.numeric(split_years) * 365.25
+  split_label <- format_follow_up_years(split_years)
+  list(
+    method = "Prespecified two-period Cox marker effect",
+    estimand = paste(
+      sprintf("Marker hazard ratio before and after a fixed %s follow-up split,", split_label),
+      "plus the late-to-early hazard-ratio ratio."
+    ),
+    analysis_role = analysis_role,
+    trigger = "Marker-specific cox.zph p < 0.05",
+    trigger_alpha = TIME_VARYING_PH_ALPHA,
+    trigger_ph_p_value = if (
+      length(ph_p_value) &&
+        is.finite(suppressWarnings(as.numeric(ph_p_value[[1]])))
+    ) {
+      unname(as.numeric(ph_p_value[[1]]))
+    } else {
+      NA_real_
+    },
+    split_rule = paste(
+      sprintf(
+        "The follow-up split is fixed at %s (%.2f days) for this %s analysis",
+        split_label,
+        split_days,
+        analysis_role
+      ),
+      "and is not selected from marker values, event times or effect estimates."
+    ),
+    split_years = as.numeric(split_years),
+    split_days = split_days,
+    sensitivity_split_years = if (identical(analysis_role, "primary")) {
+      as.list(TIME_VARYING_SENSITIVITY_YEARS)
+    } else {
+      list()
+    },
+    min_events_per_period = TIME_VARYING_MIN_EVENTS_PER_PERIOD,
+    min_at_risk_at_split = TIME_VARYING_MIN_AT_RISK_AT_SPLIT,
+    ties = "efron",
+    variance = "participant-clustered robust sandwich",
+    approximation_note = paste(
+      "The two-period model is a coarse diagnostic approximation to an effect",
+      "that may vary smoothly over follow-up."
+    )
+  )
+}
+
+time_varying_period_effect <- function(
+  label,
+  start_days,
+  end_days,
+  n_at_risk_start,
+  n_events,
+  log_hr,
+  standard_error
+) {
+  critical_value <- stats::qnorm(0.975)
+  list(
+    label = label,
+    start_days = start_days,
+    end_days = end_days,
+    n_at_risk_start = as.integer(n_at_risk_start),
+    n_events = as.integer(n_events),
+    log_hr = unname(log_hr),
+    standard_error = unname(standard_error),
+    hazard_ratio = unname(exp(log_hr)),
+    hr_conf_low = unname(exp(log_hr - critical_value * standard_error)),
+    hr_conf_high = unname(exp(log_hr + critical_value * standard_error)),
+    p_value = unname(
+      2 * stats::pnorm(abs(log_hr / standard_error), lower.tail = FALSE)
+    )
+  )
+}
+
+fit_prespecified_time_varying_effect <- function(
+  data,
+  formula_terms,
+  marker_formula_term,
+  marker_coefficient,
+  effect_label,
+  ph_p_value,
+  split_years = TIME_VARYING_SPLIT_YEARS,
+  include_sensitivities = TRUE,
+  analysis_role = "primary"
+) {
+  result <- time_varying_effect_contract(
+    ph_p_value,
+    split_years = split_years,
+    analysis_role = analysis_role
+  )
+  result$effect_label <- effect_label
+  split_days <- result$split_days
+  split_label <- format_follow_up_years(split_years)
+
+  ph_value <- suppressWarnings(as.numeric(ph_p_value))
+  if (!length(ph_value) || !is.finite(ph_value[[1]])) {
+    result$status <- "not_evaluable"
+    result$reason <- paste(
+      "The marker-specific proportional-hazards diagnostic was not evaluable,",
+      "so the prespecified temporal follow-up model was not triggered."
+    )
+    return(result)
+  }
+  if (ph_value[[1]] >= TIME_VARYING_PH_ALPHA) {
+    result$status <- "not_triggered"
+    result$reason <- paste(
+      "The marker-specific proportional-hazards diagnostic was not below the",
+      "prespecified 0.05 trigger."
+    )
+    return(result)
+  }
+
+  required_fields <- c("time_days", "event")
+  if (!all(required_fields %in% names(data))) {
+    result$status <- "failed"
+    result$reason <- "The temporal diagnostic did not receive time_days and event fields."
+    return(result)
+  }
+  data <- data[
+    is.finite(data$time_days) &
+      data$time_days > 0 &
+      !is.na(data$event) &
+      data$event %in% c(0, 1),
+    ,
+    drop = FALSE
+  ]
+  data$split_id <- seq_len(nrow(data))
+  if (include_sensitivities) {
+    result$sensitivity_analyses <- lapply(
+      TIME_VARYING_SENSITIVITY_YEARS,
+      function(sensitivity_years) {
+        fit_prespecified_time_varying_effect(
+          data = data,
+          formula_terms = formula_terms,
+          marker_formula_term = marker_formula_term,
+          marker_coefficient = marker_coefficient,
+          effect_label = effect_label,
+          ph_p_value = ph_p_value,
+          split_years = sensitivity_years,
+          include_sensitivities = FALSE,
+          analysis_role = "sensitivity"
+        )
+      }
+    )
+  }
+  early_events <- sum(
+    data$event == 1 & data$time_days <= split_days,
+    na.rm = TRUE
+  )
+  late_events <- sum(
+    data$event == 1 & data$time_days > split_days,
+    na.rm = TRUE
+  )
+  at_risk_at_split <- sum(
+    data$time_days > split_days,
+    na.rm = TRUE
+  )
+  result$n_patients <- nrow(data)
+  result$n_events <- sum(data$event, na.rm = TRUE)
+  result$support <- list(
+    early_events = as.integer(early_events),
+    late_events = as.integer(late_events),
+    at_risk_at_split = as.integer(at_risk_at_split)
+  )
+
+  support_reasons <- character()
+  if (early_events < TIME_VARYING_MIN_EVENTS_PER_PERIOD) {
+    support_reasons <- c(
+      support_reasons,
+      sprintf(
+        "The early period had %d events; at least %d are required.",
+        early_events,
+        TIME_VARYING_MIN_EVENTS_PER_PERIOD
+      )
+    )
+  }
+  if (late_events < TIME_VARYING_MIN_EVENTS_PER_PERIOD) {
+    support_reasons <- c(
+      support_reasons,
+      sprintf(
+        "The late period had %d events; at least %d are required.",
+        late_events,
+        TIME_VARYING_MIN_EVENTS_PER_PERIOD
+      )
+    )
+  }
+  if (at_risk_at_split < TIME_VARYING_MIN_AT_RISK_AT_SPLIT) {
+    support_reasons <- c(
+      support_reasons,
+      sprintf(
+        "Only %d patients entered the late period; at least %d are required.",
+        at_risk_at_split,
+        TIME_VARYING_MIN_AT_RISK_AT_SPLIT
+      )
+    )
+  }
+  if (length(support_reasons)) {
+    result$status <- "skipped"
+    result$reason <- paste(support_reasons, collapse = " ")
+    return(result)
+  }
+
+  early_data <- data
+  early_data$tstart <- 0
+  early_data$tstop <- pmin(
+    early_data$time_days,
+    split_days
+  )
+  early_data$interval_event <- as.integer(
+    early_data$event == 1 &
+      early_data$time_days <= split_days
+  )
+  early_data$late_period <- 0
+  early_data <- early_data[
+    early_data$tstop > early_data$tstart,
+    ,
+    drop = FALSE
+  ]
+
+  late_data <- data[data$time_days > split_days, , drop = FALSE]
+  late_data$tstart <- split_days
+  late_data$tstop <- late_data$time_days
+  late_data$interval_event <- late_data$event
+  late_data$late_period <- 1
+  split_data <- rbind(early_data, late_data)
+
+  time_interaction_term <- paste(marker_formula_term, "late_period", sep = ":")
+  time_formula <- stats::as.formula(
+    paste(
+      "survival::Surv(tstart, tstop, interval_event) ~",
+      paste(
+        unique(c(
+          formula_terms,
+          time_interaction_term,
+          "cluster(split_id)"
+        )),
+        collapse = " + "
+      )
+    )
+  )
+  fit_warnings <- character()
+  fit <- tryCatch(
+    withCallingHandlers(
+      survival::coxph(
+        time_formula,
+        data = split_data,
+        ties = "efron",
+        x = TRUE,
+        robust = TRUE
+      ),
+      warning = function(warning) {
+        fit_warnings <<- c(fit_warnings, conditionMessage(warning))
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(error) error
+  )
+  if (inherits(fit, "error")) {
+    result$status <- "failed"
+    result$reason <- conditionMessage(fit)
+    result$warnings <- as.list(unique(fit_warnings))
+    return(result)
+  }
+
+  coefficients <- stats::coef(fit)
+  coefficient_names <- names(coefficients)
+  early_index <- match(marker_coefficient, coefficient_names)
+  target_parts <- sort(c(
+    strsplit(marker_coefficient, ":", fixed = TRUE)[[1]],
+    "late_period"
+  ))
+  time_indexes <- which(vapply(
+    coefficient_names,
+    function(coefficient_name) {
+      identical(
+        sort(strsplit(coefficient_name, ":", fixed = TRUE)[[1]]),
+        target_parts
+      )
+    },
+    logical(1)
+  ))
+  if (is.na(early_index) || length(time_indexes) != 1) {
+    result$status <- "failed"
+    result$reason <- paste(
+      "The temporal Cox model could not isolate the marker and marker-by-period",
+      "coefficients."
+    )
+    result$coefficient_names <- as.list(coefficient_names)
+    result$warnings <- as.list(unique(fit_warnings))
+    return(result)
+  }
+
+  time_index <- time_indexes[[1]]
+  variance <- stats::vcov(fit)
+  early_log_hr <- unname(coefficients[[early_index]])
+  change_log_hr <- unname(coefficients[[time_index]])
+  early_variance <- unname(variance[early_index, early_index])
+  change_variance <- unname(variance[time_index, time_index])
+  covariance <- unname(variance[early_index, time_index])
+  late_log_hr <- early_log_hr + change_log_hr
+  late_variance <- early_variance + change_variance + (2 * covariance)
+  numeric_values <- c(
+    early_log_hr,
+    change_log_hr,
+    early_variance,
+    change_variance,
+    late_log_hr,
+    late_variance
+  )
+  if (!all(is.finite(numeric_values)) ||
+      early_variance <= 0 ||
+      change_variance <= 0 ||
+      late_variance <= 0) {
+    result$status <- "failed"
+    result$reason <- "The temporal Cox model returned non-finite effect variances."
+    result$warnings <- as.list(unique(fit_warnings))
+    return(result)
+  }
+
+  early_standard_error <- sqrt(early_variance)
+  late_standard_error <- sqrt(late_variance)
+  change_standard_error <- sqrt(change_variance)
+  critical_value <- stats::qnorm(0.975)
+  result$status <- "completed"
+  result$formula <- paste(deparse(time_formula), collapse = "")
+  result$parameter_count <- length(coefficients)
+  result$events_per_parameter <- unname(
+    sum(data$event, na.rm = TRUE) / length(coefficients)
+  )
+  result$periods <- list(
+    early = time_varying_period_effect(
+      paste("0 to", split_label),
+      0,
+      split_days,
+      nrow(data),
+      early_events,
+      early_log_hr,
+      early_standard_error
+    ),
+    late = time_varying_period_effect(
+      paste("After", split_label),
+      split_days,
+      NULL,
+      at_risk_at_split,
+      late_events,
+      late_log_hr,
+      late_standard_error
+    )
+  )
+  result$change <- list(
+    label = "Late HR / early HR",
+    method = "Wald contrast for the marker-by-period interaction coefficient",
+    log_hr_difference = change_log_hr,
+    standard_error = change_standard_error,
+    hazard_ratio_ratio = unname(exp(change_log_hr)),
+    hr_ratio_conf_low = unname(
+      exp(change_log_hr - critical_value * change_standard_error)
+    ),
+    hr_ratio_conf_high = unname(
+      exp(change_log_hr + critical_value * change_standard_error)
+    ),
+    p_value = unname(
+      2 * stats::pnorm(
+        abs(change_log_hr / change_standard_error),
+        lower.tail = FALSE
+      )
+    )
+  )
+  result$warnings <- as.list(unique(fit_warnings))
+  result
+}
 
 cox_parameter_count <- function(formula, data) {
   matrix <- tryCatch(

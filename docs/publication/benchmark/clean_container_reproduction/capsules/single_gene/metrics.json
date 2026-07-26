@@ -110,6 +110,11 @@
       }
     ]
   },
+  "competing_risks": {
+    "applicable": false,
+    "status": "not_applicable",
+    "reason": "The selected endpoint has no TCGA-CDR competing-risk status."
+  },
   "clinical_adjustment": {
     "status": "requested",
     "requested_covariates": [
@@ -179,8 +184,217 @@
         "p_value": 6.708631808853352e-08,
         "ph_p_value": 0.0013375938013074624,
         "ph_global_p_value": 0.0013375938013074624,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.0013375938013074624,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "Expression per +1 SD",
+          "sensitivity_analyses": [
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.0013375938013074624,
+              "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 1,
+              "split_days": 365.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 365,
+              "n_events": 130,
+              "support": {
+                "early_events": 58,
+                "late_events": 72,
+                "at_risk_at_split": 259
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     expression_z:late_period + cluster(split_id)",
+              "parameter_count": 2,
+              "events_per_parameter": 65,
+              "periods": {
+                "early": {
+                  "label": "0 to 1 year",
+                  "start_days": 0,
+                  "end_days": 365.25,
+                  "n_at_risk_start": 365,
+                  "n_events": 58,
+                  "log_hr": 0.7620126137263372,
+                  "standard_error": 0.12851070451435723,
+                  "hazard_ratio": 2.142584078141482,
+                  "hr_conf_low": 1.66551812506681,
+                  "hr_conf_high": 2.756299353824946,
+                  "p_value": 3.037377107726318e-09
+                },
+                "late": {
+                  "label": "After 1 year",
+                  "start_days": 365.25,
+                  "end_days": null,
+                  "n_at_risk_start": 259,
+                  "n_events": 72,
+                  "log_hr": 0.25159229948302375,
+                  "standard_error": 0.1269604498395395,
+                  "hazard_ratio": 1.286071598329581,
+                  "hr_conf_low": 1.0027581871547582,
+                  "hr_conf_high": 1.649430717412572,
+                  "p_value": 0.04751743533463573
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.5104203142433135,
+                "standard_error": 0.18281297348000433,
+                "hazard_ratio_ratio": 0.600243235003008,
+                "hr_ratio_conf_low": 0.41948514782518376,
+                "hr_ratio_conf_high": 0.8588908165993624,
+                "p_value": 0.005237760716136816
+              },
+              "warnings": []
+            },
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.0013375938013074624,
+              "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 5,
+              "split_days": 1826.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 365,
+              "n_events": 130,
+              "support": {
+                "early_events": 121,
+                "late_events": 9,
+                "at_risk_at_split": 40
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     expression_z:late_period + cluster(split_id)",
+              "parameter_count": 2,
+              "events_per_parameter": 65,
+              "periods": {
+                "early": {
+                  "label": "0 to 5 years",
+                  "start_days": 0,
+                  "end_days": 1826.25,
+                  "n_at_risk_start": 365,
+                  "n_events": 121,
+                  "log_hr": 0.5551922097900331,
+                  "standard_error": 0.09532728256231354,
+                  "hazard_ratio": 1.74227583506473,
+                  "hr_conf_low": 1.4453538481855588,
+                  "hr_conf_high": 2.100195110879722,
+                  "p_value": 5.743351069181369e-09
+                },
+                "late": {
+                  "label": "After 5 years",
+                  "start_days": 1826.25,
+                  "end_days": null,
+                  "n_at_risk_start": 40,
+                  "n_events": 9,
+                  "log_hr": -0.2557095169295922,
+                  "standard_error": 0.3925638395729125,
+                  "hazard_ratio": 0.7743668765926474,
+                  "hr_conf_low": 0.3587532315567224,
+                  "hr_conf_high": 1.6714666428559903,
+                  "p_value": 0.5147991084612522
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.8109017267196253,
+                "standard_error": 0.4095567957044476,
+                "hazard_ratio_ratio": 0.444457106623348,
+                "hr_ratio_conf_low": 0.1991656684300231,
+                "hr_ratio_conf_high": 0.9918482496766484,
+                "p_value": 0.04770921612898618
+              },
+              "warnings": []
+            }
+          ],
+          "n_patients": 365,
+          "n_events": 130,
+          "support": {
+            "early_events": 91,
+            "late_events": 39,
+            "at_risk_at_split": 140
+          },
+          "status": "completed",
+          "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     expression_z:late_period + cluster(split_id)",
+          "parameter_count": 2,
+          "events_per_parameter": 65,
+          "periods": {
+            "early": {
+              "label": "0 to 2 years",
+              "start_days": 0,
+              "end_days": 730.5,
+              "n_at_risk_start": 365,
+              "n_events": 91,
+              "log_hr": 0.7060942641591343,
+              "standard_error": 0.107240389355259,
+              "hazard_ratio": 2.0260625199465596,
+              "hr_conf_low": 1.6419867857372232,
+              "hr_conf_high": 2.499977082878388,
+              "p_value": 4.572811038026223e-11
+            },
+            "late": {
+              "label": "After 2 years",
+              "start_days": 730.5,
+              "end_days": null,
+              "n_at_risk_start": 140,
+              "n_events": 39,
+              "log_hr": -0.03110962914122839,
+              "standard_error": 0.1795505766296935,
+              "hazard_ratio": 0.9693692961271395,
+              "hr_conf_low": 0.6817976999785158,
+              "hr_conf_high": 1.3782340895307157,
+              "p_value": 0.8624440156832694
+            }
+          },
+          "change": {
+            "label": "Late HR / early HR",
+            "method": "Wald contrast for the marker-by-period interaction coefficient",
+            "log_hr_difference": -0.7372038933003627,
+            "standard_error": 0.21551734470313919,
+            "hazard_ratio_ratio": 0.4784498437652891,
+            "hr_ratio_conf_low": 0.31360842452044896,
+            "hr_ratio_conf_high": 0.7299365549540685,
+            "p_value": 0.0006247754853283524
+          },
+          "warnings": []
+        },
         "warnings": [
-          "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+          "Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic."
         ]
       },
       {
@@ -246,8 +460,217 @@
         "p_value": 1.959985428291258e-06,
         "ph_p_value": 0.014040697335641372,
         "ph_global_p_value": 0.010327127385453022,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.014040697335641372,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "Expression per +1 SD",
+          "sensitivity_analyses": [
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.014040697335641372,
+              "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 1,
+              "split_days": 365.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 341,
+              "n_events": 116,
+              "support": {
+                "early_events": 55,
+                "late_events": 61,
+                "at_risk_at_split": 241
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 38.666666666666664,
+              "periods": {
+                "early": {
+                  "label": "0 to 1 year",
+                  "start_days": 0,
+                  "end_days": 365.25,
+                  "n_at_risk_start": 341,
+                  "n_events": 55,
+                  "log_hr": 0.6748408609998529,
+                  "standard_error": 0.12161677889451378,
+                  "hazard_ratio": 1.963720446594261,
+                  "hr_conf_low": 1.547245656586786,
+                  "hr_conf_high": 2.4922984762995632,
+                  "p_value": 2.874520363424879e-08
+                },
+                "late": {
+                  "label": "After 1 year",
+                  "start_days": 365.25,
+                  "end_days": null,
+                  "n_at_risk_start": 241,
+                  "n_events": 61,
+                  "log_hr": 0.22904396499198337,
+                  "standard_error": 0.1343325314951034,
+                  "hazard_ratio": 1.2573973192576935,
+                  "hr_conf_low": 0.9663366962159824,
+                  "hr_conf_high": 1.636125405014175,
+                  "p_value": 0.08818470791294811
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.4457968960078695,
+                "standard_error": 0.18207256257259527,
+                "hazard_ratio_ratio": 0.6403138091465286,
+                "hr_ratio_conf_low": 0.44813867089134546,
+                "hr_ratio_conf_high": 0.9148993399035295,
+                "p_value": 0.014346943204111324
+              },
+              "warnings": []
+            },
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.014040697335641372,
+              "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 5,
+              "split_days": 1826.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 341,
+              "n_events": 116,
+              "support": {
+                "early_events": 108,
+                "late_events": 8,
+                "at_risk_at_split": 39
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 38.666666666666664,
+              "periods": {
+                "early": {
+                  "label": "0 to 5 years",
+                  "start_days": 0,
+                  "end_days": 1826.25,
+                  "n_at_risk_start": 341,
+                  "n_events": 108,
+                  "log_hr": 0.5032502620646995,
+                  "standard_error": 0.09434610560360956,
+                  "hazard_ratio": 1.6540887650579204,
+                  "hr_conf_low": 1.3748371572306177,
+                  "hr_conf_high": 1.9900608797932662,
+                  "p_value": 9.602688902141736e-08
+                },
+                "late": {
+                  "label": "After 5 years",
+                  "start_days": 1826.25,
+                  "end_days": null,
+                  "n_at_risk_start": 39,
+                  "n_events": 8,
+                  "log_hr": -0.22091481864712859,
+                  "standard_error": 0.3794727981133566,
+                  "hazard_ratio": 0.8017849745102977,
+                  "hr_conf_low": 0.3811097696391094,
+                  "hr_conf_high": 1.686808359594749,
+                  "p_value": 0.5604572550074696
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.7241650807118281,
+                "standard_error": 0.397493092438506,
+                "hazard_ratio_ratio": 0.4847291097356689,
+                "hr_ratio_conf_low": 0.22240900529419116,
+                "hr_ratio_conf_high": 1.056442429182839,
+                "p_value": 0.0684806925574962
+              },
+              "warnings": []
+            }
+          ],
+          "n_patients": 341,
+          "n_events": 116,
+          "support": {
+            "early_events": 85,
+            "late_events": 31,
+            "at_risk_at_split": 128
+          },
+          "status": "completed",
+          "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + expression_z:late_period + cluster(split_id)",
+          "parameter_count": 3,
+          "events_per_parameter": 38.666666666666664,
+          "periods": {
+            "early": {
+              "label": "0 to 2 years",
+              "start_days": 0,
+              "end_days": 730.5,
+              "n_at_risk_start": 341,
+              "n_events": 85,
+              "log_hr": 0.6084619734038638,
+              "standard_error": 0.10337528214814992,
+              "hazard_ratio": 1.837602942020375,
+              "hr_conf_low": 1.5005776642939515,
+              "hr_conf_high": 2.2503230941470633,
+              "p_value": 3.957686022655587e-09
+            },
+            "late": {
+              "label": "After 2 years",
+              "start_days": 730.5,
+              "end_days": null,
+              "n_at_risk_start": 128,
+              "n_events": 31,
+              "log_hr": -0.007925346680517587,
+              "standard_error": 0.20149761108597572,
+              "hazard_ratio": 0.99210597607696,
+              "hr_conf_low": 0.668410076126415,
+              "hr_conf_high": 1.4725604878246388,
+              "p_value": 0.9686255253182237
+            }
+          },
+          "change": {
+            "label": "Late HR / early HR",
+            "method": "Wald contrast for the marker-by-period interaction coefficient",
+            "log_hr_difference": -0.6163873200843814,
+            "standard_error": 0.23339757720175502,
+            "hazard_ratio_ratio": 0.5398913733704501,
+            "hr_ratio_conf_low": 0.34169451725637223,
+            "hr_ratio_conf_high": 0.853050547548389,
+            "p_value": 0.008267811348983122
+          },
+          "warnings": []
+        },
         "warnings": [
-          "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+          "Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic."
         ]
       },
       {
@@ -312,8 +735,217 @@
         "p_value": 5.691600129280888e-08,
         "ph_p_value": 0.001898138918287211,
         "ph_global_p_value": 0.005426507571744331,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.001898138918287211,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "Expression per +1 SD",
+          "sensitivity_analyses": [
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.001898138918287211,
+              "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 1,
+              "split_days": 365.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 360,
+              "n_events": 126,
+              "support": {
+                "early_events": 57,
+                "late_events": 69,
+                "at_risk_at_split": 255
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     grade_ordinal + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 42,
+              "periods": {
+                "early": {
+                  "label": "0 to 1 year",
+                  "start_days": 0,
+                  "end_days": 365.25,
+                  "n_at_risk_start": 360,
+                  "n_events": 57,
+                  "log_hr": 0.7813507079100444,
+                  "standard_error": 0.13534714995301372,
+                  "hazard_ratio": 2.184420788190937,
+                  "hr_conf_low": 1.6754389130483938,
+                  "hr_conf_high": 2.8480263545979185,
+                  "p_value": 7.790110239901903e-09
+                },
+                "late": {
+                  "label": "After 1 year",
+                  "start_days": 365.25,
+                  "end_days": null,
+                  "n_at_risk_start": 255,
+                  "n_events": 69,
+                  "log_hr": 0.2924387580632675,
+                  "standard_error": 0.1347014385139128,
+                  "hazard_ratio": 1.3396906887991311,
+                  "hr_conf_low": 1.028836744668996,
+                  "hr_conf_high": 1.744466409228527,
+                  "p_value": 0.029930086487538626
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.4889119498467768,
+                "standard_error": 0.183612747229842,
+                "hazard_ratio_ratio": 0.6132933251878715,
+                "hr_ratio_conf_low": 0.4279339911755733,
+                "hr_ratio_conf_high": 0.878940935929714,
+                "p_value": 0.007750860134886788
+              },
+              "warnings": []
+            },
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.001898138918287211,
+              "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 5,
+              "split_days": 1826.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 360,
+              "n_events": 126,
+              "support": {
+                "early_events": 118,
+                "late_events": 8,
+                "at_risk_at_split": 39
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     grade_ordinal + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 42,
+              "periods": {
+                "early": {
+                  "label": "0 to 5 years",
+                  "start_days": 0,
+                  "end_days": 1826.25,
+                  "n_at_risk_start": 360,
+                  "n_events": 118,
+                  "log_hr": 0.6016472450871821,
+                  "standard_error": 0.10606106444447713,
+                  "hazard_ratio": 1.8251227500741465,
+                  "hr_conf_low": 1.482561564647028,
+                  "hr_conf_high": 2.246836240916097,
+                  "p_value": 1.4060571478490755e-08
+                },
+                "late": {
+                  "label": "After 5 years",
+                  "start_days": 1826.25,
+                  "end_days": null,
+                  "n_at_risk_start": 39,
+                  "n_events": 8,
+                  "log_hr": -0.33997280981599454,
+                  "standard_error": 0.41898082216299287,
+                  "hazard_ratio": 0.7117896761917657,
+                  "hr_conf_low": 0.31312270657899743,
+                  "hr_conf_high": 1.6180383360519968,
+                  "p_value": 0.4171198711486892
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.9416200549031767,
+                "standard_error": 0.44250298796782184,
+                "hazard_ratio_ratio": 0.3899955091584108,
+                "hr_ratio_conf_low": 0.16383262126468093,
+                "hr_ratio_conf_high": 0.9283651570098944,
+                "p_value": 0.03334201235107516
+              },
+              "warnings": []
+            }
+          ],
+          "n_patients": 360,
+          "n_events": 126,
+          "support": {
+            "early_events": 90,
+            "late_events": 36,
+            "at_risk_at_split": 136
+          },
+          "status": "completed",
+          "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     grade_ordinal + expression_z:late_period + cluster(split_id)",
+          "parameter_count": 3,
+          "events_per_parameter": 42,
+          "periods": {
+            "early": {
+              "label": "0 to 2 years",
+              "start_days": 0,
+              "end_days": 730.5,
+              "n_at_risk_start": 360,
+              "n_events": 90,
+              "log_hr": 0.7295864118999249,
+              "standard_error": 0.11556428935002272,
+              "hazard_ratio": 2.074222556480205,
+              "hr_conf_low": 1.6538147132112364,
+              "hr_conf_high": 2.6015001435422254,
+              "p_value": 2.732330847540832e-10
+            },
+            "late": {
+              "label": "After 2 years",
+              "start_days": 730.5,
+              "end_days": null,
+              "n_at_risk_start": 136,
+              "n_events": 36,
+              "log_hr": 0.00636823334471992,
+              "standard_error": 0.18840780192753112,
+              "hazard_ratio": 1.0063885536546107,
+              "hr_conf_low": 0.6956530232003594,
+              "hr_conf_high": 1.455923983867042,
+              "p_value": 0.973036425849254
+            }
+          },
+          "change": {
+            "label": "Late HR / early HR",
+            "method": "Wald contrast for the marker-by-period interaction coefficient",
+            "log_hr_difference": -0.723218178555205,
+            "standard_error": 0.2190040863850456,
+            "hazard_ratio_ratio": 0.48518831815346475,
+            "hr_ratio_conf_low": 0.3158593370747496,
+            "hr_ratio_conf_high": 0.7452928453936359,
+            "p_value": 0.0009589391061670955
+          },
+          "warnings": []
+        },
         "warnings": [
-          "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+          "Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic."
         ]
       },
       {
@@ -395,8 +1027,217 @@
         "p_value": 9.987006232428296e-06,
         "ph_p_value": 0.01437080948690875,
         "ph_global_p_value": 0.018693309435437202,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.01437080948690875,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "Expression per +1 SD",
+          "sensitivity_analyses": [
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.01437080948690875,
+              "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 1,
+              "split_days": 365.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 339,
+              "n_events": 114,
+              "support": {
+                "early_events": 54,
+                "late_events": 60,
+                "at_risk_at_split": 240
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + grade_ordinal + expression_z:late_period +     cluster(split_id)",
+              "parameter_count": 4,
+              "events_per_parameter": 28.5,
+              "periods": {
+                "early": {
+                  "label": "0 to 1 year",
+                  "start_days": 0,
+                  "end_days": 365.25,
+                  "n_at_risk_start": 339,
+                  "n_events": 54,
+                  "log_hr": 0.6686889530648018,
+                  "standard_error": 0.12880247929267508,
+                  "hazard_ratio": 1.9516769025669476,
+                  "hr_conf_low": 1.5162508358414881,
+                  "hr_conf_high": 2.5121455117941447,
+                  "p_value": 2.08511933273047e-07
+                },
+                "late": {
+                  "label": "After 1 year",
+                  "start_days": 365.25,
+                  "end_days": null,
+                  "n_at_risk_start": 240,
+                  "n_events": 60,
+                  "log_hr": 0.2249132971201505,
+                  "standard_error": 0.14222872738839917,
+                  "hazard_ratio": 1.2522141409128322,
+                  "hr_conf_low": 0.9475743398790235,
+                  "hr_conf_high": 1.6547939182294171,
+                  "p_value": 0.11379819527150842
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.4437756559446513,
+                "standard_error": 0.18281591666748245,
+                "hazard_ratio_ratio": 0.6416093459249607,
+                "hr_ratio_conf_low": 0.4483916236839876,
+                "hr_ratio_conf_high": 0.9180870717343789,
+                "p_value": 0.015205575428897592
+              },
+              "warnings": []
+            },
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.01437080948690875,
+              "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 5,
+              "split_days": 1826.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 339,
+              "n_events": 114,
+              "support": {
+                "early_events": 107,
+                "late_events": 7,
+                "at_risk_at_split": 38
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + grade_ordinal + expression_z:late_period +     cluster(split_id)",
+              "parameter_count": 4,
+              "events_per_parameter": 28.5,
+              "periods": {
+                "early": {
+                  "label": "0 to 5 years",
+                  "start_days": 0,
+                  "end_days": 1826.25,
+                  "n_at_risk_start": 339,
+                  "n_events": 107,
+                  "log_hr": 0.5035706239341119,
+                  "standard_error": 0.10644039176794737,
+                  "hazard_ratio": 1.6546187569169268,
+                  "hr_conf_low": 1.3430609360153187,
+                  "hr_conf_high": 2.038450495674375,
+                  "p_value": 2.234048313485663e-06
+                },
+                "late": {
+                  "label": "After 5 years",
+                  "start_days": 1826.25,
+                  "end_days": null,
+                  "n_at_risk_start": 38,
+                  "n_events": 7,
+                  "log_hr": -0.2888663256640468,
+                  "standard_error": 0.42356062168853525,
+                  "hazard_ratio": 0.7491123358041307,
+                  "hr_conf_low": 0.32659647567933053,
+                  "hr_conf_high": 1.7182343761875312,
+                  "p_value": 0.49524196398223974
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.7924369495981587,
+                "standard_error": 0.44776876543499794,
+                "hazard_ratio_ratio": 0.4527401449261712,
+                "hr_ratio_conf_low": 0.18823810467939486,
+                "hr_ratio_conf_high": 1.0889061976950916,
+                "p_value": 0.07676947507066753
+              },
+              "warnings": []
+            }
+          ],
+          "n_patients": 339,
+          "n_events": 114,
+          "support": {
+            "early_events": 84,
+            "late_events": 30,
+            "at_risk_at_split": 127
+          },
+          "status": "completed",
+          "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     stage_ordinal + grade_ordinal + expression_z:late_period +     cluster(split_id)",
+          "parameter_count": 4,
+          "events_per_parameter": 28.5,
+          "periods": {
+            "early": {
+              "label": "0 to 2 years",
+              "start_days": 0,
+              "end_days": 730.5,
+              "n_at_risk_start": 339,
+              "n_events": 84,
+              "log_hr": 0.6068502152812557,
+              "standard_error": 0.11227361389234095,
+              "hazard_ratio": 1.8346435561002417,
+              "hr_conf_low": 1.4722590290359625,
+              "hr_conf_high": 2.2862260726933004,
+              "p_value": 6.477190805905151e-08
+            },
+            "late": {
+              "label": "After 2 years",
+              "start_days": 730.5,
+              "end_days": null,
+              "n_at_risk_start": 127,
+              "n_events": 30,
+              "log_hr": -0.013278837799615584,
+              "standard_error": 0.2086959864867142,
+              "hazard_ratio": 0.9868089370216283,
+              "hr_conf_low": 0.655527217414534,
+              "hr_conf_high": 1.48550945302697,
+              "p_value": 0.949266704851456
+            }
+          },
+          "change": {
+            "label": "Late HR / early HR",
+            "method": "Wald contrast for the marker-by-period interaction coefficient",
+            "log_hr_difference": -0.6201290530808713,
+            "standard_error": 0.23557954841481024,
+            "hazard_ratio_ratio": 0.5378750186871236,
+            "hr_ratio_conf_low": 0.338965657016988,
+            "hr_ratio_conf_high": 0.8535069253731925,
+            "p_value": 0.00847951557115032
+          },
+          "warnings": []
+        },
         "warnings": [
-          "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+          "Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic."
         ]
       },
       {
@@ -458,8 +1299,217 @@
         "p_value": 3.9218791417158246e-08,
         "ph_p_value": 0.000746298253420877,
         "ph_global_p_value": 0.002414182588764822,
+        "time_varying_effect": {
+          "method": "Prespecified two-period Cox marker effect",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "analysis_role": "primary",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.000746298253420877,
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "split_days": 730.5,
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
+          "min_events_per_period": 5,
+          "min_at_risk_at_split": 10,
+          "ties": "efron",
+          "variance": "participant-clustered robust sandwich",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+          "effect_label": "Expression per +1 SD",
+          "sensitivity_analyses": [
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.000746298253420877,
+              "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 1,
+              "split_days": 365.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 365,
+              "n_events": 130,
+              "support": {
+                "early_events": 58,
+                "late_events": 72,
+                "at_risk_at_split": 259
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     age_at_index_per_10y + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 43.333333333333336,
+              "periods": {
+                "early": {
+                  "label": "0 to 1 year",
+                  "start_days": 0,
+                  "end_days": 365.25,
+                  "n_at_risk_start": 365,
+                  "n_events": 58,
+                  "log_hr": 0.7935128278285788,
+                  "standard_error": 0.13170033896610223,
+                  "hazard_ratio": 2.2111501893835,
+                  "hr_conf_low": 1.70810557702636,
+                  "hr_conf_high": 2.862343654730211,
+                  "p_value": 1.689645132380226e-09
+                },
+                "late": {
+                  "label": "After 1 year",
+                  "start_days": 365.25,
+                  "end_days": null,
+                  "n_at_risk_start": 259,
+                  "n_events": 72,
+                  "log_hr": 0.25365318716734264,
+                  "standard_error": 0.1258260928744079,
+                  "hazard_ratio": 1.2887247804638606,
+                  "hr_conf_low": 1.0070634058193497,
+                  "hr_conf_high": 1.6491628532866653,
+                  "p_value": 0.04381012895176465
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.5398596406612362,
+                "standard_error": 0.18315895312407296,
+                "hazard_ratio_ratio": 0.5828300522739143,
+                "hr_ratio_conf_low": 0.4070396849674253,
+                "hr_ratio_conf_high": 0.8345399291000299,
+                "p_value": 0.003203625233473163
+              },
+              "warnings": []
+            },
+            {
+              "method": "Prespecified two-period Cox marker effect",
+              "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+              "analysis_role": "sensitivity",
+              "trigger": "Marker-specific cox.zph p < 0.05",
+              "trigger_alpha": 0.05,
+              "trigger_ph_p_value": 0.000746298253420877,
+              "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+              "split_years": 5,
+              "split_days": 1826.25,
+              "sensitivity_split_years": [],
+              "min_events_per_period": 5,
+              "min_at_risk_at_split": 10,
+              "ties": "efron",
+              "variance": "participant-clustered robust sandwich",
+              "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+              "effect_label": "Expression per +1 SD",
+              "n_patients": 365,
+              "n_events": 130,
+              "support": {
+                "early_events": 121,
+                "late_events": 9,
+                "at_risk_at_split": 40
+              },
+              "status": "completed",
+              "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     age_at_index_per_10y + expression_z:late_period + cluster(split_id)",
+              "parameter_count": 3,
+              "events_per_parameter": 43.333333333333336,
+              "periods": {
+                "early": {
+                  "label": "0 to 5 years",
+                  "start_days": 0,
+                  "end_days": 1826.25,
+                  "n_at_risk_start": 365,
+                  "n_events": 121,
+                  "log_hr": 0.5699593288606397,
+                  "standard_error": 0.09891984952258476,
+                  "hazard_ratio": 1.7681951354605223,
+                  "hr_conf_low": 1.4565636344519068,
+                  "hr_conf_high": 2.1465001343677903,
+                  "p_value": 8.320692297142875e-09
+                },
+                "late": {
+                  "label": "After 5 years",
+                  "start_days": 1826.25,
+                  "end_days": null,
+                  "n_at_risk_start": 40,
+                  "n_events": 9,
+                  "log_hr": -0.329976815184965,
+                  "standard_error": 0.39580758927275966,
+                  "hazard_ratio": 0.7189404017389351,
+                  "hr_conf_low": 0.3309640780685011,
+                  "hr_conf_high": 1.5617262884510432,
+                  "p_value": 0.40446141078159425
+                }
+              },
+              "change": {
+                "label": "Late HR / early HR",
+                "method": "Wald contrast for the marker-by-period interaction coefficient",
+                "log_hr_difference": -0.8999361440456047,
+                "standard_error": 0.42078463102848485,
+                "hazard_ratio_ratio": 0.4065956224631784,
+                "hr_ratio_conf_low": 0.17823384300763365,
+                "hr_ratio_conf_high": 0.9275455066024634,
+                "p_value": 0.03245919192893898
+              },
+              "warnings": []
+            }
+          ],
+          "n_patients": 365,
+          "n_events": 130,
+          "support": {
+            "early_events": 91,
+            "late_events": 39,
+            "at_risk_at_split": 140
+          },
+          "status": "completed",
+          "formula": "survival::Surv(tstart, tstop, interval_event) ~ expression_z +     age_at_index_per_10y + expression_z:late_period + cluster(split_id)",
+          "parameter_count": 3,
+          "events_per_parameter": 43.333333333333336,
+          "periods": {
+            "early": {
+              "label": "0 to 2 years",
+              "start_days": 0,
+              "end_days": 730.5,
+              "n_at_risk_start": 365,
+              "n_events": 91,
+              "log_hr": 0.7303473743026838,
+              "standard_error": 0.11174787368576562,
+              "hazard_ratio": 2.075801562566578,
+              "hr_conf_low": 1.6675001129264562,
+              "hr_conf_high": 2.584079061674936,
+              "p_value": 6.33248427886887e-11
+            },
+            "late": {
+              "label": "After 2 years",
+              "start_days": 730.5,
+              "end_days": null,
+              "n_at_risk_start": 140,
+              "n_events": 39,
+              "log_hr": -0.04128013800988806,
+              "standard_error": 0.17259198958800354,
+              "hazard_ratio": 0.9595602829843876,
+              "hr_conf_low": 0.6841663277998056,
+              "hr_conf_high": 1.3458071513722627,
+              "p_value": 0.8109678705406131
+            }
+          },
+          "change": {
+            "label": "Late HR / early HR",
+            "method": "Wald contrast for the marker-by-period interaction coefficient",
+            "log_hr_difference": -0.7716275123125719,
+            "standard_error": 0.21232829208306603,
+            "hazard_ratio_ratio": 0.46226012172279174,
+            "hr_ratio_conf_low": 0.3048963739353945,
+            "hr_ratio_conf_high": 0.7008427728315606,
+            "p_value": 0.0002789258324914406
+          },
+          "warnings": []
+        },
         "warnings": [
-          "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+          "Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic."
         ]
       }
     ],
@@ -470,6 +1520,21 @@
       "n_patients": 365,
       "n_events": 130,
       "degrees_freedom": 3,
+      "events_per_parameter": 43.333333333333336,
+      "information_diagnostics": {
+        "parameter_count": 3,
+        "n_events": 130,
+        "events_per_parameter": 43.333333333333336,
+        "caution_threshold": 10,
+        "severe_threshold": 5,
+        "status": "adequate",
+        "low_information": false,
+        "severe_low_information": false,
+        "standard_fit_instability": false,
+        "extreme_marker_estimate": false,
+        "penalized_sensitivity_recommended": false,
+        "trigger_reasons": []
+      },
       "nonlinear_degrees_freedom": 2,
       "knot_percentiles": [
         5,
@@ -699,8 +1764,217 @@
       "p_value": 6.411165999768477e-05,
       "ph_p_value": 0.0027121398711983445,
       "ph_global_p_value": 0.0027121398711983445,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.0027121398711983445,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "High vs Low",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0027121398711983445,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 365,
+            "n_events": 130,
+            "support": {
+              "early_events": 58,
+              "late_events": 72,
+              "at_risk_at_split": 259
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 2,
+            "events_per_parameter": 65,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 365,
+                "n_events": 58,
+                "log_hr": 1.356098093409008,
+                "standard_error": 0.3176228742900775,
+                "hazard_ratio": 3.881020340460611,
+                "hr_conf_low": 2.0824991754873974,
+                "hr_conf_high": 7.23280904999338,
+                "p_value": 1.9589165329985235e-05
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 259,
+                "n_events": 72,
+                "log_hr": 0.30869513452458475,
+                "standard_error": 0.23540614234726948,
+                "hazard_ratio": 1.3616471880019143,
+                "hr_conf_low": 0.8583937006118593,
+                "hr_conf_high": 2.1599448636120444,
+                "p_value": 0.18974630010905155
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.0474029588844234,
+              "standard_error": 0.3950772627788749,
+              "hazard_ratio_ratio": 0.35084773295475946,
+              "hr_ratio_conf_low": 0.16174404456512836,
+              "hr_ratio_conf_high": 0.7610427453477505,
+              "p_value": 0.008022188958396048
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0027121398711983445,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 365,
+            "n_events": 130,
+            "support": {
+              "early_events": 121,
+              "late_events": 9,
+              "at_risk_at_split": 40
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 2,
+            "events_per_parameter": 65,
+            "periods": {
+              "early": {
+                "label": "0 to 5 years",
+                "start_days": 0,
+                "end_days": 1826.25,
+                "n_at_risk_start": 365,
+                "n_events": 121,
+                "log_hr": 0.8276996513192562,
+                "standard_error": 0.1885927730295671,
+                "hazard_ratio": 2.2880493705429523,
+                "hr_conf_low": 1.5810111464204057,
+                "hr_conf_high": 3.3112795781959146,
+                "p_value": 1.1396757674534384e-05
+              },
+              "late": {
+                "label": "After 5 years",
+                "start_days": 1826.25,
+                "end_days": null,
+                "n_at_risk_start": 40,
+                "n_events": 9,
+                "log_hr": -0.5777725672597404,
+                "standard_error": 0.6271702579042432,
+                "hazard_ratio": 0.5611468925058772,
+                "hr_conf_low": 0.16414523152945446,
+                "hr_conf_high": 1.918336780392545,
+                "p_value": 0.3569266045836873
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.4054722185789965,
+              "standard_error": 0.6517311344177158,
+              "hazard_ratio_ratio": 0.24525121692313726,
+              "hr_ratio_conf_low": 0.06836859004842134,
+              "hr_ratio_conf_high": 0.8797630514199638,
+              "p_value": 0.03104296500392807
+            },
+            "warnings": []
+          }
+        ],
+        "n_patients": 365,
+        "n_events": 130,
+        "support": {
+          "early_events": 91,
+          "late_events": 39,
+          "at_risk_at_split": 140
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     group_high_indicator:late_period + cluster(split_id)",
+        "parameter_count": 2,
+        "events_per_parameter": 65,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 365,
+            "n_events": 91,
+            "log_hr": 1.1431911367469698,
+            "standard_error": 0.23430204859810053,
+            "hazard_ratio": 3.136762248058067,
+            "hr_conf_low": 1.9817247670444504,
+            "hr_conf_high": 4.965007030475086,
+            "p_value": 1.0655255130756673e-06
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 140,
+            "n_events": 39,
+            "log_hr": -0.12897909665325002,
+            "standard_error": 0.32246974130780276,
+            "hazard_ratio": 0.8789923392352044,
+            "hr_conf_low": 0.46719517466541066,
+            "hr_conf_high": 1.653757517909953,
+            "p_value": 0.6891766163210069
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.2721702334002198,
+          "standard_error": 0.3978880898886991,
+          "hazard_ratio_ratio": 0.28022281248104736,
+          "hr_ratio_conf_low": 0.12847556357536746,
+          "hr_ratio_conf_high": 0.6112043601873232,
+          "p_value": 0.0013871737583289643
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic."
       ]
     },
     {
@@ -763,8 +2037,217 @@
       "p_value": 0.00022449389641288135,
       "ph_p_value": 0.007788149068325177,
       "ph_global_p_value": 0.013007371803610807,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.007788149068325177,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "High vs Low",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.007788149068325177,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 341,
+            "n_events": 116,
+            "support": {
+              "early_events": 55,
+              "late_events": 61,
+              "at_risk_at_split": 241
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 38.666666666666664,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 341,
+                "n_events": 55,
+                "log_hr": 1.3243315062010481,
+                "standard_error": 0.32684784156933266,
+                "hazard_ratio": 3.7596711978624415,
+                "hr_conf_low": 1.9812372202992454,
+                "hr_conf_high": 7.134495239243204,
+                "p_value": 5.081884021447974e-05
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 241,
+                "n_events": 61,
+                "log_hr": 0.27040914883064526,
+                "standard_error": 0.25357336846180406,
+                "hazard_ratio": 1.310500530817243,
+                "hr_conf_low": 0.7972511578461984,
+                "hr_conf_high": 2.1541663807825917,
+                "p_value": 0.28624551911765334
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.0539223573704029,
+              "standard_error": 0.41354669535426825,
+              "hazard_ratio_ratio": 0.3485678565621183,
+              "hr_ratio_conf_low": 0.1549800335463556,
+              "hr_ratio_conf_high": 0.7839690561943784,
+              "p_value": 0.01081883337042155
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.007788149068325177,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 341,
+            "n_events": 116,
+            "support": {
+              "early_events": 108,
+              "late_events": 8,
+              "at_risk_at_split": 39
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 38.666666666666664,
+            "periods": {
+              "early": {
+                "label": "0 to 5 years",
+                "start_days": 0,
+                "end_days": 1826.25,
+                "n_at_risk_start": 341,
+                "n_events": 108,
+                "log_hr": 0.8163228345204473,
+                "standard_error": 0.19855258978824356,
+                "hazard_ratio": 2.2621661654445036,
+                "hr_conf_low": 1.5329084973610136,
+                "hr_conf_high": 3.338356965788739,
+                "p_value": 3.9332111337081504e-05
+              },
+              "late": {
+                "label": "After 5 years",
+                "start_days": 1826.25,
+                "end_days": null,
+                "n_at_risk_start": 39,
+                "n_events": 8,
+                "log_hr": -0.6096941645282107,
+                "standard_error": 0.5830950304280099,
+                "hazard_ratio": 0.5435170704577341,
+                "hr_conf_low": 0.17333321760622397,
+                "hr_conf_high": 1.7042942487231019,
+                "p_value": 0.29573782746486266
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.426016999048658,
+              "standard_error": 0.6175325062266639,
+              "hazard_ratio_ratio": 0.24026399066530812,
+              "hr_ratio_conf_low": 0.07162160744845025,
+              "hr_ratio_conf_high": 0.8059967831909971,
+              "p_value": 0.02093150337654921
+            },
+            "warnings": []
+          }
+        ],
+        "n_patients": 341,
+        "n_events": 116,
+        "support": {
+          "early_events": 85,
+          "late_events": 31,
+          "at_risk_at_split": 128
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + group_high_indicator:late_period + cluster(split_id)",
+        "parameter_count": 3,
+        "events_per_parameter": 38.666666666666664,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 341,
+            "n_events": 85,
+            "log_hr": 1.0722420448124037,
+            "standard_error": 0.23884012078328412,
+            "hazard_ratio": 2.921923244404076,
+            "hr_conf_low": 1.8296487526972125,
+            "hr_conf_high": 4.666270197273066,
+            "p_value": 7.143360424412864e-06
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 128,
+            "n_events": 31,
+            "log_hr": -0.15542828738009296,
+            "standard_error": 0.35487227715679487,
+            "hazard_ratio": 0.8560484642059172,
+            "hr_conf_low": 0.4270026030146167,
+            "hr_conf_high": 1.7161932219982847,
+            "p_value": 0.6613980700154651
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.2276703321924967,
+          "standard_error": 0.4281878210969267,
+          "hazard_ratio_ratio": 0.2929743160931346,
+          "hr_ratio_conf_low": 0.1265771797624151,
+          "hr_ratio_conf_high": 0.6781155185425206,
+          "p_value": 0.004142122636467137
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic."
       ]
     },
     {
@@ -826,8 +2309,217 @@
       "p_value": 0.00012402986241374583,
       "ph_p_value": 0.0049735144672082565,
       "ph_global_p_value": 0.011934590890632332,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.0049735144672082565,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "High vs Low",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0049735144672082565,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 360,
+            "n_events": 126,
+            "support": {
+              "early_events": 57,
+              "late_events": 69,
+              "at_risk_at_split": 255
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     grade_ordinal + group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 42,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 360,
+                "n_events": 57,
+                "log_hr": 1.3353642769998046,
+                "standard_error": 0.3281475929828898,
+                "hazard_ratio": 3.8013804496979415,
+                "hr_conf_low": 1.9981201491735376,
+                "hr_conf_high": 7.232044243847266,
+                "p_value": 4.713407985358261e-05
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 255,
+                "n_events": 69,
+                "log_hr": 0.33077149996749977,
+                "standard_error": 0.24484682524008886,
+                "hazard_ratio": 1.3920416743967605,
+                "hr_conf_low": 0.8614661986614068,
+                "hr_conf_high": 2.2493976272874834,
+                "p_value": 0.17671710039470584
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.0045927770323049,
+              "standard_error": 0.39852233510746676,
+              "hazard_ratio_ratio": 0.3661937269413201,
+              "hr_ratio_conf_low": 0.16768262873522288,
+              "hr_ratio_conf_high": 0.7997122102786186,
+              "p_value": 0.011709032283344483
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0049735144672082565,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 360,
+            "n_events": 126,
+            "support": {
+              "early_events": 118,
+              "late_events": 8,
+              "at_risk_at_split": 39
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     grade_ordinal + group_high_indicator:late_period + cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 42,
+            "periods": {
+              "early": {
+                "label": "0 to 5 years",
+                "start_days": 0,
+                "end_days": 1826.25,
+                "n_at_risk_start": 360,
+                "n_events": 118,
+                "log_hr": 0.8282532280507781,
+                "standard_error": 0.20249714695950816,
+                "hazard_ratio": 2.2893163320829175,
+                "hr_conf_low": 1.5393590262122712,
+                "hr_conf_high": 3.404643867413732,
+                "p_value": 4.310068985870153e-05
+              },
+              "late": {
+                "label": "After 5 years",
+                "start_days": 1826.25,
+                "end_days": null,
+                "n_at_risk_start": 39,
+                "n_events": 8,
+                "log_hr": -0.4437132046427049,
+                "standard_error": 0.6545284018537908,
+                "hazard_ratio": 0.6416494165151718,
+                "hr_conf_low": 0.17789437581165313,
+                "hr_conf_high": 2.3143731882235863,
+                "p_value": 0.4978269613427225
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.271966432693483,
+              "standard_error": 0.6799188830547538,
+              "hazard_ratio_ratio": 0.2802799279081593,
+              "hr_ratio_conf_low": 0.0739339644933959,
+              "hr_ratio_conf_high": 1.0625270608235817,
+              "p_value": 0.06137807212752968
+            },
+            "warnings": []
+          }
+        ],
+        "n_patients": 360,
+        "n_events": 126,
+        "support": {
+          "early_events": 90,
+          "late_events": 36,
+          "at_risk_at_split": 136
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     grade_ordinal + group_high_indicator:late_period + cluster(split_id)",
+        "parameter_count": 3,
+        "events_per_parameter": 42,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 360,
+            "n_events": 90,
+            "log_hr": 1.1291440379836415,
+            "standard_error": 0.24505682387130534,
+            "hazard_ratio": 3.093007869470244,
+            "hr_conf_low": 1.9133229389232682,
+            "hr_conf_high": 5.000043372703493,
+            "p_value": 4.071817825594582e-06
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 136,
+            "n_events": 36,
+            "log_hr": -0.11595152289886523,
+            "standard_error": 0.33853630783831806,
+            "hazard_ratio": 0.8905183920012687,
+            "hr_conf_low": 0.4586488044410521,
+            "hr_conf_high": 1.7290419135812851,
+            "p_value": 0.7319683374433216
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.2450955608825067,
+          "standard_error": 0.4077572572591325,
+          "hazard_ratio_ratio": 0.28791339355815887,
+          "hr_ratio_conf_low": 0.12947271700388882,
+          "hr_ratio_conf_high": 0.6402439379385658,
+          "p_value": 0.0022617249769708945
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic."
       ]
     },
     {
@@ -906,8 +2598,217 @@
       "p_value": 0.0009105614514784542,
       "ph_p_value": 0.013557427241159626,
       "ph_global_p_value": 0.03456021954520424,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.013557427241159626,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "High vs Low",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.013557427241159626,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 339,
+            "n_events": 114,
+            "support": {
+              "early_events": 54,
+              "late_events": 60,
+              "at_risk_at_split": 240
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + grade_ordinal + group_high_indicator:late_period +     cluster(split_id)",
+            "parameter_count": 4,
+            "events_per_parameter": 28.5,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 339,
+                "n_events": 54,
+                "log_hr": 1.2588528432536663,
+                "standard_error": 0.33573253318992846,
+                "hazard_ratio": 3.5213795951077174,
+                "hr_conf_low": 1.823630272751394,
+                "hr_conf_high": 6.799686558247563,
+                "p_value": 0.00017713760804976926
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 240,
+                "n_events": 60,
+                "log_hr": 0.25068817885934114,
+                "standard_error": 0.2618031491178095,
+                "hazard_ratio": 1.2849093599550119,
+                "hr_conf_low": 0.7691751558694903,
+                "hr_conf_high": 2.1464448646078345,
+                "p_value": 0.3382924710840627
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.0081646643943252,
+              "standard_error": 0.4146686464861479,
+              "hazard_ratio_ratio": 0.36488805743639435,
+              "hr_ratio_conf_low": 0.16187994851396506,
+              "hr_ratio_conf_high": 0.8224816951200069,
+              "p_value": 0.015046676283467066
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.013557427241159626,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 339,
+            "n_events": 114,
+            "support": {
+              "early_events": 107,
+              "late_events": 7,
+              "at_risk_at_split": 38
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + grade_ordinal + group_high_indicator:late_period +     cluster(split_id)",
+            "parameter_count": 4,
+            "events_per_parameter": 28.5,
+            "periods": {
+              "early": {
+                "label": "0 to 5 years",
+                "start_days": 0,
+                "end_days": 1826.25,
+                "n_at_risk_start": 339,
+                "n_events": 107,
+                "log_hr": 0.7599058758639322,
+                "standard_error": 0.21111107658706565,
+                "hazard_ratio": 2.1380749665664647,
+                "hr_conf_low": 1.4135945251271393,
+                "hr_conf_high": 3.233858423614819,
+                "p_value": 0.0003187625312522228
+              },
+              "late": {
+                "label": "After 5 years",
+                "start_days": 1826.25,
+                "end_days": null,
+                "n_at_risk_start": 38,
+                "n_events": 7,
+                "log_hr": -0.47141991708421005,
+                "standard_error": 0.6150735714396554,
+                "hazard_ratio": 0.6241154466398949,
+                "hr_conf_low": 0.18694478652525756,
+                "hr_conf_high": 2.0836103427890387,
+                "p_value": 0.44341170737997987
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.2313257929481423,
+              "standard_error": 0.6467000043814266,
+              "hazard_ratio_ratio": 0.2919053150143571,
+              "hr_ratio_conf_low": 0.08218072361363754,
+              "hr_ratio_conf_high": 1.036845493527524,
+              "p_value": 0.056908374823346326
+            },
+            "warnings": []
+          }
+        ],
+        "n_patients": 339,
+        "n_events": 114,
+        "support": {
+          "early_events": 84,
+          "late_events": 30,
+          "at_risk_at_split": 127
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     stage_ordinal + grade_ordinal + group_high_indicator:late_period +     cluster(split_id)",
+        "parameter_count": 4,
+        "events_per_parameter": 28.5,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 339,
+            "n_events": 84,
+            "log_hr": 1.0168941669338598,
+            "standard_error": 0.2488527232080276,
+            "hazard_ratio": 2.7645950455253563,
+            "hr_conf_low": 1.6974918716097942,
+            "hr_conf_high": 4.50251685652858,
+            "p_value": 4.382517065720963e-05
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 127,
+            "n_events": 30,
+            "log_hr": -0.15321068515398717,
+            "standard_error": 0.3626198679125821,
+            "hazard_ratio": 0.857948945662907,
+            "hr_conf_low": 0.4215012371881552,
+            "hr_conf_high": 1.7463208370976013,
+            "p_value": 0.6726524715892981
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.170104852087847,
+          "standard_error": 0.43038971003389664,
+          "hazard_ratio_ratio": 0.31033440034971593,
+          "hr_ratio_conf_low": 0.1335000825124922,
+          "hr_ratio_conf_high": 0.7214035993678569,
+          "p_value": 0.006553701930727561
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic."
       ]
     },
     {
@@ -966,8 +2867,217 @@
       "p_value": 4.003193717856438e-05,
       "ph_p_value": 0.0025566667619381415,
       "ph_global_p_value": 0.005373357337051574,
+      "time_varying_effect": {
+        "method": "Prespecified two-period Cox marker effect",
+        "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+        "analysis_role": "primary",
+        "trigger": "Marker-specific cox.zph p < 0.05",
+        "trigger_alpha": 0.05,
+        "trigger_ph_p_value": 0.0025566667619381415,
+        "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
+        "split_years": 2,
+        "split_days": 730.5,
+        "sensitivity_split_years": [
+          1,
+          5
+        ],
+        "min_events_per_period": 5,
+        "min_at_risk_at_split": 10,
+        "ties": "efron",
+        "variance": "participant-clustered robust sandwich",
+        "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+        "effect_label": "High vs Low",
+        "sensitivity_analyses": [
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 1 year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0025566667619381415,
+            "split_rule": "The follow-up split is fixed at 1 year (365.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 1,
+            "split_days": 365.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 365,
+            "n_events": 130,
+            "support": {
+              "early_events": 58,
+              "late_events": 72,
+              "at_risk_at_split": 259
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     age_at_index_per_10y + group_high_indicator:late_period +     cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 43.333333333333336,
+            "periods": {
+              "early": {
+                "label": "0 to 1 year",
+                "start_days": 0,
+                "end_days": 365.25,
+                "n_at_risk_start": 365,
+                "n_events": 58,
+                "log_hr": 1.3807309946233708,
+                "standard_error": 0.3175843727483191,
+                "hazard_ratio": 3.977808321472276,
+                "hr_conf_low": 2.1345952750386594,
+                "hr_conf_high": 7.412627221376904,
+                "p_value": 1.3763300062397042e-05
+              },
+              "late": {
+                "label": "After 1 year",
+                "start_days": 365.25,
+                "end_days": null,
+                "n_at_risk_start": 259,
+                "n_events": 72,
+                "log_hr": 0.3283494194376846,
+                "standard_error": 0.23299322665766187,
+                "hazard_ratio": 1.388674117254114,
+                "hr_conf_low": 0.8795816225758528,
+                "hr_conf_high": 2.192423937057861,
+                "p_value": 0.15875654504900757
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.0523815751856862,
+              "standard_error": 0.3940278442041669,
+              "hazard_ratio_ratio": 0.3491053376699998,
+              "hr_ratio_conf_low": 0.16127215155901378,
+              "hr_ratio_conf_high": 0.7557072663291619,
+              "p_value": 0.007566384876975899
+            },
+            "warnings": []
+          },
+          {
+            "method": "Prespecified two-period Cox marker effect",
+            "estimand": "Marker hazard ratio before and after a fixed 5 years follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "analysis_role": "sensitivity",
+            "trigger": "Marker-specific cox.zph p < 0.05",
+            "trigger_alpha": 0.05,
+            "trigger_ph_p_value": 0.0025566667619381415,
+            "split_rule": "The follow-up split is fixed at 5 years (1826.25 days) for this sensitivity analysis and is not selected from marker values, event times or effect estimates.",
+            "split_years": 5,
+            "split_days": 1826.25,
+            "sensitivity_split_years": [],
+            "min_events_per_period": 5,
+            "min_at_risk_at_split": 10,
+            "ties": "efron",
+            "variance": "participant-clustered robust sandwich",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
+            "effect_label": "High vs Low",
+            "n_patients": 365,
+            "n_events": 130,
+            "support": {
+              "early_events": 121,
+              "late_events": 9,
+              "at_risk_at_split": 40
+            },
+            "status": "completed",
+            "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     age_at_index_per_10y + group_high_indicator:late_period +     cluster(split_id)",
+            "parameter_count": 3,
+            "events_per_parameter": 43.333333333333336,
+            "periods": {
+              "early": {
+                "label": "0 to 5 years",
+                "start_days": 0,
+                "end_days": 1826.25,
+                "n_at_risk_start": 365,
+                "n_events": 121,
+                "log_hr": 0.8509809588387116,
+                "standard_error": 0.18800292109651845,
+                "hazard_ratio": 2.3419430752510006,
+                "hr_conf_low": 1.62012289017708,
+                "hr_conf_high": 3.385358852078581,
+                "p_value": 5.999012232580013e-06
+              },
+              "late": {
+                "label": "After 5 years",
+                "start_days": 1826.25,
+                "end_days": null,
+                "n_at_risk_start": 40,
+                "n_events": 9,
+                "log_hr": -0.5762940828466143,
+                "standard_error": 0.6196142839912975,
+                "hazard_ratio": 0.5619771530523197,
+                "hr_conf_low": 0.16684070838366635,
+                "hr_conf_high": 1.8929332272225528,
+                "p_value": 0.3523269666447541
+              }
+            },
+            "change": {
+              "label": "Late HR / early HR",
+              "method": "Wald contrast for the marker-by-period interaction coefficient",
+              "log_hr_difference": -1.427275041685326,
+              "standard_error": 0.6462947213980136,
+              "hazard_ratio_ratio": 0.23996191837074823,
+              "hr_ratio_conf_low": 0.06761067332159137,
+              "hr_ratio_conf_high": 0.8516661562336637,
+              "p_value": 0.027216641156884287
+            },
+            "warnings": []
+          }
+        ],
+        "n_patients": 365,
+        "n_events": 130,
+        "support": {
+          "early_events": 91,
+          "late_events": 39,
+          "at_risk_at_split": 140
+        },
+        "status": "completed",
+        "formula": "survival::Surv(tstart, tstop, interval_event) ~ group_high_indicator +     age_at_index_per_10y + group_high_indicator:late_period +     cluster(split_id)",
+        "parameter_count": 3,
+        "events_per_parameter": 43.333333333333336,
+        "periods": {
+          "early": {
+            "label": "0 to 2 years",
+            "start_days": 0,
+            "end_days": 730.5,
+            "n_at_risk_start": 365,
+            "n_events": 91,
+            "log_hr": 1.1665393221909104,
+            "standard_error": 0.23626261869417167,
+            "hazard_ratio": 3.210861631626596,
+            "hr_conf_low": 2.020758828727359,
+            "hr_conf_high": 5.101861870347311,
+            "p_value": 7.914303945785989e-07
+          },
+          "late": {
+            "label": "After 2 years",
+            "start_days": 730.5,
+            "end_days": null,
+            "n_at_risk_start": 140,
+            "n_events": 39,
+            "log_hr": -0.11091631856385886,
+            "standard_error": 0.3170992761389198,
+            "hazard_ratio": 0.8950136418223285,
+            "hr_conf_low": 0.4807444306364799,
+            "hr_conf_high": 1.666268744887009,
+            "p_value": 0.7265006529081162
+          }
+        },
+        "change": {
+          "label": "Late HR / early HR",
+          "method": "Wald contrast for the marker-by-period interaction coefficient",
+          "log_hr_difference": -1.2774556407547693,
+          "standard_error": 0.3967056926232114,
+          "hazard_ratio_ratio": 0.27874562796682145,
+          "hr_ratio_conf_low": 0.12809481965379071,
+          "hr_ratio_conf_high": 0.60657507712349,
+          "p_value": 0.0012811925126431324
+        },
+        "warnings": []
+      },
       "warnings": [
-        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        "Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic."
       ]
     }
   ],
@@ -977,16 +3087,16 @@
     "threshold": 3.962114095687866
   },
   "warnings": [
-    "Cox model warning: Univariable: Global proportional hazards test p < 0.05; inspect time-varying effects.",
-    "Cox model warning: Adjusted for ordinal stage: Global proportional hazards test p < 0.05; inspect time-varying effects.",
-    "Cox model warning: Adjusted for ordinal grade: Global proportional hazards test p < 0.05; inspect time-varying effects.",
-    "Cox model warning: Adjusted for ordinal stage and grade: Global proportional hazards test p < 0.05; inspect time-varying effects.",
-    "Cox model warning: User-adjusted for Age: Global proportional hazards test p < 0.05; inspect time-varying effects.",
-    "Cox model warning: Continuous expression: Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up.",
-    "Cox model warning: Continuous expression adjusted for ordinal stage: Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up.",
-    "Cox model warning: Continuous expression adjusted for ordinal grade: Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up.",
-    "Cox model warning: Continuous expression adjusted for ordinal stage and grade: Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up.",
-    "Cox model warning: Continuous expression user-adjusted for Age: Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up.",
+    "Cox model warning: Univariable: Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Adjusted for ordinal stage: Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Adjusted for ordinal grade: Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Adjusted for ordinal stage and grade: Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: User-adjusted for Age: Marker-specific proportional hazards test p < 0.05; interpret the average grouped HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Continuous expression: Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Continuous expression adjusted for ordinal stage: Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Continuous expression adjusted for ordinal grade: Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Continuous expression adjusted for ordinal stage and grade: Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic.",
+    "Cox model warning: Continuous expression user-adjusted for Age: Expression-specific proportional hazards test p < 0.05; interpret the average per-SD HR with the prespecified two-year temporal diagnostic.",
     "Cox model warning: Univariable restricted cubic spline: Spline-model global proportional hazards test p < 0.05; the displayed shape is averaged over follow-up."
   ],
   "software_versions": {
@@ -998,7 +3108,8 @@
     "ggplot2": "4.0.3",
     "svglite": "2.2.2",
     "survRM2": "1.0.4",
-    "coxphf": "1.13.4"
+    "coxphf": "1.13.4",
+    "cmprsk": "2.2.12"
   },
   "hazard_ratio": 2.0710664087301636,
   "hr_conf_low": 1.449275825122908,
@@ -1050,6 +3161,11 @@
       "Solid Tissue Normal": 50
     }
   },
+  "external_covariates": {
+    "status": "not_provided",
+    "schema_version": null,
+    "selected_covariates": []
+  },
   "endpoint_source": "tcga_cdr",
   "endpoint_qc": {
     "value": "OS",
@@ -1058,6 +3174,8 @@
     "source": "tcga_cdr",
     "patients": 365,
     "events": 130,
+    "competing_events": 0,
+    "competing_risk_available": false,
     "reason": "365 linked patients and 130 events from TCGA-CDR."
   },
   "signature": {
@@ -1156,10 +3274,26 @@
     }
   },
   "audit_report": {
-    "schema_version": "tcga-trace-analysis-audit-v3",
-    "generated_at": "2026-07-25T17:49:09.822812+00:00",
-    "reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7",
-    "patient_records_sha256": "00c81834894ccf66c1c4f72d70fa74fb9855d447bd813f05dc031517ab1eb8dc",
-    "continuous_patient_records_sha256": "92699d577a954fcdb1a1d1fee76b1cc0c6885d622b16bc20c0f7c1b470cbbc68"
+    "schema_version": "tcga-trace-analysis-audit-v4",
+    "generated_at": "2026-07-26T17:21:43.602017+00:00",
+    "reproducibility_hash": "d5a8381b32f22e23600927c0ad679efbe9af283d009431a6c39e394b0a5a685d",
+    "server_attestation": {
+      "status": "detached_receipt",
+      "schema_version": "tcga-trace-server-attestation-v1",
+      "algorithm": "Ed25519",
+      "canonicalization": "tcga-trace-canonical-json-v1",
+      "issuer": "https://apps.cienciavida.org/tcga_explorer",
+      "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+      "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+      "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/5bc89f4c26934a34a9c6238898436b4b/download/attestation",
+      "receipt_filename": "attestation_receipt.json",
+      "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+      "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time.",
+      "issued_at": "2026-07-26T17:21:43.645041+00:00",
+      "audit_report_sha256": "1a5a63a9625c495acf1f2c47adf7026af4f6c9f7ba8fa38ab60e5e79082371c2",
+      "signed_payload_sha256": "4073a626c81d3efbdc69b13d0f7adca92193c3e872dd0a35c7df758930f8e847"
+    },
+    "patient_records_sha256": "2949504726de52ea346d244a8e8a04a4b9cb7724c131df7509043d09faba015c",
+    "continuous_patient_records_sha256": "e84887dd6900726a93270b21394036677d5cfdeb822da5a1ed6f5beb4ccaf7ec"
   }
 }

@@ -1,7 +1,7 @@
 environment,architecture,analysis,analysis_id,status,runtime_seconds,difference_count,numeric_comparisons,max_absolute_error,max_relative_error,r_version,image_id
-native,arm64,Single gene,,passed,3.679,0,170,0.0,0.0,R version 4.4.2 (2024-10-31),sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385
-native,arm64,Weighted signature,,passed,3.126,0,131,0.0,0.0,R version 4.4.2 (2024-10-31),sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385
-native,arm64,Two signatures,,passed,2.446,0,159,4.0634e-14,5.8193e-14,R version 4.4.2 (2024-10-31),sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385
-linux/amd64,amd64,Single gene,,passed,6.551,0,170,1.1369e-13,4.0007e-14,R version 4.4.2 (2024-10-31),sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1
-linux/amd64,amd64,Weighted signature,,passed,5.714,0,131,2.8422e-14,7.3914e-15,R version 4.4.2 (2024-10-31),sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1
-linux/amd64,amd64,Two signatures,,passed,4.613,0,159,4.3299e-15,3.4277e-14,R version 4.4.2 (2024-10-31),sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1
+native,arm64,Single gene,,passed,4.241,0,750,0.0,0.0,R version 4.4.2 (2024-10-31),sha256:e29a1fba02936f4f2e1791312cb097cb8d15805ca3d83da3e269b07d70bbf764
+native,arm64,Weighted signature,,passed,3.202,0,155,0.0,0.0,R version 4.4.2 (2024-10-31),sha256:e29a1fba02936f4f2e1791312cb097cb8d15805ca3d83da3e269b07d70bbf764
+native,arm64,Two signatures,,passed,2.931,0,902,4.0634e-14,5.8193e-14,R version 4.4.2 (2024-10-31),sha256:e29a1fba02936f4f2e1791312cb097cb8d15805ca3d83da3e269b07d70bbf764
+linux/amd64,amd64,Single gene,,passed,10.122,0,750,1.1369e-13,5.5334e-14,R version 4.4.2 (2024-10-31),sha256:0b62db84d40cbb464ee7f3d445dfca3e082cbefe20d1d0d4d76603c98ed997a6
+linux/amd64,amd64,Weighted signature,,passed,6.072,0,155,2.8422e-14,7.3914e-15,R version 4.4.2 (2024-10-31),sha256:0b62db84d40cbb464ee7f3d445dfca3e082cbefe20d1d0d4d76603c98ed997a6
+linux/amd64,amd64,Two signatures,,passed,5.571,0,902,6.4837e-14,7.9874e-14,R version 4.4.2 (2024-10-31),sha256:0b62db84d40cbb464ee7f3d445dfca3e082cbefe20d1d0d4d76603c98ed997a6

@@ -18,6 +18,8 @@
     "endpoints": [
       {
         "available": true,
+        "competing_events": 0,
+        "competing_risk_available": false,
         "events": 151,
         "label": "Overall survival",
         "patients": 1080,
@@ -27,6 +29,8 @@
       },
       {
         "available": true,
+        "competing_events": 59,
+        "competing_risk_available": true,
         "events": 145,
         "label": "Progression-free interval",
         "patients": 1080,
@@ -36,6 +40,8 @@
       },
       {
         "available": true,
+        "competing_events": 40,
+        "competing_risk_available": true,
         "events": 84,
         "label": "Disease-free interval",
         "patients": 938,
@@ -45,6 +51,8 @@
       },
       {
         "available": true,
+        "competing_events": 49,
+        "competing_risk_available": true,
         "events": 83,
         "label": "Disease-specific survival",
         "patients": 1061,
@@ -56,7 +64,7 @@
   },
   "evidence_alpha": 0.05,
   "expression_scale": "log2_tpm",
-  "finished_at": "2026-07-25T17:50:34Z",
+  "finished_at": "2026-07-26T17:23:15Z",
   "gene": "MKI67",
   "gene_resolution": {
     "query": "MKI67",
@@ -70,9 +78,9 @@
       "cohort_count": 33,
       "cohorts_failed": 0,
       "cohorts_ready": 33,
-      "duration_seconds": 4.638,
+      "duration_seconds": 4.834,
       "errors": [],
-      "generated_at": "2026-07-25T17:48:35.998725+00:00",
+      "generated_at": "2026-07-26T17:21:29.496361+00:00",
       "status": "ready"
     },
     "cohorts": 33,
@@ -80,18 +88,23 @@
       "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
       "data_through_date": null,
       "database_imported_at": "2026-04-27T16:45:36.888931+00:00",
-      "rna_cache_generated_at": "2026-07-25T17:48:35.998725+00:00",
+      "rna_cache_generated_at": "2026-07-26T17:21:29.496361+00:00",
       "source_latest_metadata_file": "2026-04-22T16:16:36+00:00",
       "source_summary_file": "2026-04-22T16:16:36+00:00",
-      "tcga_cdr_imported_at": "2026-04-27T16:45:38.378020+00:00",
+      "tcga_cdr_imported_at": "2026-07-26T00:15:57.567523+00:00",
       "tcga_cdr_source_file": "2026-04-27T16:45:29.753288+00:00"
     },
     "pipeline_versions": {
-      "analysis": "expression-complete-integrity-contract-v6.5",
-      "combined_signatures": "expression-complete-integrity-contract-v3.7",
+      "analysis": "server-attested-competing-risk-contract-v6.13",
+      "combined_signatures": "server-attested-competing-risk-contract-v4.5",
+      "exploratory_session": "server-attested-exploratory-session-family-contract-v1.0",
       "immune_atlas": "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1",
-      "multiverse": "prespecified-multiverse-integrity-contract-v1.4",
-      "pancancer": "expression-complete-integrity-contract-v2.6"
+      "multiverse": "server-attested-prespecified-multiverse-contract-v2.2",
+      "pancancer": "server-attested-common-scale-reml-hksj-contract-v3.2"
+    },
+    "release": {
+      "commit": "development",
+      "ref": "development"
     },
     "status": "ok"
   },
@@ -109,7 +122,7 @@
     "continuous_nonlinearity_family": "one spline-versus-linear likelihood-ratio test per completed single-gene benchmark scenario",
     "continuous_nonlinearity_method": "Benjamini-Hochberg",
     "continuous_nonlinearity_scope": "across_prespecified_scenarios",
-    "continuous_nonlinearity_tests": 11,
+    "continuous_nonlinearity_tests": 10,
     "grouped_family": "four prespecified two-group cutpoint sensitivities within this marker-endpoint scenario",
     "grouped_method": "Holm",
     "grouped_scope": "within_scenario",
@@ -164,7 +177,7 @@
     },
     "status": "frozen_for_future_regeneration"
   },
-  "started_at": "2026-07-25T17:50:16Z",
+  "started_at": "2026-07-26T17:22:57Z",
   "time_unit": "months",
   "title": "TCGA-BRCA MKI67 OS cutpoint benchmark"
 }

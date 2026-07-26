@@ -301,21 +301,25 @@ post-selection summaries. Marker-term and global `cox.zph` results are reported
 separately and modify interpretation rather than excluding an association.
 When the marker-term `cox.zph` p-value is below 0.05, completed grouped,
 continuous, interaction and pan-cancer Cox models also return
-`time_varying_effect`. The diagnostic uses one fixed split at 730.5 days:
+`time_varying_effect`. The diagnostic uses a fixed primary split at 730.5 days
+and fixed 1- and 5-year sensitivity splits:
 
 - `status`: `completed`, `skipped`, `failed`, `not_triggered`, or
   `not_evaluable`;
 - `periods.early` and `periods.late`: interval support, HR, 95% CI and p-value;
 - `change`: the late-to-early HR ratio, 95% CI and p-value;
 - `support`: events on each side and patients entering the late period; and
+- `sensitivity_analyses`: the same contract for the 1- and 5-year splits; and
 - the trigger, fixed split rule, minimum support, tie handling and robust
   variance specification.
 
 The split is never selected from expression, event times, cutpoints or effect
 estimates. Estimation requires at least 5 events per period and 10 patients
-entering the late period. This is a PH interpretation diagnostic, not another
-primary test or an exclusion rule. Multiverse continuous and grouped CSV
-exports retain the same fields.
+entering the late period. The ratio is the Wald contrast for the
+marker-by-period interaction, and each two-period model is a coarse
+approximation to a potentially smooth time-varying effect. This is a PH
+interpretation diagnostic, not another primary test or an exclusion rule.
+Multiverse continuous and grouped CSV exports retain the same fields.
 
 ### Competing-risk estimands
 

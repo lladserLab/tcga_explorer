@@ -224,6 +224,13 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
             "skipped",
         }
 
+    spline = metrics["continuous_analysis"]["spline"]
+    assert spline["status"] == "completed"
+    assert spline["n_events"] == 40
+    assert spline["degrees_freedom"] == 3
+    assert spline["events_per_parameter"] == pytest.approx(40 / 3)
+    assert spline["information_diagnostics"]["status"] == "adequate"
+
     assert survival_svg_path.exists()
     assert continuous_svg_path.exists()
     assert cox_svg_path.exists()
@@ -244,3 +251,66 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
     if any(model["hazard_ratio"] >= 1 for model in completed_grouped_models):
         assert "#d95f02" in cox_svg
     assert "#7570b3" in cox_svg
+
+
+@pytest.mark.skipif(RSCRIPT is None, reason="Rscript is not installed")
+def test_km_analysis_requires_30_events_for_spline(tmp_path: Path) -> None:
+    script = Path(__file__).resolve().parents[1] / "scripts" / "km_analysis.R"
+    output_path = tmp_path / "metrics.json"
+    records = []
+    for index in range(60):
+        records.append(
+            {
+                "patient_id": f"TCGA-TEST-{index:04d}",
+                "sample_barcode": f"TCGA-TEST-{index:04d}-01A",
+                "endpoint": "OS",
+                "expression_value": 2.0 + (index * 0.07) + ((index % 5) * 0.03),
+                "group": "Low" if index < 30 else "High",
+                "time_days": 280 + ((index * 47) % 900),
+                "event": 1 if index < 29 else 0,
+                "sample_type": "Primary Tumor",
+                "stage": f"Stage {['I', 'II', 'III', 'IV'][index % 4]}",
+                "grade": f"G{1 + (index % 3)}",
+                "gender": "female" if index % 2 == 0 else "male",
+                "race": "white" if index % 4 else "asian",
+                "age_at_index": 40 + (index % 36),
+            }
+        )
+
+    payload = {
+        "cohort": "TCGA-TEST",
+        "gene_symbol": "TEST1",
+        "endpoint": "OS",
+        "endpoint_label": "Overall survival",
+        "expression_scale": "tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "records": records,
+        "continuous_records": records,
+        "group_levels": ["Low", "High"],
+        "adjustment_covariates": ["age_at_index"],
+        "cutpoint_details": {"method": "median"},
+        "show_confidence_interval": False,
+        "show_risk_table": False,
+        "render_png": False,
+        "render_svg": False,
+        "output_path": str(output_path),
+    }
+    input_path = tmp_path / "input.json"
+    input_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    completed = subprocess.run(
+        [RSCRIPT, str(script), str(input_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    metrics = json.loads(output_path.read_text(encoding="utf-8"))
+    spline = metrics["continuous_analysis"]["spline"]
+    assert spline["status"] == "skipped"
+    assert spline["n_events"] == 29
+    assert spline["reason"] == (
+        "Fewer than 30 events were available for the three-degree-of-freedom "
+        "spline model."
+    )

@@ -286,6 +286,8 @@ const COMPETING_RISK_HELP =
 const HELP_CONTENT = {
   dataset:
     "All analyses use one selected TCGA cancer cohort. After clinical and endpoint eligibility, the app requires the requested gene or complete signature score and then keeps the highest-priority expression-complete biospecimen per patient.",
+  defaultAnalysis:
+    "The default Survival path uses one gene, OS, log2(TPM + 1), no clinical filters, age adjustment and a median split. It reports the cutpoint-independent continuous Cox model first, adds the spline when at least 30 events are available, and treats Kaplan-Meier, grouped Cox and RMST as median-split sensitivities. Every completed run creates audit and reconstruction downloads plus a signed server receipt; a declared multiverse remains an explicit separate action.",
   analysisDesign:
     "One signature runs standard single-gene or multi-gene survival analysis. Two signatures calculates two independent scores, stratifies each score and crosses the labels into combined groups.",
   survivalEndpoint:
@@ -315,7 +317,7 @@ const HELP_CONTENT = {
   continuousModel:
     "The primary single-gene or one-signature model uses all expression-complete eligible patients and reports a Cox hazard ratio per +1 within-analysis expression standard deviation.",
   spline:
-    "A restricted cubic spline with knots at the 5th, 35th, 65th and 95th percentiles estimates the shape of the expression-risk association. The nonlinearity p-value compares the spline with a linear Cox effect.",
+    "A three-parameter restricted cubic spline with knots at the 5th, 35th, 65th and 95th percentiles estimates the shape of the expression-risk association when at least 30 events are available. The nonlinearity p-value compares the spline with a linear Cox effect.",
   pancancer:
     "Pan-cancer analysis reports each cohort per +1 within-cohort expression SD without pooling that scale. Eligible single-gene and mean/weighted-signature effects are also expressed per +1 common input-score unit and synthesized only within one endpoint and model family using REML, HKSJ inference and a 95% prediction interval.",
   pancancerEndpointMode:
@@ -323,7 +325,7 @@ const HELP_CONTENT = {
   rmst:
     "RMST, restricted mean survival time, estimates average event-free time up to one fixed cohort-level horizon. It complements the hazard ratio, but the group comparison still depends on the selected cutpoint.",
   coxPH:
-    "PH diagnostics use cox.zph for each marker term and the complete Cox model. When the marker-specific p-value is below 0.05, TCGA-TRACE reports separate marker HRs before and after a fixed 2-year split plus their ratio. The interval is prespecified, never outcome-optimized, and requires support on both sides.",
+    "PH diagnostics use cox.zph for each marker term and the complete Cox model. When the marker-specific p-value is below 0.05, TCGA-TRACE reports separate marker HRs before and after a fixed 2-year primary split plus fixed 1- and 5-year sensitivities. These coarse two-period summaries are prespecified, never outcome-optimized, and require support on both sides.",
   audit:
     "Audit exports record the exact payload, selected patients, endpoint source, model outputs, package versions and artifact checksums. The ZIP also contains a standalone R runner, exact analysis engine, renv.lock and a pinned Dockerfile. SHA-256 values detect drift or corruption. A detached Ed25519 receipt additionally signs the exact audit report and run hash; verify it against the key published by the declared HTTPS server. The receipt proves origin for that report, not scientific correctness or immutable publication time.",
 };
@@ -358,6 +360,7 @@ const HELP_GUIDE_SECTIONS = [
   {
     title: "Analysis Inputs",
     items: [
+      ["Default analysis path", HELP_CONTENT.defaultAnalysis],
       ["Cancer cohort", HELP_CONTENT.dataset],
       ["Survival endpoint", HELP_CONTENT.survivalEndpoint],
       ["Expression scale", HELP_CONTENT.expressionScale],
@@ -410,6 +413,17 @@ const HELP_GUIDE_SECTIONS = [
 
 const METHOD_HISTORY = [
   {
+    version: "spline-temporal-information-contract-v6.2",
+    title: "Information-aware nonlinear and temporal diagnostics",
+    date: "2026-07",
+    items: [
+      "Restricted cubic splines now require at least 30 events, equivalent to 10 events per fitted spline parameter.",
+      "Completed splines report fitted parameters, events per parameter and the same information-status vocabulary used by Cox models.",
+      "Marker-specific PH cautions retain the fixed 2-year primary split and add fixed 1- and 5-year sensitivity splits.",
+      "Temporal outputs identify the Wald marker-by-period contrast and state that a two-period model is a coarse approximation to smoothly varying effects.",
+    ],
+  },
+  {
     version: "release-identity-ci-contract-v1.0",
     title: "Verifiable release identity",
     date: "2026-07",
@@ -455,14 +469,15 @@ const METHOD_HISTORY = [
     ],
   },
   {
-    version: "prespecified-time-varying-effect-v1.0",
-    title: "Marker effects before and after two years",
+    version: "prespecified-time-varying-effect-v1.1",
+    title: "Marker effects over prespecified follow-up splits",
     date: "2026-07",
     items: [
       "A marker-specific cox.zph p-value below 0.05 triggers a two-period Cox diagnostic rather than discarding the model.",
-      "The split is fixed at 730.5 days for every analysis and is not selected from expression, event times or estimated effects.",
-      "Early and late HRs, their late-to-early ratio, confidence intervals, period events and patients entering the late period are reported.",
+      "The primary split remains fixed at 730.5 days; one- and five-year splits are reported as prespecified sensitivities when support permits.",
+      "Early and late HRs, their Wald interaction ratio, confidence intervals, period events and patients entering the late period are reported.",
       "At least five events per period and ten patients entering the late period are required; otherwise the reason remains visible.",
+      "Every two-period result is labelled as a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
     ],
   },
   {
@@ -606,6 +621,7 @@ const METHOD_HISTORY = [
     items: [
       "Single-gene and one-signature analyses now estimate the primary association per +1 within-analysis expression SD before assigning a cutpoint.",
       "A three-degree-of-freedom restricted cubic spline uses knots at the 5th, 35th, 65th and 95th percentiles and reports a likelihood-ratio test of nonlinearity.",
+      "Spline estimation requires at least 30 events, equivalent to 10 events per spline parameter.",
       "The spline effect profile reports hazard ratios relative to median expression from the 5th through 95th percentile with 95% confidence intervals.",
       "Kaplan-Meier, grouped Cox and RMST outputs remain available as cutpoint sensitivity analyses.",
       "The audit bundle stores separate hashes and CSV files for the continuous expression-complete population and the cutpoint-specific grouped population.",
@@ -8432,8 +8448,8 @@ function HelpMethodsPage({ health }) {
   const pipelineVersions = health?.pipeline_versions || {};
   const versionItems = [
     ["App", health?.app_version || "0.1.0"],
-    ["Survival analysis", pipelineVersions.analysis || "server-attested-competing-risk-contract-v6.12"],
-    ["Two signatures", pipelineVersions.combined_signatures || "server-attested-competing-risk-contract-v4.4"],
+    ["Survival analysis", pipelineVersions.analysis || "server-attested-competing-risk-contract-v6.13"],
+    ["Two signatures", pipelineVersions.combined_signatures || "server-attested-competing-risk-contract-v4.5"],
     ["Pan-cancer", pipelineVersions.pancancer || "server-attested-common-scale-reml-hksj-contract-v3.2"],
     ["Immune atlas", pipelineVersions.immune_atlas || "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1"],
     ["Data loaded", formatDate(health?.data_dates?.database_imported_at)],
@@ -10617,37 +10633,62 @@ function TimeVaryingEffectTable({ models, title = "Marker effect over follow-up"
     return ["completed", "skipped", "failed"].includes(status);
   });
   if (!triggeredModels.length) return null;
+  const rows = triggeredModels.flatMap((model) => {
+    const primary = model.time_varying_effect || {};
+    return [
+      {
+        model,
+        diagnostic: primary,
+        role: "Primary",
+      },
+      ...(primary.sensitivity_analyses || []).map((diagnostic) => ({
+        model,
+        diagnostic,
+        role: "Sensitivity",
+      })),
+    ];
+  });
 
   return (
     <div className="time-varying-effect-block">
       <DetailSectionTitle
         title={title}
-        help="Shown only when the marker-specific cox.zph p-value is below 0.05. The split is fixed at 2 years for every analysis and is never chosen from marker values, event times or effect estimates. At least 5 events per period and 10 patients entering the late period are required."
+        help="Shown only when the marker-specific cox.zph p-value is below 0.05. Two years is the fixed primary split; one and five years are prespecified sensitivities. No split is chosen from marker values, event times or effect estimates. At least 5 events per period and 10 patients entering the late period are required."
       />
       <div className="table-scroll">
         <table>
           <thead>
             <tr>
               <th>Model</th>
+              <th>Split</th>
               <th>Marker PH p</th>
-              <th>0-2 years HR (95% CI)</th>
-              <th>After 2 years HR (95% CI)</th>
+              <th>Early HR (95% CI)</th>
+              <th>Late HR (95% CI)</th>
               <th>Late / early HR ratio</th>
               <th>Support</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {triggeredModels.map((model) => {
-              const diagnostic = model.time_varying_effect || {};
+            {rows.map(({ model, diagnostic, role }) => {
               const early = diagnostic.periods?.early;
               const late = diagnostic.periods?.late;
               const change = diagnostic.change;
               const support = diagnostic.support || {};
               const completed = diagnostic.status === "completed";
+              const splitYears = toNullableNumber(diagnostic.split_years);
+              const splitLabel = splitYears === 1
+                ? "1 year"
+                : splitYears === null
+                  ? "..."
+                  : `${formatCompactNumber(splitYears)} years`;
               return (
-                <tr key={`temporal-${model.model || model.label}`}>
+                <tr key={`temporal-${model.model || model.label}-${role}-${splitLabel}`}>
                   <th scope="row">{model.label || formatLabel(model.model)}</th>
+                  <td>
+                    <strong>{splitLabel}</strong>
+                    <small>{role}</small>
+                  </td>
                   <td className="model-diagnostic-caution">{formatP(model.ph_p_value)}</td>
                   <td>{completed ? formatHrValues(early) : "..."}</td>
                   <td>{completed ? formatHrValues(late) : "..."}</td>
@@ -10663,7 +10704,7 @@ function TimeVaryingEffectTable({ models, title = "Marker effect over follow-up"
                     <strong>
                       {formatInteger(support.early_events)} / {formatInteger(support.late_events)} events
                     </strong>
-                    <small>{formatInteger(support.at_risk_at_split)} at risk at 2 years</small>
+                    <small>{formatInteger(support.at_risk_at_split)} at risk at split</small>
                   </td>
                   <td
                     className={`temporal-model-status ${diagnostic.status}`}
@@ -10678,7 +10719,7 @@ function TimeVaryingEffectTable({ models, title = "Marker effect over follow-up"
         </table>
       </div>
       <p className="time-varying-method-note">
-        Diagnostic summary, not a second primary test. HRs use Efron ties and participant-clustered robust variance.
+        Diagnostic summary, not additional primary tests. Ratios are Wald contrasts for marker-by-period interactions; the two-period model is a coarse approximation to a potentially smooth time-varying effect. HRs use Efron ties and participant-clustered robust variance.
       </p>
     </div>
   );

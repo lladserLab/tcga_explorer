@@ -52,6 +52,8 @@ METRIC_LABELS = {
     "maxstat_naive": "Maxstat naive",
     "maxstat_lau94": "Maxstat Lau94",
     "median_logrank": "Median log-rank",
+    "upper_quartile_logrank": "Upper-quartile log-rank",
+    "outer_quartiles_logrank": "Outer-quartiles log-rank",
     "median_cox": "Median Cox",
     "median_rmst": "Median RMST",
 }
@@ -439,6 +441,43 @@ def write_markdown(
             "particular, the PH column measures diagnostic sensitivity rather "
             "than biomarker association power.",
             "",
+            "## Linear-PH Association Power",
+            "",
+            "The same 2,000 linear-PH replicates compare the cutpoint-independent "
+            "primary test with valid method-specific grouped tests:",
+            "",
+            "| Continuous Cox | Maxstat Lau94 | Median | Upper quartile | "
+            "Outer quartiles | Grouped Holm family |",
+            "| ---: | ---: | ---: | ---: | ---: | ---: |",
+            "| "
+            + " | ".join(
+                format_rate(by_key.get(("linear_ph", metric)))
+                for metric in (
+                    "continuous_linear",
+                    "maxstat_lau94",
+                    "median_logrank",
+                    "upper_quartile_logrank",
+                    "outer_quartiles_logrank",
+                    "grouped_family_holm",
+                )
+            )
+            + " |",
+            "",
+            "This strong linear alternative supports the continuous Cox model "
+            "as the primary association test in this design; it is not a claim "
+            "of universal power dominance. Outer-quartile grouping increases "
+            "contrast while discarding the middle half of participants.",
+            "",
+            "## Null Calibration Interpretation",
+            "",
+            "For the observed-cohort permutation, the Wilson intervals for "
+            "continuous Cox, spline nonlinearity and marker PH include 0.05. "
+            "The grouped Holm family and Lau94 intervals lie below 0.05, "
+            "whereas naive maxstat lies far above it. Holm therefore controls "
+            "the declared 0.05 familywise level conservatively under these "
+            "dependent cutpoints; lack of grouped support is not evidence of "
+            "absence of a continuous effect.",
+            "",
             "## Dependence of Grouped Summaries",
             "",
             "Under observed-cohort expression permutation with a median split:",
@@ -539,9 +578,34 @@ def write_latex(path: Path, result: dict[str, Any]) -> None:
         )
     lines.extend(
         [
-            r"\bottomrule",
-            r"\end{tabular}",
-            r"\endgroup",
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\par\vspace{4pt}",
+        r"\begin{tabular}{lrrrrrr}",
+        r"\toprule",
+        (
+            r"Linear-PH power & Continuous & Maxstat & Median & Upper Q & "
+            r"Outer Q & Holm family \\"
+        ),
+        r"\midrule",
+        (
+            "Rejection (\\%) & "
+            + " & ".join(
+                percent_value(by_key.get(("linear_ph", metric)))
+                for metric in (
+                    "continuous_linear",
+                    "maxstat_lau94",
+                    "median_logrank",
+                    "upper_quartile_logrank",
+                    "outer_quartiles_logrank",
+                    "grouped_family_holm",
+                )
+            )
+            + r" \\"
+        ),
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\endgroup",
             r"\end{table}",
             "",
         ]

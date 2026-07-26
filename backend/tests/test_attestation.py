@@ -145,6 +145,53 @@ def test_metadata_declares_https_key_and_receipt_locations(
     assert "scientific correctness" in metadata["trust_model"]
 
 
+def test_revoked_key_remains_discoverable_but_fails_trust_check(
+    attestation_settings,
+    tmp_path,
+) -> None:
+    active = ensure_attestation_key(attestation_settings)
+    audit_path = tmp_path / "audit_report.json"
+    audit_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "tcga-trace-analysis-audit-v4",
+                "report_type": "survival_analysis_audit",
+                "reproducibility_hash": "b" * 64,
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary = write_attestation_receipt(
+        attestation_settings,
+        subject_type="survival_analysis",
+        subject_id="analysis-revoked",
+        audit_path=audit_path,
+        reproducibility_hash="b" * 64,
+        report_schema_version="tcga-trace-analysis-audit-v4",
+    )
+    receipt = json.loads(
+        (tmp_path / "attestation_receipt.json").read_text(encoding="utf-8")
+    )
+    key_document = attestation_key_document(
+        attestation_settings,
+        summary["key_id"],
+    )
+    key_document["status"] = "revoked"
+
+    result = verify_attestation_receipt(
+        receipt,
+        key_document,
+        audit_bytes=audit_path.read_bytes(),
+    )
+
+    assert summary["key_id"] == active.key_id
+    assert result["status"] == "failed"
+    key_status = next(
+        check for check in result["checks"] if check["name"] == "key_status"
+    )
+    assert key_status["passed"] is False
+
+
 def test_disabled_attestation_fails_closed(tmp_path) -> None:
     settings = Settings(
         _env_file=None,

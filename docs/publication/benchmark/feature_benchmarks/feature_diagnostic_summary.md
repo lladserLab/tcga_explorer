@@ -1,7 +1,7 @@
 # Feature Benchmark Diagnostic Summary
 
-- Started: 2026-07-26T01:31:54Z
-- Finished: 2026-07-26T01:32:27Z
+- Started: 2026-07-26T17:44:13Z
+- Finished: 2026-07-26T17:44:29Z
 - API base URL: `http://192.168.1.31:3000/tcga_explorer`
 
 | Mode | Inputs and construction | Cohort/n | Primary result | Diagnostics | Limitation |

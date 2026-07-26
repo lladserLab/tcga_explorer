@@ -4,16 +4,31 @@ FIRTH_PENALTY <- 0.5
 TIME_VARYING_PH_ALPHA <- 0.05
 TIME_VARYING_SPLIT_YEARS <- 2
 TIME_VARYING_SPLIT_DAYS <- TIME_VARYING_SPLIT_YEARS * 365.25
+TIME_VARYING_SENSITIVITY_YEARS <- c(1, 5)
 TIME_VARYING_MIN_EVENTS_PER_PERIOD <- 5L
 TIME_VARYING_MIN_AT_RISK_AT_SPLIT <- 10L
 
-time_varying_effect_contract <- function(ph_p_value) {
+format_follow_up_years <- function(years) {
+  if (isTRUE(all.equal(as.numeric(years), 1))) {
+    return("1 year")
+  }
+  sprintf("%g years", as.numeric(years))
+}
+
+time_varying_effect_contract <- function(
+  ph_p_value,
+  split_years = TIME_VARYING_SPLIT_YEARS,
+  analysis_role = "primary"
+) {
+  split_days <- as.numeric(split_years) * 365.25
+  split_label <- format_follow_up_years(split_years)
   list(
     method = "Prespecified two-period Cox marker effect",
     estimand = paste(
-      "Marker hazard ratio before and after a fixed two-year follow-up split,",
+      sprintf("Marker hazard ratio before and after a fixed %s follow-up split,", split_label),
       "plus the late-to-early hazard-ratio ratio."
     ),
+    analysis_role = analysis_role,
     trigger = "Marker-specific cox.zph p < 0.05",
     trigger_alpha = TIME_VARYING_PH_ALPHA,
     trigger_ph_p_value = if (
@@ -25,15 +40,29 @@ time_varying_effect_contract <- function(ph_p_value) {
       NA_real_
     },
     split_rule = paste(
-      "The follow-up split is fixed at 2 years (730.5 days) for every analysis",
+      sprintf(
+        "The follow-up split is fixed at %s (%.2f days) for this %s analysis",
+        split_label,
+        split_days,
+        analysis_role
+      ),
       "and is not selected from marker values, event times or effect estimates."
     ),
-    split_years = TIME_VARYING_SPLIT_YEARS,
-    split_days = TIME_VARYING_SPLIT_DAYS,
+    split_years = as.numeric(split_years),
+    split_days = split_days,
+    sensitivity_split_years = if (identical(analysis_role, "primary")) {
+      as.list(TIME_VARYING_SENSITIVITY_YEARS)
+    } else {
+      list()
+    },
     min_events_per_period = TIME_VARYING_MIN_EVENTS_PER_PERIOD,
     min_at_risk_at_split = TIME_VARYING_MIN_AT_RISK_AT_SPLIT,
     ties = "efron",
-    variance = "participant-clustered robust sandwich"
+    variance = "participant-clustered robust sandwich",
+    approximation_note = paste(
+      "The two-period model is a coarse diagnostic approximation to an effect",
+      "that may vary smoothly over follow-up."
+    )
   )
 }
 
@@ -70,10 +99,19 @@ fit_prespecified_time_varying_effect <- function(
   marker_formula_term,
   marker_coefficient,
   effect_label,
-  ph_p_value
+  ph_p_value,
+  split_years = TIME_VARYING_SPLIT_YEARS,
+  include_sensitivities = TRUE,
+  analysis_role = "primary"
 ) {
-  result <- time_varying_effect_contract(ph_p_value)
+  result <- time_varying_effect_contract(
+    ph_p_value,
+    split_years = split_years,
+    analysis_role = analysis_role
+  )
   result$effect_label <- effect_label
+  split_days <- result$split_days
+  split_label <- format_follow_up_years(split_years)
 
   ph_value <- suppressWarnings(as.numeric(ph_p_value))
   if (!length(ph_value) || !is.finite(ph_value[[1]])) {
@@ -108,16 +146,34 @@ fit_prespecified_time_varying_effect <- function(
     drop = FALSE
   ]
   data$split_id <- seq_len(nrow(data))
+  if (include_sensitivities) {
+    result$sensitivity_analyses <- lapply(
+      TIME_VARYING_SENSITIVITY_YEARS,
+      function(sensitivity_years) {
+        fit_prespecified_time_varying_effect(
+          data = data,
+          formula_terms = formula_terms,
+          marker_formula_term = marker_formula_term,
+          marker_coefficient = marker_coefficient,
+          effect_label = effect_label,
+          ph_p_value = ph_p_value,
+          split_years = sensitivity_years,
+          include_sensitivities = FALSE,
+          analysis_role = "sensitivity"
+        )
+      }
+    )
+  }
   early_events <- sum(
-    data$event == 1 & data$time_days <= TIME_VARYING_SPLIT_DAYS,
+    data$event == 1 & data$time_days <= split_days,
     na.rm = TRUE
   )
   late_events <- sum(
-    data$event == 1 & data$time_days > TIME_VARYING_SPLIT_DAYS,
+    data$event == 1 & data$time_days > split_days,
     na.rm = TRUE
   )
   at_risk_at_split <- sum(
-    data$time_days > TIME_VARYING_SPLIT_DAYS,
+    data$time_days > split_days,
     na.rm = TRUE
   )
   result$n_patients <- nrow(data)
@@ -169,11 +225,11 @@ fit_prespecified_time_varying_effect <- function(
   early_data$tstart <- 0
   early_data$tstop <- pmin(
     early_data$time_days,
-    TIME_VARYING_SPLIT_DAYS
+    split_days
   )
   early_data$interval_event <- as.integer(
     early_data$event == 1 &
-      early_data$time_days <= TIME_VARYING_SPLIT_DAYS
+      early_data$time_days <= split_days
   )
   early_data$late_period <- 0
   early_data <- early_data[
@@ -182,8 +238,8 @@ fit_prespecified_time_varying_effect <- function(
     drop = FALSE
   ]
 
-  late_data <- data[data$time_days > TIME_VARYING_SPLIT_DAYS, , drop = FALSE]
-  late_data$tstart <- TIME_VARYING_SPLIT_DAYS
+  late_data <- data[data$time_days > split_days, , drop = FALSE]
+  late_data$tstart <- split_days
   late_data$tstop <- late_data$time_days
   late_data$interval_event <- late_data$event
   late_data$late_period <- 1
@@ -294,17 +350,17 @@ fit_prespecified_time_varying_effect <- function(
   )
   result$periods <- list(
     early = time_varying_period_effect(
-      "0 to 2 years",
+      paste("0 to", split_label),
       0,
-      TIME_VARYING_SPLIT_DAYS,
+      split_days,
       nrow(data),
       early_events,
       early_log_hr,
       early_standard_error
     ),
     late = time_varying_period_effect(
-      "After 2 years",
-      TIME_VARYING_SPLIT_DAYS,
+      paste("After", split_label),
+      split_days,
       NULL,
       at_risk_at_split,
       late_events,
@@ -314,6 +370,7 @@ fit_prespecified_time_varying_effect <- function(
   )
   result$change <- list(
     label = "Late HR / early HR",
+    method = "Wald contrast for the marker-by-period interaction coefficient",
     log_hr_difference = change_log_hr,
     standard_error = change_standard_error,
     hazard_ratio_ratio = unname(exp(change_log_hr)),

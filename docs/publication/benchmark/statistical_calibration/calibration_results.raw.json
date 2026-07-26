@@ -99,6 +99,24 @@
     },
     {
       "scenario": "observed_null_permutation",
+      "metric": "upper_quartile_logrank",
+      "rejected": 114,
+      "evaluable": 2000,
+      "rate": 0.057000000000000002,
+      "confidence_low": 0.047662768878229581,
+      "confidence_high": 0.068035735012960508
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "outer_quartiles_logrank",
+      "rejected": 108,
+      "evaluable": 2000,
+      "rate": 0.053999999999999999,
+      "confidence_low": 0.0449221548758202,
+      "confidence_high": 0.064787851299057397
+    },
+    {
+      "scenario": "observed_null_permutation",
       "metric": "median_cox",
       "rejected": 105,
       "evaluable": 2000,
@@ -179,6 +197,24 @@
       "rate": 0.045999999999999999,
       "confidence_low": 0.0376570233593111,
       "confidence_high": 0.05608365557206655
+    },
+    {
+      "scenario": "null",
+      "metric": "upper_quartile_logrank",
+      "rejected": 103,
+      "evaluable": 2000,
+      "rate": 0.051499999999999997,
+      "confidence_low": 0.04264472005033882,
+      "confidence_high": 0.062074871360945048
+    },
+    {
+      "scenario": "null",
+      "metric": "outer_quartiles_logrank",
+      "rejected": 115,
+      "evaluable": 2000,
+      "rate": 0.057500000000000002,
+      "confidence_low": 0.048120313033425496,
+      "confidence_high": 0.06857627381048334
     },
     {
       "scenario": "null",
@@ -263,6 +299,24 @@
     },
     {
       "scenario": "linear_ph",
+      "metric": "upper_quartile_logrank",
+      "rejected": 1869,
+      "evaluable": 2000,
+      "rate": 0.9345,
+      "confidence_low": 0.92280261465746971,
+      "confidence_high": 0.94453147125512138
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "outer_quartiles_logrank",
+      "rejected": 1956,
+      "evaluable": 2000,
+      "rate": 0.97799999999999998,
+      "confidence_low": 0.97059621091343984,
+      "confidence_high": 0.98357109188568215
+    },
+    {
+      "scenario": "linear_ph",
       "metric": "median_cox",
       "rejected": 1873,
       "evaluable": 2000,
@@ -344,6 +398,24 @@
     },
     {
       "scenario": "delayed_non_ph",
+      "metric": "upper_quartile_logrank",
+      "rejected": 1902,
+      "evaluable": 2000,
+      "rate": 0.95099999999999996,
+      "confidence_low": 0.94064436330261714,
+      "confidence_high": 0.95962646004969265
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "outer_quartiles_logrank",
+      "rejected": 1940,
+      "evaluable": 2000,
+      "rate": 0.96999999999999997,
+      "confidence_low": 0.96157583026856042,
+      "confidence_high": 0.97662214528706159
+    },
+    {
+      "scenario": "delayed_non_ph",
       "metric": "median_cox",
       "rejected": 1869,
       "evaluable": 2000,
@@ -422,6 +494,24 @@
       "rate": 0.062,
       "confidence_low": 0.052247554461338233,
       "confidence_high": 0.073431778957039326
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "upper_quartile_logrank",
+      "rejected": 1654,
+      "evaluable": 2000,
+      "rate": 0.82699999999999996,
+      "confidence_low": 0.80980004968794106,
+      "confidence_high": 0.84294620139011933
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "outer_quartiles_logrank",
+      "rejected": 160,
+      "evaluable": 2000,
+      "rate": 0.080000000000000002,
+      "confidence_low": 0.06889957451773436,
+      "confidence_high": 0.092710745198518088
     },
     {
       "scenario": "u_shaped_nonlinear",

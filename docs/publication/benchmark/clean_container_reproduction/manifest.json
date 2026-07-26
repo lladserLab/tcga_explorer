@@ -1,8 +1,8 @@
 {
   "files": {
     "benchmark_results.raw.json": {
-      "bytes": 23818,
-      "sha256": "2b5cf7df1bd412474830206323e10f362cd76399e0746d46adf9aad4668c457f"
+      "bytes": 24977,
+      "sha256": "dcb51dc9790630b5df5c7c7689b714b4a63eb36727e8a84bdca53de4851e2f9c"
     },
     "capsules/single_gene/Dockerfile.reproduce": {
       "bytes": 945,
@@ -13,40 +13,44 @@
       "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
     },
     "capsules/single_gene/audit_report.json": {
-      "bytes": 678585,
-      "sha256": "7d6c99284e27300e38e02629f394feb96cfcaf6419b44950d626fd80add81b19"
+      "bytes": 889590,
+      "sha256": "1a5a63a9625c495acf1f2c47adf7026af4f6c9f7ba8fa38ab60e5e79082371c2"
     },
     "capsules/single_gene/clinical_covariates.R": {
-      "bytes": 7375,
-      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+      "bytes": 15512,
+      "sha256": "fbe83e3349fc418527dfb5dc2dff768f76e7e2d174d0d40a15032ba4c8f4c5a5"
+    },
+    "capsules/single_gene/competing_risks.R": {
+      "bytes": 28110,
+      "sha256": "cdab59474c4345d839ad52c68dee95a067327329501aca65445362104ec0b323"
     },
     "capsules/single_gene/cox_diagnostics.R": {
-      "bytes": 9065,
-      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+      "bytes": 20451,
+      "sha256": "c1543741cad742657555434465cad9cc65603a096f7b3bbcc7aefda76976ae22"
     },
     "capsules/single_gene/input.json": {
-      "bytes": 300220,
-      "sha256": "7b1270af24562b6370728987b184014a82647a2fa57b5fff07697c309e1f2f9c"
+      "bytes": 383838,
+      "sha256": "00fbbf6d7c94e2603a5387588c31cc57c4f0ecc36673007e81718051cbaa3738"
     },
     "capsules/single_gene/km_analysis.R": {
-      "bytes": 66975,
-      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+      "bytes": 73548,
+      "sha256": "57753380bbf53e04ea1ea22685c8593aad7f60d1f026bae17bf964c753208291"
     },
     "capsules/single_gene/metrics.json": {
-      "bytes": 40167,
-      "sha256": "0fe710bfbe55c70cdd27d06f0680e581f4165cee4b7da8f39b8097c57517d33f"
+      "bytes": 139606,
+      "sha256": "bddf629bdad14b9ff7a85af5e0156377bdf239937c14c23de9646e1d782fbe0d"
     },
     "capsules/single_gene/renv.lock": {
-      "bytes": 204337,
-      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+      "bytes": 204913,
+      "sha256": "594794128bca8309f17313c2a6a3c29a81988ca7b224b273cbef6e39c4521712"
     },
     "capsules/single_gene/reproduction_manifest.json": {
-      "bytes": 2881,
-      "sha256": "63418e15f6138f5a6aee0ffff46d4376512903f4d635f91e90ebff6afdfa77a1"
+      "bytes": 3095,
+      "sha256": "7c61f539782010559277dad02cba4f1182442e4435b7154d544aa2427d16b707"
     },
     "capsules/single_gene/rerun_analysis.R": {
-      "bytes": 7241,
-      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+      "bytes": 7497,
+      "sha256": "512c1d743cea88e96da445db19ad81824d5111ad136794ba6dd70ac355dc580a"
     },
     "capsules/two_signatures/Dockerfile.reproduce": {
       "bytes": 945,
@@ -57,40 +61,44 @@
       "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
     },
     "capsules/two_signatures/audit_report.json": {
-      "bytes": 158712,
-      "sha256": "840e7352ed1774ed85729d0aa2e72c9f8b309381daa84f942eba99ab4815bbec"
+      "bytes": 233563,
+      "sha256": "65f6a5389d5fef085c44b2a64eecea2a564d9cc61bc1f194d0f88382e8d72d38"
     },
     "capsules/two_signatures/clinical_covariates.R": {
-      "bytes": 7375,
-      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+      "bytes": 15512,
+      "sha256": "fbe83e3349fc418527dfb5dc2dff768f76e7e2d174d0d40a15032ba4c8f4c5a5"
+    },
+    "capsules/two_signatures/competing_risks.R": {
+      "bytes": 28110,
+      "sha256": "cdab59474c4345d839ad52c68dee95a067327329501aca65445362104ec0b323"
     },
     "capsules/two_signatures/cox_diagnostics.R": {
-      "bytes": 9065,
-      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+      "bytes": 20451,
+      "sha256": "c1543741cad742657555434465cad9cc65603a096f7b3bbcc7aefda76976ae22"
     },
     "capsules/two_signatures/input.json": {
-      "bytes": 37372,
-      "sha256": "94f068fec39ab96efe8ab45227344d6428fd5f43e8d8e9564d4a399ee05b4b8b"
+      "bytes": 48650,
+      "sha256": "9abcd0f775553be2192f5b30a63b4164b8d80fbd3812f59a9082a8051a037700"
     },
     "capsules/two_signatures/km_analysis.R": {
-      "bytes": 66975,
-      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+      "bytes": 73548,
+      "sha256": "57753380bbf53e04ea1ea22685c8593aad7f60d1f026bae17bf964c753208291"
     },
     "capsules/two_signatures/metrics.json": {
-      "bytes": 24974,
-      "sha256": "0ba1182af39e8895cc117fa92b6dde192d1658cf5f24d509eb90237bf303e37f"
+      "bytes": 80370,
+      "sha256": "6c18633004393af6ff21e345908e86bb784cc16f1a2149fe04f4b18545edbb87"
     },
     "capsules/two_signatures/renv.lock": {
-      "bytes": 204337,
-      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+      "bytes": 204913,
+      "sha256": "594794128bca8309f17313c2a6a3c29a81988ca7b224b273cbef6e39c4521712"
     },
     "capsules/two_signatures/reproduction_manifest.json": {
-      "bytes": 2880,
-      "sha256": "298d37c00486a595fa898102cd62dd2f895811206cce1385da8a5b58c2aa6d9a"
+      "bytes": 3094,
+      "sha256": "2938df1a8605854b334579c98fc06a5b89e7c50dc6ef6cbc0c574cb948ea257e"
     },
     "capsules/two_signatures/rerun_analysis.R": {
-      "bytes": 7241,
-      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+      "bytes": 7497,
+      "sha256": "512c1d743cea88e96da445db19ad81824d5111ad136794ba6dd70ac355dc580a"
     },
     "capsules/weighted_signature/Dockerfile.reproduce": {
       "bytes": 945,
@@ -101,48 +109,52 @@
       "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
     },
     "capsules/weighted_signature/audit_report.json": {
-      "bytes": 194798,
-      "sha256": "3738b36c20d6941338fa48691729a0b88d5626cf78e9913294d6d2867385b11e"
+      "bytes": 221305,
+      "sha256": "de44aa40576ff2fb9ef82ecb86018d18f1d6e6eccc2ea3a234d2a6c4bdbc5ea0"
     },
     "capsules/weighted_signature/clinical_covariates.R": {
-      "bytes": 7375,
-      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+      "bytes": 15512,
+      "sha256": "fbe83e3349fc418527dfb5dc2dff768f76e7e2d174d0d40a15032ba4c8f4c5a5"
+    },
+    "capsules/weighted_signature/competing_risks.R": {
+      "bytes": 28110,
+      "sha256": "cdab59474c4345d839ad52c68dee95a067327329501aca65445362104ec0b323"
     },
     "capsules/weighted_signature/cox_diagnostics.R": {
-      "bytes": 9065,
-      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+      "bytes": 20451,
+      "sha256": "c1543741cad742657555434465cad9cc65603a096f7b3bbcc7aefda76976ae22"
     },
     "capsules/weighted_signature/input.json": {
-      "bytes": 66890,
-      "sha256": "d6e3336148a152a4e2f8c1d24e84491d0228a5bb3c5be371003092b9de435cca"
+      "bytes": 85300,
+      "sha256": "ad5223031d190eb207c7681bb116ecf500e7d32e297e96d190028c3cda0193da"
     },
     "capsules/weighted_signature/km_analysis.R": {
-      "bytes": 66975,
-      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+      "bytes": 73548,
+      "sha256": "57753380bbf53e04ea1ea22685c8593aad7f60d1f026bae17bf964c753208291"
     },
     "capsules/weighted_signature/metrics.json": {
-      "bytes": 32125,
-      "sha256": "af877155ddac24bd359c67140aab3f527af8509671799baa2cd5f173344b89b9"
+      "bytes": 35041,
+      "sha256": "789a67f087dea1e994527c9b01346a737ec5a4ca47cbb37a1e29b6565d9dbdcf"
     },
     "capsules/weighted_signature/renv.lock": {
-      "bytes": 204337,
-      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+      "bytes": 204913,
+      "sha256": "594794128bca8309f17313c2a6a3c29a81988ca7b224b273cbef6e39c4521712"
     },
     "capsules/weighted_signature/reproduction_manifest.json": {
-      "bytes": 2880,
-      "sha256": "b10848e985b6f1f31b63111d28a303f9dc25abe6061d43342acabfc032596dfa"
+      "bytes": 3094,
+      "sha256": "4843236c4d15dc5903e1d5530f2218b6c4e9941974f6e4c3d9fad927ddcd68f1"
     },
     "capsules/weighted_signature/rerun_analysis.R": {
-      "bytes": 7241,
-      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+      "bytes": 7497,
+      "sha256": "512c1d743cea88e96da445db19ad81824d5111ad136794ba6dd70ac355dc580a"
     },
     "summary.csv": {
-      "bytes": 1178,
-      "sha256": "603f76cad07f327208b76b4c7efbab2e97f15a6a891f43d13622aa90bcb17d7c"
+      "bytes": 1179,
+      "sha256": "f134e7944c6c713a5918d605e1cd0e458a46a2ddfd57d73a43618157a90d91f7"
     },
     "summary.md": {
-      "bytes": 1584,
-      "sha256": "1070d663fd5c0618ee561d246d743d0eaf8dd65022ca079b429e55889319401d"
+      "bytes": 1588,
+      "sha256": "e90afd317af8089437c7fe4c17a9505e26c2b394635621863d7f1fe60659cf40"
     }
   },
   "schema_version": "tcga-trace-clean-reproduction-manifest-v1"

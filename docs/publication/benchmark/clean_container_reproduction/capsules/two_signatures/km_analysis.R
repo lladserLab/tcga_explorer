@@ -14,6 +14,7 @@ script_directory <- if (length(script_argument)) {
 }
 source(file.path(script_directory, "clinical_covariates.R"))
 source(file.path(script_directory, "cox_diagnostics.R"))
+source(file.path(script_directory, "competing_risks.R"))
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 1) {
@@ -23,7 +24,7 @@ if (length(args) != 1) {
 payload <- fromJSON(args[[1]], simplifyDataFrame = FALSE)
 
 MIN_MODEL_EVENTS <- 5L
-MIN_SPLINE_EVENTS <- 15L
+MIN_SPLINE_EVENTS <- 30L
 MIN_RMST_AT_RISK_PER_GROUP <- 5L
 
 `%||%` <- function(left, right) {
@@ -35,6 +36,15 @@ MIN_RMST_AT_RISK_PER_GROUP <- 5L
 
 requested_adjustment_covariates <- normalize_requested_covariates(
   payload$adjustment_covariates %||% list()
+)
+external_covariate_definitions <- payload$external_covariate_definitions %||% list()
+requested_external_adjustment_covariates <- normalize_requested_external_covariates(
+  payload$external_adjustment_covariates %||% list(),
+  external_covariate_definitions
+)
+adjustment_requested <- (
+  length(requested_adjustment_covariates) > 0 ||
+  length(requested_external_adjustment_covariates) > 0
 )
 
 record_fields <- c(
@@ -49,6 +59,9 @@ record_fields <- c(
   "group_b",
   "time_days",
   "event",
+  "competing_risk_status",
+  "competing_event",
+  "competing_risk_source",
   "os_time_days",
   "os_event",
   "sample_type",
@@ -56,12 +69,27 @@ record_fields <- c(
   "grade",
   "gender",
   "race",
-  "age_at_index"
+  "age_at_index",
+  vapply(
+    requested_external_adjustment_covariates,
+    external_covariate_record_name,
+    character(1)
+  )
 )
 
 normalize_record <- function(record) {
   values <- lapply(record_fields, function(field) {
-    value <- record[[field]]
+    if (startsWith(field, "external__")) {
+      external_name <- sub("^external__", "", field)
+      external_values <- record$external_covariates
+      value <- if (is.null(external_values) || !length(external_values)) {
+        NULL
+      } else {
+        external_values[[external_name]]
+      }
+    } else {
+      value <- record[[field]]
+    }
     if (is.null(value) || length(value) == 0) {
       return(NA)
     }
@@ -87,6 +115,8 @@ if (nrow(records) < 2) {
 
 records$time_days <- as.numeric(records$time_days)
 records$event <- as.integer(records$event)
+records$competing_risk_status <- as.integer(records$competing_risk_status)
+records$competing_event <- as.integer(records$competing_event)
 records$os_time_days <- as.numeric(records$os_time_days)
 records$os_event <- as.integer(records$os_event)
 if (all(is.na(records$time_days)) && any(!is.na(records$os_time_days))) {
@@ -107,6 +137,12 @@ records$grade[is.na(records$grade) | records$grade == ""] <- NA
 if (nrow(continuous_records) > 0) {
   continuous_records$time_days <- as.numeric(continuous_records$time_days)
   continuous_records$event <- as.integer(continuous_records$event)
+  continuous_records$competing_risk_status <- as.integer(
+    continuous_records$competing_risk_status
+  )
+  continuous_records$competing_event <- as.integer(
+    continuous_records$competing_event
+  )
   continuous_records$expression_value <- as.numeric(continuous_records$expression_value)
   continuous_records$stage <- trimws(as.character(continuous_records$stage))
   continuous_records$stage[is.na(continuous_records$stage) | continuous_records$stage == ""] <- NA
@@ -153,6 +189,11 @@ continuous_analysis <- list(
   reason = "An unstratified expression-complete population was not supplied."
 )
 rmst <- list(status = "skipped", reason = "RMST is reported only for two expression groups.")
+competing_risks <- list(
+  applicable = FALSE,
+  status = "not_applicable",
+  reason = "The selected endpoint has no TCGA-CDR competing-risk status."
+)
 cox_warning_messages <- c()
 
 cox_skip <- function(model_id, label, covariates, reason, data = records, covariate_encoding = list()) {
@@ -168,10 +209,29 @@ cox_skip <- function(model_id, label, covariates, reason, data = records, covari
   )
 }
 
-fit_cox_model <- function(model_id, label, covariates) {
-  data <- records[, c("time_days", "event", "group", covariates), drop = FALSE]
+fit_cox_model <- function(
+  model_id,
+  label,
+  covariates,
+  external_covariates = character()
+) {
+  external_record_names <- vapply(
+    external_covariates,
+    external_covariate_record_name,
+    character(1)
+  )
+  data <- records[
+    ,
+    c("time_days", "event", "group", covariates, external_record_names),
+    drop = FALSE
+  ]
   data <- data[is.finite(data$time_days) & !is.na(data$event) & !is.na(data$group), , drop = FALSE]
-  prepared <- prepare_model_covariates(data, covariates)
+  prepared <- prepare_model_covariates(
+    data,
+    covariates,
+    external_covariates,
+    external_covariate_definitions
+  )
   data <- prepared$data[, c("time_days", "event", "group", prepared$covariates), drop = FALSE]
   encoded_covariates <- prepared$covariates
   covariate_encoding <- prepared$metadata
@@ -328,10 +388,33 @@ fit_cox_model <- function(model_id, label, covariates) {
     if ("GLOBAL" %in% rownames(ph_table)) {
       ph_global_p_value <- unname(ph_table["GLOBAL", "p"])
     }
-    if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
-      model_warnings <- c(model_warnings, "Global proportional hazards test p < 0.05; inspect time-varying effects.")
+    if (is.finite(ph_p_value) && ph_p_value < 0.05) {
+      model_warnings <- c(
+        model_warnings,
+        paste(
+          "Marker-specific proportional hazards test p < 0.05; interpret the",
+          "average grouped HR with the prespecified two-year temporal diagnostic."
+        )
+      )
+    } else if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
+      model_warnings <- c(
+        model_warnings,
+        "Global proportional hazards test p < 0.05 while the grouped marker term was not flagged."
+      )
     }
   }
+  temporal_data <- data
+  temporal_data$group_high_indicator <- as.numeric(
+    temporal_data$group == group_levels[[2]]
+  )
+  time_varying_effect <- fit_prespecified_time_varying_effect(
+    data = temporal_data,
+    formula_terms = c("group_high_indicator", encoded_covariates),
+    marker_formula_term = "group_high_indicator",
+    marker_coefficient = "group_high_indicator",
+    effect_label = paste(group_levels[[2]], "vs", group_levels[[1]]),
+    ph_p_value = ph_p_value
+  )
   if (length(model_warnings)) {
     cox_warning_messages <<- c(cox_warning_messages, paste(label, paste(unique(model_warnings), collapse = " | "), sep = ": "))
   }
@@ -356,6 +439,7 @@ fit_cox_model <- function(model_id, label, covariates) {
     p_value = p_value,
     ph_p_value = ph_p_value,
     ph_global_p_value = ph_global_p_value,
+    time_varying_effect = time_varying_effect,
     warnings = as.list(unique(model_warnings))
   )
 }
@@ -367,16 +451,21 @@ if (length(levels(records$group)) == 2) {
     fit_cox_model("grade_adjusted", "Adjusted for ordinal grade", c("grade")),
     fit_cox_model("stage_grade_adjusted", "Adjusted for ordinal stage and grade", c("stage", "grade"))
   )
-  if (length(requested_adjustment_covariates)) {
+  if (adjustment_requested) {
     cox_models <- c(
       cox_models,
       list(fit_cox_model(
         "user_adjusted",
         paste(
           "User-adjusted for",
-          clinical_adjustment_label(requested_adjustment_covariates)
+          clinical_adjustment_label(
+            requested_adjustment_covariates,
+            requested_external_adjustment_covariates,
+            external_covariate_definitions
+          )
         ),
-        requested_adjustment_covariates
+        requested_adjustment_covariates,
+        requested_external_adjustment_covariates
       ))
     )
   }
@@ -713,7 +802,12 @@ if (nrow(continuous_base) > 0) {
   }
 }
 
-fit_continuous_linear_model <- function(model_id, label, covariates) {
+fit_continuous_linear_model <- function(
+  model_id,
+  label,
+  covariates,
+  external_covariates = character()
+) {
   if (nrow(continuous_base) == 0) {
     return(continuous_model_skip(
       model_id,
@@ -732,8 +826,28 @@ fit_continuous_linear_model <- function(model_id, label, covariates) {
       continuous_base
     ))
   }
-  data <- continuous_base[, c("time_days", "event", "expression_z", covariates), drop = FALSE]
-  prepared <- prepare_model_covariates(data, covariates)
+  external_record_names <- vapply(
+    external_covariates,
+    external_covariate_record_name,
+    character(1)
+  )
+  data <- continuous_base[
+    ,
+    c(
+      "time_days",
+      "event",
+      "expression_z",
+      covariates,
+      external_record_names
+    ),
+    drop = FALSE
+  ]
+  prepared <- prepare_model_covariates(
+    data,
+    covariates,
+    external_covariates,
+    external_covariate_definitions
+  )
   data <- prepared$data[, c("time_days", "event", "expression_z", prepared$covariates), drop = FALSE]
   encoded_covariates <- prepared$covariates
   covariate_encoding <- prepared$metadata
@@ -903,7 +1017,10 @@ fit_continuous_linear_model <- function(model_id, label, covariates) {
     if (is.finite(ph_p_value) && ph_p_value < 0.05) {
       model_warnings <- c(
         model_warnings,
-        "Expression-specific proportional hazards test p < 0.05; the per-SD HR may vary over follow-up."
+        paste(
+          "Expression-specific proportional hazards test p < 0.05; interpret",
+          "the average per-SD HR with the prespecified two-year temporal diagnostic."
+        )
       )
     } else if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
       model_warnings <- c(
@@ -912,6 +1029,14 @@ fit_continuous_linear_model <- function(model_id, label, covariates) {
       )
     }
   }
+  time_varying_effect <- fit_prespecified_time_varying_effect(
+    data = data,
+    formula_terms = formula_terms,
+    marker_formula_term = "expression_z",
+    marker_coefficient = "expression_z",
+    effect_label = "Expression per +1 SD",
+    ph_p_value = ph_p_value
+  )
   if (length(model_warnings)) {
     cox_warning_messages <<- c(
       cox_warning_messages,
@@ -942,6 +1067,7 @@ fit_continuous_linear_model <- function(model_id, label, covariates) {
     p_value = marker$p_value,
     ph_p_value = ph_p_value,
     ph_global_p_value = ph_global_p_value,
+    time_varying_effect = time_varying_effect,
     warnings = as.list(unique(model_warnings))
   )
 }
@@ -1138,6 +1264,11 @@ fit_continuous_spline <- function() {
       )
     )
   }
+  spline_information <- cox_information_diagnostics(
+    n_events = n_events,
+    parameter_count = length(spline_terms),
+    warnings = model_warnings
+  )
   list(
     status = "completed",
     method = "restricted cubic spline",
@@ -1145,6 +1276,8 @@ fit_continuous_spline <- function() {
     n_patients = nrow(data),
     n_events = n_events,
     degrees_freedom = length(spline_terms),
+    events_per_parameter = spline_information$events_per_parameter,
+    information_diagnostics = spline_information,
     nonlinear_degrees_freedom = nonlinear_df,
     knot_percentiles = as.list(knot_probabilities * 100),
     knots_expression = as.list(knots_raw),
@@ -1186,16 +1319,21 @@ if (nrow(continuous_base) > 0) {
       c("stage", "grade")
     )
   )
-  if (length(requested_adjustment_covariates)) {
+  if (adjustment_requested) {
     continuous_linear_models <- c(
       continuous_linear_models,
       list(fit_continuous_linear_model(
         "continuous_user_adjusted",
         paste(
           "Continuous expression user-adjusted for",
-          clinical_adjustment_label(requested_adjustment_covariates)
+          clinical_adjustment_label(
+            requested_adjustment_covariates,
+            requested_external_adjustment_covariates,
+            external_covariate_definitions
+          )
         ),
-        requested_adjustment_covariates
+        requested_adjustment_covariates,
+        requested_external_adjustment_covariates
       ))
     )
   }
@@ -1223,12 +1361,38 @@ if (nrow(continuous_base) > 0) {
   )
 }
 
-fit_signature_interaction_model <- function(model_id, label, covariates) {
-  data <- records[, c("time_days", "event", "expression_value_a", "expression_value_b", covariates), drop = FALSE]
+fit_signature_interaction_model <- function(
+  model_id,
+  label,
+  covariates,
+  external_covariates = character()
+) {
+  external_record_names <- vapply(
+    external_covariates,
+    external_covariate_record_name,
+    character(1)
+  )
+  data <- records[
+    ,
+    c(
+      "time_days",
+      "event",
+      "expression_value_a",
+      "expression_value_b",
+      covariates,
+      external_record_names
+    ),
+    drop = FALSE
+  ]
   data$score_a_z <- zscore_vector(data$expression_value_a)
   data$score_b_z <- zscore_vector(data$expression_value_b)
   data <- data[is.finite(data$time_days) & !is.na(data$event) & is.finite(data$score_a_z) & is.finite(data$score_b_z), , drop = FALSE]
-  prepared <- prepare_model_covariates(data, covariates)
+  prepared <- prepare_model_covariates(
+    data,
+    covariates,
+    external_covariates,
+    external_covariate_definitions
+  )
   data <- prepared$data[, c("time_days", "event", "score_a_z", "score_b_z", prepared$covariates), drop = FALSE]
   encoded_covariates <- prepared$covariates
   covariate_encoding <- prepared$metadata
@@ -1369,15 +1533,40 @@ fit_signature_interaction_model <- function(model_id, label, covariates) {
   }
 
   ph_test <- tryCatch(cox.zph(fit), error = function(e) e)
+  ph_p_value <- NA_real_
   ph_global_p_value <- NA_real_
   if (inherits(ph_test, "error")) {
     model_warnings <- c(model_warnings, paste("cox.zph failed:", conditionMessage(ph_test)))
-  } else if (!is.null(ph_test$table) && "p" %in% colnames(ph_test$table) && "GLOBAL" %in% rownames(ph_test$table)) {
-    ph_global_p_value <- unname(ph_test$table["GLOBAL", "p"])
-    if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
-      model_warnings <- c(model_warnings, "Global proportional hazards test p < 0.05; inspect time-varying effects.")
+  } else if (!is.null(ph_test$table) && "p" %in% colnames(ph_test$table)) {
+    if ("score_a_z:score_b_z" %in% rownames(ph_test$table)) {
+      ph_p_value <- unname(ph_test$table["score_a_z:score_b_z", "p"])
+    }
+    if ("GLOBAL" %in% rownames(ph_test$table)) {
+      ph_global_p_value <- unname(ph_test$table["GLOBAL", "p"])
+    }
+    if (is.finite(ph_p_value) && ph_p_value < 0.05) {
+      model_warnings <- c(
+        model_warnings,
+        paste(
+          "Interaction-specific proportional hazards test p < 0.05; interpret",
+          "the average interaction HR with the prespecified two-year temporal diagnostic."
+        )
+      )
+    } else if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
+      model_warnings <- c(
+        model_warnings,
+        "Global proportional hazards test p < 0.05 while the signature interaction term was not flagged."
+      )
     }
   }
+  time_varying_effect <- fit_prespecified_time_varying_effect(
+    data = data,
+    formula_terms = formula_terms,
+    marker_formula_term = "score_a_z:score_b_z",
+    marker_coefficient = "score_a_z:score_b_z",
+    effect_label = "Signature A x Signature B",
+    ph_p_value = ph_p_value
+  )
 
   list(
     model = model_id,
@@ -1393,7 +1582,9 @@ fit_signature_interaction_model <- function(model_id, label, covariates) {
     score_scale = "within-analysis z-score",
     interaction_term = interaction_term,
     terms = terms,
+    ph_p_value = ph_p_value,
     ph_global_p_value = ph_global_p_value,
+    time_varying_effect = time_varying_effect,
     warnings = as.list(unique(model_warnings))
   )
 }
@@ -1405,16 +1596,21 @@ if (any(is.finite(records$expression_value_a)) && any(is.finite(records$expressi
     fit_signature_interaction_model("signature_interaction_grade_adjusted", "Signature interaction adjusted for ordinal grade", c("grade")),
     fit_signature_interaction_model("signature_interaction_stage_grade_adjusted", "Signature interaction adjusted for ordinal stage and grade", c("stage", "grade"))
   )
-  if (length(requested_adjustment_covariates)) {
+  if (adjustment_requested) {
     signature_interaction_cox_models <- c(
       signature_interaction_cox_models,
       list(fit_signature_interaction_model(
         "signature_interaction_user_adjusted",
         paste(
           "Signature interaction user-adjusted for",
-          clinical_adjustment_label(requested_adjustment_covariates)
+          clinical_adjustment_label(
+            requested_adjustment_covariates,
+            requested_external_adjustment_covariates,
+            external_covariate_definitions
+          )
         ),
-        requested_adjustment_covariates
+        requested_adjustment_covariates,
+        requested_external_adjustment_covariates
       ))
     )
   }
@@ -1559,6 +1755,25 @@ plot_theme <- theme_minimal(base_size = base_font_size, base_family = font_famil
     panel.grid.major = if (show_grid) element_line(color = "#e1e7e4", linewidth = 0.35) else element_blank(),
     panel.grid.minor = if (show_grid) element_line(color = "#edf1ef", linewidth = 0.2) else element_blank()
   )
+
+competing_risks <- fit_competing_risks_analysis(
+  records = records,
+  continuous_records = continuous_records,
+  endpoint = payload$endpoint %||% "OS",
+  group_levels = group_levels,
+  requested_adjustment_covariates = requested_adjustment_covariates,
+  requested_external_adjustment_covariates = requested_external_adjustment_covariates,
+  external_covariate_definitions = external_covariate_definitions,
+  time_divisor = time_divisor,
+  time_label = time_label,
+  palette = palette,
+  plot_theme = plot_theme,
+  output_png = payload$cumulative_incidence_png_path %||% "",
+  output_svg = payload$cumulative_incidence_svg_path %||% "",
+  render_png = isTRUE(payload$render_png),
+  render_svg = isTRUE(payload$render_svg),
+  plot_aspect = plot_aspect
+)
 
 format_p_value <- function(value) {
   if (is.na(value)) {
@@ -1912,8 +2127,33 @@ software_versions <- list(
   ggplot2 = as.character(packageVersion("ggplot2")),
   svglite = as.character(packageVersion("svglite")),
   survRM2 = if (requireNamespace("survRM2", quietly = TRUE)) as.character(packageVersion("survRM2")) else "not available",
-  coxphf = if (requireNamespace("coxphf", quietly = TRUE)) as.character(packageVersion("coxphf")) else "not available"
+  coxphf = if (requireNamespace("coxphf", quietly = TRUE)) as.character(packageVersion("coxphf")) else "not available",
+  cmprsk = if (requireNamespace("cmprsk", quietly = TRUE)) as.character(packageVersion("cmprsk")) else "not available"
 )
+
+clinical_adjustment_output <- list(
+  status = if (adjustment_requested) "requested" else "not_requested",
+  requested_covariates = as.list(requested_adjustment_covariates),
+  label = if (adjustment_requested) {
+    clinical_adjustment_label(
+      requested_adjustment_covariates,
+      requested_external_adjustment_covariates,
+      external_covariate_definitions
+    )
+  } else {
+    NULL
+  },
+  grouped_model = if (adjustment_requested) "user_adjusted" else NULL,
+  continuous_model = if (adjustment_requested) "continuous_user_adjusted" else NULL,
+  interaction_model = if (adjustment_requested) "signature_interaction_user_adjusted" else NULL
+)
+if (length(requested_external_adjustment_covariates)) {
+  clinical_adjustment_output$requested_external_covariates <- as.list(
+    requested_external_adjustment_covariates
+  )
+  clinical_adjustment_output$external_covariate_definitions <- external_covariate_definitions
+  clinical_adjustment_output$external_covariate_qc <- payload$external_covariate_qc %||% list()
+}
 
 metrics <- c(
   list(
@@ -1930,18 +2170,8 @@ metrics <- c(
     event_counts = event_counts,
     median_survival_days = median_survival,
     rmst = rmst,
-    clinical_adjustment = list(
-      status = if (length(requested_adjustment_covariates)) "requested" else "not_requested",
-      requested_covariates = as.list(requested_adjustment_covariates),
-      label = if (length(requested_adjustment_covariates)) {
-        clinical_adjustment_label(requested_adjustment_covariates)
-      } else {
-        NULL
-      },
-      grouped_model = if (length(requested_adjustment_covariates)) "user_adjusted" else NULL,
-      continuous_model = if (length(requested_adjustment_covariates)) "continuous_user_adjusted" else NULL,
-      interaction_model = if (length(requested_adjustment_covariates)) "signature_interaction_user_adjusted" else NULL
-    ),
+    competing_risks = competing_risks,
+    clinical_adjustment = clinical_adjustment_output,
     continuous_analysis = continuous_analysis,
     cox_models = cox_models,
     signature_interaction_cox_models = signature_interaction_cox_models,

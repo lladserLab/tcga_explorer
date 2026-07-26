@@ -3,8 +3,8 @@
 Status date: 2026-07-26.
 
 This checklist records the remaining project-owner release steps. GitHub and
-Zenodo are the selected source and archive locations; the checklist does not
-select authors, a license or an APC route.
+Zenodo are the selected source and archive locations, and the software license
+is MIT; the checklist does not select authors or an APC route.
 
 ## 1. Complete Owner Metadata
 
@@ -17,7 +17,6 @@ repository and application URL. Review those prefilled values, then supply:
 - CRediT contribution statement;
 - accurate disclosure of permitted AI assistance;
 - the version-specific Zenodo DOI/archive URL;
-- license identifier;
 - explicit software and service availability commitment for at least two years;
 - named support owner/contact; and
 - dated confirmation of independent author review and scientific verification.
@@ -32,22 +31,15 @@ journal's stated examples.
 Policy source rechecked 2026-07-26:
 `https://academic.oup.com/bioinformatics/pages/author-guidelines`.
 
-## 2. Choose The Software License
+## 2. Verify The Software License
 
 Bioinformatics requires free software/data availability to non-commercial
 users and encourages an open-source license. TCGA-TRACE adopts a complete
 top-level OSI-compatible `LICENSE` or `COPYING` file as a stronger project
-release requirement before reviewer access.
+release requirement before reviewer access. The complete MIT text is present
+at repository root and `owner_metadata.template.json` records `MIT`.
 
-Common choices for owner/institutional review:
-
-- MIT: permissive, minimal conditions.
-- BSD-3-Clause: permissive with non-endorsement language.
-- Apache-2.0: permissive with an explicit patent grant.
-- GPL-3.0-or-later: copyleft.
-
-For supported permissive choices, generate complete text after the owner has
-selected the license, year and copyright holder:
+If the owner changes the year or copyright holder, regenerate the full text:
 
 ```sh
 scripts/publication/write_license_template.py --list
@@ -55,12 +47,11 @@ scripts/publication/write_license_template.py \
   --license MIT \
   --year 2026 \
   --holder "FINAL COPYRIGHT HOLDER" \
-  --output path/to/LICENSE
+  --output LICENSE
 ```
 
-Use institution-approved full text for any other license. Short values such as
-`MIT` or `Selected license` are not valid license files and fail the strict
-gate.
+Short values such as `MIT` or `Selected license` are not valid license files
+and fail the strict gate.
 
 ## 3. Confirm Repository And Service Access
 
@@ -169,7 +160,7 @@ Prepare:
 - mandatory cover letter;
 - complete source repository or compact verified source archive;
 - final package summary JSON;
-- selected license;
+- complete MIT license;
 - archived release DOI/URL;
 - Data Availability statement;
 - data snapshot manifest; and

@@ -16,48 +16,46 @@
     "selected_model_caution_count": 0
   },
   "downloads": {
-    "attestation": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/attestation",
-    "audit_html": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/audit_html",
-    "audit_json": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/audit_json",
-    "continuous_csv": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/continuous_csv",
-    "continuous_png": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/continuous_png",
-    "continuous_svg": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/continuous_svg",
-    "cox_png": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/cox_png",
-    "cox_svg": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/cox_svg",
-    "csv": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/csv",
-    "json": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/json",
-    "png": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/png",
-    "r_script": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/r_script",
-    "reproduction_manifest": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/reproduction_manifest",
-    "svg": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/svg",
-    "txt": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/txt",
-    "zip": "/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/zip"
+    "attestation": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/attestation",
+    "audit_html": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/audit_html",
+    "audit_json": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/audit_json",
+    "continuous_csv": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/continuous_csv",
+    "cox_png": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/cox_png",
+    "cox_svg": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/cox_svg",
+    "csv": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/csv",
+    "json": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/json",
+    "png": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/png",
+    "r_script": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/r_script",
+    "reproduction_manifest": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/reproduction_manifest",
+    "svg": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/svg",
+    "txt": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/txt",
+    "zip": "/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/zip"
   },
   "error": null,
   "expression_scale": "log2_tpm",
   "expression_scale_label": "log2(TPM + 1)",
   "gene_symbol": "WEIGHTED(BUB1B+PINK1)",
-  "id": "55c7f5da98b744e2ba62fe199c319e83",
+  "id": "3375cd134d28419581df52a8bacb4b53",
   "metrics": {
     "audit_report": {
       "continuous_patient_records_sha256": "d4d1d958c2164a94ae7f154f271b27081a01b31abd6cd2473bfb7279fdb38a5a",
-      "generated_at": "2026-07-26T01:31:58.262429+00:00",
+      "generated_at": "2026-07-26T17:44:16.532481+00:00",
       "patient_records_sha256": "a65f4d03d2e14ba9e0b33fdbbdaf77074e1ae0afa1af3561d34d75ca1d178381",
-      "reproducibility_hash": "13e2d1fff4a3f9cd418faaa5da02d299b03544989cd721ff91774a90929a8202",
+      "reproducibility_hash": "63faae5e22faeda5d35ee6937da3c4091ca9e68ee846ae874059fb48f82277fc",
       "schema_version": "tcga-trace-analysis-audit-v4",
       "server_attestation": {
         "algorithm": "Ed25519",
-        "audit_report_sha256": "0842d6f21c18f3da7a8fa90b6d07b691d9e3dbc62ff32b5354bb9e63b21a094f",
+        "audit_report_sha256": "de44aa40576ff2fb9ef82ecb86018d18f1d6e6eccc2ea3a234d2a6c4bdbc5ea0",
         "canonicalization": "tcga-trace-canonical-json-v1",
-        "issued_at": "2026-07-26T01:31:58.279991+00:00",
+        "issued_at": "2026-07-26T17:44:16.550008+00:00",
         "issuer": "https://apps.cienciavida.org/tcga_explorer",
         "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
         "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
         "receipt_filename": "attestation_receipt.json",
-        "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/55c7f5da98b744e2ba62fe199c319e83/download/attestation",
+        "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/3375cd134d28419581df52a8bacb4b53/download/attestation",
         "schema_version": "tcga-trace-server-attestation-v1",
         "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
-        "signed_payload_sha256": "6b8d95a519db075b452ff89f3d9c0dddd80bc57f93278cbe6537da93cb63db36",
+        "signed_payload_sha256": "fea6b529986f8e1210d21e8c221b6285e20d59ade8551101ab3e97d1abc139e4",
         "status": "detached_receipt",
         "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
       }
@@ -125,14 +123,20 @@
           "term": "expression_z",
           "ties": "efron",
           "time_varying_effect": {
+            "analysis_role": "primary",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
             "effect_label": "Expression per +1 SD",
-            "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
             "method": "Prespecified two-period Cox marker effect",
             "min_at_risk_at_split": 10,
             "min_events_per_period": 5,
             "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
             "split_days": 730.5,
-            "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
             "split_years": 2,
             "status": "not_triggered",
             "ties": "efron",
@@ -206,14 +210,20 @@
           "term": "expression_z",
           "ties": "efron",
           "time_varying_effect": {
+            "analysis_role": "primary",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
             "effect_label": "Expression per +1 SD",
-            "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
             "method": "Prespecified two-period Cox marker effect",
             "min_at_risk_at_split": 10,
             "min_events_per_period": 5,
             "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
             "split_days": 730.5,
-            "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
             "split_years": 2,
             "status": "not_triggered",
             "ties": "efron",
@@ -346,14 +356,20 @@
           "term": "expression_z",
           "ties": "efron",
           "time_varying_effect": {
+            "analysis_role": "primary",
+            "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
             "effect_label": "Expression per +1 SD",
-            "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+            "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
             "method": "Prespecified two-period Cox marker effect",
             "min_at_risk_at_split": 10,
             "min_events_per_period": 5,
             "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+            "sensitivity_split_years": [
+              1,
+              5
+            ],
             "split_days": 730.5,
-            "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+            "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
             "split_years": 2,
             "status": "not_triggered",
             "ties": "efron",
@@ -377,195 +393,10 @@
       },
       "reason": null,
       "spline": {
-        "aic_linear": 192.2476739209275,
-        "aic_spline": 194.73766313905153,
-        "degrees_freedom": 3,
-        "implementation": "splines::ns with linear tails",
-        "knot_percentiles": [
-          5,
-          35,
-          65,
-          95
-        ],
-        "knots_expression": [
-          -2.2635465949773788,
-          -1.5879737198352815,
-          -0.9420943528413772,
-          -0.1519127637147913
-        ],
-        "knots_z": [
-          -1.4897315939468865,
-          -0.5575041875775334,
-          0.3337489536821156,
-          1.4241256702389362
-        ],
-        "method": "restricted cubic spline",
         "n_events": 28,
         "n_patients": 79,
-        "nonlinear_degrees_freedom": 2,
-        "nonlinearity_chisq": 1.5100107818759625,
-        "nonlinearity_p_value": 0.4700080809392933,
-        "overall_p_value": 6.110438805528095e-06,
-        "ph_global_p_value": 0.24610591759449188,
-        "profile": [
-          {
-            "expression_value": -2.2635465949773788,
-            "expression_z": -1.4897315939468865,
-            "hazard_ratio": 0.5220917067875844,
-            "hr_conf_high": 2.483358895003466,
-            "hr_conf_low": 0.1097625280199351,
-            "percentile": 5
-          },
-          {
-            "expression_value": -2.1088865399360657,
-            "expression_z": -1.276315177620552,
-            "hazard_ratio": 0.449211491209934,
-            "hr_conf_high": 1.38088625107653,
-            "hr_conf_low": 0.14613148887371255,
-            "percentile": 10
-          },
-          {
-            "expression_value": -1.9528502821922302,
-            "expression_z": -1.0609997302300391,
-            "hazard_ratio": 0.39898671798948127,
-            "hr_conf_high": 0.9180335100089955,
-            "hr_conf_low": 0.17340369321644694,
-            "percentile": 15.000000000000002
-          },
-          {
-            "expression_value": -1.8757129311561584,
-            "expression_z": -0.9545573976016987,
-            "hazard_ratio": 0.38484636198369526,
-            "hr_conf_high": 0.8290554636574992,
-            "hr_conf_low": 0.17864513150747593,
-            "percentile": 20
-          },
-          {
-            "expression_value": -1.75995934009552,
-            "expression_z": -0.7948282640871231,
-            "hazard_ratio": 0.37921434487744565,
-            "hr_conf_high": 0.7960803404795442,
-            "hr_conf_low": 0.18063945565369152,
-            "percentile": 25
-          },
-          {
-            "expression_value": -1.68826459646225,
-            "expression_z": -0.6958962208290201,
-            "hazard_ratio": 0.38680043099368916,
-            "hr_conf_high": 0.8108310666491594,
-            "hr_conf_low": 0.1845200308310841,
-            "percentile": 30
-          },
-          {
-            "expression_value": -1.5879737198352815,
-            "expression_z": -0.5575041875775334,
-            "hazard_ratio": 0.4157335270463709,
-            "hr_conf_high": 0.8498593924220527,
-            "hr_conf_low": 0.20336818896340855,
-            "percentile": 35
-          },
-          {
-            "expression_value": -1.4422231361269948,
-            "expression_z": -0.35638200871767844,
-            "hazard_ratio": 0.5092370034733256,
-            "hr_conf_high": 0.90687744486292,
-            "hr_conf_low": 0.2859507943167447,
-            "percentile": 40
-          },
-          {
-            "expression_value": -1.1884256243705749,
-            "expression_z": -0.006165170781552188,
-            "hazard_ratio": 0.872664493315339,
-            "hr_conf_high": 0.9813930667237828,
-            "hr_conf_low": 0.7759819624929722,
-            "percentile": 45
-          },
-          {
-            "expression_value": -1.1314820647239685,
-            "expression_z": 0.07241161770722312,
-            "hazard_ratio": 1,
-            "hr_conf_high": 1,
-            "hr_conf_low": 1,
-            "percentile": 50
-          },
-          {
-            "expression_value": -1.0764431655406952,
-            "expression_z": 0.14836015282899678,
-            "hazard_ratio": 1.1413960775220153,
-            "hr_conf_high": 1.2752913995612754,
-            "hr_conf_low": 1.021558685513621,
-            "percentile": 55.00000000000001
-          },
-          {
-            "expression_value": -1.0267555952072143,
-            "expression_z": 0.21692435444978114,
-            "hazard_ratio": 1.2845202823067146,
-            "hr_conf_high": 1.5783590764772772,
-            "hr_conf_low": 1.0453846531170345,
-            "percentile": 60.00000000000001
-          },
-          {
-            "expression_value": -0.9420943528413772,
-            "expression_z": 0.3337489536821156,
-            "hazard_ratio": 1.5595257226317092,
-            "hr_conf_high": 2.2121469499917854,
-            "hr_conf_low": 1.0994389317395872,
-            "percentile": 65.00000000000001
-          },
-          {
-            "expression_value": -0.8576657772064202,
-            "expression_z": 0.4502524945785435,
-            "hazard_ratio": 1.8657678837638074,
-            "hr_conf_high": 2.961301056713124,
-            "hr_conf_low": 1.1755271515515173,
-            "percentile": 70
-          },
-          {
-            "expression_value": -0.7003426551818845,
-            "expression_z": 0.6673436943636356,
-            "hazard_ratio": 2.5133877350702503,
-            "hr_conf_high": 4.572200013224197,
-            "hr_conf_low": 1.3816363869757513,
-            "percentile": 75.00000000000001
-          },
-          {
-            "expression_value": -0.5172216039150953,
-            "expression_z": 0.9200336245775473,
-            "hazard_ratio": 3.3923926095511185,
-            "hr_conf_high": 6.6634025448520395,
-            "hr_conf_low": 1.7270947597527424,
-            "percentile": 80
-          },
-          {
-            "expression_value": -0.3990407466888425,
-            "expression_z": 1.083112158468304,
-            "hazard_ratio": 4.038514132718399,
-            "hr_conf_high": 8.148585894937096,
-            "hr_conf_low": 2.001524756620627,
-            "percentile": 85.00000000000001
-          },
-          {
-            "expression_value": -0.31503417491912655,
-            "expression_z": 1.1990333734851015,
-            "hazard_ratio": 4.543433444818291,
-            "hr_conf_high": 9.330610850434962,
-            "hr_conf_low": 2.2123725657823465,
-            "percentile": 90.00000000000001
-          },
-          {
-            "expression_value": -0.1519127637147913,
-            "expression_z": 1.4241256702389362,
-            "hazard_ratio": 5.66751508774718,
-            "hr_conf_high": 12.199248667212872,
-            "hr_conf_low": 2.6330086504565413,
-            "percentile": 95
-          }
-        ],
-        "reference_expression": -1.1314820647239685,
-        "reference_percentile": 50,
-        "reference_z": 0.07241161770722312,
-        "status": "completed",
-        "warnings": []
+        "reason": "Fewer than 30 events were available for the three-degree-of-freedom spline model.",
+        "status": "skipped"
       },
       "status": "completed"
     },
@@ -612,14 +443,20 @@
         "term": "groupHigh",
         "ties": "efron",
         "time_varying_effect": {
+          "analysis_role": "primary",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
           "effect_label": "High vs Low",
-          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
           "method": "Prespecified two-period Cox marker effect",
           "min_at_risk_at_split": 10,
           "min_events_per_period": 5,
           "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
           "split_days": 730.5,
-          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
           "split_years": 2,
           "status": "not_triggered",
           "ties": "efron",
@@ -690,14 +527,20 @@
         "term": "groupHigh",
         "ties": "efron",
         "time_varying_effect": {
+          "analysis_role": "primary",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
           "effect_label": "High vs Low",
-          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
           "method": "Prespecified two-period Cox marker effect",
           "min_at_risk_at_split": 10,
           "min_events_per_period": 5,
           "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
           "split_days": 730.5,
-          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
           "split_years": 2,
           "status": "not_triggered",
           "ties": "efron",
@@ -827,14 +670,20 @@
         "term": "groupHigh",
         "ties": "efron",
         "time_varying_effect": {
+          "analysis_role": "primary",
+          "approximation_note": "The two-period model is a coarse diagnostic approximation to an effect that may vary smoothly over follow-up.",
           "effect_label": "High vs Low",
-          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "estimand": "Marker hazard ratio before and after a fixed 2 years follow-up split, plus the late-to-early hazard-ratio ratio.",
           "method": "Prespecified two-period Cox marker effect",
           "min_at_risk_at_split": 10,
           "min_events_per_period": 5,
           "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "sensitivity_split_years": [
+            1,
+            5
+          ],
           "split_days": 730.5,
-          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_rule": "The follow-up split is fixed at 2 years (730.50 days) for this primary analysis and is not selected from marker values, event times or effect estimates.",
           "split_years": 2,
           "status": "not_triggered",
           "ties": "efron",

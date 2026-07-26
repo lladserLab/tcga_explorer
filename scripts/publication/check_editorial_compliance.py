@@ -21,6 +21,16 @@ OUP_PAGE_SIZE_TOLERANCE = 1.0
 MIN_FULL_WIDTH_PIXELS = 2450
 EXPECTED_SUPPLEMENT_TABLES = 8
 EXPECTED_SUPPLEMENT_FIGURES = 0
+EXPECTED_AUTHORS = [
+    "Sergio Hernández-Galaz",
+    "Andrés Hernández-Oliveras",
+    "Ignacio Pezoa-Soto",
+    "Javiera Reyes-Alvarez",
+    "Vincenzo Benedetti",
+    "Alberto J. M. Martin",
+    "Alvaro Lladser",
+]
+EXPECTED_AFFILIATIONS = 4
 ABSTRACT_HEADINGS = [
     "Summary",
     "Availability and Implementation",
@@ -246,7 +256,8 @@ def check_evidence_narrative(
         "chosen post hoc for explanation",
         "This was the deliberately non-confirmatory case.",
     ]
-    missing_main = [marker for marker in required_main if marker not in main_text]
+    normalized_main = " ".join(main_text.split())
+    missing_main = [marker for marker in required_main if marker not in normalized_main]
     if missing_main:
         failures.append(
             "main manuscript does not preserve the declared evidence narrative: "
@@ -360,7 +371,7 @@ def check_main_floats(text: str, failures: list[str], notes: list[str]) -> None:
         "{INPUTS}",
         "{COHORT}",
         "{ANALYSIS BRANCH}",
-        "{CHECKS}",
+        "{CONTRACT}",
         "{RUN RECORD}",
     ]
     missing = [
@@ -573,10 +584,37 @@ def check_oup_source(path: Path, failures: list[str], notes: list[str]) -> None:
             failures.append(message)
     if r"\application" in text:
         failures.append("OUP preview uses obsolete `\\application`; use `\\appnotes{...}`")
+    generated_authors = re.findall(r"\\author\[[^\]]+\]\{([^{}]+)\}", text)
+    missing_authors = [
+        author for author in EXPECTED_AUTHORS if author not in generated_authors
+    ]
+    if len(generated_authors) != len(EXPECTED_AUTHORS) or missing_authors:
+        failures.append(
+            "OUP preview author extraction is incomplete: expected "
+            f"{len(EXPECTED_AUTHORS)}, found {len(generated_authors)}"
+            + (
+                "; missing " + ", ".join(missing_authors)
+                if missing_authors
+                else ""
+            )
+        )
+    generated_affiliations = len(
+        re.findall(r"\\address\[[^\]]+\]\{", text)
+    )
+    if generated_affiliations != EXPECTED_AFFILIATIONS:
+        failures.append(
+            "OUP preview affiliation extraction is incomplete: expected "
+            f"{EXPECTED_AFFILIATIONS}, found {generated_affiliations}"
+        )
     if not any(message in failures for message in required.values()):
         notes.append(
             "OUP source uses the Bioinformatics modern/large, numbered-section, "
             "author-date Applications Note mapping"
+        )
+    if not missing_authors and generated_affiliations == EXPECTED_AFFILIATIONS:
+        notes.append(
+            f"OUP source preserves all {len(EXPECTED_AUTHORS)} authors and "
+            f"{EXPECTED_AFFILIATIONS} affiliations"
         )
 
 

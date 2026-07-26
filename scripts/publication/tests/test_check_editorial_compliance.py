@@ -133,7 +133,7 @@ def test_main_floats_accepts_one_vector_figure_without_tables(
 ) -> None:
     figure_source = tmp_path / "graphical_abstract.tex"
     figure_source.write_text(
-        "\\begin{tikzpicture}{INPUTS}{COHORT}{ANALYSIS BRANCH}{CHECKS}{RUN RECORD}"
+        "\\begin{tikzpicture}{INPUTS}{COHORT}{ANALYSIS BRANCH}{CONTRACT}{RUN RECORD}"
         "\\end{tikzpicture}\n",
         encoding="utf-8",
     )
@@ -160,7 +160,7 @@ def test_main_floats_rejects_empirical_table(
 ) -> None:
     figure_source = tmp_path / "graphical_abstract.tex"
     figure_source.write_text(
-        "\\begin{tikzpicture}{INPUTS}{COHORT}{ANALYSIS BRANCH}{CHECKS}{RUN RECORD}"
+        "\\begin{tikzpicture}{INPUTS}{COHORT}{ANALYSIS BRANCH}{CONTRACT}{RUN RECORD}"
         "\\end{tikzpicture}\n",
         encoding="utf-8",
     )
@@ -206,6 +206,17 @@ def test_oup_source_accepts_bioinformatics_journal_mapping(tmp_path: Path) -> No
     path.write_text(
         "\\documentclass[webpdf,modern,large,namedate]{oup-authoring-template}\n"
         "\\appnotes{Applications Note}\n"
+        "\\author[1,2,3]{Sergio Hernández-Galaz}\n"
+        "\\author[1,2]{Andrés Hernández-Oliveras}\n"
+        "\\author[1,3,4]{Ignacio Pezoa-Soto}\n"
+        "\\author[1]{Javiera Reyes-Alvarez}\n"
+        "\\author[1]{Vincenzo Benedetti}\n"
+        "\\author[1,4]{Alberto J. M. Martin}\n"
+        "\\author[1,3]{Alvaro Lladser}\n"
+        "\\address[1]{Institute A}\n"
+        "\\address[2]{Institute B}\n"
+        "\\address[3]{Institute C}\n"
+        "\\address[4]{Institute D}\n"
         "\\bibliographystyle{abbrvnat}\n",
         encoding="utf-8",
     )
@@ -216,6 +227,7 @@ def test_oup_source_accepts_bioinformatics_journal_mapping(tmp_path: Path) -> No
 
     assert failures == []
     assert any("Bioinformatics modern/large" in note for note in notes)
+    assert any("all 7 authors and 4 affiliations" in note for note in notes)
 
 
 def test_supplement_counts_direct_and_input_tables(

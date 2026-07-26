@@ -1448,7 +1448,8 @@ def pancancer_methodology_text(
         "- survival::cox.zph was evaluated for the expression term and globally for every completed model.",
         "- A PH p-value below 0.05 is a diagnostic signal for interpretation, not an automatic deletion of an otherwise estimable result.",
         "- An expression-specific cox.zph p-value below 0.05 triggered separate expression HRs from 0 to 2 years and after 2 years in a prespecified piecewise Cox model with participant-clustered robust variance.",
-        "- The 730.5-day split was fixed for every cohort before analysis and was not selected from expression, event times or effect estimates; at least 5 events per period and 10 patients entering the late period were required.",
+        "- The 730.5-day split was fixed as the primary temporal diagnostic; fixed 1- and 5-year splits were reported as sensitivities when support permitted. No split was selected from expression, event times or effect estimates.",
+        "- Every split required at least 5 events per period and 10 patients entering the late period. The late-to-early ratio is a Wald contrast for the marker-by-period interaction, and the two-period model is a coarse approximation to a potentially smooth time-varying effect.",
         "",
         "Interpretation",
         "- Primary and adjusted results are shown together because either can be informative; adjusted non-evaluability is not labeled as model failure.",
@@ -1841,7 +1842,7 @@ def write_methodology_txt(
         [
             "",
             "Suggested citation wording",
-            f"Survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). Clinical and endpoint eligibility were applied before requiring the requested gene or complete signature score; when multiple expression-complete RNA-seq barcodes remained for one TCGA participant, one sample was retained using TCGA biospecimen priority. The primary association was estimated continuously per one within-analysis standard deviation using Cox regression, with a three-degree-of-freedom restricted cubic spline used to assess nonlinearity. The prespecified user-adjustment fields were {format_all_adjustment_covariates(request_payload)}. Kaplan-Meier, grouped Cox and restricted mean survival time estimates were reported as cutpoint sensitivity analyses. Every Cox fit reported events per fitted parameter; low-information, unstable or extreme fits additionally reported a Firth penalized partial-likelihood sensitivity without replacing the standard estimate. Marker-specific cox.zph p-values below 0.05 triggered a prespecified piecewise Cox diagnostic reporting separate marker HRs before and after a fixed two-year follow-up split; the split was not optimized from the data. Plots were generated in R using survival, survminer and ggplot2.",
+            f"Survival analyses were performed using TCGA cancer cohort RNA-seq and clinical metadata from a database created at {database_created_at}, with data through {data_through}. The analyzed endpoint was {endpoint_label} ({endpoint}). Clinical and endpoint eligibility were applied before requiring the requested gene or complete signature score; when multiple expression-complete RNA-seq barcodes remained for one TCGA participant, one sample was retained using TCGA biospecimen priority. The primary association was estimated continuously per one within-analysis standard deviation using Cox regression, with a three-degree-of-freedom restricted cubic spline used to assess nonlinearity when at least 30 events were available. The prespecified user-adjustment fields were {format_all_adjustment_covariates(request_payload)}. Kaplan-Meier, grouped Cox and restricted mean survival time estimates were reported as cutpoint sensitivity analyses. Every Cox fit reported events per fitted parameter; low-information, unstable or extreme fits additionally reported a Firth penalized partial-likelihood sensitivity without replacing the standard estimate. Marker-specific cox.zph p-values below 0.05 triggered a prespecified piecewise Cox diagnostic with a fixed two-year primary split and fixed one- and five-year sensitivities; no split was optimized from the data. Plots were generated in R using survival, survminer and ggplot2.",
             "",
         ]
     )
@@ -2018,13 +2019,16 @@ def time_varying_effect_method_text(metrics: dict) -> str:
     completed = [item for item in triggered if item.get("status") == "completed"]
     return (
         "- Marker-specific survival::cox.zph p-values below 0.05 triggered a "
-        "prespecified two-period Cox diagnostic. The marker coefficient was "
+        "prespecified two-period Cox diagnostic. The primary marker coefficient was "
         "estimated separately from 0 to 2 years and after 2 years using a fixed "
         "730.5-day split, Efron ties and participant-clustered robust sandwich "
-        "variance; the late-to-early HR ratio was also reported. The split was "
-        "never selected from marker values, event times or effect estimates. "
+        "variance; fixed 1- and 5-year splits were retained as sensitivities. "
+        "The late-to-early HR ratio is the Wald contrast for the marker-by-period "
+        "interaction. No split was selected from marker values, event times or effect estimates. "
         "Estimation required at least 5 events in each period and 10 patients "
-        f"entering the late period. This analysis triggered {len(triggered)} "
+        "entering the late period. Each two-period fit is a coarse approximation "
+        "to a potentially smooth time-varying effect. "
+        f"This analysis triggered {len(triggered)} "
         f"diagnostic(s), of which {len(completed)} were estimable."
     )
 

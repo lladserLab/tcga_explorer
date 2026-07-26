@@ -24,7 +24,7 @@ if (length(args) != 1) {
 payload <- fromJSON(args[[1]], simplifyDataFrame = FALSE)
 
 MIN_MODEL_EVENTS <- 5L
-MIN_SPLINE_EVENTS <- 15L
+MIN_SPLINE_EVENTS <- 30L
 MIN_RMST_AT_RISK_PER_GROUP <- 5L
 
 `%||%` <- function(left, right) {
@@ -1264,6 +1264,11 @@ fit_continuous_spline <- function() {
       )
     )
   }
+  spline_information <- cox_information_diagnostics(
+    n_events = n_events,
+    parameter_count = length(spline_terms),
+    warnings = model_warnings
+  )
   list(
     status = "completed",
     method = "restricted cubic spline",
@@ -1271,6 +1276,8 @@ fit_continuous_spline <- function() {
     n_patients = nrow(data),
     n_events = n_events,
     degrees_freedom = length(spline_terms),
+    events_per_parameter = spline_information$events_per_parameter,
+    information_diagnostics = spline_information,
     nonlinear_degrees_freedom = nonlinear_df,
     knot_percentiles = as.list(knot_probabilities * 100),
     knots_expression = as.list(knots_raw),

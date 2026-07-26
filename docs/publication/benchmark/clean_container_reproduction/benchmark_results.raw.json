@@ -1,28 +1,28 @@
 {
   "capsules": {
     "Single gene": {
-      "analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+      "analysis_id": "5bc89f4c26934a34a9c6238898436b4b",
       "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
-      "capsule_manifest_sha256": "63418e15f6138f5a6aee0ffff46d4376512903f4d635f91e90ebff6afdfa77a1",
+      "capsule_manifest_sha256": "7c61f539782010559277dad02cba4f1182442e4435b7154d544aa2427d16b707",
       "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
       "path": "docs/publication/benchmark/clean_container_reproduction/capsules/single_gene",
-      "reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7"
+      "reproducibility_hash": "d5a8381b32f22e23600927c0ad679efbe9af283d009431a6c39e394b0a5a685d"
     },
     "Two signatures": {
-      "analysis_id": "d126076114ea42d4ae94f1ca7706b31c",
+      "analysis_id": "85c2c2f3b8e64708a92fa5d4b9f530ae",
       "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
-      "capsule_manifest_sha256": "298d37c00486a595fa898102cd62dd2f895811206cce1385da8a5b58c2aa6d9a",
+      "capsule_manifest_sha256": "2938df1a8605854b334579c98fc06a5b89e7c50dc6ef6cbc0c574cb948ea257e",
       "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
       "path": "docs/publication/benchmark/clean_container_reproduction/capsules/two_signatures",
-      "reproducibility_hash": "007047e76dc972985df9f8857525c3cfc25ee052ed6930305402bf5a09ce8c5e"
+      "reproducibility_hash": "d7a223f7f27992f2d5664b96e23d87d8e02bf6e73427af38ed84405614b17909"
     },
     "Weighted signature": {
-      "analysis_id": "a9b10394b0e74132859f8fe428e135af",
+      "analysis_id": "3375cd134d28419581df52a8bacb4b53",
       "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
-      "capsule_manifest_sha256": "b10848e985b6f1f31b63111d28a303f9dc25abe6061d43342acabfc032596dfa",
+      "capsule_manifest_sha256": "4843236c4d15dc5903e1d5530f2218b6c4e9941974f6e4c3d9fad927ddcd68f1",
       "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
       "path": "docs/publication/benchmark/clean_container_reproduction/capsules/weighted_signature",
-      "reproducibility_hash": "dd267fde950e5147cb5fea76e5b7af6a33fe467ee35482c30b52d7574ed3c6b1"
+      "reproducibility_hash": "63faae5e22faeda5d35ee6937da3c4091ca9e68ee846ae874059fb48f82277fc"
     }
   },
   "design": {
@@ -107,11 +107,11 @@
                 "max_relative_path": "$.cox_models[4].standard_error"
               },
               "exact": {
-                "comparisons": 28,
+                "comparisons": 103,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.sensitivity_analyses[1].periods.late.n_events",
                 "max_relative_error": 0,
-                "max_relative_path": "$.cox_models[4].n_patients"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.sensitivity_analyses[1].periods.late.n_events"
               },
               "generic": {
                 "comparisons": 17,
@@ -121,24 +121,25 @@
                 "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
               },
               "probability": {
-                "comparisons": 23,
+                "comparisons": 98,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.cox_models[4].ph_p_value",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.trigger_ph_p_value",
                 "max_relative_error": 0,
-                "max_relative_path": "$.cox_models[4].ph_p_value"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.trigger_ph_p_value"
               },
               "time": {
-                "comparisons": 46,
+                "comparisons": 476,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.rmst.tau_time_unit",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.support.late_events",
                 "max_relative_error": 0,
-                "max_relative_path": "$.rmst.tau_time_unit"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.support.late_events"
               }
             },
             "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -151,7 +152,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 3.679,
+          "runtime_seconds": 4.241,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -206,24 +207,25 @@
                 "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
               },
               "probability": {
-                "comparisons": 17,
+                "comparisons": 23,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.cox_models[4].ph_p_value",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.trigger_ph_p_value",
                 "max_relative_error": 0,
-                "max_relative_path": "$.cox_models[4].ph_p_value"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.trigger_ph_p_value"
               },
               "time": {
-                "comparisons": 45,
+                "comparisons": 63,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.rmst.tau_time_unit",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.split_years",
                 "max_relative_error": 0,
-                "max_relative_path": "$.rmst.tau_time_unit"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.split_years"
               }
             },
             "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -236,7 +238,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 3.126,
+          "runtime_seconds": 3.202,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -270,45 +272,46 @@
             },
             "observed_errors": {
               "effect": {
-                "comparisons": 84,
+                "comparisons": 279,
                 "max_absolute_error": 3.1086e-15,
                 "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.hazard_ratio",
                 "max_relative_error": 6.7525e-15,
                 "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.log_hr"
               },
               "exact": {
-                "comparisons": 35,
+                "comparisons": 74,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count",
+                "max_absolute_path": "$.signature_interaction_cox_models[4].time_varying_effect.sensitivity_analyses[1].n_patients",
                 "max_relative_error": 0,
-                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count"
+                "max_relative_path": "$.signature_interaction_cox_models[4].time_varying_effect.sensitivity_analyses[1].n_patients"
               },
               "generic": {
-                "comparisons": 19,
+                "comparisons": 286,
                 "max_absolute_error": 0,
                 "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty",
                 "max_relative_error": 0,
                 "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty"
               },
               "probability": {
-                "comparisons": 19,
+                "comparisons": 69,
                 "max_absolute_error": 4.0634e-14,
                 "max_absolute_path": "$.signature_interaction_cox_models[1].penalized_sensitivity.p_value",
                 "max_relative_error": 5.8193e-14,
                 "max_relative_path": "$.signature_interaction_cox_models[1].penalized_sensitivity.p_value"
               },
               "time": {
-                "comparisons": 2,
-                "max_absolute_error": 0,
-                "max_absolute_path": "$.median_survival_days.Low_Low",
-                "max_relative_error": 0,
-                "max_relative_path": "$.median_survival_days.Low_Low"
+                "comparisons": 194,
+                "max_absolute_error": 3.7748e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[1].time_varying_effect.sensitivity_analyses[0].change.hr_ratio_conf_high",
+                "max_relative_error": 5.0852e-15,
+                "max_relative_path": "$.signature_interaction_cox_models[4].time_varying_effect.periods.late.log_hr"
               }
             },
             "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -321,7 +324,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 2.446,
+          "runtime_seconds": 2.931,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -330,16 +333,16 @@
       "image": "tcga-trace-reproduction:2026-07-25-native",
       "image_metadata": {
         "architecture": "arm64",
-        "created": "2026-07-25T13:59:10.199787339Z",
-        "image_id": "sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385",
+        "created": "2026-07-26T03:44:01.526114424Z",
+        "image_id": "sha256:e29a1fba02936f4f2e1791312cb097cb8d15805ca3d83da3e269b07d70bbf764",
         "os": "linux",
         "repo_digests": [
-          "tcga-trace-reproduction@sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385"
+          "tcga-trace-reproduction@sha256:e29a1fba02936f4f2e1791312cb097cb8d15805ca3d83da3e269b07d70bbf764"
         ]
       },
       "input_tamper": {
         "detected": true,
-        "difference_count": 92,
+        "difference_count": 419,
         "first_difference": "$.n_events [exact]: 130 != 129 (abs 1 > 0)",
         "returncode": 1
       },
@@ -383,11 +386,11 @@
                 "max_relative_path": "$.cox_models[3].log_hr"
               },
               "exact": {
-                "comparisons": 28,
+                "comparisons": 103,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_absolute_path": "$.cox_models[4].time_varying_effect.sensitivity_analyses[1].periods.late.n_events",
                 "max_relative_error": 0,
-                "max_relative_path": "$.cox_models[4].n_patients"
+                "max_relative_path": "$.cox_models[4].time_varying_effect.sensitivity_analyses[1].periods.late.n_events"
               },
               "generic": {
                 "comparisons": 17,
@@ -397,24 +400,25 @@
                 "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
               },
               "probability": {
-                "comparisons": 23,
-                "max_absolute_error": 4.6838e-17,
-                "max_absolute_path": "$.cox_models[1].ph_global_p_value",
-                "max_relative_error": 4.0007e-14,
-                "max_relative_path": "$.cox_models[3].p_value"
+                "comparisons": 98,
+                "max_absolute_error": 2.8866e-15,
+                "max_absolute_path": "$.cox_models[3].time_varying_effect.periods.late.p_value",
+                "max_relative_error": 5.5334e-14,
+                "max_relative_path": "$.cox_models[2].time_varying_effect.periods.early.p_value"
               },
               "time": {
-                "comparisons": 46,
+                "comparisons": 476,
                 "max_absolute_error": 1.1369e-13,
                 "max_absolute_path": "$.rmst.groups.High.conf_low",
-                "max_relative_error": 2.1891e-16,
-                "max_relative_path": "$.rmst.tau_sensitivity[2].conf_high"
+                "max_relative_error": 8.6957e-15,
+                "max_relative_path": "$.cox_models[3].time_varying_effect.periods.late.log_hr"
               }
             },
             "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -427,7 +431,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 6.551,
+          "runtime_seconds": 10.122,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -482,14 +486,14 @@
                 "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
               },
               "probability": {
-                "comparisons": 17,
+                "comparisons": 23,
                 "max_absolute_error": 2.2204e-16,
                 "max_absolute_path": "$.cox_models[1].ph_global_p_value",
                 "max_relative_error": 7.3914e-15,
                 "max_relative_path": "$.cox_models[1].p_value"
               },
               "time": {
-                "comparisons": 45,
+                "comparisons": 63,
                 "max_absolute_error": 2.8422e-14,
                 "max_absolute_path": "$.rmst.tau_sensitivity[2].conf_high",
                 "max_relative_error": 2.2278e-16,
@@ -500,6 +504,7 @@
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -512,7 +517,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 5.714,
+          "runtime_seconds": 6.072,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -546,45 +551,46 @@
             },
             "observed_errors": {
               "effect": {
-                "comparisons": 84,
-                "max_absolute_error": 3.9968e-15,
-                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.hr_conf_high",
-                "max_relative_error": 3.4628e-15,
-                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.log_hr"
+                "comparisons": 279,
+                "max_absolute_error": 6.4837e-14,
+                "max_absolute_path": "$.competing_risks.grouped_fine_gray_models[1].terms[3].shr_conf_high",
+                "max_relative_error": 9.9536e-15,
+                "max_relative_path": "$.competing_risks.grouped_fine_gray_models[1].terms[3].shr_conf_high"
               },
               "exact": {
-                "comparisons": 35,
+                "comparisons": 74,
                 "max_absolute_error": 0,
-                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count",
+                "max_absolute_path": "$.signature_interaction_cox_models[4].time_varying_effect.sensitivity_analyses[1].n_patients",
                 "max_relative_error": 0,
-                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count"
+                "max_relative_path": "$.signature_interaction_cox_models[4].time_varying_effect.sensitivity_analyses[1].n_patients"
               },
               "generic": {
-                "comparisons": 19,
-                "max_absolute_error": 0,
-                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty",
-                "max_relative_error": 0,
-                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty"
+                "comparisons": 286,
+                "max_absolute_error": 3.5527e-15,
+                "max_absolute_path": "$.competing_risks.cumulative_incidence.gray_test.statistic",
+                "max_relative_error": 1.5427e-14,
+                "max_relative_path": "$.competing_risks.cumulative_incidence.curves[1].variance[21]"
               },
               "probability": {
-                "comparisons": 19,
-                "max_absolute_error": 4.3299e-15,
-                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.p_value",
-                "max_relative_error": 3.4277e-14,
-                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.p_value"
+                "comparisons": 69,
+                "max_absolute_error": 4.3854e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[1].time_varying_effect.sensitivity_analyses[0].periods.early.p_value",
+                "max_relative_error": 7.9874e-14,
+                "max_relative_path": "$.signature_interaction_cox_models[1].time_varying_effect.change.p_value"
               },
               "time": {
-                "comparisons": 2,
-                "max_absolute_error": 0,
-                "max_absolute_path": "$.median_survival_days.Low_Low",
-                "max_relative_error": 0,
-                "max_relative_path": "$.median_survival_days.Low_Low"
+                "comparisons": 194,
+                "max_absolute_error": 4.2188e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[1].time_varying_effect.sensitivity_analyses[0].change.hr_ratio_conf_high",
+                "max_relative_error": 4.6764e-15,
+                "max_relative_path": "$.signature_interaction_cox_models[1].time_varying_effect.sensitivity_analyses[0].periods.early.log_hr"
               }
             },
             "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
             "policy_version": "tcga-trace-numeric-comparison-v1"
           },
           "package_versions": {
+            "cmprsk": "2.2.12",
             "coxphf": "1.13.4",
             "ggplot2": "4.0.3",
             "jsonlite": "2.0.0",
@@ -597,7 +603,7 @@
           "package_versions_match_lock": true,
           "r_version": "R version 4.4.2 (2024-10-31)",
           "returncode": 0,
-          "runtime_seconds": 4.613,
+          "runtime_seconds": 5.571,
           "status": "passed",
           "stderr": "",
           "stdout": "Standalone reproduction passed"
@@ -606,23 +612,23 @@
       "image": "tcga-trace-reproduction:2026-07-25-amd64",
       "image_metadata": {
         "architecture": "amd64",
-        "created": "2026-07-25T14:10:06.132408837Z",
-        "image_id": "sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1",
+        "created": "2026-07-26T17:50:39.388986208Z",
+        "image_id": "sha256:0b62db84d40cbb464ee7f3d445dfca3e082cbefe20d1d0d4d76603c98ed997a6",
         "os": "linux",
         "repo_digests": [
-          "tcga-trace-reproduction@sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1"
+          "tcga-trace-reproduction@sha256:0b62db84d40cbb464ee7f3d445dfca3e082cbefe20d1d0d4d76603c98ed997a6"
         ]
       },
       "input_tamper": {
         "detected": true,
-        "difference_count": 92,
+        "difference_count": 419,
         "first_difference": "$.n_events [exact]: 130 != 129 (abs 1 > 0)",
         "returncode": 1
       },
       "requested_platform": "linux/amd64"
     }
   ],
-  "generated_at": "2026-07-25T19:12:33.534368+00:00",
+  "generated_at": "2026-07-26T17:51:16.568912+00:00",
   "negative_controls": {
     "data_snapshot_hash_change_detected": true,
     "mutated_input_rejected_by_all_environments": true

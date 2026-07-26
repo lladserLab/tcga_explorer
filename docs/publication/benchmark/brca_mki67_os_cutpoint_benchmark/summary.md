@@ -1,7 +1,7 @@
 # TCGA-BRCA MKI67 OS cutpoint benchmark
 
-- Run started: 2026-07-25T17:50:16Z
-- Run finished: 2026-07-25T17:50:34Z
+- Run started: 2026-07-26T17:22:57Z
+- Run finished: 2026-07-26T17:23:15Z
 - Completed analyses: 4/4
 - Cached analyses in this run: 4/4
 - API base URL: `http://192.168.1.31:3000/tcga_explorer`
@@ -15,7 +15,7 @@
 - No composite retention rule is applied. Log-rank, Cox and RMST are related summaries of the same outcomes and are not counted as independent barriers.
 - Marker-specific PH and global model PH are reported separately as interpretation diagnostics.
 - Maxstat is outcome-optimized. Its corrected rank-statistic p-value is reported, while grouped HR, confidence intervals and RMST remain post-selection.
-- Cutpoint-independent continuous reference: n=1080, events=151, HR per +1 SD=1.09 (0.94-1.27), linear p=0.262, linear suite BH q=0.320, events/parameter=151.0, nonlinearity p=0.613, nonlinearity suite BH q=0.749.
+- Cutpoint-independent continuous reference: n=1080, events=151, HR per +1 SD=1.09 (0.94-1.27), linear p=0.262, linear suite BH q=0.320, events/parameter=151.0, nonlinearity p=0.613, nonlinearity suite BH q=0.766.
 
 | Method | n | Events | Family p | Holm p | HR | Cox p | Adjusted HR | Adjusted p | Marker PH p | Global PH p | RMST delta @ tau | RMST p | Same-contrast HRs | Notes |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
@@ -28,10 +28,10 @@
 
 | Method | Analysis ID | Reproducibility hash | Grouped records SHA-256 | Continuous records SHA-256 |
 | --- | --- | --- | --- | --- |
-| maxstat | `59f69ed8d40744fbb90dc562f4ec945f` | `bb4a1e14101278a481bf6ee6a273560b93c958154dd6850762ba4cb28c5d170e` | `dabb394045ca03dc609d4f17f1a927b2b4fcc8d0dcdf4dc37a90839b02b13825` | `ead97d58ce1313d5ca4cbe5783729ec5c004b232b6b7daf2873c7b640fbdf006` |
-| median | `346dcba7cbdd4565a9134c7c02b1677a` | `8da40c425769cd57f8d075b14285d8a7203f98ca15997e629dc7f0075d4e70a2` | `7e6edea974b7a69b2838422db6950464e194b8ad3884cde311adc9655504937d` | `ead97d58ce1313d5ca4cbe5783729ec5c004b232b6b7daf2873c7b640fbdf006` |
-| upper_quartile | `f0d7a58b8eb24f24904651b45fc70a5c` | `2905b7e9d2a67398b8db68a6c60c0302eb9f26644a61e9df03318c64159e1764` | `0d750237382956d1e95f805178355bccc08bc7b3d731848839c9bcc1ef9bce77` | `ead97d58ce1313d5ca4cbe5783729ec5c004b232b6b7daf2873c7b640fbdf006` |
-| upper_lower_quartile | `1f0853cbbc82423d896e18bc59253b50` | `4321dd3d9109894e644a569fdd4f8ffda9e6f84765e937818c2f01ac0ce06a3f` | `c2ec3a5e573a2dfa9ddfb5d6866a1cd57d9d40bcc1ad0683549c6772b0b11e47` | `ead97d58ce1313d5ca4cbe5783729ec5c004b232b6b7daf2873c7b640fbdf006` |
+| maxstat | `a49de47d9368495da6a8126d3997400e` | `bca5b5baa85bc43a1cc50020e61f89942ad721609a796990d5772768c9ba590c` | `d221f53d45601540365c77a03595ca9e448a2ddafab2b9e3b6a3ebc4ca654078` | `030a82e9c3af33ee8cac435f397a36a96bedb5d3f00ea3315fb927f4ba7283ce` |
+| median | `a059e21e415c4ce8a565a96db5b24673` | `ff25caa17208d52c928de0393d33a10ff28c6094ad9c45279cf545128599a6e6` | `d52483abb1b8ac131fad3908ba29696c35637ca2bcb14ca5067c8c36338bfcd6` | `030a82e9c3af33ee8cac435f397a36a96bedb5d3f00ea3315fb927f4ba7283ce` |
+| upper_quartile | `195e0420654b437a8a428177007faa24` | `f4f680790ab1523534d5530fc49a33f5ab4ee64bf5c039424b15407473519176` | `3d3bb5f808026b070f3a4059fc766590c920c7495b7d9ddd2bf298611bbca6be` | `030a82e9c3af33ee8cac435f397a36a96bedb5d3f00ea3315fb927f4ba7283ce` |
+| upper_lower_quartile | `8206064153c6481b83a6bd6ccefe1e5c` | `c3d1caf3f201c109f79ffb3f0d60b015435d4de33617dcdf40b7de825e912593` | `312cc55a21e3235d8caea28e43d44a4128bc8928645f677527a2f879d4f7a6c5` | `030a82e9c3af33ee8cac435f397a36a96bedb5d3f00ea3315fb927f4ba7283ce` |
 
 ## RMST Tau Sensitivity
 

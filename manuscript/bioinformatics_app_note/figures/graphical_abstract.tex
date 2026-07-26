@@ -121,22 +121,27 @@
   Common-unit REML/HKSJ + prediction interval
 };
 
-% D. Diagnostics
+% D. Reporting contract
 \node[panel, minimum width=2.65cm, minimum height=6.35cm, anchor=north west] (diagnostics) at (11.65,8.35) {};
 \node[stage number, fill=traceOlive] at (11.99,8.02) {D};
-\node[stage title] at (12.30,8.02) {CHECKS};
+\node[stage title] at (12.30,8.02) {CONTRACT};
 \draw[traceLine, line width=0.45pt] (11.83,7.70) -- (14.12,7.70);
-\node[item, text width=2.15cm] at (11.90,7.43) {
-  \textbf{Diagnostics reported}\\[2pt]
-  Spline nonlinearity\\
-  Specification curve\\
-  Cutpoint sensitivity\\
-  RMST tau sensitivity\\
-  PH tests\\
-  EPV + Firth sensitivity
+\node[item, text width=2.15cm,
+  font=\sffamily\fontsize{6.6}{7.7}\selectfont] at (11.90,7.43) {
+  \textbf{Decision}\\[-1pt]
+  \textcolor{traceMuted}{fixed $\rightarrow$ reported}\\[5pt]
+  \textbf{Cohort}\\
+  endpoint + sample rule\\
+  $\rightarrow$ flow + exclusions\\[5pt]
+  \textbf{Model}\\
+  continuous primary\\
+  $\rightarrow$ effect + sensitivities\\[5pt]
+  \textbf{Family}\\
+  grid frozen before run\\
+  $\rightarrow$ ledger + adjusted $p$
 };
 \node[small, text width=2.15cm, fill=traceOliveLight, rounded corners=1pt, inner sep=4pt]
-  at (11.90,3.58) {Discordant and null results remain visible.};
+  at (11.90,2.63) {Null and discordant outputs remain visible.};
 
 % E. Exported record
 \node[panel, minimum width=3.25cm, minimum height=6.35cm, anchor=north west] (export) at (14.80,8.35) {};
@@ -146,12 +151,12 @@
 \node[item, text width=2.68cm,
   font=\sffamily\fontsize{6.6}{7.7}\selectfont] at (15.05,7.43) {
   \textbf{Results and provenance}\\[2pt]
-  Plots + specification curve\\
+  Effects + diagnostic plots\\
   Continuous/grouped CSVs\\
-  Complete family ledger\\
-  Methods + audit JSON\\
+  Specification curve + ledger\\
+  PH, RMST, EPV + Firth\\
+  Methods + participant inputs\\
   Source/GDC identifiers\\
-  Expression components\\
   SHA-256 + Ed25519 receipt
 };
 \node[small, text width=2.68cm, fill=traceTealLight, rounded corners=1pt, inner sep=4pt]
