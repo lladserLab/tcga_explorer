@@ -84,8 +84,9 @@ gate rather than a production-page guarantee.
 - The artifact checker reports `109/109`; the compact review archive verifies
   480 entries.
 - Frozen capsules pass 6/6 network-disabled clean-container reruns across
-  native arm64 and locally emulated amd64; an independent hosted amd64 CI job
-  is configured and requires confirmation after the final push.
+  native arm64 and locally emulated amd64. Hosted amd64 CI independently passed
+  both jobs for commit `00c3aaeb18ce5871b69122641db0bf3810b2d1d1` in run
+  `30188150881`; the exact tagged release must repeat the gate after deployment.
 
 ## Remaining Submission Blockers
 

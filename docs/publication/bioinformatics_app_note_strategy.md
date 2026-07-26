@@ -214,20 +214,24 @@ Generated manuscript artifacts:
 
 Current external blockers before journal submission:
 
-- replace author, affiliation and correspondence placeholders;
-- add submitting-author ORCID and final CRediT roles;
+- add corresponding-author name/email, submitting-author name/ORCID and final
+  CRediT roles;
 - choose and add an explicit software license;
-- make the repository reviewer-accessible/public as appropriate;
-- archive a release and add a DOI or stable release URL;
-- finalize funding and conflict-of-interest statements;
+- tag and deploy the exact submitted source state, then archive it and add a
+  version-specific DOI or stable release URL;
 - name a support owner and commit to at least two years of software and
   web-service availability;
-- complete cross-browser smoke testing and preserve the results;
+- repeat the passing provisional cross-browser checks against the exact tagged
+  HTTPS deployment and preserve the results;
 - independently rewrite and scientifically verify all author-facing content;
 - provide a detailed AI-use declaration in the manuscript, supplement and cover
   letter; contact the editorial office if any use falls outside the examples
-  covered by the journal guidance; and
-- confirm the open-access APC, institutional discount or waiver route.
+  covered by the journal guidance.
+
+Author order, affiliations, funding, conflict declaration, public repository
+and public application URL are already supplied. The open-access APC,
+institutional discount or waiver route remains an operational decision on the
+journal timeline, not a blocker to assembling the reviewer package.
 
 Template note: the current manuscript PDF is an initial-submission file, not an
 OUP production-template rendering. Bioinformatics states that initial

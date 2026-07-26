@@ -1,5 +1,11 @@
 # External review triage, 2026-07-24
 
+This file preserves the review-time diagnosis. Current implementation status is
+authoritatively tracked in
+`docs/publication/second_review_implementation_log_2026-07-25.md`; statements
+below that describe missing features are historical and must not be used as the
+current release checklist.
+
 ## Decision
 
 The report supports a major revision. TCGA-TRACE is not submission-ready in its

@@ -224,7 +224,7 @@ Generated files:
 - SKCM primary-versus-metastatic sample-rule sensitivity wrapper:
   `scripts/publication/run_skcm_sample_rule_sensitivity.py`.
 
-Current local reproducibility evidence:
+Current local and hosted reproducibility evidence:
 
 - `docs/publication/benchmark/data_snapshot_manifest.json` was generated with
   `--hash-count-matrices` and records 33 cohorts with zero missing
@@ -238,8 +238,10 @@ Current local reproducibility evidence:
   native arm64 and locally emulated amd64 with zero core-result differences at
   absolute tolerance 1e-8. The runtime has no network, application source, TCGA
   matrix or database; altered patient input and expression-snapshot hashes are
-  detected. The independent Linux/amd64 CI job is configured and must pass
-  after the final branch is pushed;
+  detected. GitHub-hosted Linux/amd64 CI independently passed both
+  `docker-checks` and `Independent clean-capsule reproduction` for commit
+  `00c3aaeb18ce5871b69122641db0bf3810b2d1d1` in run `30188150881`; the exact
+  tagged release must repeat this contract through the release-readiness gate;
 - the full ImmPort atlas pins 32 expression matrices and reproduces audit hash
   `4d942e93715ec953f0501b13a818d2f19e34f21d851367057924f0af3c2d0252`
   in consecutive post-processing runs;
@@ -257,14 +259,22 @@ Current local reproducibility evidence:
 
 External blockers before submission:
 
-- author list, affiliations and corresponding-author email;
-- funding and conflict-of-interest statements;
+- corresponding-author name and institutional email;
+- submitting-author name and ORCID;
+- CRediT author contributions;
+- final AI-use disclosure and dated independent author review;
 - complete final software license text as a top-level `LICENSE`/`COPYING` file;
-- reviewer-accessible or public repository URL;
-- archival DOI or stable release URL.
-- CI run confirmation after the final reviewer-accessible repository is pushed.
-- author-led substantive review and resolution of the OUP disclosure
-  requirement for AI-assisted drafting before submission.
+- exact release tag deployed with matching commit/ref identity;
+- archival DOI or stable release URL;
+- named support owner and an explicit commitment to keep the software and
+  public service available for at least two years; and
+- exact-tag browser and clean-reproduction confirmation through
+  `.github/workflows/release-readiness.yml`.
+
+Author order, affiliations, funding, conflict declaration, public repository
+and public demo URL are already supplied. The open-access APC or waiver route
+remains an operational owner decision on the journal timeline rather than a
+reviewer-package construction blocker.
 
 ## Go/No-Go Criteria
 

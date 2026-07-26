@@ -8,19 +8,19 @@ select authors, a license or an APC route.
 
 ## 1. Complete Owner Metadata
 
-Copy `owner_metadata.template.json` and supply:
+Copy `owner_metadata.template.json`. It already contains the confirmed author
+order, four affiliations, funding statement, conflict declaration, public
+repository and application URL. Review those prefilled values, then supply:
 
-- final author names, order and affiliations;
 - corresponding-author name and email;
 - submitting-author name and ORCID, independently of the corresponding author;
 - CRediT contribution statement;
-- funding and conflict-of-interest statements;
 - accurate disclosure of permitted AI assistance;
-- the prefilled public repository and application URLs;
 - the version-specific Zenodo DOI/archive URL;
 - license identifier;
 - explicit software and service availability commitment for at least two years;
-- named support owner/contact.
+- named support owner/contact; and
+- dated confirmation of independent author review and scientific verification.
 
 The author team must independently review, rewrite where necessary and
 scientifically verify the final author-facing text. Bioinformatics explicitly

@@ -1,6 +1,6 @@
 # Second Review Implementation Log
 
-Status date: 2026-07-25.
+Status date: 2026-07-26.
 
 This is the authoritative checklist for the second external statistical and
 reproducibility review. An item is `complete` only when implementation,
@@ -611,3 +611,24 @@ useful context but do not override this ledger.
   supplement and OUP preview remain 12, 17 and 4 pages; editorial compliance
   still reports one main vector figure, no main tables, eight supplementary
   tables, four declarative cases and a 4/4-page OUP preview.
+- Audited the authoritative ledger, six long-term backlog rows and repository
+  TODO markers against the current worktree. R2-01--R2-23 and L-01--L-06 have
+  implementation evidence; no additional technical gap was found outside the
+  owner-controlled R2-24 release handoff.
+- Corrected stale active documentation that still described hosted CI, the
+  public repository, authorship, affiliations, funding or conflict disclosure
+  as unresolved. Historical triage remains preserved but now points explicitly
+  to this ledger as the current source of truth.
+- Confirmed hosted CI run `30188150881` passed both `docker-checks` and
+  `Independent clean-capsule reproduction` for commit
+  `00c3aaeb18ce5871b69122641db0bf3810b2d1d1`. The public health endpoint still
+  reports release identity `commit=development`, `ref=development`, and the
+  repository has no release tags; exact-tag deployment, browser retest, Zenodo
+  archival and strict owner metadata therefore remain correctly open under
+  R2-24.
+- Revalidated the documentation checkpoint in the pinned backend container:
+  publication tests pass 133/133, editorial compliance remains 4/4 pages with
+  one main figure and no main table, and the artifact gate reports 109/109. The
+  rebuilt non-strict review archive verifies 480 entries and 479 manifest
+  files; its checksum is emitted beside the archive rather than embedded in an
+  input file that would make the checksum self-referential.
