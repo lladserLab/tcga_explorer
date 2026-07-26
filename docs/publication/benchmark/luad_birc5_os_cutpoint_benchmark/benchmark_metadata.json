@@ -1,0 +1,170 @@
+{
+  "adjustment_covariates": [
+    "age_at_index"
+  ],
+  "api_base_url": "http://192.168.1.31:3000/tcga_explorer",
+  "batch": {
+    "completed": 4,
+    "failed": 0,
+    "max_concurrency": 1,
+    "total": 4
+  },
+  "benchmark_id": "luad_birc5_os_cutpoints",
+  "cohort": "TCGA-LUAD",
+  "custom_percentile": 60.0,
+  "endpoint": "OS",
+  "endpoint_options": {
+    "cohort": "TCGA-LUAD",
+    "endpoints": [
+      {
+        "available": true,
+        "events": 182,
+        "label": "Overall survival",
+        "patients": 505,
+        "reason": "505 linked patients and 182 events from TCGA-CDR.",
+        "source": "tcga_cdr",
+        "value": "OS"
+      },
+      {
+        "available": true,
+        "events": 208,
+        "label": "Progression-free interval",
+        "patients": 505,
+        "reason": "505 linked patients and 208 events from TCGA-CDR.",
+        "source": "tcga_cdr",
+        "value": "PFI"
+      },
+      {
+        "available": true,
+        "events": 90,
+        "label": "Disease-free interval",
+        "patients": 302,
+        "reason": "302 linked patients and 90 events from TCGA-CDR.",
+        "source": "tcga_cdr",
+        "value": "DFI"
+      },
+      {
+        "available": true,
+        "events": 112,
+        "label": "Disease-specific survival",
+        "patients": 470,
+        "reason": "470 linked patients and 112 events from TCGA-CDR.",
+        "source": "tcga_cdr",
+        "value": "DSS"
+      }
+    ]
+  },
+  "evidence_alpha": 0.05,
+  "expression_scale": "log2_tpm",
+  "finished_at": "2026-07-25T17:49:31Z",
+  "gene": "BIRC5",
+  "gene_resolution": {
+    "query": "BIRC5",
+    "resolved": "BIRC5",
+    "status": "exact",
+    "warnings": []
+  },
+  "health": {
+    "app_version": "1.0.0",
+    "cache": {
+      "cohort_count": 33,
+      "cohorts_failed": 0,
+      "cohorts_ready": 33,
+      "duration_seconds": 4.638,
+      "errors": [],
+      "generated_at": "2026-07-25T17:48:35.998725+00:00",
+      "status": "ready"
+    },
+    "cohorts": 33,
+    "data_dates": {
+      "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
+      "data_through_date": null,
+      "database_imported_at": "2026-04-27T16:45:36.888931+00:00",
+      "rna_cache_generated_at": "2026-07-25T17:48:35.998725+00:00",
+      "source_latest_metadata_file": "2026-04-22T16:16:36+00:00",
+      "source_summary_file": "2026-04-22T16:16:36+00:00",
+      "tcga_cdr_imported_at": "2026-04-27T16:45:38.378020+00:00",
+      "tcga_cdr_source_file": "2026-04-27T16:45:29.753288+00:00"
+    },
+    "pipeline_versions": {
+      "analysis": "expression-complete-integrity-contract-v6.5",
+      "combined_signatures": "expression-complete-integrity-contract-v3.7",
+      "immune_atlas": "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1",
+      "multiverse": "prespecified-multiverse-integrity-contract-v1.4",
+      "pancancer": "expression-complete-integrity-contract-v2.6"
+    },
+    "status": "ok"
+  },
+  "methods": [
+    "maxstat",
+    "median",
+    "upper_quartile",
+    "upper_lower_quartile"
+  ],
+  "multiple_testing": {
+    "continuous_linear_family": "one continuous univariable Cox test per completed single-gene benchmark scenario",
+    "continuous_linear_method": "Benjamini-Hochberg",
+    "continuous_linear_scope": "across_prespecified_scenarios",
+    "continuous_linear_tests": 11,
+    "continuous_nonlinearity_family": "one spline-versus-linear likelihood-ratio test per completed single-gene benchmark scenario",
+    "continuous_nonlinearity_method": "Benjamini-Hochberg",
+    "continuous_nonlinearity_scope": "across_prespecified_scenarios",
+    "continuous_nonlinearity_tests": 11,
+    "grouped_family": "four prespecified two-group cutpoint sensitivities within this marker-endpoint scenario",
+    "grouped_method": "Holm",
+    "grouped_scope": "within_scenario",
+    "grouped_tests": 4,
+    "legacy_aliases": {
+      "bh_logrank_p_value": "grouped_holm_p_value",
+      "bh_within_scenario_logrank_p_value": "grouped_holm_p_value"
+    },
+    "maxstat_input": "Lau94 selection-adjusted rank-statistic p-value; naive post-selection log-rank p is descriptive only"
+  },
+  "resolved_gene": "BIRC5",
+  "sample_types": [],
+  "scenario_registry": {
+    "endpoint_policy": {
+      "default_primary_endpoint": "OS",
+      "default_rule": "OS is the primary endpoint for cross-scenario comparability when it satisfies TCGA-CDR operational QC.",
+      "prespecified_exception": "TCGA-UVM BAP1 uses DSS as its primary endpoint because the literature anchor concerns disease-specific metastatic prognosis in uveal melanoma. Current DSS analysis treats other-cause death as non-informative censoring.",
+      "registered_endpoint_sensitivities": [
+        "brca_mki67_pfi_cutpoints",
+        "luad_cd274_pfi_cutpoints"
+      ],
+      "sensitivity_rule": "Additional endpoints are labelled endpoint sensitivities and cannot replace the registered primary endpoint because of a more favorable effect or p-value.",
+      "unavailable_endpoint_rule": "A registered endpoint that fails operational QC remains a visible non-evaluable scenario; no outcome-driven endpoint substitution is allowed."
+    },
+    "registry_path": "docs/publication/benchmark/scenario_registry_v1.json",
+    "registry_sha256": "393cbc06edfae73843641af77aac17873c49ab91984a207e2ee5155319300f4c",
+    "registry_version": "1.0.0",
+    "scenario": {
+      "benchmark_id": "luad_birc5_os_cutpoints",
+      "benchmark_role": "literature_guided_cutpoint_dependence_stress_test",
+      "cohort": "TCGA-LUAD",
+      "endpoint": "OS",
+      "endpoint_rationale": "OS is the registered default primary endpoint and matches the survival outcome emphasized by the literature anchor.",
+      "endpoint_role": "primary",
+      "inclusion_rationale": "Preserves a literature-guided lung adenocarcinoma marker for quantifying how grouped estimates depend on cutpoint choice.",
+      "literature_anchors": [
+        {
+          "citation_key": "cao2019birc5",
+          "doi": "10.1155/2019/5451290",
+          "scope": "BIRC5 prognostic context in lung adenocarcinoma; the publication cohort and molecular restrictions are not reproduced by this all-eligible TCGA workflow."
+        }
+      ],
+      "marker": "BIRC5",
+      "parent_benchmark_id": null
+    },
+    "schema_version": "tcga-trace-publication-scenario-registry-v1",
+    "selection_history": {
+      "future_change_rule": "A scenario may be added, removed or reclassified only in a new registry version with a written rationale. Observed effect direction, effect magnitude or p-value from a regeneration cannot trigger an in-place change.",
+      "initial_panel_date": "2026-07-23",
+      "initial_panel_origin": "retrospective_exploratory_triage",
+      "statement": "The marker panel was assembled after exploratory TCGA-TRACE triage. This registry does not claim prospective initial marker selection. It freezes the existing heterogeneous software stress-test panel before subsequent publication regeneration and revision."
+    },
+    "status": "frozen_for_future_regeneration"
+  },
+  "started_at": "2026-07-25T17:49:17Z",
+  "time_unit": "months",
+  "title": "TCGA-LUAD BIRC5 OS cutpoint benchmark"
+}

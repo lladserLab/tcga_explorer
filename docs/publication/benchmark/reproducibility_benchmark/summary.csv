@@ -1,0 +1,4 @@
+label,analysis_id,analysis_type,patients,checks,checks_passed,score_reconstructed,r_roundtrip,expression_artifact_hashed,gdc_identifiers,reproducibility_hash,numeric_policy_version,numeric_comparisons,max_absolute_error,max_relative_error,status,clean_reruns_passed,clean_reruns
+Single gene,d7a5cea9a427469885f6534cc03678b2,single,365,40,40,True,True,True,365,21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7,tcga-trace-numeric-comparison-v1,170,1.1369e-13,4.0007e-14,passed,2,2
+Weighted signature,55c7f5da98b744e2ba62fe199c319e83,weighted,79,43,43,True,True,True,79,13e2d1fff4a3f9cd418faaa5da02d299b03544989cd721ff91774a90929a8202,tcga-trace-numeric-comparison-v1,131,2.8422e-14,7.3914e-15,passed,2,2
+Two signatures,4b6f0bfa40a44a7fae8f3c013db24ec5,combined_signatures,80,42,42,True,True,True,80,8cd06bd6b09ef9c9232dd9db53ce28d9feeb18c8e8f029a62eb8128297a209ef,tcga-trace-numeric-comparison-v1,159,4.0634e-14,5.8193e-14,passed,2,2

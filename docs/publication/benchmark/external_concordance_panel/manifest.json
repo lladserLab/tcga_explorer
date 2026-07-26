@@ -1,0 +1,65 @@
+{
+  "files": {
+    "kirc_ca9_os_median/cbioportal_snapshot.json.gz": {
+      "bytes": 145896,
+      "sha256": "095a0b186eab75fdcac6a00e95be37d7159ac06ec36d7a8b2bc7922cb855fbbe"
+    },
+    "kirc_ca9_os_median/comparison.json": {
+      "bytes": 8107,
+      "sha256": "381536c7db0baf76d8a7d8b256110c9b4a47f8bf5c5f416b2a3fbb63abe0bb3f"
+    },
+    "kirc_ca9_os_median/external_input.csv": {
+      "bytes": 36138,
+      "sha256": "376b320fdaa782c7f14f55e48a7e495a56a6c9e0beef928ae28be1ec262ccddd"
+    },
+    "kirc_ca9_os_median/external_survival_result.json": {
+      "bytes": 940,
+      "sha256": "9023d83ac375a93367ba6bffa779eea166275e1d1e7cb899862d4c1dd1070e51"
+    },
+    "luad_cd274_os_median/cbioportal_snapshot.json.gz": {
+      "bytes": 154833,
+      "sha256": "e56d0a6e7f45525b6c470f1bc463b50f117c12240415c73cf9fb731eeda34369"
+    },
+    "luad_cd274_os_median/comparison.json": {
+      "bytes": 8049,
+      "sha256": "d6ba8031dbd7d8e25e21c8b87cb83d0030f4970a3737d30436ff05260fcd769a"
+    },
+    "luad_cd274_os_median/external_input.csv": {
+      "bytes": 35504,
+      "sha256": "25029c1e09405576288b604f0faa7fe53bd3543deb62ae08ab85152cb3a9e68c"
+    },
+    "luad_cd274_os_median/external_survival_result.json": {
+      "bytes": 942,
+      "sha256": "f7cf1bce9bb6cd9b09f510663d71f4d5f541f64dd72d1cee8d43d4424f5fc588"
+    },
+    "panel_results.raw.json": {
+      "bytes": 26761,
+      "sha256": "4ecde8846c1de073c5c7e762b3a3e42358d235998198412f97061a231031c3e5"
+    },
+    "skcm_pdcd1_os_median/cbioportal_snapshot.json.gz": {
+      "bytes": 129658,
+      "sha256": "bee9803fc3f8636dfac3e66e176696a38777dc2923c6436a7845326d17590752"
+    },
+    "skcm_pdcd1_os_median/comparison.json": {
+      "bytes": 6940,
+      "sha256": "b207ecb3ddcc6535ae5d1c7368beb67193641717e2ae5a874c9e6d59eceacd35"
+    },
+    "skcm_pdcd1_os_median/external_input.csv": {
+      "bytes": 26947,
+      "sha256": "05bbd6405017d2a9a5fef1f7bd5bfa5ad352b9ddb23e760a2f42152fa76d899a"
+    },
+    "skcm_pdcd1_os_median/external_survival_result.json": {
+      "bytes": 950,
+      "sha256": "a8c689aed12f567e6a634a14585786c0482b4d3c649d690896734517f863bbd5"
+    },
+    "summary.csv": {
+      "bytes": 1746,
+      "sha256": "6f6717ea66ccc27f1d4fdfb5b9dee76a45ccdcc9b110addbc02d47975be479c6"
+    },
+    "summary.md": {
+      "bytes": 1793,
+      "sha256": "9a079495eee0249cf0dc764bc4026e7eedaf3832fd311590b11f514bb86bcb4b"
+    }
+  },
+  "schema_version": "tcga-trace-external-concordance-manifest-v1"
+}

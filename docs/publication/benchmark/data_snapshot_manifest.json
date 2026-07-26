@@ -1,0 +1,1906 @@
+{
+  "derived_cache": {
+    "startup_cache_manifest": {
+      "cohort_count": 33,
+      "cohorts": [
+        {
+          "cohort": "TCGA-ACC",
+          "duration_seconds": 0.066,
+          "gdc_cache_files": 79,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 79,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 79,
+          "gene_index_count": 59427,
+          "library_size_count": 79,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-BLCA",
+          "duration_seconds": 0.179,
+          "gdc_cache_files": 431,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 431,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 431,
+          "gene_index_count": 59427,
+          "library_size_count": 431,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-BRCA",
+          "duration_seconds": 0.461,
+          "gdc_cache_files": 1231,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 1231,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 1231,
+          "gene_index_count": 59427,
+          "library_size_count": 1231,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-CESC",
+          "duration_seconds": 0.127,
+          "gdc_cache_files": 309,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 309,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 309,
+          "gene_index_count": 59427,
+          "library_size_count": 309,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-CHOL",
+          "duration_seconds": 0.04,
+          "gdc_cache_files": 44,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 44,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 44,
+          "gene_index_count": 59427,
+          "library_size_count": 44,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-COAD",
+          "duration_seconds": 0.199,
+          "gdc_cache_files": 524,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 524,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 524,
+          "gene_index_count": 59427,
+          "library_size_count": 524,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-DLBC",
+          "duration_seconds": 0.041,
+          "gdc_cache_files": 48,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 48,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 48,
+          "gene_index_count": 59427,
+          "library_size_count": 48,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-ESCA",
+          "duration_seconds": 0.092,
+          "gdc_cache_files": 198,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 198,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 198,
+          "gene_index_count": 59427,
+          "library_size_count": 198,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-GBM",
+          "duration_seconds": 0.155,
+          "gdc_cache_files": 391,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 391,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 391,
+          "gene_index_count": 59427,
+          "library_size_count": 391,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-HNSC",
+          "duration_seconds": 0.213,
+          "gdc_cache_files": 566,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 566,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 566,
+          "gene_index_count": 59427,
+          "library_size_count": 566,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-KICH",
+          "duration_seconds": 0.054,
+          "gdc_cache_files": 91,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 91,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 91,
+          "gene_index_count": 59427,
+          "library_size_count": 91,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-KIRC",
+          "duration_seconds": 0.227,
+          "gdc_cache_files": 614,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 614,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 614,
+          "gene_index_count": 59427,
+          "library_size_count": 614,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-KIRP",
+          "duration_seconds": 0.129,
+          "gdc_cache_files": 323,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 323,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 323,
+          "gene_index_count": 59427,
+          "library_size_count": 323,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-LAML",
+          "duration_seconds": 0.075,
+          "gdc_cache_files": 151,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 151,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 151,
+          "gene_index_count": 59427,
+          "library_size_count": 151,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-LGG",
+          "duration_seconds": 0.198,
+          "gdc_cache_files": 534,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 534,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 534,
+          "gene_index_count": 59427,
+          "library_size_count": 534,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-LIHC",
+          "duration_seconds": 0.16,
+          "gdc_cache_files": 424,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 424,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 424,
+          "gene_index_count": 59427,
+          "library_size_count": 424,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-LUAD",
+          "duration_seconds": 0.226,
+          "gdc_cache_files": 601,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 601,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 601,
+          "gene_index_count": 59427,
+          "library_size_count": 601,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-LUSC",
+          "duration_seconds": 0.205,
+          "gdc_cache_files": 562,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 562,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 562,
+          "gene_index_count": 59427,
+          "library_size_count": 562,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-MESO",
+          "duration_seconds": 0.05,
+          "gdc_cache_files": 87,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 87,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 87,
+          "gene_index_count": 59427,
+          "library_size_count": 87,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-OV",
+          "duration_seconds": 0.173,
+          "gdc_cache_files": 434,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 434,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 434,
+          "gene_index_count": 59427,
+          "library_size_count": 434,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-PAAD",
+          "duration_seconds": 0.091,
+          "gdc_cache_files": 183,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 183,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 183,
+          "gene_index_count": 59427,
+          "library_size_count": 183,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-PCPG",
+          "duration_seconds": 0.086,
+          "gdc_cache_files": 187,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 187,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 187,
+          "gene_index_count": 59427,
+          "library_size_count": 187,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-PRAD",
+          "duration_seconds": 0.228,
+          "gdc_cache_files": 554,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 554,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 554,
+          "gene_index_count": 59427,
+          "library_size_count": 554,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-READ",
+          "duration_seconds": 0.083,
+          "gdc_cache_files": 177,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 177,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 177,
+          "gene_index_count": 59427,
+          "library_size_count": 177,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-SARC",
+          "duration_seconds": 0.112,
+          "gdc_cache_files": 265,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 265,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 265,
+          "gene_index_count": 59427,
+          "library_size_count": 265,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-SKCM",
+          "duration_seconds": 0.213,
+          "gdc_cache_files": 473,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 473,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 473,
+          "gene_index_count": 59427,
+          "library_size_count": 473,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-STAD",
+          "duration_seconds": 0.191,
+          "gdc_cache_files": 448,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 448,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 448,
+          "gene_index_count": 59427,
+          "library_size_count": 448,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-TGCT",
+          "duration_seconds": 0.075,
+          "gdc_cache_files": 156,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 156,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 156,
+          "gene_index_count": 59427,
+          "library_size_count": 156,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-THCA",
+          "duration_seconds": 0.21,
+          "gdc_cache_files": 572,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 572,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 572,
+          "gene_index_count": 59427,
+          "library_size_count": 572,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-THYM",
+          "duration_seconds": 0.065,
+          "gdc_cache_files": 122,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 122,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 122,
+          "gene_index_count": 59427,
+          "library_size_count": 122,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-UCEC",
+          "duration_seconds": 0.221,
+          "gdc_cache_files": 589,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 589,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 589,
+          "gene_index_count": 59427,
+          "library_size_count": 589,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-UCS",
+          "duration_seconds": 0.048,
+          "gdc_cache_files": 57,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 57,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 57,
+          "gene_index_count": 59427,
+          "library_size_count": 57,
+          "status": "ready",
+          "warnings": []
+        },
+        {
+          "cohort": "TCGA-UVM",
+          "duration_seconds": 0.055,
+          "gdc_cache_files": 80,
+          "gdc_expression_matrix": {
+            "gene_count": 59317,
+            "sample_count": 80,
+            "scales": [
+              "log2_fpkm",
+              "log2_fpkm_uq",
+              "log2_tpm"
+            ],
+            "status": "ready"
+          },
+          "gdc_mapped_samples": 80,
+          "gene_index_count": 59427,
+          "library_size_count": 80,
+          "status": "ready",
+          "warnings": []
+        }
+      ],
+      "derived_expression_dir": "/app/derived/rna_bulk",
+      "duration_seconds": 4.776,
+      "errors": [],
+      "generated_at": "2026-07-23T02:53:23.477539+00:00",
+      "mode": "startup_preload",
+      "status": "ready",
+      "steps": [
+        "gene_index",
+        "count_matrix_library_sizes",
+        "gdc_barcode_file_maps",
+        "gdc_expression_matrices"
+      ],
+      "tcga_data_dir": "/data/tcga"
+    }
+  },
+  "generated_at": "2026-07-23T02:59:07.074626+00:00",
+  "manifest_hash": "f424cf0ce18199ca291b9a396dd89660c654d049cc9bdeff1bbdcf1b8a0ba094",
+  "rna_snapshot": {
+    "cohort_count": 33,
+    "cohorts": [
+      {
+        "clinical_data": {
+          "bytes": 62549,
+          "mtime": "2026-04-20T18:22:26+00:00",
+          "path": "TCGA/TCGA-ACC/clinical_data.tsv",
+          "sha256": "3d30de0a8aece8d5e1d5bfc4dc2117f7a3c9ae099fe9fe8aa11912da9acef7e5",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-ACC",
+        "col_data": {
+          "bytes": 193742,
+          "mtime": "2026-04-20T18:22:27+00:00",
+          "path": "TCGA/TCGA-ACC/col_data.tsv",
+          "sha256": "e9d518b7ed2cd08b6201f266776e443ba56ea5d7f3a7a43de45a40c3361fb4ec",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 12892908,
+          "mtime": "2026-04-20T18:22:26+00:00",
+          "path": "TCGA/TCGA-ACC/count_matrix.tsv",
+          "sha256": "418248d2deda7bf77aa5e1f029aa359993a9cfd5e3e605a70bb4d2df37e0624c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 9253216,
+          "mtime": "2026-04-20T18:22:51+00:00",
+          "path": "TCGA/TCGA-ACC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 303311,
+          "mtime": "2026-04-20T18:25:54+00:00",
+          "path": "TCGA/TCGA-BLCA/clinical_data.tsv",
+          "sha256": "1af6ab01fef9dd6b770764542501b318c590e65ced92ab6dfe2d32136eb730fb",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-BLCA",
+        "col_data": {
+          "bytes": 1161792,
+          "mtime": "2026-04-20T18:25:55+00:00",
+          "path": "TCGA/TCGA-BLCA/col_data.tsv",
+          "sha256": "2175a98615ef903eb15cd2817a3e04deba21f7be920dcdd092bd1927e58cf35a",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 69293154,
+          "mtime": "2026-04-20T18:25:54+00:00",
+          "path": "TCGA/TCGA-BLCA/count_matrix.tsv",
+          "sha256": "c13f619cd85d77c343c0b0aaca4194bd1b1c020be15f26c547ede0a37349d736",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 49953460,
+          "mtime": "2026-04-20T18:28:13+00:00",
+          "path": "TCGA/TCGA-BLCA/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 691802,
+          "mtime": "2026-04-20T18:36:36+00:00",
+          "path": "TCGA/TCGA-BRCA/clinical_data.tsv",
+          "sha256": "59e2527c57ccc238c897db2a168188c90b0add48a772366bcdce6560d5816e80",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-BRCA",
+        "col_data": {
+          "bytes": 3737753,
+          "mtime": "2026-04-20T18:36:42+00:00",
+          "path": "TCGA/TCGA-BRCA/col_data.tsv",
+          "sha256": "734f1eff4b10f32e1e3d9cf3a9b672557ab4d36d50dafce92ca83a5f098e50e4",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 201378586,
+          "mtime": "2026-04-20T18:36:36+00:00",
+          "path": "TCGA/TCGA-BRCA/count_matrix.tsv",
+          "sha256": "4c435262bd205a09f4378e40c7685bbbbee1e73031c46177caa50069419de1aa",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 150667292,
+          "mtime": "2026-04-20T18:43:42+00:00",
+          "path": "TCGA/TCGA-BRCA/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 267255,
+          "mtime": "2026-04-20T18:45:27+00:00",
+          "path": "TCGA/TCGA-CESC/clinical_data.tsv",
+          "sha256": "13e6ed898e2c6ce9559244cee52fc65435bf0db0b77f8130eb57a72b0d20c2ed",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-CESC",
+        "col_data": {
+          "bytes": 986444,
+          "mtime": "2026-04-20T18:45:28+00:00",
+          "path": "TCGA/TCGA-CESC/col_data.tsv",
+          "sha256": "54037dfcf65a74be8ada12d9502d552aba95b6bb4be78f03316a8680fa61866f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 50259209,
+          "mtime": "2026-04-20T18:45:27+00:00",
+          "path": "TCGA/TCGA-CESC/count_matrix.tsv",
+          "sha256": "715788b92e7d9ae4fac18905547aa1328f3f9bb1319e4fb5b99d4b31a69256b3",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 37017860,
+          "mtime": "2026-04-20T18:47:11+00:00",
+          "path": "TCGA/TCGA-CESC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 27126,
+          "mtime": "2026-04-20T18:47:43+00:00",
+          "path": "TCGA/TCGA-CHOL/clinical_data.tsv",
+          "sha256": "c449cff583dc2cc907353370c06cf5f4a28a579a65b435665a32ea13ea7effa3",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-CHOL",
+        "col_data": {
+          "bytes": 143233,
+          "mtime": "2026-04-20T18:47:43+00:00",
+          "path": "TCGA/TCGA-CHOL/col_data.tsv",
+          "sha256": "4c7920be827467b66a4dc1f773b5252c5b0287671219e33d4773b17447740426",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 7476620,
+          "mtime": "2026-04-20T18:47:43+00:00",
+          "path": "TCGA/TCGA-CHOL/count_matrix.tsv",
+          "sha256": "5d57b7021049f21283397c722b55d825d51fe886e80f4abca563777135d4e88f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 5627120,
+          "mtime": "2026-04-20T18:47:58+00:00",
+          "path": "TCGA/TCGA-CHOL/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 263436,
+          "mtime": "2026-04-20T18:50:53+00:00",
+          "path": "TCGA/TCGA-COAD/clinical_data.tsv",
+          "sha256": "35925c16d2f87a0cee7055dc55dcc4274c782d53234a20d066ef3506c09ccac2",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-COAD",
+        "col_data": {
+          "bytes": 1087550,
+          "mtime": "2026-04-20T18:50:54+00:00",
+          "path": "TCGA/TCGA-COAD/col_data.tsv",
+          "sha256": "06c44998760527693e86b405a5d553d4b8ecf3df17f8567b8d949df3d78a4d95",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 82590410,
+          "mtime": "2026-04-20T18:50:53+00:00",
+          "path": "TCGA/TCGA-COAD/count_matrix.tsv",
+          "sha256": "c01230d30201db3c37046058bc5ea9bc89dc984cc1263c1c2c64dfd2cd766d68",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 55653708,
+          "mtime": "2026-04-20T18:53:32+00:00",
+          "path": "TCGA/TCGA-COAD/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 32622,
+          "mtime": "2026-04-20T18:54:05+00:00",
+          "path": "TCGA/TCGA-DLBC/clinical_data.tsv",
+          "sha256": "24eddee60b6e9f9c37514bd24debf535e915a5925daabcf0fd68f5ae097b7b0c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-DLBC",
+        "col_data": {
+          "bytes": 210504,
+          "mtime": "2026-04-20T18:54:05+00:00",
+          "path": "TCGA/TCGA-DLBC/col_data.tsv",
+          "sha256": "dc3da4759aedcef652a82e5f69353a2d36750251a916321dc851ec363725c4bb",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 8071266,
+          "mtime": "2026-04-20T18:54:05+00:00",
+          "path": "TCGA/TCGA-DLBC/count_matrix.tsv",
+          "sha256": "2af867c30b9048bdbf354ddbaec1dc79f394ef0a8738ff4c2807af1db5497057",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 5939872,
+          "mtime": "2026-04-20T18:54:22+00:00",
+          "path": "TCGA/TCGA-DLBC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 145392,
+          "mtime": "2026-04-20T18:56:02+00:00",
+          "path": "TCGA/TCGA-ESCA/clinical_data.tsv",
+          "sha256": "3440c1ebc573691894cba0988e931f58272d5bdcfe63c646131e12a191738cf1",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-ESCA",
+        "col_data": {
+          "bytes": 483896,
+          "mtime": "2026-04-20T18:56:02+00:00",
+          "path": "TCGA/TCGA-ESCA/col_data.tsv",
+          "sha256": "5da21da01205b4bea76801d73ab2410122f06932ae3682e1b3b17a84d81836b4",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 33993533,
+          "mtime": "2026-04-20T18:56:02+00:00",
+          "path": "TCGA/TCGA-ESCA/count_matrix.tsv",
+          "sha256": "6294781a6adfb64e443e252df07bf8b3448eb6b8a7bb7769a2766b3444c40167",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 26734052,
+          "mtime": "2026-04-20T18:57:24+00:00",
+          "path": "TCGA/TCGA-ESCA/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 189036,
+          "mtime": "2026-04-20T18:59:39+00:00",
+          "path": "TCGA/TCGA-GBM/clinical_data.tsv",
+          "sha256": "bb1fc1f4e5789c29af694c5eeb2451c4df061a4186019849c116df260f6d86ef",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-GBM",
+        "col_data": {
+          "bytes": 990393,
+          "mtime": "2026-04-20T18:59:40+00:00",
+          "path": "TCGA/TCGA-GBM/col_data.tsv",
+          "sha256": "aaa4812b963be8f8f34bdccea74a9d340aa91fd2ef23b97c3e91123848d85123",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 65957944,
+          "mtime": "2026-04-20T18:59:39+00:00",
+          "path": "TCGA/TCGA-GBM/count_matrix.tsv",
+          "sha256": "42053279596b323a166f673eb3989f7ede5049cd6c3ebdc72411883b0573fd8a",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 51921076,
+          "mtime": "2026-04-20T19:02:17+00:00",
+          "path": "TCGA/TCGA-GBM/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 389513,
+          "mtime": "2026-04-20T19:05:12+00:00",
+          "path": "TCGA/TCGA-HNSC/clinical_data.tsv",
+          "sha256": "5822694d12cc75ea66ef915fda82eb80d92eba2c080db75dd048fe03a86db00c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-HNSC",
+        "col_data": {
+          "bytes": 1349908,
+          "mtime": "2026-04-20T19:05:13+00:00",
+          "path": "TCGA/TCGA-HNSC/col_data.tsv",
+          "sha256": "dcbc1dfede6e32ff9e4eeed4617d8c8ecdb8a7681d7dfc3d1c43263847d23223",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 90839940,
+          "mtime": "2026-04-20T19:05:12+00:00",
+          "path": "TCGA/TCGA-HNSC/count_matrix.tsv",
+          "sha256": "dbe43708cf190e52d41a6cc58c626407ee33ddf812c6c0ee797db0e9ee26fe67",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 64225120,
+          "mtime": "2026-04-20T19:08:21+00:00",
+          "path": "TCGA/TCGA-HNSC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 44617,
+          "mtime": "2026-04-20T19:10:44+00:00",
+          "path": "TCGA/TCGA-KICH/clinical_data.tsv",
+          "sha256": "8deb0bfb8fdd0e716dceb240b024288f4aa89117ae654b82f1d42de6b29351ae",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-KICH",
+        "col_data": {
+          "bytes": 168674,
+          "mtime": "2026-04-20T19:10:45+00:00",
+          "path": "TCGA/TCGA-KICH/col_data.tsv",
+          "sha256": "ef8b4264677a2ef602e4b30e662d5b21f47584fd8ade0d8ab29960e9cbc58717",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 15211349,
+          "mtime": "2026-04-20T19:10:44+00:00",
+          "path": "TCGA/TCGA-KICH/count_matrix.tsv",
+          "sha256": "f7099de85a04257ae371a0fb33881cb0038c3fa73b881468da0959ba8b1f63fa",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 11356072,
+          "mtime": "2026-04-20T19:11:15+00:00",
+          "path": "TCGA/TCGA-KICH/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 296677,
+          "mtime": "2026-04-20T19:28:07+00:00",
+          "path": "TCGA/TCGA-KIRC/clinical_data.tsv",
+          "sha256": "9560244dfd0f14775fd6e46364f6f6eed156e79f9f1e9ff445fac11a862a7645",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-KIRC",
+        "col_data": {
+          "bytes": 830741,
+          "mtime": "2026-04-20T19:28:08+00:00",
+          "path": "TCGA/TCGA-KIRC/col_data.tsv",
+          "sha256": "acfe32d001b2f87f4e58d70e478071a46c47a72120d078b0a91f5d614c158f6d",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 100795003,
+          "mtime": "2026-04-20T19:28:07+00:00",
+          "path": "TCGA/TCGA-KIRC/count_matrix.tsv",
+          "sha256": "cf00c80c19b1545bae372c4c7ccc3c40ddd50b1db0f09da9cade51f5b25cde36",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 75979832,
+          "mtime": "2026-04-20T19:31:29+00:00",
+          "path": "TCGA/TCGA-KIRC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 198358,
+          "mtime": "2026-04-20T19:40:30+00:00",
+          "path": "TCGA/TCGA-KIRP/clinical_data.tsv",
+          "sha256": "94f10efea7f88b8fe64ef2738e207465c8a6e782204a3e65fc7c1dd0554705f6",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-KIRP",
+        "col_data": {
+          "bytes": 708434,
+          "mtime": "2026-04-20T19:40:31+00:00",
+          "path": "TCGA/TCGA-KIRP/col_data.tsv",
+          "sha256": "94e97165e7e7d32c2c8976fed7950c4404fb8704798a9b4bcc5e164d10150c0f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 52512847,
+          "mtime": "2026-04-20T19:40:30+00:00",
+          "path": "TCGA/TCGA-KIRP/count_matrix.tsv",
+          "sha256": "409c6f33225dd1e37d326eeff069e0021e0fa47c4827f93491b779a460f1daea",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 37706512,
+          "mtime": "2026-04-20T19:42:01+00:00",
+          "path": "TCGA/TCGA-KIRP/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 82644,
+          "mtime": "2026-04-20T23:01:51+00:00",
+          "path": "TCGA/TCGA-LAML/clinical_data.tsv",
+          "sha256": "ebe53e8f784cec6062ea72d42808278e1fcff840e4f785eac70f44336c4bf152",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-LAML",
+        "col_data": {
+          "bytes": 248922,
+          "mtime": "2026-04-20T23:01:51+00:00",
+          "path": "TCGA/TCGA-LAML/col_data.tsv",
+          "sha256": "4f5f4b36ac0ad6d8690a303859bb84c9d87bc275fd00b20461bfe858ecf2b967",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 24989391,
+          "mtime": "2026-04-20T23:01:51+00:00",
+          "path": "TCGA/TCGA-LAML/count_matrix.tsv",
+          "sha256": "8bbfe03b1216d40c679298979aacb41709dba86fcc7d88b318680c4062f2ab4f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 19037892,
+          "mtime": "2026-04-20T23:02:42+00:00",
+          "path": "TCGA/TCGA-LAML/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 383434,
+          "mtime": "2026-04-20T20:00:57+00:00",
+          "path": "TCGA/TCGA-LGG/clinical_data.tsv",
+          "sha256": "758f0285d31e91334dd865d54e2c7ede0224dc24f9e6ccca8c2fa20c2f3a4af8",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-LGG",
+        "col_data": {
+          "bytes": 1675644,
+          "mtime": "2026-04-20T20:01:00+00:00",
+          "path": "TCGA/TCGA-LGG/col_data.tsv",
+          "sha256": "f5c41feaa677be427c8af187a0b994e98ed30140820b054fb74acf0920ae615b",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 88108927,
+          "mtime": "2026-04-20T20:00:57+00:00",
+          "path": "TCGA/TCGA-LGG/count_matrix.tsv",
+          "sha256": "6575dbb43d3af3666767f17d18eeb5f6dcd920da09f0f0a99c02b27f9a2aa61e",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 64975056,
+          "mtime": "2026-04-20T20:03:36+00:00",
+          "path": "TCGA/TCGA-LGG/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 235645,
+          "mtime": "2026-04-20T22:51:16+00:00",
+          "path": "TCGA/TCGA-LIHC/clinical_data.tsv",
+          "sha256": "0d17972e9df597ab074ff30eecd75efd5a7e3ed1f030b8d01bd28cdc6ed204af",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-LIHC",
+        "col_data": {
+          "bytes": 1008316,
+          "mtime": "2026-04-20T22:51:17+00:00",
+          "path": "TCGA/TCGA-LIHC/col_data.tsv",
+          "sha256": "545f3d2174398c0c3e726c51615116b586c847529544f0af0c6bfc1637b7495c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 66317979,
+          "mtime": "2026-04-20T22:51:16+00:00",
+          "path": "TCGA/TCGA-LIHC/count_matrix.tsv",
+          "sha256": "e16cf04033636280d73ec3917b2af84c892eee3ff8505f55c3fdbdcc17895559",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 45482196,
+          "mtime": "2026-04-20T22:53:11+00:00",
+          "path": "TCGA/TCGA-LIHC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 361014,
+          "mtime": "2026-04-20T23:23:13+00:00",
+          "path": "TCGA/TCGA-LUAD/clinical_data.tsv",
+          "sha256": "c789e9d30bfddba56c1ca222ffa4082db8fb9d2844a38c468a7e88de113f2c48",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-LUAD",
+        "col_data": {
+          "bytes": 1265349,
+          "mtime": "2026-04-20T23:23:14+00:00",
+          "path": "TCGA/TCGA-LUAD/col_data.tsv",
+          "sha256": "f40a18e23fbba7cb42219b6dd946ee3c86977c7a2072b8db87d49ffae78d70ba",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 97672779,
+          "mtime": "2026-04-20T23:23:13+00:00",
+          "path": "TCGA/TCGA-LUAD/count_matrix.tsv",
+          "sha256": "3b06f00e5f2333d0acea903259935f0e18e0b34f3a9daf4fc5412875ccf982f0",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 71803304,
+          "mtime": "2026-04-20T23:26:11+00:00",
+          "path": "TCGA/TCGA-LUAD/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 347656,
+          "mtime": "2026-04-20T23:42:51+00:00",
+          "path": "TCGA/TCGA-LUSC/clinical_data.tsv",
+          "sha256": "381f17036a8e4e1a9fe3dbe6542f7c1e2e087138d11d1028e3ddc8b27b20f567",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-LUSC",
+        "col_data": {
+          "bytes": 1068550,
+          "mtime": "2026-04-20T23:42:53+00:00",
+          "path": "TCGA/TCGA-LUSC/col_data.tsv",
+          "sha256": "8bde275e5433f116ecd77332d826918f752ca3588d0f785cb22d5e31336c6963",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 92254691,
+          "mtime": "2026-04-20T23:42:51+00:00",
+          "path": "TCGA/TCGA-LUSC/count_matrix.tsv",
+          "sha256": "38888e1e1e8a8d43bb8a70eb7bb0b1a1bed9059adfd09a8d44d17f3be4af6e0f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 69015716,
+          "mtime": "2026-04-20T23:45:32+00:00",
+          "path": "TCGA/TCGA-LUSC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 56061,
+          "mtime": "2026-04-20T23:48:20+00:00",
+          "path": "TCGA/TCGA-MESO/clinical_data.tsv",
+          "sha256": "b372a24438bec446931fb601616c6baee2adb3b060573e7d76ba9f4f276624b2",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-MESO",
+        "col_data": {
+          "bytes": 174269,
+          "mtime": "2026-04-20T23:48:20+00:00",
+          "path": "TCGA/TCGA-MESO/col_data.tsv",
+          "sha256": "d205325a5c660bf24e4c18e667d73ca852366a2b0148f8ddab521537482d2d1c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 14461808,
+          "mtime": "2026-04-20T23:48:20+00:00",
+          "path": "TCGA/TCGA-MESO/count_matrix.tsv",
+          "sha256": "a62cdb44db906eb869d94d66ac8a7a657bd81a7b66bc5b1ec171f25e30612690",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 10459492,
+          "mtime": "2026-04-20T23:48:43+00:00",
+          "path": "TCGA/TCGA-MESO/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 230098,
+          "mtime": "2026-04-21T00:01:44+00:00",
+          "path": "TCGA/TCGA-OV/clinical_data.tsv",
+          "sha256": "4f07db381a699e78c5d459aad65aba8eefcd9d483ff565ad8699aec749cc83a8",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-OV",
+        "col_data": {
+          "bytes": 1113574,
+          "mtime": "2026-04-21T00:01:45+00:00",
+          "path": "TCGA/TCGA-OV/col_data.tsv",
+          "sha256": "c3ff004bf4ddbb52c83321c0f3edb451f690dfb3b418739bbc5d79ab941daf26",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 72639809,
+          "mtime": "2026-04-21T00:01:44+00:00",
+          "path": "TCGA/TCGA-OV/count_matrix.tsv",
+          "sha256": "d8e838531fc701353a6222f8ee7e90b5295b55662806b6d0b1800d161fbe6fd3",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 57580304,
+          "mtime": "2026-04-21T00:03:56+00:00",
+          "path": "TCGA/TCGA-OV/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 123282,
+          "mtime": "2026-04-21T00:09:49+00:00",
+          "path": "TCGA/TCGA-PAAD/clinical_data.tsv",
+          "sha256": "35bc7e9dfae0b0f1515dcb4d83ad284b97a9c5b26d06b86c895f612ac481083b",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-PAAD",
+        "col_data": {
+          "bytes": 501411,
+          "mtime": "2026-04-21T00:09:49+00:00",
+          "path": "TCGA/TCGA-PAAD/col_data.tsv",
+          "sha256": "a5478680f050c1c15f032dd89faa319ef4f7e524d40385f98a3b8e42330e8d39",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 30135531,
+          "mtime": "2026-04-21T00:09:49+00:00",
+          "path": "TCGA/TCGA-PAAD/count_matrix.tsv",
+          "sha256": "b050126813fcaa6eb7663237d26d3516ec887f3369235d025876b460c5e838e9",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 21791468,
+          "mtime": "2026-04-21T00:10:37+00:00",
+          "path": "TCGA/TCGA-PAAD/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 107979,
+          "mtime": "2026-04-21T00:16:20+00:00",
+          "path": "TCGA/TCGA-PCPG/clinical_data.tsv",
+          "sha256": "12794b740d74404a871f9b2b3d0c109e64ba699a731d886a52bbead5736b74db",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-PCPG",
+        "col_data": {
+          "bytes": 361946,
+          "mtime": "2026-04-21T00:16:21+00:00",
+          "path": "TCGA/TCGA-PCPG/col_data.tsv",
+          "sha256": "e5edd63148041275c5c1f73f0d52fd73790d82d3abbbd4a3ad15ac29922eac7c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 30360912,
+          "mtime": "2026-04-21T00:16:20+00:00",
+          "path": "TCGA/TCGA-PCPG/count_matrix.tsv",
+          "sha256": "617227d730d4dff1fca49cc67d8ba7933e758b2cf6a6b1fc9476850b6f904c2d",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 21404692,
+          "mtime": "2026-04-21T00:17:07+00:00",
+          "path": "TCGA/TCGA-PCPG/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 337266,
+          "mtime": "2026-04-21T00:33:31+00:00",
+          "path": "TCGA/TCGA-PRAD/clinical_data.tsv",
+          "sha256": "7b3ca1b0f780f41fe4239e805289f5c17e4b33d24b77f8cfbfcb8dea9c4992d5",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-PRAD",
+        "col_data": {
+          "bytes": 1140061,
+          "mtime": "2026-04-21T00:33:32+00:00",
+          "path": "TCGA/TCGA-PRAD/col_data.tsv",
+          "sha256": "6307522efcb09f1d5884b6f331596d1d6eb508549816df0e7d5eb3c80ce7cbce",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 90187660,
+          "mtime": "2026-04-21T00:33:31+00:00",
+          "path": "TCGA/TCGA-PRAD/count_matrix.tsv",
+          "sha256": "720bf24a3da371ba37a25aba775cadb334fde494d2f16ce0964e3a2d01ee315d",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 63511032,
+          "mtime": "2026-04-21T00:35:54+00:00",
+          "path": "TCGA/TCGA-PRAD/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 109393,
+          "mtime": "2026-04-21T00:41:05+00:00",
+          "path": "TCGA/TCGA-READ/clinical_data.tsv",
+          "sha256": "cec3607a551fbedae9de730f9aa425cbbfc35f1bfd02af1b15a24c2932b75cf9",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-READ",
+        "col_data": {
+          "bytes": 397509,
+          "mtime": "2026-04-21T00:41:05+00:00",
+          "path": "TCGA/TCGA-READ/col_data.tsv",
+          "sha256": "703fedcab892cc006ff3be53d8bbab4eef7d2f6fa2fa216c17ff209d5bb17eeb",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 28280204,
+          "mtime": "2026-04-21T00:41:05+00:00",
+          "path": "TCGA/TCGA-READ/count_matrix.tsv",
+          "sha256": "2393eabe3b6c54ae326e667b733a6056eaed531dda043257d222f048ee7e2589",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 19163864,
+          "mtime": "2026-04-21T00:41:50+00:00",
+          "path": "TCGA/TCGA-READ/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 114947,
+          "mtime": "2026-04-21T00:49:55+00:00",
+          "path": "TCGA/TCGA-SARC/clinical_data.tsv",
+          "sha256": "91de824ddd0c3aa3e73d63887934a40c7ca94e8ac8a5411282108041052be7a4",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-SARC",
+        "col_data": {
+          "bytes": 449825,
+          "mtime": "2026-04-21T00:49:55+00:00",
+          "path": "TCGA/TCGA-SARC/col_data.tsv",
+          "sha256": "3b9c4894c39a758813066b8919ea26753e4522b24341b089d0ce87e49cb7eedc",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 42772012,
+          "mtime": "2026-04-21T00:49:55+00:00",
+          "path": "TCGA/TCGA-SARC/count_matrix.tsv",
+          "sha256": "d305d1e433bf150ab3a1cded80d391ed3b6a7d7fde8a2652bae876b45fd507eb",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 31440984,
+          "mtime": "2026-04-21T00:51:07+00:00",
+          "path": "TCGA/TCGA-SARC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 305076,
+          "mtime": "2026-04-21T01:04:49+00:00",
+          "path": "TCGA/TCGA-SKCM/clinical_data.tsv",
+          "sha256": "db84d77397c79bda88961ddc1e58fb7bfec7ca70b0d6e345017946e12e6a5271",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-SKCM",
+        "col_data": {
+          "bytes": 1102427,
+          "mtime": "2026-04-21T01:04:50+00:00",
+          "path": "TCGA/TCGA-SKCM/col_data.tsv",
+          "sha256": "b20de4bba6fb9fa3a654d3623d13238ee3727b90843aca7a8863f916f820dca8",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 76186174,
+          "mtime": "2026-04-21T01:04:49+00:00",
+          "path": "TCGA/TCGA-SKCM/count_matrix.tsv",
+          "sha256": "5e3c136e28c8a5e5755a92436caa43ef6171dc5df7927c92036f88ff6b63ff38",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 55371276,
+          "mtime": "2026-04-21T01:07:07+00:00",
+          "path": "TCGA/TCGA-SKCM/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 244842,
+          "mtime": "2026-04-21T01:20:52+00:00",
+          "path": "TCGA/TCGA-STAD/clinical_data.tsv",
+          "sha256": "22b25953a3e73fff6d06dca26d75a23af374f4bd13a9d72f6ff53cf1563bc4d8",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-STAD",
+        "col_data": {
+          "bytes": 885142,
+          "mtime": "2026-04-21T01:20:53+00:00",
+          "path": "TCGA/TCGA-STAD/col_data.tsv",
+          "sha256": "ec33d51d59b51bce8fd127f0bb7690a73282b06860040c1b120206f11237a3d0",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 75257770,
+          "mtime": "2026-04-21T01:20:52+00:00",
+          "path": "TCGA/TCGA-STAD/count_matrix.tsv",
+          "sha256": "cd0431c2cb3532f76e6747f77ae325c8c427ddca7cf806041173771300cfe7af",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 60888876,
+          "mtime": "2026-04-21T01:23:42+00:00",
+          "path": "TCGA/TCGA-STAD/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 89379,
+          "mtime": "2026-04-21T01:28:35+00:00",
+          "path": "TCGA/TCGA-TGCT/clinical_data.tsv",
+          "sha256": "38175bfceb18e51157c07e74bfa1c2053ad280a66f5ddd10e7b7184a75d82fae",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-TGCT",
+        "col_data": {
+          "bytes": 306843,
+          "mtime": "2026-04-21T01:28:36+00:00",
+          "path": "TCGA/TCGA-TGCT/col_data.tsv",
+          "sha256": "888d9cf756264a6a969593b7631b06c0d58a0f02bba7a775f114a485e08ed0f4",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 25839686,
+          "mtime": "2026-04-21T01:28:35+00:00",
+          "path": "TCGA/TCGA-TGCT/count_matrix.tsv",
+          "sha256": "08d82e64acfb54f97d8dce28add39a3c0cd50eed2bd02ea5f3cd6c3bcdf701dd",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 19703616,
+          "mtime": "2026-04-21T01:29:20+00:00",
+          "path": "TCGA/TCGA-TGCT/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 418550,
+          "mtime": "2026-04-21T01:46:46+00:00",
+          "path": "TCGA/TCGA-THCA/clinical_data.tsv",
+          "sha256": "6a77e6faffb549b0d987098943d44c327d760c08d486252a15bacbf56cbef8ee",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-THCA",
+        "col_data": {
+          "bytes": 1855277,
+          "mtime": "2026-04-21T01:46:48+00:00",
+          "path": "TCGA/TCGA-THCA/col_data.tsv",
+          "sha256": "06e820c293e081fc3309e3353baa19cf555181630010dd17df53496c7067261c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 93652975,
+          "mtime": "2026-04-21T01:46:46+00:00",
+          "path": "TCGA/TCGA-THCA/count_matrix.tsv",
+          "sha256": "d39b4eb37a77d2340b331bd48d6296e85eda3ea6a5abec330c88ca904c06f6f7",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 66608156,
+          "mtime": "2026-04-21T01:49:12+00:00",
+          "path": "TCGA/TCGA-THCA/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 73073,
+          "mtime": "2026-04-21T01:53:12+00:00",
+          "path": "TCGA/TCGA-THYM/clinical_data.tsv",
+          "sha256": "365f382496f2e644c262089b2109a9bf53f127863959f2013ae4391bed579fd5",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-THYM",
+        "col_data": {
+          "bytes": 243387,
+          "mtime": "2026-04-21T01:53:12+00:00",
+          "path": "TCGA/TCGA-THYM/col_data.tsv",
+          "sha256": "c3d5c4dbc2b789cd252c439f8a8eac43db2ab0c76897885ee085e6484cbf6af5",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 20322543,
+          "mtime": "2026-04-21T01:53:12+00:00",
+          "path": "TCGA/TCGA-THYM/count_matrix.tsv",
+          "sha256": "6d797931dbfc99e9195be6166084b58f2b03f4d8f1539a88232a0cb030c735b0",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 15288332,
+          "mtime": "2026-04-21T01:53:43+00:00",
+          "path": "TCGA/TCGA-THYM/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 400912,
+          "mtime": "2026-04-21T02:11:08+00:00",
+          "path": "TCGA/TCGA-UCEC/clinical_data.tsv",
+          "sha256": "b7d3c650c7f3d9f45e52c175f0055e44c3e991e08e0a827c68e625c32d5cb751",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-UCEC",
+        "col_data": {
+          "bytes": 1612148,
+          "mtime": "2026-04-21T02:11:10+00:00",
+          "path": "TCGA/TCGA-UCEC/col_data.tsv",
+          "sha256": "513174877a606a6d88f4a0c1ff5062988246174417ca8030f592953039bc8baf",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 92517686,
+          "mtime": "2026-04-21T02:11:08+00:00",
+          "path": "TCGA/TCGA-UCEC/count_matrix.tsv",
+          "sha256": "7cba15cd2ea97db934b802392f15ec40aeabf6c9f99505e5a6bf992f33b44a43",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 65660380,
+          "mtime": "2026-04-21T02:13:45+00:00",
+          "path": "TCGA/TCGA-UCEC/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 40280,
+          "mtime": "2026-04-21T02:15:55+00:00",
+          "path": "TCGA/TCGA-UCS/clinical_data.tsv",
+          "sha256": "904c8694d8d592e6847431d29f0d686bcc8a56ba79775eb3745e5da993c32b7c",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-UCS",
+        "col_data": {
+          "bytes": 190036,
+          "mtime": "2026-04-21T02:15:55+00:00",
+          "path": "TCGA/TCGA-UCS/col_data.tsv",
+          "sha256": "f45713cdfc5884bff74c27978a555b2d57d69f17de7734d4000707bc1c82c53a",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 9790941,
+          "mtime": "2026-04-21T02:15:55+00:00",
+          "path": "TCGA/TCGA-UCS/count_matrix.tsv",
+          "sha256": "f8608aa3d0428135b096e808a08e3099d1f350e4b08a8e7d31c614839d882a93",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 7895692,
+          "mtime": "2026-04-21T02:16:11+00:00",
+          "path": "TCGA/TCGA-UCS/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      },
+      {
+        "clinical_data": {
+          "bytes": 62018,
+          "mtime": "2026-04-21T02:18:56+00:00",
+          "path": "TCGA/TCGA-UVM/clinical_data.tsv",
+          "sha256": "3d6ee6bfbbe622a527bed88b15ed59400e45f5d1eb723297fddc0b2bf30fad5f",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "cohort": "TCGA-UVM",
+        "col_data": {
+          "bytes": 182920,
+          "mtime": "2026-04-21T02:18:57+00:00",
+          "path": "TCGA/TCGA-UVM/col_data.tsv",
+          "sha256": "80eec98020609ba7f314b7c8b217d1254c48ddd8cfff14519a10335233312c6e",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "count_matrix": {
+          "bytes": 12901094,
+          "mtime": "2026-04-21T02:18:56+00:00",
+          "path": "TCGA/TCGA-UVM/count_matrix.tsv",
+          "sha256": "82fdf781f10435a552c71695f3ed8b24e585a30508d68a207746f5be04c3b4e2",
+          "sha256_status": "computed",
+          "status": "available"
+        },
+        "dds_rds": {
+          "bytes": 8834276,
+          "mtime": "2026-04-21T02:19:14+00:00",
+          "path": "TCGA/TCGA-UVM/dds.rds",
+          "sha256": null,
+          "sha256_status": "not_computed",
+          "status": "available"
+        }
+      }
+    ],
+    "hash_count_matrices": true,
+    "source_description": "Local TCGA cohort directories with count_matrix.tsv, col_data.tsv, clinical_data.tsv and dds.rds generated by the local download pipeline.",
+    "summary_table": {
+      "bytes": 7647,
+      "mtime": "2026-04-22T16:16:36+00:00",
+      "path": "TCGA/summary_table.tsv",
+      "sha256": "d325e50b4467d95a10e8a68f558368d0efe7a69ea76e92f3c2ebe7537322791b",
+      "sha256_status": "computed",
+      "status": "available"
+    },
+    "sync_manifest": null,
+    "sync_manifest_file": {
+      "path": "TCGA/.sync/manifests/tcga_rna_current.json",
+      "sha256": null,
+      "status": "missing"
+    },
+    "validation_summary": {
+      "cohorts": 33,
+      "failing_cohorts": [],
+      "passing_cohorts": 33,
+      "status": "available"
+    },
+    "validation_table": {
+      "bytes": 2525,
+      "mtime": "2026-04-22T16:46:56+00:00",
+      "path": "TCGA/tcga_validation_summary.tsv",
+      "sha256": "fba6cc6d3f4a640e9c4a009708be2be694e17160a28cc04fafd4eb61fa228df4",
+      "sha256_status": "computed",
+      "status": "available"
+    }
+  },
+  "schema_version": "tcga-trace-data-snapshot-manifest-v1",
+  "submission_note": "For final journal submission, run this script with --hash-count-matrices. If the RNA snapshot was created by the application updater, include the GDC sync manifest with --rna-sync-manifest. Archive this manifest with the software release.",
+  "tcga_cdr": {
+    "file": {
+      "bytes": 2945129,
+      "mtime": "2026-04-27T16:45:29.753288+00:00",
+      "path": "tcga_explorer/clinical/TCGA-CDR-SupplementalTableS1.xlsx",
+      "sha256": "ea594c0fbb6731477c7ac511fab449ca9c38b0d42d269591ed9f5c4090e75a5a",
+      "sha256_status": "computed",
+      "status": "available"
+    },
+    "sync_manifest": {
+      "data_release": null,
+      "data_through_date": null,
+      "files": [
+        {
+          "data_release": null,
+          "file_id": "1b5f413e-a8d1-4d10-92eb-7c4ae739ed81",
+          "file_name": "TCGA-CDR-SupplementalTableS1.xlsx",
+          "file_size": 2945129,
+          "md5sum": "a4591b2dcee39591f59e5e25a6ce75fa",
+          "sha256": "ea594c0fbb6731477c7ac511fab449ca9c38b0d42d269591ed9f5c4090e75a5a",
+          "source_url": "https://api.gdc.cancer.gov/data/1b5f413e-a8d1-4d10-92eb-7c4ae739ed81",
+          "updated_datetime": null
+        }
+      ],
+      "generated_at": "2026-04-27T16:45:30.851587+00:00",
+      "manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
+      "source": "tcga_cdr"
+    }
+  },
+  "tcga_data_dir": "TCGA"
+}

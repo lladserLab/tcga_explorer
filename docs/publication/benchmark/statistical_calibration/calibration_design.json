@@ -1,0 +1,21 @@
+{
+  "alpha": 0.05,
+  "audit_report": "/workspace/artifacts/d7a5cea9a427469885f6534cc03678b2/audit_report.json",
+  "methods": [
+    "maxstat",
+    "median",
+    "upper_quartile",
+    "upper_lower_quartile"
+  ],
+  "observed_max_tau": 1826.25,
+  "output_json": "/workspace/docs/publication/benchmark/statistical_calibration/calibration_results.raw.json",
+  "permutation_csv": "/workspace/docs/publication/benchmark/statistical_calibration/permutation_replicates.csv",
+  "permutation_replicates": 2000,
+  "schema_version": "tcga-trace-statistical-calibration-design-v2",
+  "seed": 20260725,
+  "simulation_csv": "/workspace/docs/publication/benchmark/statistical_calibration/simulation_replicates.csv",
+  "simulation_max_tau": 5,
+  "simulation_n": 300,
+  "simulation_replicates": 2000,
+  "workers": 4
+}

@@ -1,0 +1,214 @@
+{
+  "accessed_date": "2026-07-25",
+  "case_id": "luad_cd274_os_median",
+  "cohort": "TCGA-LUAD",
+  "comparison": {
+    "decision": "both_unsupported_point_direction_differs",
+    "external_direction": "higher expression adverse",
+    "external_nominal_supported": false,
+    "independent_validation": false,
+    "limitations": [
+      "Both resources derive from TCGA and therefore are not independent biological validation.",
+      "cBioPortal PanCancer Atlas RSEM and TCGA-TRACE GDC STAR-count TPM are different expression pipelines and releases.",
+      "cBioPortal OS fields and TCGA-TRACE TCGA-CDR OS may differ in endpoint curation and eligible participants.",
+      "The external model is unadjusted; TCGA-TRACE additionally reports an exact age-adjusted model.",
+      "A median split is rank-comparable but its numerical expression threshold is not comparable across pipelines."
+    ],
+    "tcga_trace_direction": "higher expression protective",
+    "tcga_trace_holm_supported": false,
+    "tcga_trace_nominal_supported": false
+  },
+  "cutoff": "median",
+  "endpoint": "OS",
+  "external": {
+    "expression_processing": "Batch-normalized RSEM from Illumina HiSeq RNASeqV2 as labelled by cBioPortal PanCancer Atlas.",
+    "molecular_profile": {
+      "datatype": "CONTINUOUS",
+      "description": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+      "molecularAlterationType": "MRNA_EXPRESSION",
+      "molecularProfileId": "luad_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+      "name": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+      "patientLevel": false,
+      "showProfileInAnalysisTab": false,
+      "studyId": "luad_tcga_pan_can_atlas_2018"
+    },
+    "result": {
+      "contrast": "High vs Low",
+      "cox": {
+        "coefficient": 0.08152246962262921,
+        "conf_high": 1.4537835068521858,
+        "conf_low": 0.8096732288332227,
+        "hazard_ratio": 1.084937595448464,
+        "p_value": 0.5850757074977487,
+        "standard_error": 0.1493124393286908,
+        "ties": "efron"
+      },
+      "cutoff_method": "median",
+      "cutoff_value": 60.9405,
+      "group_summary": {
+        "High": {
+          "events": 88,
+          "group": "High",
+          "median_survival_months": 45.33648946,
+          "patients": 251
+        },
+        "Low": {
+          "events": 93,
+          "group": "Low",
+          "median_survival_months": 50.23506592,
+          "patients": 250
+        }
+      },
+      "logrank": {
+        "chisq": 0.29851057263795927,
+        "degrees_of_freedom": 1,
+        "p_value": 0.5848176680030568
+      },
+      "n_events": 181,
+      "n_patients": 501,
+      "software": {
+        "r_version": "R version 4.6.1 (2026-06-24)",
+        "survival_version": "3.8.6"
+      },
+      "status": "completed"
+    },
+    "sample_list": {
+      "category": "all_cases_with_mrna_rnaseq_data",
+      "description": "Samples with mRNA expression data (510 samples)",
+      "name": "Samples with mRNA data (RNA Seq V2)",
+      "sampleListId": "luad_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+      "studyId": "luad_tcga_pan_can_atlas_2018"
+    },
+    "selection": {
+      "events": 181,
+      "expression_records": 510,
+      "patients_with_complete_os_and_expression": 501,
+      "patients_with_multiple_eligible_samples": 0,
+      "rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+    },
+    "source_snapshot": "docs/publication/benchmark/external_concordance_panel/luad_cd274_os_median/cbioportal_snapshot.json.gz",
+    "source_snapshot_sha256": "e56d0a6e7f45525b6c470f1bc463b50f117c12240415c73cf9fb731eeda34369",
+    "study": {
+      "allSampleCount": 566,
+      "cancerType": {
+        "dedicatedColor": "Gainsboro",
+        "id": "luad",
+        "name": "Lung Adenocarcinoma",
+        "parent": "nsclc",
+        "shortName": "LUAD"
+      },
+      "cancerTypeId": "luad",
+      "citation": "TCGA, Cell 2018",
+      "cnaSampleCount": 511,
+      "completeSampleCount": 503,
+      "description": "Lung Adenocarcinoma TCGA PanCancer data. The original data is <a href=\"https://gdc.cancer.gov/about-data/publications/pancanatlas\">here</a>. The publications are <a href=\"https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html\">here</a>.",
+      "groups": "PUBLIC;PANCAN",
+      "importDate": "2026-06-04 18:48:28",
+      "massSpectrometrySampleCount": 0,
+      "methylationHm27SampleCount": 0,
+      "miRnaSampleCount": 0,
+      "mrnaMicroarraySampleCount": 0,
+      "mrnaRnaSeqSampleCount": 0,
+      "mrnaRnaSeqV2SampleCount": 510,
+      "name": "Lung Adenocarcinoma (TCGA, PanCancer Atlas)",
+      "pmid": "29625048,29596782,29622463,29617662,29625055,29625050,29617662,30643250,32214244,29625049,29850653,36334560",
+      "publicStudy": true,
+      "readPermission": true,
+      "referenceGenome": "hg19",
+      "resourceCounts": [
+        {
+          "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+          "description": "Computed Tomography",
+          "displayName": "Computed Tomography",
+          "openByDefault": true,
+          "patientCount": 60,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_CT",
+          "resourceType": "PATIENT",
+          "sampleCount": 60
+        },
+        {
+          "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+          "description": "Nuclear Medicine",
+          "displayName": "Nuclear Medicine",
+          "openByDefault": true,
+          "patientCount": 2,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_NM",
+          "resourceType": "PATIENT",
+          "sampleCount": 2
+        },
+        {
+          "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+          "description": "Positron Emission Tomography",
+          "displayName": "Positron Emission Tomography",
+          "openByDefault": true,
+          "patientCount": 23,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_PT",
+          "resourceType": "PATIENT",
+          "sampleCount": 23
+        },
+        {
+          "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+          "description": "Slide Microscopy",
+          "displayName": "Slide Microscopy",
+          "openByDefault": true,
+          "patientCount": 514,
+          "priority": "1",
+          "resourceId": "IDC_SLIM",
+          "resourceType": "PATIENT",
+          "sampleCount": 514
+        }
+      ],
+      "rppaSampleCount": 360,
+      "sequencedSampleCount": 566,
+      "status": 0,
+      "structuralVariantCount": 403,
+      "studyId": "luad_tcga_pan_can_atlas_2018",
+      "treatmentCount": 202
+    },
+    "tool": "cBioPortal"
+  },
+  "gene": "CD274",
+  "prespecified_role": "unsupported or weak-signal case",
+  "tcga_trace": {
+    "age_adjusted_cox": {
+      "conf_high": 1.256211542296366,
+      "conf_low": 0.6982025075288064,
+      "hazard_ratio": 0.9365308584440515,
+      "p_value": 0.6616542746023163
+    },
+    "analysis_id": "aaa1cceb5cd04ca59a9d59b694221062",
+    "cohort": "TCGA-LUAD",
+    "cox": {
+      "conf_high": 1.3285205358118806,
+      "conf_low": 0.7420149435790572,
+      "hazard_ratio": 0.9928655953471605,
+      "p_value": 0.9615672322807484
+    },
+    "cutoff_value": 3.0359933376312256,
+    "endpoint": "OS",
+    "endpoint_source": "tcga_cdr",
+    "event_counts": {
+      "High": 87,
+      "Low": 95
+    },
+    "expression_scale": "log2(TPM + 1)",
+    "gene": "CD274",
+    "group_counts": {
+      "High": 252,
+      "Low": 253
+    },
+    "grouped_holm_p_value": 1.0,
+    "logrank_p_value": 0.9618174116556687,
+    "median_survival_days": {
+      "High": 1501,
+      "Low": 1499
+    },
+    "n_events": 182,
+    "n_patients": 505,
+    "patient_records_sha256": "ac02621f429d7b9ebbc84c5ffcb402a8ef7cfe621cfa50d1d32e10d9d4c9d1d1",
+    "reproducibility_hash": "1797b1e98a6dc61cc1ef8d955e3db12c39a925e3a21612742e341eed01896bc3"
+  }
+}

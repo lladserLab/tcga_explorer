@@ -1,0 +1,15 @@
+{
+  "files": {
+    "benchmark_results.raw.json": {
+      "bytes": 13125,
+      "sha256": "cf7ae2eddcdff9a77055f489298186aba9b06fbc8ec71f9d7dbcd18b575a84b5"
+    },
+    "summary.md": {
+      "bytes": 1614,
+      "sha256": "71ab35b335fd735f13a649b11f08a889c194a508c9475a46afe5e1602d7f7a2a"
+    }
+  },
+  "generated_at": "2026-07-26T03:10:13.454134+00:00",
+  "schema_version": "tcga-trace-browser-compatibility-v1",
+  "status": "passed_provisional"
+}

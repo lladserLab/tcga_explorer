@@ -1,0 +1,93 @@
+{
+  "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
+  "core_result_keys": [
+    "n_patients",
+    "n_events",
+    "group_counts",
+    "event_counts",
+    "median_survival_days",
+    "rmst",
+    "logrank_p_value",
+    "hazard_ratio",
+    "hr_conf_low",
+    "hr_conf_high",
+    "hr_p_value",
+    "cox_models",
+    "signature_interaction_cox_models"
+  ],
+  "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
+  "entrypoint": "rerun_analysis.R",
+  "expected_results": "metrics.json",
+  "expected_results_integrity": "Core results are bound by audit_report.json reproducibility_hash; metrics.json is excluded from this manifest to avoid a circular checksum.",
+  "files": {
+    "input": {
+      "bytes": 37372,
+      "filename": "input.json",
+      "sha256": "94f068fec39ab96efe8ab45227344d6428fd5f43e8d8e9564d4a399ee05b4b8b"
+    },
+    "reproduction_clinical_covariates": {
+      "bytes": 7375,
+      "filename": "clinical_covariates.R",
+      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+    },
+    "reproduction_cox_diagnostics": {
+      "bytes": 9065,
+      "filename": "cox_diagnostics.R",
+      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+    },
+    "reproduction_dockerfile": {
+      "bytes": 945,
+      "filename": "Dockerfile.reproduce",
+      "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
+    },
+    "reproduction_km_analysis": {
+      "bytes": 66975,
+      "filename": "km_analysis.R",
+      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+    },
+    "reproduction_r_runner": {
+      "bytes": 7241,
+      "filename": "rerun_analysis.R",
+      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+    },
+    "reproduction_readme": {
+      "bytes": 1209,
+      "filename": "REPRODUCE.md",
+      "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
+    },
+    "reproduction_renv_lock": {
+      "bytes": 204337,
+      "filename": "renv.lock",
+      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+    }
+  },
+  "input": "input.json",
+  "numeric_comparison": {
+    "classes": {
+      "effect": {
+        "absolute": 1e-08,
+        "relative": 1e-08
+      },
+      "exact": {
+        "absolute": 0.0,
+        "relative": 0.0
+      },
+      "generic": {
+        "absolute": 1e-10,
+        "relative": 1e-08
+      },
+      "probability": {
+        "absolute": 1e-12,
+        "relative": 1e-06
+      },
+      "time": {
+        "absolute": 1e-06,
+        "relative": 1e-09
+      }
+    },
+    "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+    "policy_version": "tcga-trace-numeric-comparison-v1"
+  },
+  "renv_version": "1.2.3",
+  "schema_version": "tcga-trace-reproduction-capsule-v1"
+}

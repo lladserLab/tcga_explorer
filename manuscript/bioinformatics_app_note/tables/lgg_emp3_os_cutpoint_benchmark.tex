@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-LGG EMP3 OS cutpoint-sensitivity benchmark.}
+\label{tab:lgg-emp3-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
+\midrule
+Maxstat & 511 & 125 & 1.39e-22 & 1.87e-25 & 0.103 & -514 & Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 511 & 125 & 2.95e-09 & 1.49e-06 & 0.003 & -217 & Marker-specific PH caution; fixed 2-year diagnostic estimated \\
+Upper Q & 511 & 125 & 4.38e-19 & 4.27e-13 & 3.45e-04 & -361 & Marker-specific PH caution; fixed 2-year diagnostic estimated \\
+Outer Q & 256 & 77 & 1.12e-12 & 3.35e-08 & 0.006 & -390 & Marker-specific PH caution; fixed 2-year diagnostic estimated; Middle 50\% excluded \\
+\bottomrule
+\end{tabular}
+\end{table}

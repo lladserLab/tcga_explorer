@@ -1,4 +1,8 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+const PUBLIC_API_PREFIX = "/api/v1";
+const JOB_POLL_INTERVAL_MS = 2000;
+const JOB_POLL_TIMEOUT_MS = 60 * 60 * 1000;
+const SESSION_JOB_EVENT = "tcga-trace:job-update";
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -10,7 +14,10 @@ async function request(path, options = {}) {
     let code = `HTTP_${response.status}`;
     try {
       const payload = await response.json();
-      if (typeof payload.detail === "string") {
+      if (payload.error?.message) {
+        message = payload.error.message;
+        code = payload.error.code || code;
+      } else if (typeof payload.detail === "string") {
         message = payload.detail;
       } else if (payload.detail?.message) {
         message = payload.detail.message;
@@ -21,9 +28,141 @@ async function request(path, options = {}) {
     }
     const error = new Error(message);
     error.code = code;
+    error.status = response.status;
     throw error;
   }
   return response.json();
+}
+
+function wait(milliseconds) {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+function randomRunEventId() {
+  const token =
+    globalThis.crypto?.randomUUID?.().replaceAll("-", "") ||
+    `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+  return `event-${token}`;
+}
+
+function summarizeComputeRequest(path, payload) {
+  if (path === "/analyses/combined") {
+    const signatureA = payload.signature_a?.name || payload.signature_a?.gene_symbol || "Signature A";
+    const signatureB = payload.signature_b?.name || payload.signature_b?.gene_symbol || "Signature B";
+    return {
+      label: `${signatureA} x ${signatureB}`,
+      source_view: "analysis",
+      design_summary: [
+        payload.cohort,
+        payload.endpoint,
+        payload.combination_method,
+      ].filter(Boolean).join(" · "),
+    };
+  }
+  if (path === "/analyses/batch") {
+    const analyses = payload.analyses || [];
+    const genes = [...new Set(analyses.map((item) => item.gene_symbol).filter(Boolean))];
+    return {
+      label: `${genes.slice(0, 3).join(", ")}${genes.length > 3 ? ` +${genes.length - 3}` : ""}`,
+      source_view: "compare",
+      design_summary: [
+        analyses[0]?.cohort,
+        analyses[0]?.endpoint,
+        `${analyses.length} analyses`,
+      ].filter(Boolean).join(" · "),
+    };
+  }
+  if (path === "/analyses/multiverse") {
+    const genes = (payload.genes || []).map((item) => item.gene_symbol).filter(Boolean);
+    return {
+      label: payload.session_label || genes.join(", ") || "Prespecified multiverse",
+      source_view: "multiverse",
+      design_summary: [
+        payload.cohort,
+        `${payload.endpoints?.length || 0} endpoints`,
+        `${payload.cutpoint_methods?.length || 0} cutpoints`,
+      ].filter(Boolean).join(" · "),
+    };
+  }
+  if (path === "/pancancer/survival") {
+    return {
+      label: payload.gene_symbol || "Pan-cancer scan",
+      source_view: "pancancer",
+      design_summary: [
+        payload.endpoint_mode || payload.endpoint,
+        `${payload.cohorts?.length || 33} cohorts`,
+      ].filter(Boolean).join(" · "),
+    };
+  }
+  if (path === "/analyses/sessions/export") {
+    return {
+      label: payload.session_label || "Exploratory session export",
+      source_view: "session",
+      design_summary: `${payload.entries?.length || 0} selected events`,
+    };
+  }
+  const signatureGenes = (payload.signature_genes || [])
+    .map((item) => item.gene_symbol)
+    .filter(Boolean);
+  return {
+    label: payload.signature_method === "single"
+      ? payload.gene_symbol || "Survival analysis"
+      : `${payload.signature_method}: ${signatureGenes.join(", ")}`,
+    source_view: "analysis",
+    design_summary: [
+      payload.cohort,
+      payload.endpoint,
+      payload.cutpoint_method,
+    ].filter(Boolean).join(" · "),
+  };
+}
+
+function publishJobUpdate(context, job) {
+  if (typeof window === "undefined" || context.summary.source_view === "session") return;
+  window.dispatchEvent(new CustomEvent(SESSION_JOB_EVENT, {
+    detail: {
+      event_id: context.eventId,
+      recorded_at: context.recordedAt,
+      summary: context.summary,
+      job,
+    },
+  }));
+}
+
+async function submitAndWait(path, payload) {
+  const context = {
+    eventId: randomRunEventId(),
+    recordedAt: new Date().toISOString(),
+    summary: summarizeComputeRequest(path, payload),
+  };
+  let job = await request(`${PUBLIC_API_PREFIX}${path}`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  publishJobUpdate(context, job);
+  const deadline = Date.now() + JOB_POLL_TIMEOUT_MS;
+
+  while (job.status === "queued" || job.status === "running") {
+    if (Date.now() >= deadline) {
+      const error = new Error(
+        `The analysis is still running. Its job ID is ${job.id}; it can be retrieved from the public API.`,
+      );
+      error.code = "JOB_POLL_TIMEOUT";
+      error.jobId = job.id;
+      throw error;
+    }
+    await wait(JOB_POLL_INTERVAL_MS);
+    job = await request(`${PUBLIC_API_PREFIX}/jobs/${job.id}`);
+    publishJobUpdate(context, job);
+  }
+
+  if (job.status !== "completed" || !job.result) {
+    const error = new Error(job.error?.message || `Analysis job ended with status ${job.status}.`);
+    error.code = job.error?.code || "COMPUTE_FAILED";
+    error.jobId = job.id;
+    throw error;
+  }
+  return job.result;
 }
 
 export function apiUrl(path) {
@@ -34,72 +173,72 @@ export function apiUrl(path) {
 }
 
 export function getHealth() {
-  return request("/api/health");
+  return request(`${PUBLIC_API_PREFIX}/health`);
 }
 
 export function getCohorts() {
-  return request("/api/cohorts");
+  return request(`${PUBLIC_API_PREFIX}/cohorts`);
 }
 
 export function getDatasetSummary(cohort = "") {
   const params = cohort ? `?${new URLSearchParams({ cohort }).toString()}` : "";
-  return request(`/api/dataset/summary${params}`);
+  return request(`${PUBLIC_API_PREFIX}/dataset/summary${params}`);
 }
 
 export function getDataSources() {
-  return request("/api/data-sources");
+  return request(`${PUBLIC_API_PREFIX}/data-sources`);
+}
+
+export function getPaperExamples() {
+  return request(`${PUBLIC_API_PREFIX}/examples/paper`, { cache: "no-store" });
 }
 
 export function getCohortEndpoints(cohort) {
-  return request(`/api/cohorts/${cohort}/endpoints`);
+  return request(`${PUBLIC_API_PREFIX}/cohorts/${cohort}/endpoints`);
 }
 
 export function getExpressionScales() {
-  return request("/api/expression-scales");
+  return request(`${PUBLIC_API_PREFIX}/expression-scales`);
 }
 
 export function getFilterOptions(cohort) {
-  return request(`/api/cohorts/${cohort}/filters`);
+  return request(`${PUBLIC_API_PREFIX}/cohorts/${cohort}/filters`);
 }
 
 export function searchGenes(cohort, query) {
   const params = new URLSearchParams({ query, limit: "20" });
-  return request(`/api/cohorts/${cohort}/genes?${params.toString()}`);
+  return request(`${PUBLIC_API_PREFIX}/cohorts/${cohort}/genes?${params.toString()}`);
 }
 
 export function resolveGene(cohort, query) {
   const params = new URLSearchParams({ query });
-  return request(`/api/cohorts/${cohort}/genes/resolve?${params.toString()}`);
+  return request(`${PUBLIC_API_PREFIX}/cohorts/${cohort}/genes/resolve?${params.toString()}`);
 }
 
 export function createAnalysis(payload) {
-  return request("/api/analyses", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  return submitAndWait("/analyses", payload);
 }
 
 export function createCombinedAnalysis(payload) {
-  return request("/api/analyses/combined", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  return submitAndWait("/analyses/combined", payload);
 }
 
 export function createAnalysesBatch(analyses, maxConcurrency = 3) {
-  return request("/api/analyses/batch", {
-    method: "POST",
-    body: JSON.stringify({ analyses, max_concurrency: maxConcurrency }),
-  });
+  return submitAndWait("/analyses/batch", { analyses, max_concurrency: maxConcurrency });
+}
+
+export function createMultiverseAnalysis(payload) {
+  return submitAndWait("/analyses/multiverse", payload);
 }
 
 export function createPanCancerSurvival(payload) {
-  return request("/api/pancancer/survival", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  return submitAndWait("/pancancer/survival", payload);
 }
 
-export function getImmunePanCancerScreen(screenId = "immune_os_immport_all_v1") {
-  return request(`/api/pancancer/immune-screens/${screenId}`);
+export function createExploratorySession(payload) {
+  return submitAndWait("/analyses/sessions/export", payload);
+}
+
+export function getImmunePanCancerScreen(screenId = "immune_os_immport_all_v2_1") {
+  return request(`${PUBLIC_API_PREFIX}/pancancer/immune-screens/${screenId}`);
 }

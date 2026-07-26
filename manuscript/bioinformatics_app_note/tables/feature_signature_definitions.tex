@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\caption{Exact feature definitions used in the main and diagnostic workflow benchmarks.}
+\label{tab:feature-signature-definitions}
+\begin{tabularx}{\linewidth}{P{1.1cm}P{2.65cm}P{1.45cm}YY}
+\toprule
+Role & Workflow & Score & Construction & Genes \\
+\midrule
+Main & ACC BUB1B-PINK1 contrast & weighted & (BUB1B - PINK1)/2 on log2(TPM + 1) expression; continuous Cox primary and median split sensitivity. & BUB1B, PINK1 (w=-1) \\
+Main & UVM BAP1 marker & single & Gene-level BAP1 expression; median split for crossed grouping. & BAP1 \\
+Main & UVM PRAME marker & single & Gene-level PRAME expression; median split for crossed grouping. & PRAME \\
+Main & BIRC5 pan-cancer primary + ordinal sensitivity & single & Primary continuous Cox; parallel ordinal stage/grade sensitivity. & BIRC5 \\
+Diag. & KIRC compact hypoxia signature & zscore & Equal-weight mean of per-gene z-scores. & CA9, VEGFA, SLC2A1, LDHA, PGK1 \\
+Diag. & SKCM effector signature & zscore & Mean z-score; crossed after median splits. & CD8A, GZMB, PRF1, IFNG, CXCL9, CXCL10 \\
+Diag. & SKCM exhaustion signature & zscore & Mean z-score; crossed after median splits. & PDCD1, CTLA4, LAG3, HAVCR2, TIGIT \\
+Diag. & CA9 pan-cancer primary + ordinal sensitivity & single & Primary continuous Cox; parallel ordinal stage/grade sensitivity. & CA9 \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{table}

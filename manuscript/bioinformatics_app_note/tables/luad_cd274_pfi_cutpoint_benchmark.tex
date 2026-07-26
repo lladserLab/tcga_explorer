@@ -1,16 +1,15 @@
 \begin{table}[t]
 \centering
-\caption{TCGA-LUAD CD274 PFI cutpoint robustness benchmark.}
+\caption{TCGA-LUAD CD274 PFI cutpoint-sensitivity benchmark.}
 \label{tab:luad-cd274-pfi-cutpoints}
 \begin{tabular}{lrrrrrrl}
 \toprule
-Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
 \midrule
-Maxstat & 505 & 208 & 0.110 & 0.023 & 0.042 & -294 & Fails BH \\
-Median & 505 & 208 & 0.695 & 0.695 & 0.454 & 84 & Fails BH \\
-Upper Q & 505 & 208 & 0.454 & 0.228 & 0.678 & -184 & Fails BH \\
-Outer Q & 254 & 117 & 0.695 & 0.580 & 0.904 & -124 & Fails BH \\
-75th pct. & 505 & 208 & 0.454 & 0.273 & 0.786 & -171 & Fails BH \\
+Maxstat & 505 & 208 & 1.000 & 0.036 & 0.813 & -60 & Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 505 & 208 & 1.000 & 0.852 & 0.907 & -15 & No model-diagnostic caution recorded \\
+Upper Q & 505 & 208 & 0.911 & 0.289 & 0.805 & -33 & No model-diagnostic caution recorded \\
+Outer Q & 254 & 117 & 1.000 & 0.692 & 0.604 & -19 & Middle 50\% excluded \\
 \bottomrule
 \end{tabular}
 \end{table}

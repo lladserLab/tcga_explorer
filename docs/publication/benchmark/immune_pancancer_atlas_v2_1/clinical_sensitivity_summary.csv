@@ -1,0 +1,17 @@
+metric,value
+total_primary_gene_cohort_pairs,96779
+evaluable,72633
+not_evaluable,24146
+fdr_significant,2379
+primary_fdr_not_evaluable,2421
+retained,2212
+attenuated,7432
+emerged,165
+direction_reversed_all,13738
+primary_fdr_direction_reversed,169
+both_fdr_direction_reversed,0
+direction_consistent,49086
+ph_flagged,19055
+fdr_significant_ph_flagged,899
+selected_model_counts,"{""grade_adjusted"": 6085, ""not_evaluable"": 24146, ""stage_adjusted"": 36222, ""stage_grade_adjusted"": 30326}"
+comparison_counts,"{""attenuated"": 7432, ""direction_consistent"": 49086, ""emerged"": 165, ""not_evaluable"": 24146, ""retained"": 2212, ""reversed"": 13738}"

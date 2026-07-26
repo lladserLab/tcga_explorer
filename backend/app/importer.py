@@ -18,6 +18,12 @@ ENDPOINT_COLUMNS = {
     "DFI": ("DFI", "DFI.time"),
     "DSS": ("DSS", "DSS.time"),
 }
+COMPETING_ENDPOINT_COLUMNS = {
+    "PFI": ("PFI.cr", "PFI.time.cr"),
+    "DFI": ("DFI.cr", "DFI.time.cr"),
+    "DSS": ("DSS_cr", "DSS.time.cr"),
+}
+TCGA_CDR_COMPETING_RISK_SCHEMA_VERSION = "tcga-cdr-competing-risk-v1"
 
 
 def clean(value: Any) -> str | None:
@@ -43,7 +49,12 @@ def parse_int(value: Any) -> int | None:
 
 
 def normalize_stage(row: dict[str, str]) -> str | None:
-    stage = clean(row.get("ajcc_pathologic_stage")) or clean(row.get("paper_pathologic_stage")) or clean(row.get("figo_stage"))
+    stage = (
+        clean(row.get("ajcc_pathologic_stage"))
+        or clean(row.get("ensat_pathologic_stage"))
+        or clean(row.get("paper_pathologic_stage"))
+        or clean(row.get("figo_stage"))
+    )
     if stage is None:
         return None
     return stage.replace("_", " ")
@@ -109,6 +120,7 @@ def import_cohorts_and_samples(db: Session, tcga_data_dir: Path, force: bool = F
     if existing and not force:
         if source and source.source_file_modified_at == summary_modified:
             register_tcga_rna_source(db, tcga_data_dir)
+            backfill_sample_stage_from_col_data(db, tcga_data_dir)
             backfill_sample_grade_from_col_data(db, tcga_data_dir)
             return {"cohorts": int(existing), "samples": int(db.scalar(select(func.count()).select_from(Sample)) or 0)}
         db.execute(delete(Sample))
@@ -181,12 +193,16 @@ def import_tcga_cdr(db: Session, cdr_path: Path, force: bool = False) -> dict[st
         label="TCGA Clinical Data Resource",
         kind="clinical_endpoint",
     )
+    previous_metadata = source.metadata_json or {}
     source.source_url = TCGA_CDR_URL
     source.source_path = str(cdr_path)
     source.metadata_json = {
         "description": "TCGA-CDR standardized clinical outcome endpoint resource.",
         "citation": "Liu et al., Cell 2018, doi:10.1016/j.cell.2018.02.052",
         "supported_endpoints": sorted(ENDPOINT_COLUMNS),
+        "competing_risk_endpoints": sorted(COMPETING_ENDPOINT_COLUMNS),
+        "competing_risk_schema_version": TCGA_CDR_COMPETING_RISK_SCHEMA_VERSION,
+        "competing_risk_source_sheet": "ExtraEndpoints",
     }
 
     if not cdr_path.exists():
@@ -213,11 +229,22 @@ def import_tcga_cdr(db: Session, cdr_path: Path, force: bool = False) -> dict[st
         )
         or 0
     )
-    if existing and not force and source.source_file_modified_at == modified_at and source.status in {"ready", "ready_cached"}:
+    competing_schema_current = (
+        previous_metadata.get("competing_risk_schema_version")
+        == TCGA_CDR_COMPETING_RISK_SCHEMA_VERSION
+    )
+    if (
+        existing
+        and not force
+        and competing_schema_current
+        and source.source_file_modified_at == modified_at
+        and source.status in {"ready", "ready_cached"}
+    ):
         return {"status": source.status, "endpoints": existing}
 
     rows = read_tcga_cdr_rows(cdr_path)
-    endpoint_rows = tcga_cdr_endpoint_rows(rows)
+    competing_rows = read_tcga_cdr_rows(cdr_path, sheet_name="ExtraEndpoints")
+    endpoint_rows = tcga_cdr_endpoint_rows(rows, competing_rows=competing_rows)
     db.execute(delete(ClinicalEndpoint).where(ClinicalEndpoint.source_id == TCGA_CDR_SOURCE_ID))
     db.flush()
     if endpoint_rows:
@@ -228,7 +255,12 @@ def import_tcga_cdr(db: Session, cdr_path: Path, force: bool = False) -> dict[st
     source.metadata_json = {
         **(source.metadata_json or {}),
         "row_count": len(rows),
+        "competing_risk_row_count": len(competing_rows),
         "endpoint_record_count": len(endpoint_rows),
+        "competing_risk_record_count": sum(
+            (row.raw_metadata or {}).get("competing_risk_status") in {0, 1, 2}
+            for row in endpoint_rows
+        ),
     }
     db.commit()
     return {"status": source.status, "endpoints": len(endpoint_rows)}
@@ -246,7 +278,10 @@ def get_or_create_data_source(db: Session, source_id: str, label: str, kind: str
     return source
 
 
-def read_tcga_cdr_rows(path: Path) -> list[dict[str, Any]]:
+def read_tcga_cdr_rows(
+    path: Path,
+    sheet_name: str | None = None,
+) -> list[dict[str, Any]]:
     suffix = path.suffix.lower()
     if suffix == ".xlsx":
         try:
@@ -254,7 +289,10 @@ def read_tcga_cdr_rows(path: Path) -> list[dict[str, Any]]:
         except ImportError as exc:  # pragma: no cover - dependency is installed in Docker
             raise RuntimeError("openpyxl is required to read TCGA-CDR XLSX files.") from exc
         workbook = load_workbook(path, read_only=True, data_only=True)
-        sheet = workbook[workbook.sheetnames[0]]
+        selected_sheet = sheet_name or workbook.sheetnames[0]
+        if selected_sheet not in workbook.sheetnames:
+            return []
+        sheet = workbook[selected_sheet]
         rows = sheet.iter_rows(values_only=True)
         headers = [str(value).strip() if value is not None else "" for value in next(rows)]
         return [
@@ -268,9 +306,27 @@ def read_tcga_cdr_rows(path: Path) -> list[dict[str, Any]]:
         return list(csv.DictReader(handle, delimiter=delimiter))
 
 
-def tcga_cdr_endpoint_rows(rows: list[dict[str, Any]]) -> list[ClinicalEndpoint]:
+def tcga_cdr_endpoint_rows(
+    rows: list[dict[str, Any]],
+    *,
+    competing_rows: list[dict[str, Any]] | None = None,
+) -> list[ClinicalEndpoint]:
     endpoints: list[ClinicalEndpoint] = []
     seen: set[tuple[str, str]] = set()
+    competing_by_patient = {
+        patient_id: normalized
+        for row in (competing_rows or [])
+        if (
+            normalized := {str(key).strip(): value for key, value in row.items()}
+        )
+        and (
+            patient_id := clean(
+                normalized.get("bcr_patient_barcode")
+                or normalized.get("patient_id")
+                or normalized.get("submitter_id")
+            )
+        )
+    }
     for row in rows:
         normalized = {str(key).strip(): value for key, value in row.items()}
         patient_id = clean(
@@ -290,6 +346,45 @@ def tcga_cdr_endpoint_rows(rows: list[dict[str, Any]]) -> list[ClinicalEndpoint]
             if key in seen:
                 continue
             seen.add(key)
+            raw_metadata = {
+                "type": clean(normalized.get("type")),
+                "source_event_column": event_col,
+                "source_time_column": time_col,
+            }
+            competing_columns = COMPETING_ENDPOINT_COLUMNS.get(endpoint)
+            competing_row = competing_by_patient.get(patient_id)
+            if competing_columns and competing_row:
+                status_col, competing_time_col = competing_columns
+                competing_status = parse_int(competing_row.get(status_col))
+                competing_time = parse_float(competing_row.get(competing_time_col))
+                status_matches_event = (
+                    competing_status == 1
+                    if event == 1
+                    else competing_status in {0, 2}
+                )
+                time_matches = (
+                    competing_time is not None
+                    and abs(competing_time - time_days) <= 1e-8
+                )
+                if (
+                    competing_status in {0, 1, 2}
+                    and status_matches_event
+                    and time_matches
+                ):
+                    raw_metadata.update(
+                        {
+                            "competing_risk_status": competing_status,
+                            "competing_event": int(competing_status == 2),
+                            "source_competing_status_column": status_col,
+                            "source_competing_time_column": competing_time_col,
+                            "source_competing_sheet": "ExtraEndpoints",
+                            "competing_risk_coding": {
+                                "0": "censored",
+                                "1": "event_of_interest",
+                                "2": "competing_death",
+                            },
+                        }
+                    )
             endpoints.append(
                 ClinicalEndpoint(
                     source_id=TCGA_CDR_SOURCE_ID,
@@ -298,11 +393,7 @@ def tcga_cdr_endpoint_rows(rows: list[dict[str, Any]]) -> list[ClinicalEndpoint]
                     endpoint=endpoint,
                     time_days=time_days,
                     event=event,
-                    raw_metadata={
-                        "type": clean(normalized.get("type")),
-                        "source_event_column": event_col,
-                        "source_time_column": time_col,
-                    },
+                    raw_metadata=raw_metadata,
                 )
             )
     return endpoints
@@ -326,6 +417,19 @@ def modified_datetime(path: Path) -> datetime | None:
     return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc).replace(tzinfo=None)
 
 
+def clinical_rows_by_patient(cohort_dir: Path) -> dict[str, dict[str, str]]:
+    clinical_path = cohort_dir / "clinical_data.tsv"
+    if not clinical_path.exists():
+        return {}
+    rows: dict[str, dict[str, str]] = {}
+    with clinical_path.open(newline="", encoding="utf-8", errors="replace") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            patient_id = clean(row.get("submitter_id")) or clean(row.get("bcr_patient_barcode"))
+            if patient_id:
+                rows[patient_id] = row
+    return rows
+
+
 def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> int:
     col_data_path = cohort_dir / "col_data.tsv"
     if not col_data_path.exists():
@@ -333,6 +437,7 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
 
     count = 0
     batch: list[Sample] = []
+    clinical_rows = clinical_rows_by_patient(cohort_dir)
     with col_data_path.open(newline="", encoding="utf-8", errors="replace") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
         for row in reader:
@@ -340,15 +445,18 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
             patient_id = clean(row.get("patient_id")) or clean(row.get("patient")) or (barcode[:12] if barcode else None)
             if barcode is None or patient_id is None:
                 continue
+            clinical_row = clinical_rows.get(patient_id, {})
             os_time_days, os_event = derive_os(row)
             age = parse_float(row.get("age_at_index"))
+            stage = normalize_stage(row) or normalize_stage(clinical_row)
+            grade = normalize_grade(row) or normalize_grade(clinical_row)
             sample = Sample(
                 cohort=cohort_id,
                 patient_id=patient_id,
                 barcode=barcode,
                 sample_type=clean(row.get("sample_type")),
-                stage=normalize_stage(row),
-                grade=normalize_grade(row),
+                stage=stage,
+                grade=grade,
                 gender=clean(row.get("gender")) or clean(row.get("sex_at_birth")),
                 race=clean(row.get("race")),
                 age_at_index=age,
@@ -357,7 +465,7 @@ def import_samples_for_cohort(db: Session, cohort_id: str, cohort_dir: Path) -> 
                 os_event=os_event,
                 raw_metadata={
                     "primary_diagnosis": clean(row.get("primary_diagnosis")),
-                    "tumor_grade": normalize_grade(row),
+                    "tumor_grade": grade,
                     "paper_BRCA_Subtype_PAM50": clean(row.get("paper_BRCA_Subtype_PAM50")),
                     "progression_or_recurrence": clean(row.get("progression_or_recurrence")),
                 },
@@ -381,14 +489,16 @@ def backfill_sample_grade_from_col_data(db: Session, tcga_data_dir: Path) -> int
         col_data_path = cohort_dir / "col_data.tsv"
         if not col_data_path.exists():
             continue
+        clinical_rows = clinical_rows_by_patient(cohort_dir)
         with col_data_path.open(newline="", encoding="utf-8", errors="replace") as handle:
             reader = csv.DictReader(handle, delimiter="\t")
             for row in reader:
-                grade = normalize_grade(row)
-                if grade is None:
-                    continue
                 barcode = clean(row.get("")) or clean(row.get("barcode"))
                 if barcode is None:
+                    continue
+                patient_id = clean(row.get("patient_id")) or clean(row.get("patient")) or barcode[:12]
+                grade = normalize_grade(row) or normalize_grade(clinical_rows.get(patient_id, {}))
+                if grade is None:
                     continue
                 sample = db.scalar(
                     select(Sample).where(Sample.cohort == cohort_dir.name).where(Sample.barcode == barcode)
@@ -399,6 +509,37 @@ def backfill_sample_grade_from_col_data(db: Session, tcga_data_dir: Path) -> int
                 metadata["tumor_grade"] = grade
                 sample.grade = grade
                 sample.raw_metadata = metadata
+                updated += 1
+                if updated % 1000 == 0:
+                    db.flush()
+    if updated:
+        db.commit()
+    return updated
+
+
+def backfill_sample_stage_from_col_data(db: Session, tcga_data_dir: Path) -> int:
+    updated = 0
+    for cohort_dir in sorted(tcga_data_dir.glob("TCGA-*")):
+        col_data_path = cohort_dir / "col_data.tsv"
+        if not col_data_path.exists():
+            continue
+        clinical_rows = clinical_rows_by_patient(cohort_dir)
+        with col_data_path.open(newline="", encoding="utf-8", errors="replace") as handle:
+            reader = csv.DictReader(handle, delimiter="\t")
+            for row in reader:
+                barcode = clean(row.get("")) or clean(row.get("barcode"))
+                if barcode is None:
+                    continue
+                patient_id = clean(row.get("patient_id")) or clean(row.get("patient")) or barcode[:12]
+                stage = normalize_stage(row) or normalize_stage(clinical_rows.get(patient_id, {}))
+                if stage is None:
+                    continue
+                sample = db.scalar(
+                    select(Sample).where(Sample.cohort == cohort_dir.name).where(Sample.barcode == barcode)
+                )
+                if sample is None or sample.stage == stage:
+                    continue
+                sample.stage = stage
                 updated += 1
                 if updated % 1000 == 0:
                     db.flush()

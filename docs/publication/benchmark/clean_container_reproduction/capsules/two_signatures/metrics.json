@@ -1,0 +1,768 @@
+{
+  "n_patients": 80,
+  "n_events": 21,
+  "endpoint": "DSS",
+  "endpoint_label": "Disease-specific survival",
+  "time_unit": "months",
+  "time_axis_label": "Time (months)",
+  "expression_scale": "log2_tpm",
+  "expression_scale_label": "log2(TPM + 1)",
+  "logrank_p_value": 0.002219601163402479,
+  "group_counts": {
+    "Low_Low": 19,
+    "Low_High": 21,
+    "High_Low": 21,
+    "High_High": 19
+  },
+  "event_counts": {
+    "Low_Low": 7,
+    "Low_High": 10,
+    "High_Low": 1,
+    "High_High": 3
+  },
+  "median_survival_days": {
+    "Low_Low": 1314,
+    "Low_High": 1113,
+    "High_Low": null,
+    "High_High": null
+  },
+  "rmst": {
+    "status": "skipped",
+    "reason": "RMST is reported only for two expression groups."
+  },
+  "clinical_adjustment": {
+    "status": "requested",
+    "requested_covariates": [
+      "age_at_index"
+    ],
+    "label": "Age",
+    "grouped_model": "user_adjusted",
+    "continuous_model": "continuous_user_adjusted",
+    "interaction_model": "signature_interaction_user_adjusted"
+  },
+  "continuous_analysis": {
+    "status": "skipped",
+    "reason": "An unstratified expression-complete population was not supplied."
+  },
+  "cox_models": [],
+  "signature_interaction_cox_models": [
+    {
+      "model": "signature_interaction",
+      "label": "Signature interaction",
+      "covariates": [],
+      "covariate_encoding": [],
+      "status": "completed",
+      "ties": "efron",
+      "n_patients": 80,
+      "n_events": 21,
+      "information_diagnostics": {
+        "parameter_count": 3,
+        "n_events": 21,
+        "events_per_parameter": 7,
+        "caution_threshold": 10,
+        "severe_threshold": 5,
+        "status": "caution",
+        "low_information": true,
+        "severe_low_information": false,
+        "standard_fit_instability": false,
+        "extreme_marker_estimate": false,
+        "penalized_sensitivity_recommended": true,
+        "trigger_reasons": [
+          "7.00 events per fitted parameter is below the prespecified threshold of 10."
+        ]
+      },
+      "penalized_sensitivity": {
+        "status": "completed",
+        "method": "Firth penalized partial likelihood",
+        "package": "coxphf",
+        "package_version": "1.13.4",
+        "confidence_interval_method": "profile penalized likelihood",
+        "p_value_method": "penalized likelihood ratio",
+        "ties": "breslow",
+        "penalty": 0.5,
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "n_patients": 80,
+        "n_events": 21,
+        "parameter_count": 3,
+        "events_per_parameter": 7,
+        "log_hr": 0.11316721762311467,
+        "hazard_ratio": 1.1198191707934744,
+        "hr_conf_low": 0.7682602585397235,
+        "hr_conf_high": 1.5690037671094348,
+        "p_value": 0.5379304771828,
+        "iterations": 7,
+        "trigger_reasons": [
+          "7.00 events per fitted parameter is below the prespecified threshold of 10."
+        ],
+        "warnings": []
+      },
+      "score_scale": "within-analysis z-score",
+      "interaction_term": {
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "log_hr": 0.08780865854416954,
+        "standard_error": 0.18608887142118996,
+        "hazard_ratio": 1.0917791994195944,
+        "hr_conf_low": 0.758116032888938,
+        "hr_conf_high": 1.5722946997216622,
+        "p_value": 0.6370237913969757
+      },
+      "terms": [
+        {
+          "term": "score_a_z",
+          "label": "Signature A score",
+          "log_hr": -0.6789780310822147,
+          "standard_error": 0.1966496971725353,
+          "hazard_ratio": 0.5071350038357347,
+          "hr_conf_low": 0.3449332513176065,
+          "hr_conf_high": 0.7456106685367364,
+          "p_value": 0.0005549470643081483
+        },
+        {
+          "term": "score_b_z",
+          "label": "Signature B score",
+          "log_hr": 0.23768390303444942,
+          "standard_error": 0.24249295666585466,
+          "hazard_ratio": 1.2683082210752081,
+          "hr_conf_low": 0.788523114462313,
+          "hr_conf_high": 2.040023575902214,
+          "p_value": 0.3270030617711046
+        },
+        {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.08780865854416954,
+          "standard_error": 0.18608887142118996,
+          "hazard_ratio": 1.0917791994195944,
+          "hr_conf_low": 0.758116032888938,
+          "hr_conf_high": 1.5722946997216622,
+          "p_value": 0.6370237913969757
+        }
+      ],
+      "ph_global_p_value": 0.4311057110034102,
+      "warnings": [
+        "Low-information Cox model: 7.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
+      ]
+    },
+    {
+      "model": "signature_interaction_stage_adjusted",
+      "label": "Signature interaction adjusted for ordinal stage",
+      "covariates": [
+        "stage_ordinal"
+      ],
+      "covariate_encoding": {
+        "stage_ordinal": {
+          "source": "stage",
+          "encoded_name": "stage_ordinal",
+          "type": "ordinal_numeric",
+          "unit": "one major-stage increase",
+          "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+          "mapped_patients": 79,
+          "observed_scores": [
+            2,
+            3,
+            4
+          ],
+          "unmapped_values": []
+        }
+      },
+      "status": "completed",
+      "ties": "efron",
+      "n_patients": 79,
+      "n_events": 20,
+      "information_diagnostics": {
+        "parameter_count": 4,
+        "n_events": 20,
+        "events_per_parameter": 5,
+        "caution_threshold": 10,
+        "severe_threshold": 5,
+        "status": "caution",
+        "low_information": true,
+        "severe_low_information": false,
+        "standard_fit_instability": false,
+        "extreme_marker_estimate": false,
+        "penalized_sensitivity_recommended": true,
+        "trigger_reasons": [
+          "5.00 events per fitted parameter is below the prespecified threshold of 10."
+        ]
+      },
+      "penalized_sensitivity": {
+        "status": "completed",
+        "method": "Firth penalized partial likelihood",
+        "package": "coxphf",
+        "package_version": "1.13.4",
+        "confidence_interval_method": "profile penalized likelihood",
+        "p_value_method": "penalized likelihood ratio",
+        "ties": "breslow",
+        "penalty": 0.5,
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "n_patients": 79,
+        "n_events": 20,
+        "parameter_count": 4,
+        "events_per_parameter": 5,
+        "log_hr": 0.07580773080784829,
+        "hazard_ratio": 1.0787551428367539,
+        "hr_conf_low": 0.7177364053718659,
+        "hr_conf_high": 1.5452593523694342,
+        "p_value": 0.6982672980730551,
+        "iterations": 7,
+        "trigger_reasons": [
+          "5.00 events per fitted parameter is below the prespecified threshold of 10."
+        ],
+        "warnings": []
+      },
+      "score_scale": "within-analysis z-score",
+      "interaction_term": {
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "log_hr": 0.04847753423640321,
+        "standard_error": 0.20100508847187393,
+        "hazard_ratio": 1.0496717898771473,
+        "hr_conf_low": 0.7078768083896273,
+        "hr_conf_high": 1.5565008676727816,
+        "p_value": 0.8094189771482455
+      },
+      "terms": [
+        {
+          "term": "score_a_z",
+          "label": "Signature A score",
+          "log_hr": -0.6073889996685073,
+          "standard_error": 0.20382710312171273,
+          "hazard_ratio": 0.544771412085882,
+          "hr_conf_low": 0.3653561013538263,
+          "hr_conf_high": 0.8122921454612184,
+          "p_value": 0.0028832118497434597
+        },
+        {
+          "term": "score_b_z",
+          "label": "Signature B score",
+          "log_hr": 0.32116579880783674,
+          "standard_error": 0.2671364595397789,
+          "hazard_ratio": 1.3787341544237481,
+          "hr_conf_low": 0.8167583208082064,
+          "hr_conf_high": 2.3273810870926464,
+          "p_value": 0.22926524667009118
+        },
+        {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.04847753423640321,
+          "standard_error": 0.20100508847187393,
+          "hazard_ratio": 1.0496717898771473,
+          "hr_conf_low": 0.7078768083896273,
+          "hr_conf_high": 1.5565008676727816,
+          "p_value": 0.8094189771482455
+        }
+      ],
+      "ph_global_p_value": 0.027660110650787384,
+      "warnings": [
+        "Low-information Cox model: 5.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.",
+        "Global proportional hazards test p < 0.05; inspect time-varying effects."
+      ]
+    },
+    {
+      "model": "signature_interaction_grade_adjusted",
+      "label": "Signature interaction adjusted for ordinal grade",
+      "covariates": [
+        "grade_ordinal"
+      ],
+      "covariate_encoding": {
+        "grade_ordinal": {
+          "source": "grade",
+          "encoded_name": "grade_ordinal",
+          "type": "ordinal_numeric",
+          "unit": "one grade increase",
+          "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+          "mapped_patients": 0,
+          "observed_scores": [],
+          "unmapped_values": []
+        }
+      },
+      "status": "skipped",
+      "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+      "n_patients": 0,
+      "n_events": 0
+    },
+    {
+      "model": "signature_interaction_stage_grade_adjusted",
+      "label": "Signature interaction adjusted for ordinal stage and grade",
+      "covariates": [
+        "stage_ordinal",
+        "grade_ordinal"
+      ],
+      "covariate_encoding": {
+        "stage_ordinal": {
+          "source": "stage",
+          "encoded_name": "stage_ordinal",
+          "type": "ordinal_numeric",
+          "unit": "one major-stage increase",
+          "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+          "mapped_patients": 79,
+          "observed_scores": [
+            2,
+            3,
+            4
+          ],
+          "unmapped_values": []
+        },
+        "grade_ordinal": {
+          "source": "grade",
+          "encoded_name": "grade_ordinal",
+          "type": "ordinal_numeric",
+          "unit": "one grade increase",
+          "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+          "mapped_patients": 0,
+          "observed_scores": [],
+          "unmapped_values": []
+        }
+      },
+      "status": "skipped",
+      "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+      "n_patients": 0,
+      "n_events": 0
+    },
+    {
+      "model": "signature_interaction_user_adjusted",
+      "label": "Signature interaction user-adjusted for Age",
+      "covariates": [
+        "age_at_index_per_10y"
+      ],
+      "covariate_encoding": {
+        "age_at_index_per_10y": {
+          "source": "age_at_index",
+          "encoded_name": "age_at_index_per_10y",
+          "type": "continuous_numeric",
+          "unit": "10-year increase",
+          "coding": "Age at index is modeled continuously after division by 10; the hazard ratio is per 10-year increase.",
+          "mapped_patients": 80,
+          "observed_range_years": [
+            22,
+            86
+          ]
+        }
+      },
+      "status": "completed",
+      "ties": "efron",
+      "n_patients": 80,
+      "n_events": 21,
+      "information_diagnostics": {
+        "parameter_count": 4,
+        "n_events": 21,
+        "events_per_parameter": 5.25,
+        "caution_threshold": 10,
+        "severe_threshold": 5,
+        "status": "caution",
+        "low_information": true,
+        "severe_low_information": false,
+        "standard_fit_instability": false,
+        "extreme_marker_estimate": false,
+        "penalized_sensitivity_recommended": true,
+        "trigger_reasons": [
+          "5.25 events per fitted parameter is below the prespecified threshold of 10."
+        ]
+      },
+      "penalized_sensitivity": {
+        "status": "completed",
+        "method": "Firth penalized partial likelihood",
+        "package": "coxphf",
+        "package_version": "1.13.4",
+        "confidence_interval_method": "profile penalized likelihood",
+        "p_value_method": "penalized likelihood ratio",
+        "ties": "breslow",
+        "penalty": 0.5,
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "n_patients": 80,
+        "n_events": 21,
+        "parameter_count": 4,
+        "events_per_parameter": 5.25,
+        "log_hr": 0.3206120742451635,
+        "hazard_ratio": 1.3779709267854936,
+        "hr_conf_low": 0.9098210928924755,
+        "hr_conf_high": 2.0350364987077807,
+        "p_value": 0.12631843500703743,
+        "iterations": 8,
+        "trigger_reasons": [
+          "5.25 events per fitted parameter is below the prespecified threshold of 10."
+        ],
+        "warnings": []
+      },
+      "score_scale": "within-analysis z-score",
+      "interaction_term": {
+        "term": "score_a_z:score_b_z",
+        "label": "Signature A x Signature B",
+        "log_hr": 0.3026885879550577,
+        "standard_error": 0.20944723933912354,
+        "hazard_ratio": 1.3534929048130193,
+        "hr_conf_low": 0.8977887729225933,
+        "hr_conf_high": 2.040505627415697,
+        "p_value": 0.14840783322680862
+      },
+      "terms": [
+        {
+          "term": "score_a_z",
+          "label": "Signature A score",
+          "log_hr": -0.889059341793074,
+          "standard_error": 0.24293728957608102,
+          "hazard_ratio": 0.4110422211952528,
+          "hr_conf_low": 0.2553276440710491,
+          "hr_conf_high": 0.6617211709285676,
+          "p_value": 0.00025258475830980046
+        },
+        {
+          "term": "score_b_z",
+          "label": "Signature B score",
+          "log_hr": 0.2706917120545163,
+          "standard_error": 0.233803342853365,
+          "hazard_ratio": 1.3108708823935191,
+          "hr_conf_low": 0.8289840041381464,
+          "hr_conf_high": 2.0728777174581072,
+          "p_value": 0.24695578641577315
+        },
+        {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.3026885879550577,
+          "standard_error": 0.20944723933912354,
+          "hazard_ratio": 1.3534929048130193,
+          "hr_conf_low": 0.8977887729225933,
+          "hr_conf_high": 2.040505627415697,
+          "p_value": 0.14840783322680862
+        }
+      ],
+      "ph_global_p_value": 0.18173200016193894,
+      "warnings": [
+        "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
+      ]
+    }
+  ],
+  "cutpoint_details": {
+    "method": "median",
+    "combination": "signature_a_x_signature_b",
+    "signature_a_levels": "Low/High",
+    "signature_b_levels": "Low/High",
+    "signature_a_threshold": 6.000036716461182,
+    "signature_b_threshold": 2.740936279296875
+  },
+  "warnings": [],
+  "software_versions": {
+    "R": "R version 4.4.2 (2024-10-31)",
+    "jsonlite": "2.0.0",
+    "survival": "3.8.9",
+    "survminer": "0.5.2",
+    "maxstat": "0.7.26",
+    "ggplot2": "4.0.3",
+    "svglite": "2.2.2",
+    "survRM2": "1.0.4",
+    "coxphf": "1.13.4"
+  },
+  "sample_selection": {
+    "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
+    "rule_description": "one expression-complete eligible RNA-seq sample per TCGA participant; clinical filters and endpoint completeness are applied first, samples lacking the requested gene or complete signature score are removed second, and biospecimen priority is applied last. Primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority expression-complete sample remains; ties are resolved by RNA analyte/portion metadata and barcode.",
+    "selection_order": [
+      "user_filters",
+      "endpoint_completeness",
+      "requested_expression_or_score_completeness",
+      "biospecimen_priority"
+    ],
+    "priority_order": [
+      "Primary tumor / primary blood-derived cancer",
+      "Recurrent tumor",
+      "Additional new primary",
+      "Metastatic / additional metastatic",
+      "Human tumor original cells",
+      "Normal tissue / normal blood",
+      "Control, cell line, xenograft or unknown"
+    ],
+    "endpoint": "DSS",
+    "endpoint_label": "Disease-specific survival",
+    "endpoint_source": "tcga_cdr",
+    "input_samples": 80,
+    "after_user_filters": 80,
+    "complete_endpoint_samples": 80,
+    "complete_os_samples": 80,
+    "missing_endpoint_removed": 0,
+    "missing_os_removed": 0,
+    "candidate_patients": 80,
+    "sample_type_filter_applied": false,
+    "expression_requirement_applied": true,
+    "expression_complete_samples": 80,
+    "expression_complete_patients": 80,
+    "missing_expression_samples_removed": 0,
+    "missing_expression_patients_removed": 0,
+    "expression_priority_fallbacks": 0,
+    "expression_priority_fallback_barcodes": [],
+    "duplicate_samples_removed": 0,
+    "retained_patients": 80,
+    "retained_sample_types": {
+      "Primary Tumor": 80
+    },
+    "removed_duplicate_sample_types": {}
+  },
+  "endpoint_source": "tcga_cdr",
+  "endpoint_qc": {
+    "value": "DSS",
+    "label": "Disease-specific survival",
+    "available": true,
+    "source": "tcga_cdr",
+    "patients": 80,
+    "events": 21,
+    "reason": "80 linked patients and 21 events from TCGA-CDR."
+  },
+  "signature": {
+    "method": "combined",
+    "label": "BAP1 x PRAME",
+    "signatures": [
+      {
+        "method": "single",
+        "label": "BAP1",
+        "genes": [
+          {
+            "query": "BAP1",
+            "resolved_symbol": "BAP1",
+            "weight": 1.0,
+            "status": "exact"
+          }
+        ],
+        "scoring_population": {
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "eligible_barcode_count": 80,
+          "complete_case_barcode_count": 80,
+          "score_values_sha256": "cc0fe7be225a508b148f5109c1611d68bcdbe81817c66ac6f33246dc66900ef4",
+          "component_value_hashes": {
+            "BAP1": "daf944281599cf67084a998217ad45b23f18881e4614078d5d30a639ebebd367"
+          }
+        },
+        "name": "BAP1"
+      },
+      {
+        "method": "single",
+        "label": "PRAME",
+        "genes": [
+          {
+            "query": "PRAME",
+            "resolved_symbol": "PRAME",
+            "weight": 1.0,
+            "status": "exact"
+          }
+        ],
+        "scoring_population": {
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "eligible_barcode_count": 80,
+          "complete_case_barcode_count": 80,
+          "score_values_sha256": "4160da6a4f3a302d56a7e1d8fee0564ac9e0db11c5a0b3e1ecfe5a13b04bd5ec",
+          "component_value_hashes": {
+            "PRAME": "7f6aa378c2e43319ba19ee8fa61ed54f2f416af3ae1ede1654f74d2532d272c3"
+          }
+        },
+        "name": "PRAME"
+      }
+    ]
+  },
+  "combined_signature": {
+    "method": "median",
+    "label": "BAP1 x PRAME",
+    "signature_a": {
+      "method": "single",
+      "label": "BAP1",
+      "genes": [
+        {
+          "query": "BAP1",
+          "resolved_symbol": "BAP1",
+          "weight": 1.0,
+          "status": "exact"
+        }
+      ],
+      "scoring_population": {
+        "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+        "eligible_barcode_count": 80,
+        "complete_case_barcode_count": 80,
+        "score_values_sha256": "cc0fe7be225a508b148f5109c1611d68bcdbe81817c66ac6f33246dc66900ef4",
+        "component_value_hashes": {
+          "BAP1": "daf944281599cf67084a998217ad45b23f18881e4614078d5d30a639ebebd367"
+        }
+      },
+      "name": "BAP1"
+    },
+    "signature_b": {
+      "method": "single",
+      "label": "PRAME",
+      "genes": [
+        {
+          "query": "PRAME",
+          "resolved_symbol": "PRAME",
+          "weight": 1.0,
+          "status": "exact"
+        }
+      ],
+      "scoring_population": {
+        "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+        "eligible_barcode_count": 80,
+        "complete_case_barcode_count": 80,
+        "score_values_sha256": "4160da6a4f3a302d56a7e1d8fee0564ac9e0db11c5a0b3e1ecfe5a13b04bd5ec",
+        "component_value_hashes": {
+          "PRAME": "7f6aa378c2e43319ba19ee8fa61ed54f2f416af3ae1ede1654f74d2532d272c3"
+        }
+      },
+      "name": "PRAME"
+    },
+    "sample_overlap": 80,
+    "group_levels": [
+      "Low_Low",
+      "Low_High",
+      "High_Low",
+      "High_High"
+    ]
+  },
+  "expression_distribution_a": {
+    "n": 80,
+    "min": 2.5250415802001953,
+    "q1": 4.749674558639526,
+    "median": 6.000036716461182,
+    "q3": 6.73908793926239,
+    "max": 7.379608154296875,
+    "bins": [
+      {
+        "label": "2.53-3.01",
+        "count": 3
+      },
+      {
+        "label": "3.01-3.50",
+        "count": 5
+      },
+      {
+        "label": "3.50-3.98",
+        "count": 5
+      },
+      {
+        "label": "3.98-4.47",
+        "count": 4
+      },
+      {
+        "label": "4.47-4.95",
+        "count": 5
+      },
+      {
+        "label": "4.95-5.44",
+        "count": 5
+      },
+      {
+        "label": "5.44-5.92",
+        "count": 10
+      },
+      {
+        "label": "5.92-6.41",
+        "count": 10
+      },
+      {
+        "label": "6.41-6.89",
+        "count": 21
+      },
+      {
+        "label": "6.89-7.38",
+        "count": 12
+      }
+    ]
+  },
+  "expression_distribution_b": {
+    "n": 80,
+    "min": 0.0,
+    "q1": 0.752549797296524,
+    "median": 2.740936279296875,
+    "q3": 7.227426648139954,
+    "max": 9.643020629882812,
+    "bins": [
+      {
+        "label": "0.00-0.96",
+        "count": 24
+      },
+      {
+        "label": "0.96-1.93",
+        "count": 10
+      },
+      {
+        "label": "1.93-2.89",
+        "count": 7
+      },
+      {
+        "label": "2.89-3.86",
+        "count": 1
+      },
+      {
+        "label": "3.86-4.82",
+        "count": 5
+      },
+      {
+        "label": "4.82-5.79",
+        "count": 3
+      },
+      {
+        "label": "5.79-6.75",
+        "count": 7
+      },
+      {
+        "label": "6.75-7.71",
+        "count": 7
+      },
+      {
+        "label": "7.71-8.68",
+        "count": 6
+      },
+      {
+        "label": "8.68-9.64",
+        "count": 10
+      }
+    ]
+  },
+  "quality": {
+    "groups": {
+      "Low_High": {
+        "patients": 21,
+        "events": 10
+      },
+      "High_Low": {
+        "patients": 21,
+        "events": 1
+      },
+      "High_High": {
+        "patients": 19,
+        "events": 3
+      },
+      "Low_Low": {
+        "patients": 19,
+        "events": 7
+      }
+    },
+    "low_event_groups": [
+      "High_Low",
+      "High_High"
+    ],
+    "interpretation": "Exploratory research analysis only; not for clinical decision-making."
+  },
+  "median_survival_status": {
+    "Low_Low": {
+      "status": "estimated",
+      "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve."
+    },
+    "Low_High": {
+      "status": "estimated",
+      "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve."
+    },
+    "High_Low": {
+      "status": "not_reached",
+      "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached."
+    },
+    "High_High": {
+      "status": "not_reached",
+      "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached."
+    }
+  },
+  "audit_report": {
+    "schema_version": "tcga-trace-analysis-audit-v3",
+    "generated_at": "2026-07-25T18:19:24.480676+00:00",
+    "reproducibility_hash": "007047e76dc972985df9f8857525c3cfc25ee052ed6930305402bf5a09ce8c5e",
+    "patient_records_sha256": "ea916ac12de3b9bfbb8dd05611d61ce980a5607fe840f2466c2a2a8df041636a"
+  }
+}

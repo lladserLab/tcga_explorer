@@ -1,81 +1,179 @@
 # Bioinformatics Application Note Submission Checklist
 
-Status date: 2026-07-22.
+Status date: 2026-07-25.
 
 Target article type: Bioinformatics Application Note.
 
-Official constraints checked:
+Official sources last checked on 2026-07-24:
 
-- Bioinformatics submission page: Application Notes should fit approximately
-  2,600 words, or 2,000 words plus one figure.
-  Source: https://academic.oup.com/bioinformatics/pages/submission_online
-- Initial submissions may be PDF or LaTeX source, with line numbers, double
-  spacing and at least 12-point font.
-  Source: https://academic.oup.com/bioinformatics/pages/submission_online
-- Software/data availability and implementation must be stated in the article;
-  software or data must be freely available to non-commercial users.
-  Source: https://academic.oup.com/bioinformatics/pages/author-guidelines
+- Author guidelines:
+  https://academic.oup.com/bioinformatics/pages/author-guidelines
+- Online submission:
+  https://academic.oup.com/bioinformatics/pages/submission_online
+- OUP supported-journals list and LaTeX template:
+  https://academic.oup.com/pages/for-authors/journals/preparing-and-submitting-your-manuscript
+- Open access:
+  https://academic.oup.com/bioinformatics/pages/open-access
 
-## Ready
+Journal policies can change. Recheck these pages immediately before upload.
 
-- Main manuscript source: `manuscript/bioinformatics_app_note/main.tex`.
-- Main manuscript PDF: `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_app_note.pdf`.
-- Supplement source: `manuscript/bioinformatics_app_note/supplementary.tex`.
-- Supplement PDF: `manuscript/bioinformatics_app_note/build/tcga_explorer_bioinformatics_supplement.pdf`.
-- Both PDFs rebuild successfully with
-  `make -C manuscript/bioinformatics_app_note clean all`.
-- One workflow figure is included as reproducible LaTeX/TikZ source:
-  `manuscript/bioinformatics_app_note/figures/workflow.tex`.
-- Line numbering, double spacing and 12-point manuscript font are enabled.
-- Main manuscript is below the Application Note word budget. `texcount` reports
-  853 main-text words for `main.tex` on 2026-07-22.
-- Literature-backed comparator matrix is available in
-  `docs/publication/comparator_matrix.md`.
-- Reproducible benchmark scripts are available:
-  `scripts/publication/run_single_gene_benchmark_suite.py` and
-  `scripts/publication/run_feature_benchmarks.py`.
-- Benchmark outputs are stored in `docs/publication/benchmark/`.
-- Reviewer reproduction guide:
-  `manuscript/bioinformatics_app_note/submission/reviewer_reproduction_guide.md`.
-- Submission artifact manifest:
-  `manuscript/bioinformatics_app_note/submission/artifact_manifest.md`.
-- Narrative avoids unsupported novelty claims around two-biomarker survival
-  interaction and gene-set survival.
-- In-app Help & Methods and repository `CHANGELOG.md` document the active
-  analysis behavior and methodological version history.
-- Final owner-decision tracker:
-  `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md`.
+## Editorial Limits
 
-## Blocking Before Submission
+| Requirement | Current state | Status |
+| --- | --- | --- |
+| Maximum length | Four journal pages. Five pages is 25% over the limit and is liable to immediate return. | OUP `modern,large` preview is 4/4 pages. |
+| Approximate content budget | About 2,600 words without a figure or 2,000 words plus one figure. | Main sum count is 1,998, including 1,840 text words and one figure; OUP preview remains 4/4 pages. |
+| Initial review format | At least 12-point type, double spacing and line numbers. | Enabled in `main.tex`; review PDF is 12 pages. |
+| Revised/final format | OUP authoring template. | Preview uses the Bioinformatics mapping: numbered sections, `modern,large`, author-date citations and `Applications Note` article label. |
+| Abstract | Headings must be `Summary`, `Availability and Implementation`, `Contact` and `Supplementary Information`; Summary is one or two sentences. | Four headings are in order; Summary has two sentences. |
+| Main display items | Must fit within the four-page article. | One integrated full-width vector figure and no main-text tables. |
+| Accessibility | Figure alt text must follow the legend. | Figure 1 includes inline alt text after its legend; the standalone accessibility source is also retained. |
+| Supplement | Submit as one separate file, with items cited from the manuscript. | One supplementary PDF with 8 essential tables and no figures; all tables precede the references. |
+| Cover letter | Required at submission. | Draft exists; author-led rewrite and final sign-off are pending. |
+| Data Availability | Required statement. | Prepared with the public GitHub URL and Zenodo as the archive; final license and version-specific DOI are pending. |
 
-- Replace placeholder authors, affiliations and corresponding-author email in
-  `main.tex`.
-- Add funding statement.
-- Add conflict-of-interest statement.
-- Select and add an explicit open-source license file.
-- Confirm repository visibility. Current remote is
-  `git@github.com:lladserLab/tcga_explorer.git`; Bioinformatics needs reviewer
-  access and post-publication non-commercial availability.
-- Decide final public web-demo URL, or state that the Dockerized local app is
-  the reviewer-accessible implementation.
-- Archive a submission release in Zenodo, Figshare, Software Heritage or an
-  equivalent stable repository, and insert the DOI/URL in Availability.
-- Confirm whether TCGA source data redistribution restrictions require adding
-  a data-availability note that benchmark raw patient exports are generated
-  locally and not tracked in git.
+The current instructions do not state a separate numerical maximum for
+supplementary tables or figures. The supplement retains eight essential, cited
+tables, including the complete 11-scenario evidence matrix in Table S4. The
+main manuscript uses one integrated vector figure and no empirical tables
+while remaining within the four-page limit. The 11-page review PDF is not
+the journal page-count metric: its length results from the required 12-point,
+double-spaced submission format. The synchronized OUP preview is the page-limit
+estimate and currently occupies four pages. OUP states that author templates
+do not exactly reproduce final typesetting, so this is a conservative local
+gate rather than a production-page guarantee.
 
-## Optional But Strongly Recommended
+## Technical Package Ready
 
-- Add 2-3 screenshots or a short reviewer walkthrough as supplementary material
-  if the journal submission system allows extra files.
-- Run one manual comparator example in GEPIA2, cSurvival or DoSurvive and store
-  the exact accessed date plus exported numbers, if available.
-- Create a tagged release after final author/license edits.
-- Run the full verification command before submission:
+- Canonical manuscript:
+  `manuscript/bioinformatics_app_note/main.tex`.
+- Review PDF:
+  `manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-application-note.pdf`.
+- OUP page-limit preview:
+  `manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-oup-preview.pdf`.
+- Single supplementary PDF:
+  `manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-supplement.pdf`.
+- Main vector figure and accessibility source:
+  `figures/graphical_abstract.tex` and `figures/figure_alt_text.md`.
+- The supplement orders Tables S1-S8 before the reference list and contains no
+  figures.
+- All 17 frozen Paper Examples cases are explicitly mapped between the main
+  manuscript and supplement.
+- The comparator table correctly treats cSurvival two-predictor analysis and
+  PESSA ssGSEA as prior art.
+- The narrative centers the defensible contribution: a machine-verifiable run
+  record that integrates endpoint/sample provenance, score reconstruction,
+  automatic PH diagnostics, RMST and cutpoint-sensitivity reporting.
+- Public HTTPS application:
+  `https://apps.cienciavida.org/tcga_explorer/`.
+- Public health endpoint returned status `ok` with 33 cohorts on 2026-07-24:
+  `https://apps.cienciavida.org/tcga_explorer/api/v1/health`.
+- Reviewer quickstart, walkthrough, reproduction guide and Docker fallback are
+  included.
+- Compact benchmark records, the 33-cohort data snapshot manifest, three
+  audit-reconstruction bundles and their standalone pinned R capsules are
+  included.
+- `check_editorial_compliance.py` enforces page count, abstract structure,
+  main/supplement float counts and inline alt text.
+- `application_note_writing_blueprint.md` records the internal editorial
+  structure review; it is not a scientific comparator or manuscript citation.
+- `check_submission_artifacts.py` verifies the complete technical handoff.
+- Backend, publication-script, standalone-script and frontend tests pass:
+  `137 + 121 + 15 + 15`. The standalone suite comprises 14 CLI tests across
+  all six public compute families plus one server-attestation verifier test.
+- The artifact checker reports `109/109`; the compact review archive verifies
+  480 entries.
+- Frozen capsules pass 6/6 network-disabled clean-container reruns across
+  native arm64 and locally emulated amd64; an independent hosted amd64 CI job
+  is configured and requires confirmation after the final push.
+
+## Remaining Submission Blockers
+
+The technical editorial gate passes, but journal submission must not proceed
+until every item below is resolved:
+
+- Final author names and order.
+- Final affiliations and corresponding-author email.
+- Submitting-author ORCID.
+- CRediT contribution statement.
+- Funding statement.
+- Conflict-of-interest declaration.
+- Complete top-level software license.
+- Exact submitted code state tagged and pushed to the public GitHub repository.
+- Passing independent clean-reproduction CI run for that exact commit.
+- Tagged release archived on Zenodo with its stable version-specific DOI/URL.
+- Three-year public web-service maintenance commitment.
+- Named support owner and support contact for those three years.
+- Provisional automated smoke tests pass 24/24 checks across Chromium,
+  Firefox/Gecko and WebKit. Regenerate the record against the exact tagged
+  HTTPS release; add a short manual Safari-product check if deployment behavior
+  depends on Safari-specific integration.
+- Institutional decision on the open-access APC, ISCB discount or waiver route.
+- Owner/legal approval of the Data Availability wording.
+- Final cover letter and submission-system metadata.
+- Independent author rewrite and scientific verification of all author-facing
+  prose, tables, captions and references.
+- Accurate disclosure of permitted AI assistance in the cover letter and
+  manuscript and detailed supplementary disclosure, following the current OUP
+  AI policy.
+
+The last two points are submission blockers. The current Bioinformatics policy
+lists language correction, translation, research use and evaluation among
+common acceptable uses; manuscript drafting is not in that list. The current
+package is therefore an engineering and editorial working draft. The author
+team must independently rewrite and verify the final text, disclose the
+assistance and confirm acceptability with the editorial office rather than
+submit it unchanged.
+
+## Finalization Workflow
+
+1. Copy and complete
+   `submission/owner_metadata.template.json`.
+2. Select the full license text and save it outside the repository until the
+   owner/institution approves it.
+3. Validate without editing:
 
 ```sh
-python3 -m py_compile scripts/publication/run_cutpoint_benchmark.py scripts/publication/run_single_gene_benchmark_suite.py scripts/publication/run_feature_benchmarks.py
-docker compose run --rm --no-deps -v "$PWD/backend/tests:/app/tests:ro" backend pytest -q /app/tests
-make -C manuscript/bioinformatics_app_note clean all
+scripts/publication/finalize_submission_package.py \
+  path/to/owner_metadata.json \
+  --license-source path/to/LICENSE \
+  --dry-run
+```
+
+4. Apply owner metadata, run the strict gate and generate the final archive:
+
+```sh
+scripts/publication/finalize_submission_package.py \
+  path/to/owner_metadata.json \
+  --license-source path/to/LICENSE
+```
+
+5. Commit and push only the reviewed submission files, create a release tag,
+   archive that exact release, insert the resulting DOI and rerun the
+   finalizer. Deploy it with `APP_RELEASE_COMMIT` and `APP_RELEASE_REF`, then
+   run `.github/workflows/release-readiness.yml` against that exact tag and
+   HTTPS URL.
+
+## Verification Commands
+
+Current technical check:
+
+```sh
+make -C manuscript/bioinformatics_app_note compliance
+python3 -m pytest -q scripts/publication/tests
+python3 -m pytest -q scripts/tests
+scripts/publication/check_submission_artifacts.py
+scripts/publication/check_submission_metadata.py
 git diff --check
 ```
+
+The metadata checker is expected to report owner blockers until the fields above
+are resolved. The strict upload gate must pass after owner finalization:
+
+```sh
+scripts/publication/pre_submission_check.sh --strict-owner-metadata
+```
+
+The finalizer additionally builds and verifies the compact source/reviewer
+archive and writes SHA-256 values for the main PDF, supplement, OUP preview and
+archive.

@@ -6,3 +6,7 @@ pydantic-settings==2.6.1
 python-multipart==0.0.19
 pytest==8.3.4
 openpyxl==3.1.5
+alembic==1.14.0
+mcp==1.28.1
+httpx==0.28.1
+cryptography==49.0.0

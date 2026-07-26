@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_DB: tcga_explorer
       POSTGRES_USER: tcga
@@ -14,10 +15,14 @@ services:
       retries: 20
 
   backend:
+    image: ${TCGA_EXPLORER_BACKEND_IMAGE:-tcga_explorer-backend}
+    restart: unless-stopped
     build:
       context: .
       dockerfile: backend/Dockerfile
     environment:
+      APP_RELEASE_COMMIT: ${APP_RELEASE_COMMIT:-development}
+      APP_RELEASE_REF: ${APP_RELEASE_REF:-development}
       DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
       TCGA_DATA_DIR: /data/tcga
       TCGA_CDR_PATH: /app/clinical/TCGA-CDR-SupplementalTableS1.xlsx
@@ -27,11 +32,33 @@ services:
       ARTIFACT_DIR: /app/artifacts
       DERIVED_EXPRESSION_DIR: /app/derived/rna_bulk
       R_SCRIPT_PATH: /app/scripts/km_analysis.R
-      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+      CORS_ORIGINS: "${CORS_ORIGINS:-*}"
       BOOTSTRAP_ON_STARTUP: "true"
       PRELOAD_CACHE_ON_STARTUP: "true"
       PRELOAD_CACHE_STRICT: "true"
       PRELOAD_GDC_EXPRESSION_MATRICES_ON_STARTUP: "true"
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://apps.cienciavida.org/tcga_explorer}
+      PUBLIC_PATH_PREFIX: ${PUBLIC_PATH_PREFIX:-/tcga_explorer}
+      PUBLIC_API_ENABLED: ${PUBLIC_API_ENABLED:-true}
+      ATTESTATION_ENABLED: ${ATTESTATION_ENABLED:-true}
+      ATTESTATION_AUTO_GENERATE: ${ATTESTATION_AUTO_GENERATE:-true}
+      ATTESTATION_PRIVATE_KEY_PATH: ${ATTESTATION_PRIVATE_KEY_PATH:-/run/attestation/ed25519-private.pem}
+      ATTESTATION_ISSUER: ${ATTESTATION_ISSUER:-}
+      COMPUTE_GLOBAL_CONCURRENCY: ${COMPUTE_GLOBAL_CONCURRENCY:-2}
+      COMPUTE_QUEUE_MAX_SIZE: ${COMPUTE_QUEUE_MAX_SIZE:-50}
+      COMPUTE_MAX_ACTIVE_PER_CLIENT: ${COMPUTE_MAX_ACTIVE_PER_CLIENT:-5}
+      COMPUTE_SINGLE_HOURLY_LIMIT: ${COMPUTE_SINGLE_HOURLY_LIMIT:-10}
+      COMPUTE_BATCH_HOURLY_LIMIT: ${COMPUTE_BATCH_HOURLY_LIMIT:-2}
+      COMPUTE_MULTIVERSE_HOURLY_LIMIT: ${COMPUTE_MULTIVERSE_HOURLY_LIMIT:-1}
+      COMPUTE_PANCANCER_HOURLY_LIMIT: ${COMPUTE_PANCANCER_HOURLY_LIMIT:-2}
+      COMPUTE_SESSION_HOURLY_LIMIT: ${COMPUTE_SESSION_HOURLY_LIMIT:-5}
+      COMPUTE_STALE_SECONDS: ${COMPUTE_STALE_SECONDS:-1800}
+      COMPUTE_MAX_ATTEMPTS: ${COMPUTE_MAX_ATTEMPTS:-2}
+      PUBLIC_BATCH_MAX_ANALYSES: ${PUBLIC_BATCH_MAX_ANALYSES:-25}
+      PUBLIC_MULTIVERSE_MAX_ANALYSES: ${PUBLIC_MULTIVERSE_MAX_ANALYSES:-72}
+      ARTIFACT_RETENTION_DAYS: ${ARTIFACT_RETENTION_DAYS:-90}
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-apps.cienciavida.org,apps.cienciavida.org:*,localhost,localhost:*,127.0.0.1,127.0.0.1:*,testserver}
+      MCP_ALLOWED_ORIGINS: ${MCP_ALLOWED_ORIGINS:-https://apps.cienciavida.org,https://chatgpt.com,https://chat.openai.com,https://claude.ai,http://localhost:3000,http://localhost:5173}
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,8 +74,62 @@ services:
       - ./derived:/app/derived
       - ./clinical:/app/clinical:ro
       - ./jcga:/app/jcga:ro
+      - attestation_keys:/run/attestation
+
+  worker:
+    image: ${TCGA_EXPLORER_BACKEND_IMAGE:-tcga_explorer-backend}
+    command: ["python3", "-m", "app.worker"]
+    environment:
+      APP_RELEASE_COMMIT: ${APP_RELEASE_COMMIT:-development}
+      APP_RELEASE_REF: ${APP_RELEASE_REF:-development}
+      DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
+      TCGA_DATA_DIR: /data/tcga
+      TCGA_CDR_PATH: /app/clinical/TCGA-CDR-SupplementalTableS1.xlsx
+      JCGA_DATA_DIR: /app/jcga
+      TCGA_SYNC_STATE_DIR: /data/tcga/.sync
+      CLINICAL_SYNC_STATE_DIR: /app/clinical/.sync
+      ARTIFACT_DIR: /app/artifacts
+      DERIVED_EXPRESSION_DIR: /app/derived/rna_bulk
+      R_SCRIPT_PATH: /app/scripts/km_analysis.R
+      BOOTSTRAP_ON_STARTUP: "false"
+      PRELOAD_CACHE_ON_STARTUP: "false"
+      PRELOAD_CACHE_STRICT: "false"
+      PRELOAD_GDC_EXPRESSION_MATRICES_ON_STARTUP: "false"
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://apps.cienciavida.org/tcga_explorer}
+      PUBLIC_PATH_PREFIX: ${PUBLIC_PATH_PREFIX:-/tcga_explorer}
+      ATTESTATION_ENABLED: ${ATTESTATION_ENABLED:-true}
+      ATTESTATION_AUTO_GENERATE: ${ATTESTATION_AUTO_GENERATE:-true}
+      ATTESTATION_PRIVATE_KEY_PATH: ${ATTESTATION_PRIVATE_KEY_PATH:-/run/attestation/ed25519-private.pem}
+      ATTESTATION_ISSUER: ${ATTESTATION_ISSUER:-}
+      COMPUTE_GLOBAL_CONCURRENCY: ${COMPUTE_GLOBAL_CONCURRENCY:-2}
+      COMPUTE_QUEUE_MAX_SIZE: ${COMPUTE_QUEUE_MAX_SIZE:-50}
+      COMPUTE_MAX_ACTIVE_PER_CLIENT: ${COMPUTE_MAX_ACTIVE_PER_CLIENT:-5}
+      COMPUTE_SINGLE_HOURLY_LIMIT: ${COMPUTE_SINGLE_HOURLY_LIMIT:-10}
+      COMPUTE_BATCH_HOURLY_LIMIT: ${COMPUTE_BATCH_HOURLY_LIMIT:-2}
+      COMPUTE_MULTIVERSE_HOURLY_LIMIT: ${COMPUTE_MULTIVERSE_HOURLY_LIMIT:-1}
+      COMPUTE_PANCANCER_HOURLY_LIMIT: ${COMPUTE_PANCANCER_HOURLY_LIMIT:-2}
+      COMPUTE_SESSION_HOURLY_LIMIT: ${COMPUTE_SESSION_HOURLY_LIMIT:-5}
+      COMPUTE_STALE_SECONDS: ${COMPUTE_STALE_SECONDS:-1800}
+      COMPUTE_MAX_ATTEMPTS: ${COMPUTE_MAX_ATTEMPTS:-2}
+      PUBLIC_BATCH_MAX_ANALYSES: ${PUBLIC_BATCH_MAX_ANALYSES:-25}
+      PUBLIC_MULTIVERSE_MAX_ANALYSES: ${PUBLIC_MULTIVERSE_MAX_ANALYSES:-72}
+      ARTIFACT_RETENTION_DAYS: ${ARTIFACT_RETENTION_DAYS:-90}
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-apps.cienciavida.org,apps.cienciavida.org:*,localhost,localhost:*,127.0.0.1,127.0.0.1:*,testserver}
+      MCP_ALLOWED_ORIGINS: ${MCP_ALLOWED_ORIGINS:-https://apps.cienciavida.org,https://chatgpt.com,https://chat.openai.com,https://claude.ai,http://localhost:3000,http://localhost:5173}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ../TCGA:/data/tcga:ro
+      - ./artifacts:/app/artifacts
+      - ./derived:/app/derived
+      - ./clinical:/app/clinical:ro
+      - ./jcga:/app/jcga:ro
+      - attestation_keys:/run/attestation
 
   frontend:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: frontend/Dockerfile
@@ -61,13 +142,14 @@ services:
 
   nginx:
     image: nginx:1.27-alpine
+    restart: unless-stopped
     depends_on:
       frontend:
         condition: service_started
       backend:
         condition: service_healthy
     ports:
-      - "${TCGA_EXPLORER_HTTP_BIND:-0.0.0.0}:${TCGA_EXPLORER_HTTP_PORT:-3000}:80"
+      - "${TCGA_EXPLORER_HTTP_BIND:-127.0.0.1}:${TCGA_EXPLORER_HTTP_PORT:-3000}:80"
     volumes:
       - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
@@ -90,6 +172,7 @@ services:
       BOOTSTRAP_ON_STARTUP: "false"
       PRELOAD_CACHE_ON_STARTUP: "false"
       PRELOAD_CACHE_STRICT: "false"
+      PRELOAD_GDC_EXPRESSION_MATRICES_ON_STARTUP: "false"
     depends_on:
       postgres:
         condition: service_healthy
@@ -104,3 +187,4 @@ services:
 
 volumes:
   postgres_data:
+  attestation_keys:

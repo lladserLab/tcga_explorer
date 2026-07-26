@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-SKCM TMEM176B OS cutpoint-sensitivity benchmark.}
+\label{tab:skcm-tmem176b-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
+\midrule
+Maxstat & 453 & 213 & 1.70e-04 & 3.41e-06 & 0.837 & 235 & Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 453 & 213 & 5.27e-06 & 9.67e-06 & 0.913 & 231 & No model-diagnostic caution recorded \\
+Upper Q & 453 & 213 & 9.72e-04 & 0.002 & 0.919 & 170 & No model-diagnostic caution recorded \\
+Outer Q & 228 & 111 & 3.83e-04 & 3.22e-04 & 0.539 & 282 & Middle 50\% excluded \\
+\bottomrule
+\end{tabular}
+\end{table}

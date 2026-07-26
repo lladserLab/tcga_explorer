@@ -1,0 +1,10 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Typed key field and bibliography identifiers without secret material"
+regexTarget = "line"
+regexes = [
+  '''^\s*private_key:\s*Ed25519PrivateKey\s*$''',
+  '''^\s*"citation_key":\s*"[A-Za-z0-9_]+",?\s*$''',
+]

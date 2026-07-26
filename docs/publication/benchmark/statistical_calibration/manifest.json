@@ -1,0 +1,43 @@
+{
+  "files": [
+    {
+      "bytes": 798,
+      "path": "docs/publication/benchmark/statistical_calibration/calibration_design.json",
+      "sha256": "9eac5a7005b80827fc7458eb98d481026d32a00e8b89e29d68f27639b67f9510"
+    },
+    {
+      "bytes": 14052,
+      "path": "docs/publication/benchmark/statistical_calibration/calibration_results.raw.json",
+      "sha256": "cf1ea8c933e89ff1a526b350d2478c27f9ae985d5767ee4a88ae185fb36b4688"
+    },
+    {
+      "bytes": 1028093,
+      "path": "docs/publication/benchmark/statistical_calibration/permutation_replicates.csv",
+      "sha256": "0bc88f5bde2da34b150c02b0619f2507b24cebf9f7b4626cddf20d0495162a8d"
+    },
+    {
+      "bytes": 4178986,
+      "path": "docs/publication/benchmark/statistical_calibration/simulation_replicates.csv",
+      "sha256": "d019326aefd6ad21045fa71fec255620ea5febe1db2d7e43c1ed5d26d083b5d7"
+    },
+    {
+      "bytes": 5906,
+      "path": "docs/publication/benchmark/statistical_calibration/summary.csv",
+      "sha256": "c1e1f37eae86c92772373ca1f2ce0d1c1e1e9f4e70b93684daaee13f6b6e376d"
+    },
+    {
+      "bytes": 2888,
+      "path": "docs/publication/benchmark/statistical_calibration/summary.md",
+      "sha256": "1dfb76b8102aab2aa130c5c9b3b5f5ec7d8cc98c5f4e4d2c39dc74633a45debb"
+    },
+    {
+      "bytes": 1053,
+      "path": "manuscript/bioinformatics_app_note/tables/statistical_calibration.tex",
+      "sha256": "8b45953b9d5d71519a72d1a203462dae724092e8bc1ba68c78c6ebc8e67feebd"
+    }
+  ],
+  "generated_at": "2026-07-25T17:56:38.308135+00:00",
+  "schema_version": "tcga-trace-statistical-calibration-manifest-v2",
+  "source_analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+  "source_audit_reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7"
+}

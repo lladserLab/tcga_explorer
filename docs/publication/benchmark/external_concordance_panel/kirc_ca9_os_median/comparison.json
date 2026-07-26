@@ -1,0 +1,214 @@
+{
+  "accessed_date": "2026-07-25",
+  "case_id": "kirc_ca9_os_median",
+  "cohort": "TCGA-KIRC",
+  "comparison": {
+    "decision": "direction_concordant_nominal_support_discordant",
+    "external_direction": "higher expression protective",
+    "external_nominal_supported": false,
+    "independent_validation": false,
+    "limitations": [
+      "Both resources derive from TCGA and therefore are not independent biological validation.",
+      "cBioPortal PanCancer Atlas RSEM and TCGA-TRACE GDC STAR-count TPM are different expression pipelines and releases.",
+      "cBioPortal OS fields and TCGA-TRACE TCGA-CDR OS may differ in endpoint curation and eligible participants.",
+      "The external model is unadjusted; TCGA-TRACE additionally reports an exact age-adjusted model.",
+      "A median split is rank-comparable but its numerical expression threshold is not comparable across pipelines."
+    ],
+    "tcga_trace_direction": "higher expression protective",
+    "tcga_trace_holm_supported": false,
+    "tcga_trace_nominal_supported": true
+  },
+  "cutoff": "median",
+  "endpoint": "OS",
+  "external": {
+    "expression_processing": "Batch-normalized RSEM from Illumina HiSeq RNASeqV2 as labelled by cBioPortal PanCancer Atlas.",
+    "molecular_profile": {
+      "datatype": "CONTINUOUS",
+      "description": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+      "molecularAlterationType": "MRNA_EXPRESSION",
+      "molecularProfileId": "kirc_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+      "name": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+      "patientLevel": false,
+      "showProfileInAnalysisTab": false,
+      "studyId": "kirc_tcga_pan_can_atlas_2018"
+    },
+    "result": {
+      "contrast": "High vs Low",
+      "cox": {
+        "coefficient": -0.20936743114884052,
+        "conf_high": 1.0989516356968039,
+        "conf_low": 0.5986419958777424,
+        "hazard_ratio": 0.8110971585245779,
+        "p_value": 0.1766728970871223,
+        "standard_error": 0.15496412201574747,
+        "ties": "efron"
+      },
+      "cutoff_method": "median",
+      "cutoff_value": 5650.46,
+      "group_summary": {
+        "High": {
+          "events": 77,
+          "group": "High",
+          "median_survival_months": 116.8425552,
+          "patients": 255
+        },
+        "Low": {
+          "events": 91,
+          "group": "Low",
+          "median_survival_months": 75.58273334,
+          "patients": 255
+        }
+      },
+      "logrank": {
+        "chisq": 1.832187938925619,
+        "degrees_of_freedom": 1,
+        "p_value": 0.17586933551481415
+      },
+      "n_events": 168,
+      "n_patients": 510,
+      "software": {
+        "r_version": "R version 4.6.1 (2026-06-24)",
+        "survival_version": "3.8.6"
+      },
+      "status": "completed"
+    },
+    "sample_list": {
+      "category": "all_cases_with_mrna_rnaseq_data",
+      "description": "Samples with mRNA expression data (510 samples)",
+      "name": "Samples with mRNA data (RNA Seq V2)",
+      "sampleListId": "kirc_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+      "studyId": "kirc_tcga_pan_can_atlas_2018"
+    },
+    "selection": {
+      "events": 168,
+      "expression_records": 510,
+      "patients_with_complete_os_and_expression": 510,
+      "patients_with_multiple_eligible_samples": 0,
+      "rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+    },
+    "source_snapshot": "docs/publication/benchmark/external_concordance_panel/kirc_ca9_os_median/cbioportal_snapshot.json.gz",
+    "source_snapshot_sha256": "095a0b186eab75fdcac6a00e95be37d7159ac06ec36d7a8b2bc7922cb855fbbe",
+    "study": {
+      "allSampleCount": 512,
+      "cancerType": {
+        "dedicatedColor": "Orange",
+        "id": "ccrcc",
+        "name": "Renal Clear Cell Carcinoma",
+        "parent": "rcc",
+        "shortName": "CCRCC"
+      },
+      "cancerTypeId": "ccrcc",
+      "citation": "TCGA, Cell 2018",
+      "cnaSampleCount": 509,
+      "completeSampleCount": 352,
+      "description": "Kidney Renal Clear Cell Carcinoma TCGA PanCancer data. The original data is <a href=\"https://gdc.cancer.gov/about-data/publications/pancanatlas\">here</a>. The publications are <a href=\"https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html\">here</a>.",
+      "groups": "PUBLIC;PANCAN",
+      "importDate": "2026-06-05 20:35:31",
+      "massSpectrometrySampleCount": 0,
+      "methylationHm27SampleCount": 0,
+      "miRnaSampleCount": 0,
+      "mrnaMicroarraySampleCount": 0,
+      "mrnaRnaSeqSampleCount": 0,
+      "mrnaRnaSeqV2SampleCount": 510,
+      "name": "Kidney Renal Clear Cell Carcinoma (TCGA, PanCancer Atlas)",
+      "pmid": "29625048,29596782,29622463,29617662,29625055,29625050,29617662,30643250,32214244,29625049,29850653,36334560",
+      "publicStudy": true,
+      "readPermission": true,
+      "referenceGenome": "hg19",
+      "resourceCounts": [
+        {
+          "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+          "description": "Computed Radiography",
+          "displayName": "Computed Radiography",
+          "openByDefault": true,
+          "patientCount": 1,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_CR",
+          "resourceType": "PATIENT",
+          "sampleCount": 1
+        },
+        {
+          "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+          "description": "Computed Tomography",
+          "displayName": "Computed Tomography",
+          "openByDefault": true,
+          "patientCount": 221,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_CT",
+          "resourceType": "PATIENT",
+          "sampleCount": 221
+        },
+        {
+          "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+          "description": "Magnetic Resonance",
+          "displayName": "Magnetic Resonance",
+          "openByDefault": true,
+          "patientCount": 60,
+          "priority": "1",
+          "resourceId": "IDC_OHIF_MR",
+          "resourceType": "PATIENT",
+          "sampleCount": 60
+        },
+        {
+          "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+          "description": "Slide Microscopy",
+          "displayName": "Slide Microscopy",
+          "openByDefault": true,
+          "patientCount": 512,
+          "priority": "1",
+          "resourceId": "IDC_SLIM",
+          "resourceType": "PATIENT",
+          "sampleCount": 512
+        }
+      ],
+      "rppaSampleCount": 455,
+      "sequencedSampleCount": 402,
+      "status": 0,
+      "structuralVariantCount": 153,
+      "studyId": "kirc_tcga_pan_can_atlas_2018",
+      "treatmentCount": 98
+    },
+    "tool": "cBioPortal"
+  },
+  "gene": "CA9",
+  "prespecified_role": "direction and significance-discordance case",
+  "tcga_trace": {
+    "age_adjusted_cox": {
+      "conf_high": 0.9520026713344716,
+      "conf_low": 0.5210212340515176,
+      "hazard_ratio": 0.7042823344646859,
+      "p_value": 0.022617445857293327
+    },
+    "analysis_id": "9281f0877ce24ce79d683a0c0a19f07c",
+    "cohort": "TCGA-KIRC",
+    "cox": {
+      "conf_high": 0.9232359091342277,
+      "conf_low": 0.5059102095035746,
+      "hazard_ratio": 0.683428468979249,
+      "p_value": 0.013121611408119736
+    },
+    "cutoff_value": 8.629610061645508,
+    "endpoint": "OS",
+    "endpoint_source": "tcga_cdr",
+    "event_counts": {
+      "High": 73,
+      "Low": 102
+    },
+    "expression_scale": "log2(TPM + 1)",
+    "gene": "CA9",
+    "group_counts": {
+      "High": 265,
+      "Low": 266
+    },
+    "grouped_holm_p_value": 0.05037488422240736,
+    "logrank_p_value": 0.01259372105560184,
+    "median_survival_days": {
+      "High": null,
+      "Low": 2299
+    },
+    "n_events": 175,
+    "n_patients": 531,
+    "patient_records_sha256": "a9b9a351f99ebd870c6a006a8bacc5eb6441ca1887dac24e3bbf0358dad9e2c3",
+    "reproducibility_hash": "7d3ca49db684f5331b52b132c5bcf064a3240e877dc05094e041a236e4c83585"
+  }
+}

@@ -1,0 +1,4455 @@
+{
+  "schema_version": "tcga-trace-analysis-audit-v3",
+  "report_type": "survival_analysis_audit",
+  "analysis_id": "d126076114ea42d4ae94f1ca7706b31c",
+  "generated_at": "2026-07-25T18:19:24.480676+00:00",
+  "reproducibility_hash": "007047e76dc972985df9f8857525c3cfc25ee052ed6930305402bf5a09ce8c5e",
+  "integrity_scope": {
+    "threat_model": "Detect accidental analysis drift, file corruption and incomplete transfer relative to the values recorded in this export.",
+    "not_an_authenticity_proof": "These are unsigned SHA-256 digests. An exporter who can alter content and recompute every digest is outside scope; independent attestation is required to establish origin or resist adversarial forgery.",
+    "reproducibility_hash_boundary": "The reproducibility hash binds the fields named in reproducibility_hash_definition.payload_fields.",
+    "artifact_boundary": "Rendered plots and methodology files are outside the reproducibility hash and are protected separately by artifact byte counts and SHA-256 checksums."
+  },
+  "reproducibility_hash_definition": {
+    "algorithm": "sha256 over canonical JSON with sorted keys and compact separators",
+    "payload_fields": [
+      "request",
+      "data_dates",
+      "data_provenance",
+      "scoring_provenance_sha256",
+      "record_digest",
+      "continuous_record_digest",
+      "core_results"
+    ],
+    "artifact_checksums": "Artifact files are not included in reproducibility_hash; their SHA-256 values are reported separately under artifacts."
+  },
+  "request": {
+    "cohort": "TCGA-UVM",
+    "signature_a": {
+      "name": "BAP1",
+      "gene_symbol": "BAP1",
+      "signature_method": "single",
+      "signature_genes": []
+    },
+    "signature_b": {
+      "name": "PRAME",
+      "gene_symbol": "PRAME",
+      "signature_method": "single",
+      "signature_genes": []
+    },
+    "endpoint": "DSS",
+    "expression_scale": "log2_tpm",
+    "combination_method": "median",
+    "filters": {
+      "sample_types": [],
+      "stages": [],
+      "grades": [],
+      "genders": [],
+      "races": [],
+      "age_min": null,
+      "age_max": null,
+      "max_time_days": null
+    },
+    "adjustment_covariates": [
+      "age_at_index"
+    ],
+    "time_unit": "months",
+    "show_confidence_interval": true,
+    "show_risk_table": false,
+    "plot_style": {
+      "palette": [
+        "#1f6f8b",
+        "#c8842d",
+        "#5a6f9f",
+        "#b94d48"
+      ],
+      "font_family": "sans",
+      "plot_aspect": "rectangular",
+      "base_font_size": 12,
+      "axis_text_size": 11,
+      "axis_title_size": 12,
+      "show_grid": false,
+      "show_title": false,
+      "plot_title": null,
+      "continuous": {
+        "effect_color": "#1f6f8b",
+        "reference_color": "#75817e",
+        "show_title": true,
+        "plot_title": null,
+        "x_axis_title": null,
+        "y_axis_title": null
+      },
+      "cox_forest": {
+        "lower_hazard_color": "#1f6f8b",
+        "higher_hazard_color": "#b94d48",
+        "reference_color": "#7b8582",
+        "show_title": true,
+        "plot_title": null,
+        "x_axis_title": null
+      }
+    },
+    "pipeline_version": "expression-complete-integrity-contract-v3.7",
+    "data_version": {
+      "tcga_cdr": {
+        "manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
+        "data_through_date": null,
+        "data_release": null
+      },
+      "tcga_rna": {
+        "source_summary_mtime": "2026-04-22T16:16:36+00:00",
+        "publication_snapshot_manifest_hash": "f424cf0ce18199ca291b9a396dd89660c654d049cc9bdeff1bbdcf1b8a0ba094",
+        "publication_snapshot_status": "available"
+      },
+      "clinical_metadata": {
+        "latest_source_modified_at": "2026-04-22T16:16:36+00:00"
+      }
+    }
+  },
+  "pipeline": {
+    "version": "expression-complete-integrity-contract-v3.7",
+    "software_versions": {
+      "Python": "3.12.3",
+      "FastAPI": "0.115.6",
+      "SQLAlchemy": "2.0.36",
+      "psycopg": "3.2.3",
+      "pydantic-settings": "2.6.1",
+      "R": "R version 4.4.2 (2024-10-31)",
+      "R/jsonlite": "2.0.0",
+      "R/survival": "3.8.9",
+      "R/survminer": "0.5.2",
+      "R/maxstat": "0.7.26",
+      "R/ggplot2": "4.0.3",
+      "R/svglite": "2.2.2",
+      "R/survRM2": "1.0.4",
+      "R/coxphf": "1.13.4"
+    }
+  },
+  "data": {
+    "cohort": "TCGA-UVM",
+    "data_dates": {
+      "source_summary_file": "2026-04-22T16:16:36+00:00",
+      "source_latest_metadata_file": "2026-04-22T16:16:36+00:00",
+      "database_imported_at": "2026-04-27T16:45:36.888931+00:00",
+      "rna_cache_generated_at": "2026-07-25T18:19:03.290528+00:00",
+      "tcga_cdr_source_file": "2026-04-27T16:45:29.753288+00:00",
+      "tcga_cdr_imported_at": "2026-04-27T16:45:38.378020+00:00",
+      "data_through_date": null,
+      "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264"
+    },
+    "endpoint": {
+      "value": "DSS",
+      "label": "Disease-specific survival",
+      "source": "tcga_cdr",
+      "qc": {
+        "value": "DSS",
+        "label": "Disease-specific survival",
+        "available": true,
+        "source": "tcga_cdr",
+        "patients": 80,
+        "events": 21,
+        "reason": "80 linked patients and 21 events from TCGA-CDR."
+      }
+    },
+    "expression_scale": {
+      "value": "log2_tpm",
+      "label": "log2(TPM + 1)"
+    },
+    "provenance": {
+      "schema_version": "tcga-trace-data-provenance-v1",
+      "cohort": "TCGA-UVM",
+      "expression_scale": "log2_tpm",
+      "expression_source": "derived GDC STAR-count matrix cache",
+      "expression_files": [
+        {
+          "logical_name": "Derived log2_tpm expression matrix",
+          "filename": "log2_tpm.float32.bin",
+          "status": "available",
+          "bytes": 18981440,
+          "mtime_ns": 1777307721297355396,
+          "sha256": "865688af2c226fd2c835f56a0b9ff5c757271b89fbd266cb3c8484019c6dcdc2"
+        },
+        {
+          "logical_name": "Derived expression matrix metadata",
+          "filename": "metadata.json",
+          "status": "available",
+          "bytes": 2285044,
+          "mtime_ns": 1777307721393683238,
+          "sha256": "d07ec4ec87b8bc745565df036d2400696957c7028b8c5cdbbf5b2b2e3e99f2b2"
+        },
+        {
+          "logical_name": "TCGA barcode to GDC file map",
+          "filename": "TCGA-UVM.json",
+          "status": "available",
+          "bytes": 19013,
+          "mtime_ns": 1777307707940327544,
+          "sha256": "ec86e7b7bb99a931b1d274a685a751b223a0df315ae20e72b32b61106f0ac928"
+        }
+      ],
+      "clinical_files": [
+        {
+          "logical_name": "TCGA Clinical Data Resource",
+          "filename": "TCGA-CDR-SupplementalTableS1.xlsx",
+          "status": "available",
+          "bytes": 2945129,
+          "mtime_ns": 1777308329753287972,
+          "sha256": "ea594c0fbb6731477c7ac511fab449ca9c38b0d42d269591ed9f5c4090e75a5a"
+        }
+      ],
+      "selected_gdc_file_identifiers": [
+        {
+          "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d2c0009c-f833-4a3c-86ff-3f6b19bb299d",
+          "gdc_file_uuid": "05ec7139-df1a-48af-8d31-0acb26ee037b",
+          "gdc_filename": "05ec7139-df1a-48af-8d31-0acb26ee037b.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+          "gdc_case_file_uuid": "25af10e2-b273-48de-a61e-d17f2942e0bd",
+          "gdc_file_uuid": "0df5b21d-6ab0-4d21-a801-9e0dd4230ffb",
+          "gdc_filename": "0df5b21d-6ab0-4d21-a801-9e0dd4230ffb.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b5b0f524-d70e-40eb-ae49-16d2b5ea5467",
+          "gdc_file_uuid": "0e86cd4d-d678-4061-9717-ffcd93f05dbd",
+          "gdc_filename": "0e86cd4d-d678-4061-9717-ffcd93f05dbd.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+          "gdc_case_file_uuid": "37b6b698-b9d0-4efd-b8fa-410803ff43f7",
+          "gdc_file_uuid": "d12f92f8-960c-4969-adec-fa55ce64fbee",
+          "gdc_filename": "d12f92f8-960c-4969-adec-fa55ce64fbee.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+          "gdc_case_file_uuid": "24036f4b-2361-48e9-a4a0-ef5f5c7d2dd9",
+          "gdc_file_uuid": "3fe63e9d-8cdd-4e22-b1f0-475a23e075f7",
+          "gdc_filename": "3fe63e9d-8cdd-4e22-b1f0-475a23e075f7.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+          "gdc_case_file_uuid": "4a2edd0e-ea77-4ef3-9b3c-3ec65e4e426d",
+          "gdc_file_uuid": "d9480f8b-3086-4a6f-b349-a3ae5bafe58c",
+          "gdc_filename": "d9480f8b-3086-4a6f-b349-a3ae5bafe58c.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d48060d6-bea4-4d02-9bb6-38a43aea36af",
+          "gdc_file_uuid": "2a6ea7b6-7ec3-4226-9d58-37b544e78aec",
+          "gdc_filename": "2a6ea7b6-7ec3-4226-9d58-37b544e78aec.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+          "gdc_case_file_uuid": "735ebb00-3320-4307-a69b-a10992adbdab",
+          "gdc_file_uuid": "66697b8e-4ffe-4ed5-933f-1d11eda9a7d5",
+          "gdc_filename": "66697b8e-4ffe-4ed5-933f-1d11eda9a7d5.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+          "gdc_case_file_uuid": "8d6d0afa-3b22-4329-87be-228971ffd581",
+          "gdc_file_uuid": "0d902210-381c-4e66-8087-0de815e8d507",
+          "gdc_filename": "0d902210-381c-4e66-8087-0de815e8d507.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+          "gdc_case_file_uuid": "7fff968e-af87-4766-98a0-3eebed53264c",
+          "gdc_file_uuid": "b72d0a6b-8984-4854-b4b3-3f4671a0bff5",
+          "gdc_filename": "b72d0a6b-8984-4854-b4b3-3f4671a0bff5.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+          "gdc_case_file_uuid": "ab6a5e24-de1a-446e-bf4c-38e7a5bb14a3",
+          "gdc_file_uuid": "9d285856-ea63-4cf3-9827-fbd6d8cbfae8",
+          "gdc_filename": "9d285856-ea63-4cf3-9827-fbd6d8cbfae8.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+          "gdc_case_file_uuid": "44363b1e-23b3-4a97-8b53-5d184259f03a",
+          "gdc_file_uuid": "ecaf1c57-1d8e-49e4-84a3-6c371c5314f3",
+          "gdc_filename": "ecaf1c57-1d8e-49e4-84a3-6c371c5314f3.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+          "gdc_case_file_uuid": "7b0ba77b-5af5-4529-995a-18ef231c0b41",
+          "gdc_file_uuid": "74e2edb8-5d55-48b2-a24d-2d76db8a04bd",
+          "gdc_filename": "74e2edb8-5d55-48b2-a24d-2d76db8a04bd.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+          "gdc_case_file_uuid": "36999a4f-9ab2-435c-b4f4-c3412e7b68b2",
+          "gdc_file_uuid": "8a851a1b-c39e-4ee2-876a-447ff4b088c4",
+          "gdc_filename": "8a851a1b-c39e-4ee2-876a-447ff4b088c4.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+          "gdc_case_file_uuid": "ea09a6c8-0521-4b9e-8cc0-ba0e7f855aa8",
+          "gdc_file_uuid": "8acb6203-ddd0-4edc-8017-7e3b2953b7a2",
+          "gdc_filename": "8acb6203-ddd0-4edc-8017-7e3b2953b7a2.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b73b5094-7b4f-4de7-bf89-5e9aa440e6af",
+          "gdc_file_uuid": "7dcf88b1-efbf-4d15-8702-c089871ec52e",
+          "gdc_filename": "7dcf88b1-efbf-4d15-8702-c089871ec52e.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+          "gdc_case_file_uuid": "9054cd54-9088-455d-aef6-f2a7ae1ba3e1",
+          "gdc_file_uuid": "51370984-04a3-4b46-9627-a346c2af69c6",
+          "gdc_filename": "51370984-04a3-4b46-9627-a346c2af69c6.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+          "gdc_case_file_uuid": "2099feee-53e9-4c8d-b4f1-f80a55b34e1c",
+          "gdc_file_uuid": "bdae6108-fe46-463f-98de-58d5f680bdaf",
+          "gdc_filename": "bdae6108-fe46-463f-98de-58d5f680bdaf.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+          "gdc_case_file_uuid": "e77bc8dd-c55c-4de8-a42e-8139e9c34c62",
+          "gdc_file_uuid": "38afdac7-861e-4d67-b6a3-4f95f8880bb2",
+          "gdc_filename": "38afdac7-861e-4d67-b6a3-4f95f8880bb2.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+          "gdc_case_file_uuid": "3d70feec-2460-48ef-90d0-355ffdadf785",
+          "gdc_file_uuid": "50e97e06-9279-484e-8c8f-6fcc67a55ebc",
+          "gdc_filename": "50e97e06-9279-484e-8c8f-6fcc67a55ebc.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+          "gdc_case_file_uuid": "99ce0e9b-b1c8-4adf-8529-393068fa8f69",
+          "gdc_file_uuid": "4d335987-6d71-4ef3-9655-e33fe642d381",
+          "gdc_filename": "4d335987-6d71-4ef3-9655-e33fe642d381.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d79c97d7-9fcd-4631-9051-a219bf2495c7",
+          "gdc_file_uuid": "130f6905-2d83-425a-950f-50bd8a0cc42e",
+          "gdc_filename": "130f6905-2d83-425a-950f-50bd8a0cc42e.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b11a8fb5-77d6-414a-a4bb-9ef3255149a2",
+          "gdc_file_uuid": "01ecfef7-7a6b-4212-bdfa-d4aae88fadfa",
+          "gdc_filename": "01ecfef7-7a6b-4212-bdfa-d4aae88fadfa.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+          "gdc_case_file_uuid": "e523c375-f64a-4904-af5c-3da6d2d4f59a",
+          "gdc_file_uuid": "d48466f5-2fbe-455a-9e19-2277f71983d5",
+          "gdc_filename": "d48466f5-2fbe-455a-9e19-2277f71983d5.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+          "gdc_case_file_uuid": "ddf84756-4ed2-4deb-9321-9fc456232cdc",
+          "gdc_file_uuid": "a199f5da-dda7-406f-967b-f9c5ff771a40",
+          "gdc_filename": "a199f5da-dda7-406f-967b-f9c5ff771a40.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+          "gdc_case_file_uuid": "ab3f65bf-14b3-45be-8e6a-28855d9a8beb",
+          "gdc_file_uuid": "2aa9348e-e78c-4af8-9aa1-ac2a0771ea7c",
+          "gdc_filename": "2aa9348e-e78c-4af8-9aa1-ac2a0771ea7c.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+          "gdc_case_file_uuid": "29fb9a0c-a98a-4884-a6f2-79b0de3dfee9",
+          "gdc_file_uuid": "c1f10672-b50f-453b-ba18-3a5858a10bf6",
+          "gdc_filename": "c1f10672-b50f-453b-ba18-3a5858a10bf6.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+          "gdc_case_file_uuid": "276aeda4-33d9-45c4-abe5-734da78a78ea",
+          "gdc_file_uuid": "ddc9ddb7-8686-4cd7-8f81-71ff37c8203e",
+          "gdc_filename": "ddc9ddb7-8686-4cd7-8f81-71ff37c8203e.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+          "gdc_case_file_uuid": "5bec0dff-25e9-422b-ba9b-e718aa8e3f64",
+          "gdc_file_uuid": "72d9b028-1c20-4835-a7f9-882e5dd80797",
+          "gdc_filename": "72d9b028-1c20-4835-a7f9-882e5dd80797.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+          "gdc_case_file_uuid": "fa9e7839-a49f-4d7b-b7e0-b1a492511e0f",
+          "gdc_file_uuid": "2bbc05dc-29d8-4f22-8011-48b9cd2f4360",
+          "gdc_filename": "2bbc05dc-29d8-4f22-8011-48b9cd2f4360.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+          "gdc_case_file_uuid": "216abb23-24f6-483a-9295-afc8732236b7",
+          "gdc_file_uuid": "26afaa53-4039-4efd-a008-9578dea6a301",
+          "gdc_filename": "26afaa53-4039-4efd-a008-9578dea6a301.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+          "gdc_case_file_uuid": "44ecb36d-5821-4934-9305-f1d93c9ebb01",
+          "gdc_file_uuid": "e66cc51e-3029-4568-b546-6278e993189f",
+          "gdc_filename": "e66cc51e-3029-4568-b546-6278e993189f.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+          "gdc_case_file_uuid": "1f1c530d-5934-4bfb-bc45-d5d7d632301d",
+          "gdc_file_uuid": "3a9a7eaf-120e-4c63-8185-a27f697ce299",
+          "gdc_filename": "3a9a7eaf-120e-4c63-8185-a27f697ce299.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+          "gdc_case_file_uuid": "22fa5d91-428b-42b0-a5b0-f0729aee9635",
+          "gdc_file_uuid": "382cce5b-8d34-481d-b746-d1defc817a08",
+          "gdc_filename": "382cce5b-8d34-481d-b746-d1defc817a08.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+          "gdc_case_file_uuid": "a7ff797b-4601-47a3-8909-20c23b4ecc60",
+          "gdc_file_uuid": "e7f27690-8071-4923-bc18-35eba10113a9",
+          "gdc_filename": "e7f27690-8071-4923-bc18-35eba10113a9.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+          "gdc_case_file_uuid": "94449598-9604-4b06-b647-57b2d015af88",
+          "gdc_file_uuid": "96e154ab-2822-4477-990e-4b65e6d1432b",
+          "gdc_filename": "96e154ab-2822-4477-990e-4b65e6d1432b.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+          "gdc_case_file_uuid": "b7ac31c0-1284-4d89-b2c6-852e8edb939d",
+          "gdc_file_uuid": "cc372dbb-e7ea-457f-ae2b-7d0ba5a0a2dd",
+          "gdc_filename": "cc372dbb-e7ea-457f-ae2b-7d0ba5a0a2dd.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d944f6f9-8616-4cee-9672-a5e249d8ee0b",
+          "gdc_file_uuid": "37f52ca5-99ff-44e5-8753-ea97dab7f958",
+          "gdc_filename": "37f52ca5-99ff-44e5-8753-ea97dab7f958.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+          "gdc_case_file_uuid": "223dce04-4892-4f9b-b136-f6254b10a285",
+          "gdc_file_uuid": "b65a7b29-61ac-495f-b06c-065909a2971b",
+          "gdc_filename": "b65a7b29-61ac-495f-b06c-065909a2971b.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+          "gdc_case_file_uuid": "3c44e284-32e2-48bb-aeed-20c739ef4260",
+          "gdc_file_uuid": "598eebde-1c35-4dfb-be46-167c6b2b3819",
+          "gdc_filename": "598eebde-1c35-4dfb-be46-167c6b2b3819.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+          "gdc_case_file_uuid": "90d51c25-d04d-4ef6-bc42-a65886cad80f",
+          "gdc_file_uuid": "23d3ea07-1507-4b92-b05b-5c464ecb9858",
+          "gdc_filename": "23d3ea07-1507-4b92-b05b-5c464ecb9858.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+          "gdc_case_file_uuid": "5bd814b8-c382-4353-a342-de3b77d3eac9",
+          "gdc_file_uuid": "9b127b39-c64a-4863-bbb7-615d53ebe7f8",
+          "gdc_filename": "9b127b39-c64a-4863-bbb7-615d53ebe7f8.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+          "gdc_case_file_uuid": "9bf8d5f6-47e8-4c92-b67c-4de0bcdfeab1",
+          "gdc_file_uuid": "04a9005f-3104-49f0-a957-dd77c3c60679",
+          "gdc_filename": "04a9005f-3104-49f0-a957-dd77c3c60679.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+          "gdc_case_file_uuid": "a6086929-603b-4bd5-8214-fc925ff38293",
+          "gdc_file_uuid": "e089d94c-a4d2-44ff-b8e7-2fa6838f0bc5",
+          "gdc_filename": "e089d94c-a4d2-44ff-b8e7-2fa6838f0bc5.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+          "gdc_case_file_uuid": "2e2874d4-4932-4f81-b464-1ea2f509a119",
+          "gdc_file_uuid": "7850ab16-4701-4e05-b2b8-6086b8ed63bb",
+          "gdc_filename": "7850ab16-4701-4e05-b2b8-6086b8ed63bb.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d148f481-a38c-481e-b0c0-cdad04cbf3ba",
+          "gdc_file_uuid": "304d1c41-8a4b-4068-ab27-8cea5a065e80",
+          "gdc_filename": "304d1c41-8a4b-4068-ab27-8cea5a065e80.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d681e616-e248-47b9-a966-6e5132c3c818",
+          "gdc_file_uuid": "37d341cf-24de-4af2-9a2b-ee801c416ec8",
+          "gdc_filename": "37d341cf-24de-4af2-9a2b-ee801c416ec8.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+          "gdc_case_file_uuid": "7a3399f3-a7c4-48c9-925d-c42860ed83b6",
+          "gdc_file_uuid": "e71db7d0-f7b7-4522-a382-c83b7520f608",
+          "gdc_filename": "e71db7d0-f7b7-4522-a382-c83b7520f608.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+          "gdc_case_file_uuid": "8c5e6f18-3a16-4065-ab12-d3391da154e9",
+          "gdc_file_uuid": "61b1ca49-d26b-432d-bc34-98c4644f8b4f",
+          "gdc_filename": "61b1ca49-d26b-432d-bc34-98c4644f8b4f.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b6c9c1d7-ebd4-4ccb-8177-80a4242c93d9",
+          "gdc_file_uuid": "ac60cc0f-3aa5-4299-94f1-f7094537d906",
+          "gdc_filename": "ac60cc0f-3aa5-4299-94f1-f7094537d906.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b9c29a6a-5d54-46c1-a92b-beb8d0d3ea15",
+          "gdc_file_uuid": "3e391ede-f7b1-46ef-ae6e-24cfed805095",
+          "gdc_filename": "3e391ede-f7b1-46ef-ae6e-24cfed805095.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+          "gdc_case_file_uuid": "71c889d4-ac45-443d-8676-aa2d4079f7d6",
+          "gdc_file_uuid": "d8d59d9b-c57a-4383-8962-9204a8b9175a",
+          "gdc_filename": "d8d59d9b-c57a-4383-8962-9204a8b9175a.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+          "gdc_case_file_uuid": "f84b24e5-751f-4b17-a6dd-74b046844d0d",
+          "gdc_file_uuid": "45fcc1a1-d73a-4ec5-95ae-f9ca82c5b3fd",
+          "gdc_filename": "45fcc1a1-d73a-4ec5-95ae-f9ca82c5b3fd.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+          "gdc_case_file_uuid": "875d9e2e-1f35-4374-97b4-5d58c5b9c4c5",
+          "gdc_file_uuid": "c317811d-b28a-430e-96e3-23bba15f04a3",
+          "gdc_filename": "c317811d-b28a-430e-96e3-23bba15f04a3.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+          "gdc_case_file_uuid": "dfd688a4-aac4-4588-9035-87635ddc96a4",
+          "gdc_file_uuid": "d720c62a-64a3-40b6-9400-7fc41e0f12f2",
+          "gdc_filename": "d720c62a-64a3-40b6-9400-7fc41e0f12f2.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+          "gdc_case_file_uuid": "a150bfbe-72d3-42a3-b87f-842399d3c541",
+          "gdc_file_uuid": "71adf9b8-e04d-454a-814e-855aa2f106d6",
+          "gdc_filename": "71adf9b8-e04d-454a-814e-855aa2f106d6.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+          "gdc_case_file_uuid": "b5213c67-a73f-4b3d-ac9b-deedfbc08160",
+          "gdc_file_uuid": "97aede8f-8315-4d49-8f04-41b4c266d78c",
+          "gdc_filename": "97aede8f-8315-4d49-8f04-41b4c266d78c.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+          "gdc_case_file_uuid": "eb1f76d1-e547-41f3-8d85-adf4bb9c4204",
+          "gdc_file_uuid": "7a632cae-65fe-4d7c-a892-a8809a9ba6de",
+          "gdc_filename": "7a632cae-65fe-4d7c-a892-a8809a9ba6de.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+          "gdc_case_file_uuid": "c5f1b74e-095f-45ef-a8e2-d973b2c084cb",
+          "gdc_file_uuid": "79255954-1b33-4a51-bc0d-6c4cd59183dc",
+          "gdc_filename": "79255954-1b33-4a51-bc0d-6c4cd59183dc.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+          "gdc_case_file_uuid": "e34a4ad6-6c02-4e7b-b47b-7692b2b4788d",
+          "gdc_file_uuid": "1ab744be-3780-4baa-971a-50defda0e791",
+          "gdc_filename": "1ab744be-3780-4baa-971a-50defda0e791.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+          "gdc_case_file_uuid": "f96a0144-600b-4a7b-aada-1e87d8596a63",
+          "gdc_file_uuid": "c1867a9a-942f-46f9-b7ff-bfe8edb04f6d",
+          "gdc_filename": "c1867a9a-942f-46f9-b7ff-bfe8edb04f6d.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+          "gdc_case_file_uuid": "9007a863-1d7e-43de-acd4-8833c1fae268",
+          "gdc_file_uuid": "79351f4f-6f4b-4a1e-bd18-eaa521344822",
+          "gdc_filename": "79351f4f-6f4b-4a1e-bd18-eaa521344822.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+          "gdc_case_file_uuid": "6a5fc50d-285f-4b43-89e8-4e0369adccd0",
+          "gdc_file_uuid": "06cbde58-ac14-4736-ad91-0ba2bf399527",
+          "gdc_filename": "06cbde58-ac14-4736-ad91-0ba2bf399527.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+          "gdc_case_file_uuid": "3ec5342f-740b-452b-8e13-87d81a36060c",
+          "gdc_file_uuid": "8dbf5d9d-67b7-4107-a596-6af42710b7b6",
+          "gdc_filename": "8dbf5d9d-67b7-4107-a596-6af42710b7b6.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+          "gdc_case_file_uuid": "0db0e29f-bd16-4f9a-944a-9b2b73ae3231",
+          "gdc_file_uuid": "f94feb03-e191-4328-9818-7220696e3a86",
+          "gdc_filename": "f94feb03-e191-4328-9818-7220696e3a86.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+          "gdc_case_file_uuid": "2c941f66-90ae-4126-9ff4-44ce398c3d3f",
+          "gdc_file_uuid": "f42e7ae4-f25b-4cec-a514-cd7f47dd43b8",
+          "gdc_filename": "f42e7ae4-f25b-4cec-a514-cd7f47dd43b8.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+          "gdc_case_file_uuid": "b42616c7-d6dc-49aa-9c5e-17f7ab1e2b99",
+          "gdc_file_uuid": "34f43fb5-ca59-4455-ae07-f987bdb9a8e0",
+          "gdc_filename": "34f43fb5-ca59-4455-ae07-f987bdb9a8e0.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+          "gdc_case_file_uuid": "1c7d0c48-1ff5-4de3-9e47-ad3a67dde79a",
+          "gdc_file_uuid": "850c83fc-adb5-4f71-bba6-006022c4f4c5",
+          "gdc_filename": "850c83fc-adb5-4f71-bba6-006022c4f4c5.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+          "gdc_case_file_uuid": "d215af76-6241-492f-a3bb-c3540e997e16",
+          "gdc_file_uuid": "c4479d47-5f2d-434a-8755-59426a635706",
+          "gdc_filename": "c4479d47-5f2d-434a-8755-59426a635706.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+          "gdc_case_file_uuid": "cb6cee1a-43a4-40c3-9af7-91bc299ed5ab",
+          "gdc_file_uuid": "18496158-0c5e-4f32-a8bc-3c946dad43c3",
+          "gdc_filename": "18496158-0c5e-4f32-a8bc-3c946dad43c3.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+          "gdc_case_file_uuid": "e1849623-895a-4981-b8c1-25ad0ec1143b",
+          "gdc_file_uuid": "5b47289b-49a4-40c2-9089-34fd811149d2",
+          "gdc_filename": "5b47289b-49a4-40c2-9089-34fd811149d2.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+          "gdc_case_file_uuid": "4222f092-b07a-42a9-8f97-c89545790942",
+          "gdc_file_uuid": "e1ac88db-c63b-405a-bf22-0c02eab7ecff",
+          "gdc_filename": "e1ac88db-c63b-405a-bf22-0c02eab7ecff.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+          "gdc_case_file_uuid": "beb0cc9b-4bfd-40e2-85d0-c7f80924aa44",
+          "gdc_file_uuid": "00922fb6-95ec-458b-9f4e-9811cbb643eb",
+          "gdc_filename": "00922fb6-95ec-458b-9f4e-9811cbb643eb.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+          "gdc_case_file_uuid": "f557537f-cc1a-4cec-acdb-6cbe78847b05",
+          "gdc_file_uuid": "30df08e9-e6be-4c16-91e1-4e7de6adddea",
+          "gdc_filename": "30df08e9-e6be-4c16-91e1-4e7de6adddea.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+          "gdc_case_file_uuid": "84938e5c-3249-4e5a-862f-c0ae8886ab75",
+          "gdc_file_uuid": "28571071-5093-4d12-b526-9c06133cfcbc",
+          "gdc_filename": "28571071-5093-4d12-b526-9c06133cfcbc.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+          "gdc_case_file_uuid": "5b61633f-4183-458f-a1f2-978b3a90e935",
+          "gdc_file_uuid": "d6833afe-f5dd-4a0d-8778-666f7e52224f",
+          "gdc_filename": "d6833afe-f5dd-4a0d-8778-666f7e52224f.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+          "gdc_case_file_uuid": "d540d661-2223-400e-8525-63b06530f23e",
+          "gdc_file_uuid": "89acdd18-8dbd-4d4d-8b92-b88b82f8c0c7",
+          "gdc_filename": "89acdd18-8dbd-4d4d-8b92-b88b82f8c0c7.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+          "gdc_case_file_uuid": "1d970f75-011a-4fc6-a151-1ad62e016c35",
+          "gdc_file_uuid": "0c792398-8789-4708-bc3a-73b0bde80175",
+          "gdc_filename": "0c792398-8789-4708-bc3a-73b0bde80175.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+          "gdc_case_file_uuid": "3ebf5ee0-d140-4a74-bc20-51a7ee98cd2e",
+          "gdc_file_uuid": "f9862bd4-4530-4ba9-b940-658d39907222",
+          "gdc_filename": "f9862bd4-4530-4ba9-b940-658d39907222.rna_seq.augmented_star_gene_counts.tsv"
+        },
+        {
+          "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+          "gdc_case_file_uuid": "aa68b133-387e-496c-bdfc-7b4f6fb0ce95",
+          "gdc_file_uuid": "aa816c97-1621-4bb0-bded-07e8e1c06f09",
+          "gdc_filename": "aa816c97-1621-4bb0-bded-07e8e1c06f09.rna_seq.augmented_star_gene_counts.tsv"
+        }
+      ],
+      "selected_gdc_file_count": 80,
+      "publication_snapshot": {
+        "status": "available",
+        "schema_version": "tcga-trace-data-snapshot-manifest-v1",
+        "manifest_hash": "f424cf0ce18199ca291b9a396dd89660c654d049cc9bdeff1bbdcf1b8a0ba094",
+        "file": {
+          "logical_name": "Publication data snapshot manifest",
+          "filename": "data_snapshot_manifest.json",
+          "status": "available",
+          "bytes": 63483,
+          "mtime_ns": 1784775547000000000,
+          "sha256": "d6c11b96e116ac44c2baa3e477cc88666999712101dfe57fae9013010b0d0aed"
+        },
+        "cohort": {
+          "cohort": "TCGA-UVM",
+          "count_matrix": {
+            "path": "TCGA/TCGA-UVM/count_matrix.tsv",
+            "bytes": 12901094,
+            "sha256": "82fdf781f10435a552c71695f3ed8b24e585a30508d68a207746f5be04c3b4e2",
+            "sha256_status": "computed",
+            "status": "available"
+          },
+          "col_data": {
+            "path": "TCGA/TCGA-UVM/col_data.tsv",
+            "bytes": 182920,
+            "sha256": "80eec98020609ba7f314b7c8b217d1254c48ddd8cfff14519a10335233312c6e",
+            "sha256_status": "computed",
+            "status": "available"
+          },
+          "clinical_data": {
+            "path": "TCGA/TCGA-UVM/clinical_data.tsv",
+            "bytes": 62018,
+            "sha256": "3d6ee6bfbbe622a527bed88b15ed59400e45f5d1eb723297fddc0b2bf30fad5f",
+            "sha256_status": "computed",
+            "status": "available"
+          }
+        }
+      },
+      "provenance_completeness": {
+        "exact_expression_artifact_hashed": true,
+        "selected_gdc_identifiers_recorded": true,
+        "publication_manifest_available": true,
+        "rna_sync_manifest_available": false
+      }
+    }
+  },
+  "analysis_design": {
+    "gene_symbol": null,
+    "reported_marker": "BAP1 x PRAME",
+    "signature": {
+      "method": "combined",
+      "label": "BAP1 x PRAME",
+      "signatures": [
+        {
+          "method": "single",
+          "label": "BAP1",
+          "genes": [
+            {
+              "query": "BAP1",
+              "resolved_symbol": "BAP1",
+              "weight": 1.0,
+              "status": "exact"
+            }
+          ],
+          "scoring_population": {
+            "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+            "eligible_barcode_count": 80,
+            "complete_case_barcode_count": 80,
+            "score_values_sha256": "cc0fe7be225a508b148f5109c1611d68bcdbe81817c66ac6f33246dc66900ef4",
+            "component_value_hashes": {
+              "BAP1": "daf944281599cf67084a998217ad45b23f18881e4614078d5d30a639ebebd367"
+            }
+          },
+          "name": "BAP1"
+        },
+        {
+          "method": "single",
+          "label": "PRAME",
+          "genes": [
+            {
+              "query": "PRAME",
+              "resolved_symbol": "PRAME",
+              "weight": 1.0,
+              "status": "exact"
+            }
+          ],
+          "scoring_population": {
+            "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+            "eligible_barcode_count": 80,
+            "complete_case_barcode_count": 80,
+            "score_values_sha256": "4160da6a4f3a302d56a7e1d8fee0564ac9e0db11c5a0b3e1ecfe5a13b04bd5ec",
+            "component_value_hashes": {
+              "PRAME": "7f6aa378c2e43319ba19ee8fa61ed54f2f416af3ae1ede1654f74d2532d272c3"
+            }
+          },
+          "name": "PRAME"
+        }
+      ]
+    },
+    "combined_signature": {
+      "method": "median",
+      "label": "BAP1 x PRAME",
+      "signature_a": {
+        "method": "single",
+        "label": "BAP1",
+        "genes": [
+          {
+            "query": "BAP1",
+            "resolved_symbol": "BAP1",
+            "weight": 1.0,
+            "status": "exact"
+          }
+        ],
+        "scoring_population": {
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "eligible_barcode_count": 80,
+          "complete_case_barcode_count": 80,
+          "score_values_sha256": "cc0fe7be225a508b148f5109c1611d68bcdbe81817c66ac6f33246dc66900ef4",
+          "component_value_hashes": {
+            "BAP1": "daf944281599cf67084a998217ad45b23f18881e4614078d5d30a639ebebd367"
+          }
+        },
+        "name": "BAP1"
+      },
+      "signature_b": {
+        "method": "single",
+        "label": "PRAME",
+        "genes": [
+          {
+            "query": "PRAME",
+            "resolved_symbol": "PRAME",
+            "weight": 1.0,
+            "status": "exact"
+          }
+        ],
+        "scoring_population": {
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "eligible_barcode_count": 80,
+          "complete_case_barcode_count": 80,
+          "score_values_sha256": "4160da6a4f3a302d56a7e1d8fee0564ac9e0db11c5a0b3e1ecfe5a13b04bd5ec",
+          "component_value_hashes": {
+            "PRAME": "7f6aa378c2e43319ba19ee8fa61ed54f2f416af3ae1ede1654f74d2532d272c3"
+          }
+        },
+        "name": "PRAME"
+      },
+      "sample_overlap": 80,
+      "group_levels": [
+        "Low_Low",
+        "Low_High",
+        "High_Low",
+        "High_High"
+      ]
+    },
+    "scoring_provenance_sha256": "f371836efd31a744612c8cf8a2cf53e29dcf770212fd4fa927325ad920272967",
+    "scoring_provenance": {
+      "schema_version": "tcga-trace-scoring-provenance-v1",
+      "analysis_type": "combined_signatures",
+      "signature_a": {
+        "schema_version": "tcga-trace-scoring-provenance-v1",
+        "method": "single",
+        "population_rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+        "eligible_barcode_count": 80,
+        "complete_case_barcode_count": 80,
+        "weight_denominator": 1,
+        "components": [
+          {
+            "query": "BAP1",
+            "resolved_symbol": "BAP1",
+            "weight": 1.0,
+            "source_value_count": 80,
+            "selected_value_count": 80,
+            "selected_values_sha256": "daf944281599cf67084a998217ad45b23f18881e4614078d5d30a639ebebd367",
+            "selected_values": [
+              {
+                "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+                "expression_value": 5.899485111236572
+              },
+              {
+                "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+                "expression_value": 4.763687610626221
+              },
+              {
+                "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+                "expression_value": 6.756629943847656
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+                "expression_value": 6.56974458694458
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+                "expression_value": 5.077290058135986
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+                "expression_value": 3.375567674636841
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+                "expression_value": 6.532391548156738
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+                "expression_value": 7.215336799621582
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+                "expression_value": 5.955201148986816
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+                "expression_value": 5.907722473144531
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+                "expression_value": 5.135386943817139
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+                "expression_value": 3.7885708808898926
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+                "expression_value": 7.288421154022217
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+                "expression_value": 6.438287734985352
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+                "expression_value": 6.912095546722412
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+                "expression_value": 6.8515143394470215
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+                "expression_value": 3.611219644546509
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+                "expression_value": 7.203911781311035
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+                "expression_value": 6.4930500984191895
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+                "expression_value": 2.682483434677124
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+                "expression_value": 4.566206455230713
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+                "expression_value": 7.065931797027588
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+                "expression_value": 3.929166078567505
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+                "expression_value": 4.690573692321777
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+                "expression_value": 6.704614639282227
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+                "expression_value": 6.315866947174072
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+                "expression_value": 6.49390172958374
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+                "expression_value": 5.458398342132568
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+                "expression_value": 3.4292008876800537
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+                "expression_value": 5.782778263092041
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+                "expression_value": 6.1439666748046875
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+                "expression_value": 5.440211296081543
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+                "expression_value": 6.784222602844238
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+                "expression_value": 3.714421272277832
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+                "expression_value": 6.811323165893555
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+                "expression_value": 6.201696395874023
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+                "expression_value": 6.870880126953125
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+                "expression_value": 6.076107978820801
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+                "expression_value": 7.192955493927002
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+                "expression_value": 6.905012607574463
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+                "expression_value": 7.059840679168701
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+                "expression_value": 5.969150543212891
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+                "expression_value": 6.812699794769287
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+                "expression_value": 3.7997608184814453
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+                "expression_value": 7.1598711013793945
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+                "expression_value": 5.231547832489014
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+                "expression_value": 2.7420923709869385
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+                "expression_value": 6.855979919433594
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+                "expression_value": 3.110246181488037
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+                "expression_value": 5.798706531524658
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+                "expression_value": 3.9957468509674072
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+                "expression_value": 3.418783664703369
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+                "expression_value": 6.301571369171143
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+                "expression_value": 6.614700794219971
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+                "expression_value": 4.894410133361816
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+                "expression_value": 4.374044895172119
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+                "expression_value": 5.711580276489258
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+                "expression_value": 5.1898088455200195
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+                "expression_value": 6.7200798988342285
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+                "expression_value": 7.162269592285156
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+                "expression_value": 4.118218421936035
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+                "expression_value": 6.733240604400635
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+                "expression_value": 6.588892936706543
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+                "expression_value": 7.0777740478515625
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+                "expression_value": 4.707635402679443
+              },
+              {
+                "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+                "expression_value": 6.851016998291016
+              },
+              {
+                "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+                "expression_value": 5.958842754364014
+              },
+              {
+                "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+                "expression_value": 5.5234551429748535
+              },
+              {
+                "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+                "expression_value": 4.255870819091797
+              },
+              {
+                "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+                "expression_value": 6.658082962036133
+              },
+              {
+                "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+                "expression_value": 6.614711284637451
+              },
+              {
+                "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+                "expression_value": 5.822281360626221
+              },
+              {
+                "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+                "expression_value": 6.030922889709473
+              },
+              {
+                "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+                "expression_value": 5.29446268081665
+              },
+              {
+                "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+                "expression_value": 6.608898162841797
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+                "expression_value": 5.576718807220459
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+                "expression_value": 7.379608154296875
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+                "expression_value": 6.24564790725708
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+                "expression_value": 3.452608585357666
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+                "expression_value": 2.5250415802001953
+              }
+            ]
+          }
+        ],
+        "score_values_sha256": "cc0fe7be225a508b148f5109c1611d68bcdbe81817c66ac6f33246dc66900ef4",
+        "score_values": [
+          {
+            "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+            "score": 5.899485111236572
+          },
+          {
+            "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+            "score": 4.763687610626221
+          },
+          {
+            "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+            "score": 6.756629943847656
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+            "score": 6.56974458694458
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+            "score": 5.077290058135986
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+            "score": 3.375567674636841
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+            "score": 6.532391548156738
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+            "score": 7.215336799621582
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+            "score": 5.955201148986816
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+            "score": 5.907722473144531
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+            "score": 5.135386943817139
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+            "score": 3.7885708808898926
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+            "score": 7.288421154022217
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+            "score": 6.438287734985352
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+            "score": 6.912095546722412
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+            "score": 6.8515143394470215
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+            "score": 3.611219644546509
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+            "score": 7.203911781311035
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+            "score": 6.4930500984191895
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+            "score": 2.682483434677124
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+            "score": 4.566206455230713
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+            "score": 7.065931797027588
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+            "score": 3.929166078567505
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+            "score": 4.690573692321777
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+            "score": 6.704614639282227
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+            "score": 6.315866947174072
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+            "score": 6.49390172958374
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+            "score": 5.458398342132568
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+            "score": 3.4292008876800537
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+            "score": 5.782778263092041
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+            "score": 6.1439666748046875
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+            "score": 5.440211296081543
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+            "score": 6.784222602844238
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+            "score": 3.714421272277832
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+            "score": 6.811323165893555
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+            "score": 6.201696395874023
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+            "score": 6.870880126953125
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+            "score": 6.076107978820801
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+            "score": 7.192955493927002
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+            "score": 6.905012607574463
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+            "score": 7.059840679168701
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+            "score": 5.969150543212891
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+            "score": 6.812699794769287
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+            "score": 3.7997608184814453
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+            "score": 7.1598711013793945
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+            "score": 5.231547832489014
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+            "score": 2.7420923709869385
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+            "score": 6.855979919433594
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+            "score": 3.110246181488037
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+            "score": 5.798706531524658
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+            "score": 3.9957468509674072
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+            "score": 3.418783664703369
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+            "score": 6.301571369171143
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+            "score": 6.614700794219971
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+            "score": 4.894410133361816
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+            "score": 4.374044895172119
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+            "score": 5.711580276489258
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+            "score": 5.1898088455200195
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+            "score": 6.7200798988342285
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+            "score": 7.162269592285156
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+            "score": 4.118218421936035
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+            "score": 6.733240604400635
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+            "score": 6.588892936706543
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+            "score": 7.0777740478515625
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+            "score": 4.707635402679443
+          },
+          {
+            "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+            "score": 6.851016998291016
+          },
+          {
+            "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+            "score": 5.958842754364014
+          },
+          {
+            "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+            "score": 5.5234551429748535
+          },
+          {
+            "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+            "score": 4.255870819091797
+          },
+          {
+            "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+            "score": 6.658082962036133
+          },
+          {
+            "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+            "score": 6.614711284637451
+          },
+          {
+            "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+            "score": 5.822281360626221
+          },
+          {
+            "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+            "score": 6.030922889709473
+          },
+          {
+            "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+            "score": 5.29446268081665
+          },
+          {
+            "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+            "score": 6.608898162841797
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+            "score": 5.576718807220459
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+            "score": 7.379608154296875
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+            "score": 6.24564790725708
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+            "score": 3.452608585357666
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+            "score": 2.5250415802001953
+          }
+        ]
+      },
+      "signature_b": {
+        "schema_version": "tcga-trace-scoring-provenance-v1",
+        "method": "single",
+        "population_rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+        "eligible_barcode_count": 80,
+        "complete_case_barcode_count": 80,
+        "weight_denominator": 1,
+        "components": [
+          {
+            "query": "PRAME",
+            "resolved_symbol": "PRAME",
+            "weight": 1.0,
+            "source_value_count": 80,
+            "selected_value_count": 80,
+            "selected_values_sha256": "7f6aa378c2e43319ba19ee8fa61ed54f2f416af3ae1ede1654f74d2532d272c3",
+            "selected_values": [
+              {
+                "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+                "expression_value": 6.724846839904785
+              },
+              {
+                "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+                "expression_value": 9.176064491271973
+              },
+              {
+                "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+                "expression_value": 0.026729250326752663
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+                "expression_value": 2.774038553237915
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+                "expression_value": 5.82070255279541
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+                "expression_value": 6.65263557434082
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+                "expression_value": 7.289279460906982
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+                "expression_value": 5.1935906410217285
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+                "expression_value": 0.646899938583374
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+                "expression_value": 0.7703639268875122
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+                "expression_value": 0.34027740359306335
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+                "expression_value": 5.392571449279785
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+                "expression_value": 0.28557977080345154
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+                "expression_value": 7.5573930740356445
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+                "expression_value": 9.643020629882812
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+                "expression_value": 9.258752822875977
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+                "expression_value": 7.624191761016846
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+                "expression_value": 1.011567234992981
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+                "expression_value": 2.5370476245880127
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+                "expression_value": 5.544009208679199
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+                "expression_value": 0.0
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+                "expression_value": 8.337508201599121
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+                "expression_value": 9.488025665283203
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+                "expression_value": 3.4477379322052
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+                "expression_value": 6.763430118560791
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+                "expression_value": 9.048508644104004
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+                "expression_value": 1.5045695304870605
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+                "expression_value": 2.346276044845581
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+                "expression_value": 5.8899383544921875
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+                "expression_value": 4.421903133392334
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+                "expression_value": 1.124923586845398
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+                "expression_value": 9.334114074707031
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+                "expression_value": 6.364034652709961
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+                "expression_value": 7.206758499145508
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+                "expression_value": 0.0
+              },
+              {
+                "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+                "expression_value": 4.7397236824035645
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+                "expression_value": 1.4319437742233276
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+                "expression_value": 0.17197537422180176
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+                "expression_value": 9.522293090820312
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+                "expression_value": 8.977609634399414
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+                "expression_value": 8.121673583984375
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+                "expression_value": 0.14234808087348938
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+                "expression_value": 1.2930761575698853
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+                "expression_value": 2.585299015045166
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+                "expression_value": 4.072054386138916
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+                "expression_value": 0.13264264166355133
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+                "expression_value": 8.120447158813477
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+                "expression_value": 2.3647406101226807
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+                "expression_value": 1.2149951457977295
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+                "expression_value": 1.1006413698196411
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+                "expression_value": 8.705185890197754
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+                "expression_value": 7.414443492889404
+              },
+              {
+                "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+                "expression_value": 0.25205227732658386
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+                "expression_value": 0.11330043524503708
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+                "expression_value": 6.6876654624938965
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+                "expression_value": 0.6991074085235596
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+                "expression_value": 2.707834005355835
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+                "expression_value": 0.1323794275522232
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+                "expression_value": 0.0
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+                "expression_value": 0.026020970195531845
+              },
+              {
+                "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+                "expression_value": 0.4697818160057068
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+                "expression_value": 0.0
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+                "expression_value": 0.7776196002960205
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+                "expression_value": 0.8227709531784058
+              },
+              {
+                "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+                "expression_value": 0.7798900604248047
+              },
+              {
+                "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+                "expression_value": 1.2995963096618652
+              },
+              {
+                "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+                "expression_value": 8.889324188232422
+              },
+              {
+                "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+                "expression_value": 2.5773441791534424
+              },
+              {
+                "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+                "expression_value": 8.227913856506348
+              },
+              {
+                "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+                "expression_value": 4.269781112670898
+              },
+              {
+                "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+                "expression_value": 8.114351272583008
+              },
+              {
+                "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+                "expression_value": 4.612305164337158
+              },
+              {
+                "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+                "expression_value": 8.569567680358887
+              },
+              {
+                "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+                "expression_value": 1.2678353786468506
+              },
+              {
+                "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+                "expression_value": 7.206809043884277
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+                "expression_value": 1.1399933099746704
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+                "expression_value": 0.24622565507888794
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+                "expression_value": 0.3043942153453827
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+                "expression_value": 6.212038040161133
+              },
+              {
+                "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+                "expression_value": 0.03899797797203064
+              }
+            ]
+          }
+        ],
+        "score_values_sha256": "4160da6a4f3a302d56a7e1d8fee0564ac9e0db11c5a0b3e1ecfe5a13b04bd5ec",
+        "score_values": [
+          {
+            "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+            "score": 6.724846839904785
+          },
+          {
+            "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+            "score": 9.176064491271973
+          },
+          {
+            "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+            "score": 0.026729250326752663
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+            "score": 2.774038553237915
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+            "score": 5.82070255279541
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+            "score": 6.65263557434082
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+            "score": 7.289279460906982
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+            "score": 5.1935906410217285
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+            "score": 0.646899938583374
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+            "score": 0.7703639268875122
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+            "score": 0.34027740359306335
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+            "score": 5.392571449279785
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+            "score": 0.28557977080345154
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+            "score": 7.5573930740356445
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+            "score": 9.643020629882812
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+            "score": 9.258752822875977
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+            "score": 7.624191761016846
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+            "score": 1.011567234992981
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+            "score": 2.5370476245880127
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+            "score": 5.544009208679199
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+            "score": 0.0
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+            "score": 8.337508201599121
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+            "score": 9.488025665283203
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+            "score": 3.4477379322052
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+            "score": 6.763430118560791
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+            "score": 9.048508644104004
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+            "score": 1.5045695304870605
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+            "score": 2.346276044845581
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+            "score": 5.8899383544921875
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+            "score": 4.421903133392334
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+            "score": 1.124923586845398
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+            "score": 9.334114074707031
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+            "score": 6.364034652709961
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+            "score": 7.206758499145508
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+            "score": 0.0
+          },
+          {
+            "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+            "score": 4.7397236824035645
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+            "score": 1.4319437742233276
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+            "score": 0.17197537422180176
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+            "score": 9.522293090820312
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+            "score": 8.977609634399414
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+            "score": 8.121673583984375
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+            "score": 0.14234808087348938
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+            "score": 1.2930761575698853
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+            "score": 2.585299015045166
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+            "score": 4.072054386138916
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+            "score": 0.13264264166355133
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+            "score": 8.120447158813477
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+            "score": 2.3647406101226807
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+            "score": 1.2149951457977295
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+            "score": 1.1006413698196411
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+            "score": 8.705185890197754
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+            "score": 7.414443492889404
+          },
+          {
+            "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+            "score": 0.25205227732658386
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+            "score": 0.11330043524503708
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+            "score": 6.6876654624938965
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+            "score": 0.6991074085235596
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+            "score": 2.707834005355835
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+            "score": 0.1323794275522232
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+            "score": 0.0
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+            "score": 0.026020970195531845
+          },
+          {
+            "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+            "score": 0.4697818160057068
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+            "score": 0.0
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+            "score": 0.7776196002960205
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+            "score": 0.8227709531784058
+          },
+          {
+            "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+            "score": 0.7798900604248047
+          },
+          {
+            "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+            "score": 1.2995963096618652
+          },
+          {
+            "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+            "score": 8.889324188232422
+          },
+          {
+            "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+            "score": 2.5773441791534424
+          },
+          {
+            "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+            "score": 8.227913856506348
+          },
+          {
+            "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+            "score": 4.269781112670898
+          },
+          {
+            "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+            "score": 8.114351272583008
+          },
+          {
+            "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+            "score": 4.612305164337158
+          },
+          {
+            "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+            "score": 8.569567680358887
+          },
+          {
+            "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+            "score": 1.2678353786468506
+          },
+          {
+            "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+            "score": 7.206809043884277
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+            "score": 1.1399933099746704
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+            "score": 0.24622565507888794
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+            "score": 0.3043942153453827
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+            "score": 6.212038040161133
+          },
+          {
+            "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+            "score": 0.03899797797203064
+          }
+        ]
+      }
+    },
+    "cutpoint_method": "median",
+    "cutpoint_details": {
+      "method": "median",
+      "combination": "signature_a_x_signature_b",
+      "signature_a_levels": "Low/High",
+      "signature_b_levels": "Low/High",
+      "signature_a_threshold": 6.000036716461182,
+      "signature_b_threshold": 2.740936279296875
+    },
+    "filters": {
+      "sample_types": [],
+      "stages": [],
+      "grades": [],
+      "genders": [],
+      "races": [],
+      "age_min": null,
+      "age_max": null,
+      "max_time_days": null
+    },
+    "adjustment_covariates": [
+      "age_at_index"
+    ],
+    "clinical_adjustment": {
+      "status": "requested",
+      "requested_covariates": [
+        "age_at_index"
+      ],
+      "label": "Age",
+      "grouped_model": "user_adjusted",
+      "continuous_model": "continuous_user_adjusted",
+      "interaction_model": "signature_interaction_user_adjusted"
+    },
+    "time_unit": "months",
+    "plot_style": {
+      "palette": [
+        "#1f6f8b",
+        "#c8842d",
+        "#5a6f9f",
+        "#b94d48"
+      ],
+      "font_family": "sans",
+      "plot_aspect": "rectangular",
+      "base_font_size": 12,
+      "axis_text_size": 11,
+      "axis_title_size": 12,
+      "show_grid": false,
+      "show_title": false,
+      "plot_title": null,
+      "continuous": {
+        "effect_color": "#1f6f8b",
+        "reference_color": "#75817e",
+        "show_title": true,
+        "plot_title": null,
+        "x_axis_title": null,
+        "y_axis_title": null
+      },
+      "cox_forest": {
+        "lower_hazard_color": "#1f6f8b",
+        "higher_hazard_color": "#b94d48",
+        "reference_color": "#7b8582",
+        "show_title": true,
+        "plot_title": null,
+        "x_axis_title": null
+      }
+    }
+  },
+  "cohort_selection": {
+    "sample_selection": {
+      "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
+      "rule_description": "one expression-complete eligible RNA-seq sample per TCGA participant; clinical filters and endpoint completeness are applied first, samples lacking the requested gene or complete signature score are removed second, and biospecimen priority is applied last. Primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority expression-complete sample remains; ties are resolved by RNA analyte/portion metadata and barcode.",
+      "selection_order": [
+        "user_filters",
+        "endpoint_completeness",
+        "requested_expression_or_score_completeness",
+        "biospecimen_priority"
+      ],
+      "priority_order": [
+        "Primary tumor / primary blood-derived cancer",
+        "Recurrent tumor",
+        "Additional new primary",
+        "Metastatic / additional metastatic",
+        "Human tumor original cells",
+        "Normal tissue / normal blood",
+        "Control, cell line, xenograft or unknown"
+      ],
+      "endpoint": "DSS",
+      "endpoint_label": "Disease-specific survival",
+      "endpoint_source": "tcga_cdr",
+      "input_samples": 80,
+      "after_user_filters": 80,
+      "complete_endpoint_samples": 80,
+      "complete_os_samples": 80,
+      "missing_endpoint_removed": 0,
+      "missing_os_removed": 0,
+      "candidate_patients": 80,
+      "sample_type_filter_applied": false,
+      "expression_requirement_applied": true,
+      "expression_complete_samples": 80,
+      "expression_complete_patients": 80,
+      "missing_expression_samples_removed": 0,
+      "missing_expression_patients_removed": 0,
+      "expression_priority_fallbacks": 0,
+      "expression_priority_fallback_barcodes": [],
+      "duplicate_samples_removed": 0,
+      "retained_patients": 80,
+      "retained_sample_types": {
+        "Primary Tumor": 80
+      },
+      "removed_duplicate_sample_types": {}
+    },
+    "patient_record_count": 80,
+    "patient_records_sha256": "ea916ac12de3b9bfbb8dd05611d61ce980a5607fe840f2466c2a2a8df041636a",
+    "patient_records": [
+      {
+        "patient_id": "TCGA-RZ-AB0B",
+        "sample_barcode": "TCGA-RZ-AB0B-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.312165975570679,
+        "expression_value_a": 5.899485111236572,
+        "expression_value_b": 6.724846839904785,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 149.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IV",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 47.0
+      },
+      {
+        "patient_id": "TCGA-V3-A9ZX",
+        "sample_barcode": "TCGA-V3-A9ZX-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.969876050949097,
+        "expression_value_a": 4.763687610626221,
+        "expression_value_b": 9.176064491271973,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 470.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 56.0
+      },
+      {
+        "patient_id": "TCGA-V3-A9ZY",
+        "sample_barcode": "TCGA-V3-A9ZY-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.3916795970872045,
+        "expression_value_a": 6.756629943847656,
+        "expression_value_b": 0.026729250326752663,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 459.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 54.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9E5",
+        "sample_barcode": "TCGA-V4-A9E5-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.671891570091248,
+        "expression_value_a": 6.56974458694458,
+        "expression_value_b": 2.774038553237915,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 2499.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 51.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9E7",
+        "sample_barcode": "TCGA-V4-A9E7-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.448996305465698,
+        "expression_value_a": 5.077290058135986,
+        "expression_value_b": 5.82070255279541,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 415.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 76.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9E8",
+        "sample_barcode": "TCGA-V4-A9E8-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.014101624488831,
+        "expression_value_a": 3.375567674636841,
+        "expression_value_b": 6.65263557434082,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 808.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 49.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9E9",
+        "sample_barcode": "TCGA-V4-A9E9-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.91083550453186,
+        "expression_value_a": 6.532391548156738,
+        "expression_value_b": 7.289279460906982,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1246.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 50.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EA",
+        "sample_barcode": "TCGA-V4-A9EA-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.204463720321655,
+        "expression_value_a": 7.215336799621582,
+        "expression_value_b": 5.1935906410217285,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1348.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 66.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EC",
+        "sample_barcode": "TCGA-V4-A9EC-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.301050543785095,
+        "expression_value_a": 5.955201148986816,
+        "expression_value_b": 0.646899938583374,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 743.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 75.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9ED",
+        "sample_barcode": "TCGA-V4-A9ED-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.3390432000160217,
+        "expression_value_a": 5.907722473144531,
+        "expression_value_b": 0.7703639268875122,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1078.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 45.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EE",
+        "sample_barcode": "TCGA-V4-A9EE-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.737832173705101,
+        "expression_value_a": 5.135386943817139,
+        "expression_value_b": 0.34027740359306335,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 398.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 86.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EH",
+        "sample_barcode": "TCGA-V4-A9EH-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.787000462412834,
+        "expression_value_a": 7.288421154022217,
+        "expression_value_b": 0.28557977080345154,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 670.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 53.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EI",
+        "sample_barcode": "TCGA-V4-A9EI-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.997840404510498,
+        "expression_value_a": 6.438287734985352,
+        "expression_value_b": 7.5573930740356445,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 389.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 78.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EJ",
+        "sample_barcode": "TCGA-V4-A9EJ-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 8.277558088302612,
+        "expression_value_a": 6.912095546722412,
+        "expression_value_b": 9.643020629882812,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 746.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 38.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EK",
+        "sample_barcode": "TCGA-V4-A9EK-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 8.055133581161499,
+        "expression_value_a": 6.8515143394470215,
+        "expression_value_b": 9.258752822875977,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1028.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 37.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EL",
+        "sample_barcode": "TCGA-V4-A9EL-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.617705702781677,
+        "expression_value_a": 3.611219644546509,
+        "expression_value_b": 7.624191761016846,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 982.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 60.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EM",
+        "sample_barcode": "TCGA-V4-A9EM-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.107739508152008,
+        "expression_value_a": 7.203911781311035,
+        "expression_value_b": 1.011567234992981,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 966.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 53.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EQ",
+        "sample_barcode": "TCGA-V4-A9EQ-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.113246321678162,
+        "expression_value_a": 2.682483434677124,
+        "expression_value_b": 5.544009208679199,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 455.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 64.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9ES",
+        "sample_barcode": "TCGA-V4-A9ES-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.2831032276153564,
+        "expression_value_a": 4.566206455230713,
+        "expression_value_b": 0.0,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1511.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 54.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9ET",
+        "sample_barcode": "TCGA-V4-A9ET-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.7017199993133545,
+        "expression_value_a": 7.065931797027588,
+        "expression_value_b": 8.337508201599121,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1362.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 57.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EU",
+        "sample_barcode": "TCGA-V4-A9EU-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.708595871925354,
+        "expression_value_a": 3.929166078567505,
+        "expression_value_b": 9.488025665283203,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 709.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIC",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 83.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EV",
+        "sample_barcode": "TCGA-V4-A9EV-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.069155812263489,
+        "expression_value_a": 4.690573692321777,
+        "expression_value_b": 3.4477379322052,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 1269.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 59.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EW",
+        "sample_barcode": "TCGA-V4-A9EW-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.734022378921509,
+        "expression_value_a": 6.704614639282227,
+        "expression_value_b": 6.763430118560791,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1211.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 44.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EX",
+        "sample_barcode": "TCGA-V4-A9EX-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.682187795639038,
+        "expression_value_a": 6.315866947174072,
+        "expression_value_b": 9.048508644104004,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 730.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 55.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EY",
+        "sample_barcode": "TCGA-V4-A9EY-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.9992356300354004,
+        "expression_value_a": 6.49390172958374,
+        "expression_value_b": 1.5045695304870605,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 837.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 66.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EZ",
+        "sample_barcode": "TCGA-V4-A9EZ-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.9023371934890747,
+        "expression_value_a": 5.458398342132568,
+        "expression_value_b": 2.346276044845581,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 599.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 78.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F0",
+        "sample_barcode": "TCGA-V4-A9F0-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.659569621086121,
+        "expression_value_a": 3.4292008876800537,
+        "expression_value_b": 5.8899383544921875,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 945.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 59.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F1",
+        "sample_barcode": "TCGA-V4-A9F1-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.1023406982421875,
+        "expression_value_a": 5.782778263092041,
+        "expression_value_b": 4.421903133392334,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 938.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 46.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F2",
+        "sample_barcode": "TCGA-V4-A9F2-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.6344451308250427,
+        "expression_value_a": 6.1439666748046875,
+        "expression_value_b": 1.124923586845398,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 734.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 78.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F3",
+        "sample_barcode": "TCGA-V4-A9F3-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.387162685394287,
+        "expression_value_a": 5.440211296081543,
+        "expression_value_b": 9.334114074707031,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 873.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 49.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F4",
+        "sample_barcode": "TCGA-V4-A9F4-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.5741286277771,
+        "expression_value_a": 6.784222602844238,
+        "expression_value_b": 6.364034652709961,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 634.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 41.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F5",
+        "sample_barcode": "TCGA-V4-A9F5-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.46058988571167,
+        "expression_value_a": 3.714421272277832,
+        "expression_value_b": 7.206758499145508,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 203.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IV",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 85.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F7",
+        "sample_barcode": "TCGA-V4-A9F7-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.4056615829467773,
+        "expression_value_a": 6.811323165893555,
+        "expression_value_b": 0.0,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1256.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 78.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9F8",
+        "sample_barcode": "TCGA-V4-A9F8-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.470710039138794,
+        "expression_value_a": 6.201696395874023,
+        "expression_value_b": 4.7397236824035645,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 597.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 68.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8K7",
+        "sample_barcode": "TCGA-VD-A8K7-01B-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.151411950588226,
+        "expression_value_a": 6.870880126953125,
+        "expression_value_b": 1.4319437742233276,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1459.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 39.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8K8",
+        "sample_barcode": "TCGA-VD-A8K8-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.1240416765213013,
+        "expression_value_a": 6.076107978820801,
+        "expression_value_b": 0.17197537422180176,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1377.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 56.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8K9",
+        "sample_barcode": "TCGA-VD-A8K9-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 8.357624292373657,
+        "expression_value_a": 7.192955493927002,
+        "expression_value_b": 9.522293090820312,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1424.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 71.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KA",
+        "sample_barcode": "TCGA-VD-A8KA-01B-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.9413111209869385,
+        "expression_value_a": 6.905012607574463,
+        "expression_value_b": 8.977609634399414,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1178.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 22.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KB",
+        "sample_barcode": "TCGA-VD-A8KB-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.590757131576538,
+        "expression_value_a": 7.059840679168701,
+        "expression_value_b": 8.121673583984375,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 1354.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 66.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KD",
+        "sample_barcode": "TCGA-VD-A8KD-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.05574931204319,
+        "expression_value_a": 5.969150543212891,
+        "expression_value_b": 0.14234808087348938,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 114.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IV",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 72.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KE",
+        "sample_barcode": "TCGA-VD-A8KE-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.052887976169586,
+        "expression_value_a": 6.812699794769287,
+        "expression_value_b": 1.2930761575698853,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 821.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 74.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KF",
+        "sample_barcode": "TCGA-VD-A8KF-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.1925299167633057,
+        "expression_value_a": 3.7997608184814453,
+        "expression_value_b": 2.585299015045166,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 40.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 68.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KG",
+        "sample_barcode": "TCGA-VD-A8KG-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.615962743759155,
+        "expression_value_a": 7.1598711013793945,
+        "expression_value_b": 4.072054386138916,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 19.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 47.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KH",
+        "sample_barcode": "TCGA-VD-A8KH-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.6820952370762825,
+        "expression_value_a": 5.231547832489014,
+        "expression_value_b": 0.13264264166355133,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1158.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 69.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KI",
+        "sample_barcode": "TCGA-VD-A8KI-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.4312697649002075,
+        "expression_value_a": 2.7420923709869385,
+        "expression_value_b": 8.120447158813477,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 1113.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 68.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KJ",
+        "sample_barcode": "TCGA-VD-A8KJ-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.610360264778137,
+        "expression_value_a": 6.855979919433594,
+        "expression_value_b": 2.3647406101226807,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1150.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 53.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KK",
+        "sample_barcode": "TCGA-VD-A8KK-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.1626206636428833,
+        "expression_value_a": 3.110246181488037,
+        "expression_value_b": 1.2149951457977295,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 64.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 54.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KL",
+        "sample_barcode": "TCGA-VD-A8KL-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.4496739506721497,
+        "expression_value_a": 5.798706531524658,
+        "expression_value_b": 1.1006413698196411,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 638.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 77.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KM",
+        "sample_barcode": "TCGA-VD-A8KM-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.350466370582581,
+        "expression_value_a": 3.9957468509674072,
+        "expression_value_b": 8.705185890197754,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 4.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 65.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KN",
+        "sample_barcode": "TCGA-VD-A8KN-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.416613578796387,
+        "expression_value_a": 3.418783664703369,
+        "expression_value_b": 7.414443492889404,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 68.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 60.0
+      },
+      {
+        "patient_id": "TCGA-VD-A8KO",
+        "sample_barcode": "TCGA-VD-A8KO-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.276811823248863,
+        "expression_value_a": 6.301571369171143,
+        "expression_value_b": 0.25205227732658386,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 795.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 51.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8M",
+        "sample_barcode": "TCGA-VD-AA8M-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.364000614732504,
+        "expression_value_a": 6.614700794219971,
+        "expression_value_b": 0.11330043524503708,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 6.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 64.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8N",
+        "sample_barcode": "TCGA-VD-AA8N-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.7910377979278564,
+        "expression_value_a": 4.894410133361816,
+        "expression_value_b": 6.6876654624938965,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 44.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 86.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8O",
+        "sample_barcode": "TCGA-VD-AA8O-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.5365761518478394,
+        "expression_value_a": 4.374044895172119,
+        "expression_value_b": 0.6991074085235596,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 606.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 77.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8P",
+        "sample_barcode": "TCGA-VD-AA8P-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.209707140922546,
+        "expression_value_a": 5.711580276489258,
+        "expression_value_b": 2.707834005355835,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 86.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 64.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8Q",
+        "sample_barcode": "TCGA-VD-AA8Q-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.6610941365361214,
+        "expression_value_a": 5.1898088455200195,
+        "expression_value_b": 0.1323794275522232,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 636.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 71.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8R",
+        "sample_barcode": "TCGA-VD-AA8R-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.3600399494171143,
+        "expression_value_a": 6.7200798988342285,
+        "expression_value_b": 0.0,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 6.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 78.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8S",
+        "sample_barcode": "TCGA-VD-AA8S-01B-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.594145281240344,
+        "expression_value_a": 7.162269592285156,
+        "expression_value_b": 0.026020970195531845,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 427.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "male",
+        "race": null,
+        "age_at_index": 40.0
+      },
+      {
+        "patient_id": "TCGA-VD-AA8T",
+        "sample_barcode": "TCGA-VD-AA8T-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.294000118970871,
+        "expression_value_a": 4.118218421936035,
+        "expression_value_b": 0.4697818160057068,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 49.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": null,
+        "age_at_index": 83.0
+      },
+      {
+        "patient_id": "TCGA-WC-A87T",
+        "sample_barcode": "TCGA-WC-A87T-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.3666203022003174,
+        "expression_value_a": 6.733240604400635,
+        "expression_value_b": 0.0,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 2600.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 64.0
+      },
+      {
+        "patient_id": "TCGA-WC-A87U",
+        "sample_barcode": "TCGA-WC-A87U-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.6832562685012817,
+        "expression_value_a": 6.588892936706543,
+        "expression_value_b": 0.7776196002960205,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1581.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 73.0
+      },
+      {
+        "patient_id": "TCGA-WC-A87W",
+        "sample_barcode": "TCGA-WC-A87W-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.950272500514984,
+        "expression_value_a": 7.0777740478515625,
+        "expression_value_b": 0.8227709531784058,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1703.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 57.0
+      },
+      {
+        "patient_id": "TCGA-WC-A87Y",
+        "sample_barcode": "TCGA-WC-A87Y-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 2.743762731552124,
+        "expression_value_a": 4.707635402679443,
+        "expression_value_b": 0.7798900604248047,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1314.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": null,
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 59.0
+      },
+      {
+        "patient_id": "TCGA-WC-A880",
+        "sample_barcode": "TCGA-WC-A880-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.07530665397644,
+        "expression_value_a": 6.851016998291016,
+        "expression_value_b": 1.2995963096618652,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 1258.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 63.0
+      },
+      {
+        "patient_id": "TCGA-WC-A882",
+        "sample_barcode": "TCGA-WC-A882-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.050399661064148,
+        "expression_value_a": 5.5234551429748535,
+        "expression_value_b": 2.5773441791534424,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1112.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 50.0
+      },
+      {
+        "patient_id": "TCGA-WC-A884",
+        "sample_barcode": "TCGA-WC-A884-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.463932037353516,
+        "expression_value_a": 6.658082962036133,
+        "expression_value_b": 4.269781112670898,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 12.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 35.0
+      },
+      {
+        "patient_id": "TCGA-WC-A885",
+        "sample_barcode": "TCGA-WC-A885-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.3645312786102295,
+        "expression_value_a": 6.614711284637451,
+        "expression_value_b": 8.114351272583008,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 686.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 60.0
+      },
+      {
+        "patient_id": "TCGA-WC-A888",
+        "sample_barcode": "TCGA-WC-A888-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 5.2172932624816895,
+        "expression_value_a": 5.822281360626221,
+        "expression_value_b": 4.612305164337158,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 575.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 76.0
+      },
+      {
+        "patient_id": "TCGA-WC-A88A",
+        "sample_barcode": "TCGA-WC-A88A-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.30024528503418,
+        "expression_value_a": 6.030922889709473,
+        "expression_value_b": 8.569567680358887,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 82.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IV",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 75.0
+      },
+      {
+        "patient_id": "TCGA-WC-AA9A",
+        "sample_barcode": "TCGA-WC-AA9A-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.2811490297317505,
+        "expression_value_a": 5.29446268081665,
+        "expression_value_b": 1.2678353786468506,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 453.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 70.0
+      },
+      {
+        "patient_id": "TCGA-WC-AA9E",
+        "sample_barcode": "TCGA-WC-AA9E-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.907853603363037,
+        "expression_value_a": 6.608898162841797,
+        "expression_value_b": 7.206809043884277,
+        "group": "High_High",
+        "group_a": "High",
+        "group_b": "High",
+        "time_days": 838.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 60.0
+      },
+      {
+        "patient_id": "TCGA-YZ-A980",
+        "sample_barcode": "TCGA-YZ-A980-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.3583560585975647,
+        "expression_value_a": 5.576718807220459,
+        "expression_value_b": 1.1399933099746704,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1862.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 75.0
+      },
+      {
+        "patient_id": "TCGA-YZ-A982",
+        "sample_barcode": "TCGA-YZ-A982-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.8129169046878815,
+        "expression_value_a": 7.379608154296875,
+        "expression_value_b": 0.24622565507888794,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 495.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 79.0
+      },
+      {
+        "patient_id": "TCGA-YZ-A983",
+        "sample_barcode": "TCGA-YZ-A983-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 3.2750210613012314,
+        "expression_value_a": 6.24564790725708,
+        "expression_value_b": 0.3043942153453827,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 798.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 51.0
+      },
+      {
+        "patient_id": "TCGA-YZ-A984",
+        "sample_barcode": "TCGA-YZ-A984-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.832323312759399,
+        "expression_value_a": 3.452608585357666,
+        "expression_value_b": 6.212038040161133,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 1396.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 50.0
+      },
+      {
+        "patient_id": "TCGA-YZ-A985",
+        "sample_barcode": "TCGA-YZ-A985-01A-11R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 1.282019779086113,
+        "expression_value_a": 2.5250415802001953,
+        "expression_value_b": 0.03899797797203064,
+        "group": "Low_Low",
+        "group_a": "Low",
+        "group_b": "Low",
+        "time_days": 1184.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 41.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EO",
+        "sample_barcode": "TCGA-V4-A9EO-01A-12R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.515048861503601,
+        "expression_value_a": 6.4930500984191895,
+        "expression_value_b": 2.5370476245880127,
+        "group": "High_Low",
+        "group_a": "High",
+        "group_b": "Low",
+        "time_days": 773.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 74.0
+      },
+      {
+        "patient_id": "TCGA-WC-A881",
+        "sample_barcode": "TCGA-WC-A881-01A-12R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 7.424083471298218,
+        "expression_value_a": 5.958842754364014,
+        "expression_value_b": 8.889324188232422,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 1065.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 75.0
+      },
+      {
+        "patient_id": "TCGA-WC-A883",
+        "sample_barcode": "TCGA-WC-A883-01A-12R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 6.241892337799072,
+        "expression_value_a": 4.255870819091797,
+        "expression_value_b": 8.227913856506348,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 241.0,
+        "event": 1,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIA",
+        "grade": null,
+        "gender": "female",
+        "race": "white",
+        "age_at_index": 76.0
+      },
+      {
+        "patient_id": "TCGA-V4-A9EF",
+        "sample_barcode": "TCGA-V4-A9EF-01A-21R-A405-07",
+        "endpoint": "DSS",
+        "expression_value": 4.590571165084839,
+        "expression_value_a": 3.7885708808898926,
+        "expression_value_b": 5.392571449279785,
+        "group": "Low_High",
+        "group_a": "Low",
+        "group_b": "High",
+        "time_days": 1165.0,
+        "event": 0,
+        "sample_type": "Primary Tumor",
+        "stage": "Stage IIIB",
+        "grade": null,
+        "gender": "male",
+        "race": "white",
+        "age_at_index": 56.0
+      }
+    ],
+    "stratified_patient_record_count": 80,
+    "stratified_patient_records_sha256": "ea916ac12de3b9bfbb8dd05611d61ce980a5607fe840f2466c2a2a8df041636a",
+    "continuous_patient_record_count": 0,
+    "continuous_patient_records_sha256": null,
+    "continuous_patient_records": []
+  },
+  "results": {
+    "n_patients": 80,
+    "n_events": 21,
+    "group_counts": {
+      "Low_Low": 19,
+      "Low_High": 21,
+      "High_Low": 21,
+      "High_High": 19
+    },
+    "event_counts": {
+      "Low_Low": 7,
+      "Low_High": 10,
+      "High_Low": 1,
+      "High_High": 3
+    },
+    "median_survival_days": {
+      "Low_Low": 1314,
+      "Low_High": 1113,
+      "High_Low": null,
+      "High_High": null
+    },
+    "median_survival_status": {
+      "Low_Low": {
+        "status": "estimated",
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve."
+      },
+      "Low_High": {
+        "status": "estimated",
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve."
+      },
+      "High_Low": {
+        "status": "not_reached",
+        "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached."
+      },
+      "High_High": {
+        "status": "not_reached",
+        "explanation": "The Kaplan-Meier curve did not fall to or below 50% survival in this group, so median survival was not reached."
+      }
+    },
+    "rmst": {
+      "status": "skipped",
+      "reason": "RMST is reported only for two expression groups."
+    },
+    "continuous_analysis": {
+      "status": "skipped",
+      "reason": "An unstratified expression-complete population was not supplied."
+    },
+    "logrank_p_value": 0.002219601163402479,
+    "hazard_ratio": null,
+    "hr_conf_low": null,
+    "hr_conf_high": null,
+    "hr_p_value": null,
+    "cox_models": [],
+    "signature_interaction_cox_models": [
+      {
+        "model": "signature_interaction",
+        "label": "Signature interaction",
+        "covariates": [],
+        "covariate_encoding": [],
+        "status": "completed",
+        "ties": "efron",
+        "n_patients": 80,
+        "n_events": 21,
+        "information_diagnostics": {
+          "parameter_count": 3,
+          "n_events": 21,
+          "events_per_parameter": 7,
+          "caution_threshold": 10,
+          "severe_threshold": 5,
+          "status": "caution",
+          "low_information": true,
+          "severe_low_information": false,
+          "standard_fit_instability": false,
+          "extreme_marker_estimate": false,
+          "penalized_sensitivity_recommended": true,
+          "trigger_reasons": [
+            "7.00 events per fitted parameter is below the prespecified threshold of 10."
+          ]
+        },
+        "penalized_sensitivity": {
+          "status": "completed",
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "package_version": "1.13.4",
+          "confidence_interval_method": "profile penalized likelihood",
+          "p_value_method": "penalized likelihood ratio",
+          "ties": "breslow",
+          "penalty": 0.5,
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "n_patients": 80,
+          "n_events": 21,
+          "parameter_count": 3,
+          "events_per_parameter": 7,
+          "log_hr": 0.11316721762311467,
+          "hazard_ratio": 1.1198191707934744,
+          "hr_conf_low": 0.7682602585397235,
+          "hr_conf_high": 1.5690037671094348,
+          "p_value": 0.5379304771828,
+          "iterations": 7,
+          "trigger_reasons": [
+            "7.00 events per fitted parameter is below the prespecified threshold of 10."
+          ],
+          "warnings": []
+        },
+        "score_scale": "within-analysis z-score",
+        "interaction_term": {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.08780865854416954,
+          "standard_error": 0.18608887142118996,
+          "hazard_ratio": 1.0917791994195944,
+          "hr_conf_low": 0.758116032888938,
+          "hr_conf_high": 1.5722946997216622,
+          "p_value": 0.6370237913969757
+        },
+        "terms": [
+          {
+            "term": "score_a_z",
+            "label": "Signature A score",
+            "log_hr": -0.6789780310822147,
+            "standard_error": 0.1966496971725353,
+            "hazard_ratio": 0.5071350038357347,
+            "hr_conf_low": 0.3449332513176065,
+            "hr_conf_high": 0.7456106685367364,
+            "p_value": 0.0005549470643081483
+          },
+          {
+            "term": "score_b_z",
+            "label": "Signature B score",
+            "log_hr": 0.23768390303444942,
+            "standard_error": 0.24249295666585466,
+            "hazard_ratio": 1.2683082210752081,
+            "hr_conf_low": 0.788523114462313,
+            "hr_conf_high": 2.040023575902214,
+            "p_value": 0.3270030617711046
+          },
+          {
+            "term": "score_a_z:score_b_z",
+            "label": "Signature A x Signature B",
+            "log_hr": 0.08780865854416954,
+            "standard_error": 0.18608887142118996,
+            "hazard_ratio": 1.0917791994195944,
+            "hr_conf_low": 0.758116032888938,
+            "hr_conf_high": 1.5722946997216622,
+            "p_value": 0.6370237913969757
+          }
+        ],
+        "ph_global_p_value": 0.4311057110034102,
+        "warnings": [
+          "Low-information Cox model: 7.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
+        ]
+      },
+      {
+        "model": "signature_interaction_stage_adjusted",
+        "label": "Signature interaction adjusted for ordinal stage",
+        "covariates": [
+          "stage_ordinal"
+        ],
+        "covariate_encoding": {
+          "stage_ordinal": {
+            "source": "stage",
+            "encoded_name": "stage_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "mapped_patients": 79,
+            "observed_scores": [
+              2,
+              3,
+              4
+            ],
+            "unmapped_values": []
+          }
+        },
+        "status": "completed",
+        "ties": "efron",
+        "n_patients": 79,
+        "n_events": 20,
+        "information_diagnostics": {
+          "parameter_count": 4,
+          "n_events": 20,
+          "events_per_parameter": 5,
+          "caution_threshold": 10,
+          "severe_threshold": 5,
+          "status": "caution",
+          "low_information": true,
+          "severe_low_information": false,
+          "standard_fit_instability": false,
+          "extreme_marker_estimate": false,
+          "penalized_sensitivity_recommended": true,
+          "trigger_reasons": [
+            "5.00 events per fitted parameter is below the prespecified threshold of 10."
+          ]
+        },
+        "penalized_sensitivity": {
+          "status": "completed",
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "package_version": "1.13.4",
+          "confidence_interval_method": "profile penalized likelihood",
+          "p_value_method": "penalized likelihood ratio",
+          "ties": "breslow",
+          "penalty": 0.5,
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "n_patients": 79,
+          "n_events": 20,
+          "parameter_count": 4,
+          "events_per_parameter": 5,
+          "log_hr": 0.07580773080784829,
+          "hazard_ratio": 1.0787551428367539,
+          "hr_conf_low": 0.7177364053718659,
+          "hr_conf_high": 1.5452593523694342,
+          "p_value": 0.6982672980730551,
+          "iterations": 7,
+          "trigger_reasons": [
+            "5.00 events per fitted parameter is below the prespecified threshold of 10."
+          ],
+          "warnings": []
+        },
+        "score_scale": "within-analysis z-score",
+        "interaction_term": {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.04847753423640321,
+          "standard_error": 0.20100508847187393,
+          "hazard_ratio": 1.0496717898771473,
+          "hr_conf_low": 0.7078768083896273,
+          "hr_conf_high": 1.5565008676727816,
+          "p_value": 0.8094189771482455
+        },
+        "terms": [
+          {
+            "term": "score_a_z",
+            "label": "Signature A score",
+            "log_hr": -0.6073889996685073,
+            "standard_error": 0.20382710312171273,
+            "hazard_ratio": 0.544771412085882,
+            "hr_conf_low": 0.3653561013538263,
+            "hr_conf_high": 0.8122921454612184,
+            "p_value": 0.0028832118497434597
+          },
+          {
+            "term": "score_b_z",
+            "label": "Signature B score",
+            "log_hr": 0.32116579880783674,
+            "standard_error": 0.2671364595397789,
+            "hazard_ratio": 1.3787341544237481,
+            "hr_conf_low": 0.8167583208082064,
+            "hr_conf_high": 2.3273810870926464,
+            "p_value": 0.22926524667009118
+          },
+          {
+            "term": "score_a_z:score_b_z",
+            "label": "Signature A x Signature B",
+            "log_hr": 0.04847753423640321,
+            "standard_error": 0.20100508847187393,
+            "hazard_ratio": 1.0496717898771473,
+            "hr_conf_low": 0.7078768083896273,
+            "hr_conf_high": 1.5565008676727816,
+            "p_value": 0.8094189771482455
+          }
+        ],
+        "ph_global_p_value": 0.027660110650787384,
+        "warnings": [
+          "Low-information Cox model: 5.00 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.",
+          "Global proportional hazards test p < 0.05; inspect time-varying effects."
+        ]
+      },
+      {
+        "model": "signature_interaction_grade_adjusted",
+        "label": "Signature interaction adjusted for ordinal grade",
+        "covariates": [
+          "grade_ordinal"
+        ],
+        "covariate_encoding": {
+          "grade_ordinal": {
+            "source": "grade",
+            "encoded_name": "grade_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "unmapped_values": []
+          }
+        },
+        "status": "skipped",
+        "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+        "n_patients": 0,
+        "n_events": 0
+      },
+      {
+        "model": "signature_interaction_stage_grade_adjusted",
+        "label": "Signature interaction adjusted for ordinal stage and grade",
+        "covariates": [
+          "stage_ordinal",
+          "grade_ordinal"
+        ],
+        "covariate_encoding": {
+          "stage_ordinal": {
+            "source": "stage",
+            "encoded_name": "stage_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "mapped_patients": 79,
+            "observed_scores": [
+              2,
+              3,
+              4
+            ],
+            "unmapped_values": []
+          },
+          "grade_ordinal": {
+            "source": "grade",
+            "encoded_name": "grade_ordinal",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "unmapped_values": []
+          }
+        },
+        "status": "skipped",
+        "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+        "n_patients": 0,
+        "n_events": 0
+      },
+      {
+        "model": "signature_interaction_user_adjusted",
+        "label": "Signature interaction user-adjusted for Age",
+        "covariates": [
+          "age_at_index_per_10y"
+        ],
+        "covariate_encoding": {
+          "age_at_index_per_10y": {
+            "source": "age_at_index",
+            "encoded_name": "age_at_index_per_10y",
+            "type": "continuous_numeric",
+            "unit": "10-year increase",
+            "coding": "Age at index is modeled continuously after division by 10; the hazard ratio is per 10-year increase.",
+            "mapped_patients": 80,
+            "observed_range_years": [
+              22,
+              86
+            ]
+          }
+        },
+        "status": "completed",
+        "ties": "efron",
+        "n_patients": 80,
+        "n_events": 21,
+        "information_diagnostics": {
+          "parameter_count": 4,
+          "n_events": 21,
+          "events_per_parameter": 5.25,
+          "caution_threshold": 10,
+          "severe_threshold": 5,
+          "status": "caution",
+          "low_information": true,
+          "severe_low_information": false,
+          "standard_fit_instability": false,
+          "extreme_marker_estimate": false,
+          "penalized_sensitivity_recommended": true,
+          "trigger_reasons": [
+            "5.25 events per fitted parameter is below the prespecified threshold of 10."
+          ]
+        },
+        "penalized_sensitivity": {
+          "status": "completed",
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "package_version": "1.13.4",
+          "confidence_interval_method": "profile penalized likelihood",
+          "p_value_method": "penalized likelihood ratio",
+          "ties": "breslow",
+          "penalty": 0.5,
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "n_patients": 80,
+          "n_events": 21,
+          "parameter_count": 4,
+          "events_per_parameter": 5.25,
+          "log_hr": 0.3206120742451635,
+          "hazard_ratio": 1.3779709267854936,
+          "hr_conf_low": 0.9098210928924755,
+          "hr_conf_high": 2.0350364987077807,
+          "p_value": 0.12631843500703743,
+          "iterations": 8,
+          "trigger_reasons": [
+            "5.25 events per fitted parameter is below the prespecified threshold of 10."
+          ],
+          "warnings": []
+        },
+        "score_scale": "within-analysis z-score",
+        "interaction_term": {
+          "term": "score_a_z:score_b_z",
+          "label": "Signature A x Signature B",
+          "log_hr": 0.3026885879550577,
+          "standard_error": 0.20944723933912354,
+          "hazard_ratio": 1.3534929048130193,
+          "hr_conf_low": 0.8977887729225933,
+          "hr_conf_high": 2.040505627415697,
+          "p_value": 0.14840783322680862
+        },
+        "terms": [
+          {
+            "term": "score_a_z",
+            "label": "Signature A score",
+            "log_hr": -0.889059341793074,
+            "standard_error": 0.24293728957608102,
+            "hazard_ratio": 0.4110422211952528,
+            "hr_conf_low": 0.2553276440710491,
+            "hr_conf_high": 0.6617211709285676,
+            "p_value": 0.00025258475830980046
+          },
+          {
+            "term": "score_b_z",
+            "label": "Signature B score",
+            "log_hr": 0.2706917120545163,
+            "standard_error": 0.233803342853365,
+            "hazard_ratio": 1.3108708823935191,
+            "hr_conf_low": 0.8289840041381464,
+            "hr_conf_high": 2.0728777174581072,
+            "p_value": 0.24695578641577315
+          },
+          {
+            "term": "score_a_z:score_b_z",
+            "label": "Signature A x Signature B",
+            "log_hr": 0.3026885879550577,
+            "standard_error": 0.20944723933912354,
+            "hazard_ratio": 1.3534929048130193,
+            "hr_conf_low": 0.8977887729225933,
+            "hr_conf_high": 2.040505627415697,
+            "p_value": 0.14840783322680862
+          }
+        ],
+        "ph_global_p_value": 0.18173200016193894,
+        "warnings": [
+          "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity."
+        ]
+      }
+    ],
+    "expression_distribution": null,
+    "expression_distribution_a": {
+      "n": 80,
+      "min": 2.5250415802001953,
+      "q1": 4.749674558639526,
+      "median": 6.000036716461182,
+      "q3": 6.73908793926239,
+      "max": 7.379608154296875,
+      "bins": [
+        {
+          "label": "2.53-3.01",
+          "count": 3
+        },
+        {
+          "label": "3.01-3.50",
+          "count": 5
+        },
+        {
+          "label": "3.50-3.98",
+          "count": 5
+        },
+        {
+          "label": "3.98-4.47",
+          "count": 4
+        },
+        {
+          "label": "4.47-4.95",
+          "count": 5
+        },
+        {
+          "label": "4.95-5.44",
+          "count": 5
+        },
+        {
+          "label": "5.44-5.92",
+          "count": 10
+        },
+        {
+          "label": "5.92-6.41",
+          "count": 10
+        },
+        {
+          "label": "6.41-6.89",
+          "count": 21
+        },
+        {
+          "label": "6.89-7.38",
+          "count": 12
+        }
+      ]
+    },
+    "expression_distribution_b": {
+      "n": 80,
+      "min": 0.0,
+      "q1": 0.752549797296524,
+      "median": 2.740936279296875,
+      "q3": 7.227426648139954,
+      "max": 9.643020629882812,
+      "bins": [
+        {
+          "label": "0.00-0.96",
+          "count": 24
+        },
+        {
+          "label": "0.96-1.93",
+          "count": 10
+        },
+        {
+          "label": "1.93-2.89",
+          "count": 7
+        },
+        {
+          "label": "2.89-3.86",
+          "count": 1
+        },
+        {
+          "label": "3.86-4.82",
+          "count": 5
+        },
+        {
+          "label": "4.82-5.79",
+          "count": 3
+        },
+        {
+          "label": "5.79-6.75",
+          "count": 7
+        },
+        {
+          "label": "6.75-7.71",
+          "count": 7
+        },
+        {
+          "label": "7.71-8.68",
+          "count": 6
+        },
+        {
+          "label": "8.68-9.64",
+          "count": 10
+        }
+      ]
+    }
+  },
+  "quality": {
+    "summary": {
+      "groups": {
+        "Low_High": {
+          "patients": 21,
+          "events": 10
+        },
+        "High_Low": {
+          "patients": 21,
+          "events": 1
+        },
+        "High_High": {
+          "patients": 19,
+          "events": 3
+        },
+        "Low_Low": {
+          "patients": 19,
+          "events": 7
+        }
+      },
+      "low_event_groups": [
+        "High_Low",
+        "High_High"
+      ],
+      "interpretation": "Exploratory research analysis only; not for clinical decision-making."
+    },
+    "warnings": [],
+    "limitations": [
+      "Retrospective exploratory analysis based on public TCGA cohort data.",
+      "Continuous Cox and spline estimates describe association, not causality, and can remain confounded by unmeasured clinical or biological factors.",
+      "Kaplan-Meier grouping does not establish causality and is sensitive to cutpoint choice.",
+      "Optimized cutpoints such as maxstat can overestimate apparent significance unless externally validated.",
+      "Clinical adjustment is limited to imported covariates and does not include treatment or tumor purity."
+    ]
+  },
+  "artifacts": {
+    "csv": {
+      "filename": "raw_data.csv",
+      "bytes": 13619,
+      "sha256": "828e33f87c4632c584fb7fc0307ae600f6e658f579df68569fe4457dcdc01cbe"
+    },
+    "input": {
+      "filename": "input.json",
+      "bytes": 37372,
+      "sha256": "94f068fec39ab96efe8ab45227344d6428fd5f43e8d8e9564d4a399ee05b4b8b"
+    },
+    "methodology": {
+      "filename": "methodology.txt",
+      "bytes": 11541,
+      "sha256": "bec648bc11822b12260bb56d7a9c55142ed6e49af39b37e650206e4c737b2871"
+    },
+    "png": {
+      "filename": "plot.png",
+      "bytes": 62276,
+      "sha256": "fc099b0a32be3bd1062518ec9da4fe83f145c691a7e12d45ddbe46987d544507"
+    },
+    "reproduction_clinical_covariates": {
+      "filename": "clinical_covariates.R",
+      "bytes": 7375,
+      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+    },
+    "reproduction_cox_diagnostics": {
+      "filename": "cox_diagnostics.R",
+      "bytes": 9065,
+      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+    },
+    "reproduction_dockerfile": {
+      "filename": "Dockerfile.reproduce",
+      "bytes": 945,
+      "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
+    },
+    "reproduction_km_analysis": {
+      "filename": "km_analysis.R",
+      "bytes": 66975,
+      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+    },
+    "reproduction_manifest": {
+      "filename": "reproduction_manifest.json",
+      "bytes": 2880,
+      "sha256": "298d37c00486a595fa898102cd62dd2f895811206cce1385da8a5b58c2aa6d9a"
+    },
+    "reproduction_r_runner": {
+      "filename": "rerun_analysis.R",
+      "bytes": 7241,
+      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+    },
+    "reproduction_readme": {
+      "filename": "REPRODUCE.md",
+      "bytes": 1209,
+      "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
+    },
+    "reproduction_renv_lock": {
+      "filename": "renv.lock",
+      "bytes": 204337,
+      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+    },
+    "txt": {
+      "filename": "methodology.txt",
+      "bytes": 11541,
+      "sha256": "bec648bc11822b12260bb56d7a9c55142ed6e49af39b37e650206e4c737b2871"
+    }
+  }
+}

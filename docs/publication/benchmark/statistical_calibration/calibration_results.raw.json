@@ -1,0 +1,467 @@
+{
+  "schema_version": "tcga-trace-statistical-calibration-v2",
+  "design": {
+    "alpha": 0.050000000000000003,
+    "seed": 20260725,
+    "permutation_replicates": 2000,
+    "simulation_replicates_per_scenario": 2000,
+    "simulation_n": 300,
+    "methods": [
+      "maxstat",
+      "median",
+      "upper_quartile",
+      "upper_lower_quartile"
+    ],
+    "observed_tau_definition": "minimum of 1826.25 days and the observed cohort 75th percentile, fixed before permutation",
+    "simulation_tau_definition": "minimum of 5 time units and each generated cohort 75th percentile, fixed before grouping",
+    "maxstat_inference": "Lau94 corrected p-value, bounded to [0,1], enters the grouped Holm family; the selected-group log-rank p-value is retained only as a naive post-selection diagnostic",
+    "multiplicity": "Holm adjustment across the four prespecified grouped methods within each replicate",
+    "monte_carlo_interval": "Wilson 95% interval for each rejection proportion"
+  },
+  "source": {
+    "analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+    "audit_schema_version": "tcga-trace-analysis-audit-v3",
+    "audit_reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7",
+    "continuous_patient_records_sha256": "92699d577a954fcdb1a1d1fee76b1cc0c6885d622b16bc20c0f7c1b470cbbc68",
+    "patients": 365,
+    "events": 130,
+    "tau": 1091
+  },
+  "scenario_truth": {
+    "null": "No expression effect; exponential baseline event time.",
+    "linear_ph": "Constant log HR log(1.5) per one-SD expression increase.",
+    "delayed_non_ph": "No expression effect before time 2.5; log HR log(2) per SD thereafter.",
+    "u_shaped_nonlinear": "Log hazard log(1.8) times (x squared minus 1), with no linear monotone truth."
+  },
+  "permutation_summary": [
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "continuous_linear",
+      "rejected": 99,
+      "evaluable": 2000,
+      "rate": 0.049500000000000002,
+      "confidence_low": 0.040827254610808245,
+      "confidence_high": 0.059900004989600644
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "spline_nonlinearity",
+      "rejected": 116,
+      "evaluable": 2000,
+      "rate": 0.058000000000000003,
+      "confidence_low": 0.048578071454013827,
+      "confidence_high": 0.069116598342613758
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "marker_ph",
+      "rejected": 102,
+      "evaluable": 2000,
+      "rate": 0.050999999999999997,
+      "confidence_low": 0.042189969917315481,
+      "confidence_high": 0.061531538541249639
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "grouped_family_holm",
+      "rejected": 64,
+      "evaluable": 2000,
+      "rate": 0.032000000000000001,
+      "confidence_low": 0.02513912520329142,
+      "confidence_high": 0.04065523105196131
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "maxstat_naive",
+      "rejected": 792,
+      "evaluable": 2000,
+      "rate": 0.39600000000000002,
+      "confidence_low": 0.3747852003560857,
+      "confidence_high": 0.41761354547841484
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "maxstat_lau94",
+      "rejected": 37,
+      "evaluable": 2000,
+      "rate": 0.018499999999999999,
+      "confidence_low": 0.013451349814109875,
+      "confidence_high": 0.025394766717736699
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "median_logrank",
+      "rejected": 107,
+      "evaluable": 2000,
+      "rate": 0.053499999999999999,
+      "confidence_low": 0.044466187536515975,
+      "confidence_high": 0.064245735685642874
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "median_cox",
+      "rejected": 105,
+      "evaluable": 2000,
+      "rate": 0.052499999999999998,
+      "confidence_low": 0.043554967025111281,
+      "confidence_high": 0.063160790291610064
+    },
+    {
+      "scenario": "observed_null_permutation",
+      "metric": "median_rmst",
+      "rejected": 105,
+      "evaluable": 2000,
+      "rate": 0.052499999999999998,
+      "confidence_low": 0.043554967025111281,
+      "confidence_high": 0.063160790291610064
+    }
+  ],
+  "simulation_summary": [
+    {
+      "scenario": "null",
+      "metric": "continuous_linear",
+      "rejected": 113,
+      "evaluable": 2000,
+      "rate": 0.056500000000000002,
+      "confidence_low": 0.04720544161779263,
+      "confidence_high": 0.067494979320678716
+    },
+    {
+      "scenario": "null",
+      "metric": "spline_nonlinearity",
+      "rejected": 89,
+      "evaluable": 2000,
+      "rate": 0.044499999999999998,
+      "confidence_low": 0.036302665128406825,
+      "confidence_high": 0.054443764944814579
+    },
+    {
+      "scenario": "null",
+      "metric": "marker_ph",
+      "rejected": 106,
+      "evaluable": 2000,
+      "rate": 0.052999999999999999,
+      "confidence_low": 0.044010457205797063,
+      "confidence_high": 0.063703383063643038
+    },
+    {
+      "scenario": "null",
+      "metric": "grouped_family_holm",
+      "rejected": 71,
+      "evaluable": 2000,
+      "rate": 0.035499999999999997,
+      "confidence_low": 0.028239876230264003,
+      "confidence_high": 0.04454106069401996
+    },
+    {
+      "scenario": "null",
+      "metric": "maxstat_naive",
+      "rejected": 765,
+      "evaluable": 2000,
+      "rate": 0.38250000000000001,
+      "confidence_low": 0.36144509033940542,
+      "confidence_high": 0.40400541577168891
+    },
+    {
+      "scenario": "null",
+      "metric": "maxstat_lau94",
+      "rejected": 48,
+      "evaluable": 2000,
+      "rate": 0.024,
+      "confidence_low": 0.018149556703294482,
+      "confidence_high": 0.031675472308458304
+    },
+    {
+      "scenario": "null",
+      "metric": "median_logrank",
+      "rejected": 92,
+      "evaluable": 2000,
+      "rate": 0.045999999999999999,
+      "confidence_low": 0.0376570233593111,
+      "confidence_high": 0.05608365557206655
+    },
+    {
+      "scenario": "null",
+      "metric": "median_cox",
+      "rejected": 91,
+      "evaluable": 2000,
+      "rate": 0.045499999999999999,
+      "confidence_low": 0.037205271350201449,
+      "confidence_high": 0.055537324628457452
+    },
+    {
+      "scenario": "null",
+      "metric": "median_rmst",
+      "rejected": 92,
+      "evaluable": 2000,
+      "rate": 0.045999999999999999,
+      "confidence_low": 0.0376570233593111,
+      "confidence_high": 0.05608365557206655
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "continuous_linear",
+      "rejected": 1985,
+      "evaluable": 2000,
+      "rate": 0.99250000000000005,
+      "confidence_low": 0.98766208586377513,
+      "confidence_high": 0.99544962256419078
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "spline_nonlinearity",
+      "rejected": 109,
+      "evaluable": 2000,
+      "rate": 0.0545,
+      "confidence_low": 0.045378356153563192,
+      "confidence_high": 0.065329732974033161
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "marker_ph",
+      "rejected": 99,
+      "evaluable": 2000,
+      "rate": 0.049500000000000002,
+      "confidence_low": 0.040827254610808245,
+      "confidence_high": 0.059900004989600644
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "grouped_family_holm",
+      "rejected": 1927,
+      "evaluable": 2000,
+      "rate": 0.96350000000000002,
+      "confidence_low": 0.95435264945075327,
+      "confidence_high": 0.97087024771952524
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "maxstat_naive",
+      "rejected": 1997,
+      "evaluable": 2000,
+      "rate": 0.99850000000000005,
+      "confidence_low": 0.99559896744422938,
+      "confidence_high": 0.99948973641636152
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "maxstat_lau94",
+      "rejected": 1887,
+      "evaluable": 2000,
+      "rate": 0.94350000000000001,
+      "confidence_low": 0.93250502067932128,
+      "confidence_high": 0.95279455838220728
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "median_logrank",
+      "rejected": 1878,
+      "evaluable": 2000,
+      "rate": 0.93899999999999995,
+      "confidence_low": 0.9276458135951825,
+      "confidence_high": 0.94867101889187733
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "median_cox",
+      "rejected": 1873,
+      "evaluable": 2000,
+      "rate": 0.9365,
+      "confidence_low": 0.92495327385404924,
+      "confidence_high": 0.94637314386941684
+    },
+    {
+      "scenario": "linear_ph",
+      "metric": "median_rmst",
+      "rejected": 1607,
+      "evaluable": 2000,
+      "rate": 0.80349999999999999,
+      "confidence_low": 0.78551079837883508,
+      "confidence_high": 0.82032555392144435
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "continuous_linear",
+      "rejected": 1989,
+      "evaluable": 2000,
+      "rate": 0.99450000000000005,
+      "confidence_low": 0.99017793724838477,
+      "confidence_high": 0.99692610299045614
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "spline_nonlinearity",
+      "rejected": 121,
+      "evaluable": 2000,
+      "rate": 0.060499999999999998,
+      "confidence_low": 0.050869989310639914,
+      "confidence_high": 0.071815095249581407
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "marker_ph",
+      "rejected": 1765,
+      "evaluable": 2000,
+      "rate": 0.88249999999999995,
+      "confidence_low": 0.86764853168038791,
+      "confidence_high": 0.89588492714945334
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "grouped_family_holm",
+      "rejected": 1934,
+      "evaluable": 2000,
+      "rate": 0.96699999999999997,
+      "confidence_low": 0.95823223053959927,
+      "confidence_high": 0.97397724729971025
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "maxstat_naive",
+      "rejected": 1999,
+      "evaluable": 2000,
+      "rate": 0.99950000000000006,
+      "confidence_low": 0.99717313749673375,
+      "confidence_high": 0.99991173226929442
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "maxstat_lau94",
+      "rejected": 1882,
+      "evaluable": 2000,
+      "rate": 0.94099999999999995,
+      "confidence_low": 0.9298033851481019,
+      "confidence_high": 0.95050577914983292
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "median_logrank",
+      "rejected": 1870,
+      "evaluable": 2000,
+      "rate": 0.93500000000000005,
+      "confidence_low": 0.92334000648671322,
+      "confidence_high": 0.94499216237859684
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "median_cox",
+      "rejected": 1869,
+      "evaluable": 2000,
+      "rate": 0.9345,
+      "confidence_low": 0.92280261465746971,
+      "confidence_high": 0.94453147125512138
+    },
+    {
+      "scenario": "delayed_non_ph",
+      "metric": "median_rmst",
+      "rejected": 478,
+      "evaluable": 2000,
+      "rate": 0.23899999999999999,
+      "confidence_low": 0.22082092237035655,
+      "confidence_high": 0.25817977631045741
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "continuous_linear",
+      "rejected": 300,
+      "evaluable": 2000,
+      "rate": 0.14999999999999999,
+      "confidence_low": 0.13502252494970823,
+      "confidence_high": 0.16631940814716878
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "spline_nonlinearity",
+      "rejected": 2000,
+      "evaluable": 2000,
+      "rate": 1,
+      "confidence_low": 0.99808295271874692,
+      "confidence_high": 0.99999999999999978
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "marker_ph",
+      "rejected": 414,
+      "evaluable": 2000,
+      "rate": 0.20699999999999999,
+      "confidence_low": 0.18981343495635533,
+      "confidence_high": 0.22530995475045879
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "grouped_family_holm",
+      "rejected": 1957,
+      "evaluable": 2000,
+      "rate": 0.97850000000000004,
+      "confidence_low": 0.97116616626091556,
+      "confidence_high": 0.98399921949092539
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "maxstat_naive",
+      "rejected": 2000,
+      "evaluable": 2000,
+      "rate": 1,
+      "confidence_low": 0.99808295271874692,
+      "confidence_high": 0.99999999999999978
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "maxstat_lau94",
+      "rejected": 1982,
+      "evaluable": 2000,
+      "rate": 0.99099999999999999,
+      "confidence_low": 0.98581795929838689,
+      "confidence_high": 0.99429950027142255
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "median_logrank",
+      "rejected": 124,
+      "evaluable": 2000,
+      "rate": 0.062,
+      "confidence_low": 0.052247554461338233,
+      "confidence_high": 0.073431778957039326
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "median_cox",
+      "rejected": 120,
+      "evaluable": 2000,
+      "rate": 0.059999999999999998,
+      "confidence_low": 0.050411197114316506,
+      "confidence_high": 0.07127580449318606
+    },
+    {
+      "scenario": "u_shaped_nonlinear",
+      "metric": "median_rmst",
+      "rejected": 119,
+      "evaluable": 2000,
+      "rate": 0.059499999999999997,
+      "confidence_low": 0.049952606838412239,
+      "confidence_high": 0.070736311816371578
+    }
+  ],
+  "dependence": {
+    "scenario": "observed_null_permutation",
+    "method": "median",
+    "spearman_logrank_vs_cox": 0.99999746499936626,
+    "spearman_logrank_vs_rmst": 0.66448986862246706,
+    "spearman_cox_vs_rmst": 0.66472069918017473,
+    "all_three_nominal": {
+      "rejected": 57,
+      "evaluable": 2000,
+      "rate": 0.028500000000000001,
+      "confidence_low": 0.022062516054529097,
+      "confidence_high": 0.036745259531692415
+    },
+    "interpretation": "Log-rank, grouped Cox and RMST are correlated summaries and are not treated as independent evidence barriers."
+  },
+  "software_versions": {
+    "R": "R version 4.4.2 (2024-10-31)",
+    "survival": "3.8.9",
+    "maxstat": "0.7.26",
+    "survRM2": "1.0.4",
+    "jsonlite": "2.0.0"
+  }
+}

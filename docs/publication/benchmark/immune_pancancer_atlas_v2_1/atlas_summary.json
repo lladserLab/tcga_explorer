@@ -1,0 +1,157 @@
+{
+  "screen_id": "immune_os_immport_all_v2_1",
+  "created_at": "2026-07-24T13:37:06.399619+00:00",
+  "pipeline_version": "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1",
+  "data_version": {
+    "tcga_cdr": {
+      "manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264",
+      "data_through_date": null,
+      "data_release": null
+    }
+  },
+  "headline": {
+    "immune_genes": 3118,
+    "immune_terms": 153,
+    "prepared_cohorts": 32,
+    "completed_gene_cohort_models": 96779,
+    "global_fdr_hits": 12234,
+    "meta_fdr_gene_hits": 881,
+    "adjusted_gene_cohort_models": 72633,
+    "adjusted_global_fdr_hits": 2379,
+    "retained_global_fdr_hits": 2212,
+    "attenuated_global_fdr_hits": 7432,
+    "direction_reversed": 169,
+    "direction_reversed_all": 13738,
+    "fdr_threshold": 0.1
+  },
+  "model_family_summary": [
+    {
+      "model": "primary",
+      "model_label": "Primary continuous expression",
+      "role": "primary_estimand",
+      "completed_gene_cohort_models": "96779",
+      "global_fdr_hits": "12234",
+      "meta_fdr_gene_hits": "881",
+      "ph_flagged_models": "7907",
+      "global_fdr_ph_flagged": "1930",
+      "recurrent_harmful_genes_ge5": "508",
+      "recurrent_protective_genes_ge5": "73"
+    },
+    {
+      "model": "stage_grade_adjusted",
+      "model_label": "Ordinal stage + grade",
+      "role": "clinical_sensitivity",
+      "completed_gene_cohort_models": "30326",
+      "global_fdr_hits": "178",
+      "meta_fdr_gene_hits": "100",
+      "ph_flagged_models": "7391",
+      "global_fdr_ph_flagged": "108",
+      "recurrent_harmful_genes_ge5": "0",
+      "recurrent_protective_genes_ge5": "0"
+    },
+    {
+      "model": "stage_adjusted",
+      "model_label": "Ordinal stage",
+      "role": "clinical_sensitivity",
+      "completed_gene_cohort_models": "66547",
+      "global_fdr_hits": "1342",
+      "meta_fdr_gene_hits": "346",
+      "ph_flagged_models": "17061",
+      "global_fdr_ph_flagged": "402",
+      "recurrent_harmful_genes_ge5": "0",
+      "recurrent_protective_genes_ge5": "0"
+    },
+    {
+      "model": "grade_adjusted",
+      "model_label": "Ordinal grade",
+      "role": "clinical_sensitivity",
+      "completed_gene_cohort_models": "36410",
+      "global_fdr_hits": "2841",
+      "meta_fdr_gene_hits": "119",
+      "ph_flagged_models": "8338",
+      "global_fdr_ph_flagged": "785",
+      "recurrent_harmful_genes_ge5": "0",
+      "recurrent_protective_genes_ge5": "0"
+    },
+    {
+      "model": "availability_selected",
+      "model_label": "Availability-selected sensitivity",
+      "role": "descriptive_sensitivity_no_mixed_meta",
+      "completed_gene_cohort_models": "72633",
+      "global_fdr_hits": "2379",
+      "meta_fdr_gene_hits": "",
+      "ph_flagged_models": "19055",
+      "global_fdr_ph_flagged": "899",
+      "recurrent_harmful_genes_ge5": "0",
+      "recurrent_protective_genes_ge5": "0"
+    }
+  ],
+  "clinical_sensitivity": {
+    "selection_hierarchy": [
+      "stage_grade_adjusted",
+      "stage_adjusted",
+      "grade_adjusted"
+    ],
+    "summary": {
+      "total_primary_gene_cohort_pairs": 96779,
+      "evaluable": 72633,
+      "not_evaluable": 24146,
+      "fdr_significant": 2379,
+      "primary_fdr_not_evaluable": 2421,
+      "retained": 2212,
+      "attenuated": 7432,
+      "emerged": 165,
+      "direction_reversed_all": 13738,
+      "primary_fdr_direction_reversed": 169,
+      "both_fdr_direction_reversed": 0,
+      "direction_consistent": 49086,
+      "ph_flagged": 19055,
+      "fdr_significant_ph_flagged": 899,
+      "selected_model_counts": {
+        "not_evaluable": 24146,
+        "stage_adjusted": 36222,
+        "stage_grade_adjusted": 30326,
+        "grade_adjusted": 6085
+      },
+      "comparison_counts": {
+        "not_evaluable": 24146,
+        "direction_consistent": 49086,
+        "reversed": 13738,
+        "attenuated": 7432,
+        "retained": 2212,
+        "emerged": 165
+      }
+    },
+    "recurrence_summary": {
+      "genes_with_any_global_hit": 1709,
+      "genes_with_harmful_hit": 1293,
+      "genes_with_protective_hit": 669,
+      "recurrent_harmful_genes_ge5": 0,
+      "recurrent_protective_genes_ge5": 0,
+      "one_cancer_harmful_genes": 1025,
+      "one_cancer_protective_genes": 599
+    },
+    "notes": [
+      "Selection depends only on complete-case model availability, never on effect size or p-value.",
+      "Retained and attenuated refer to atlas-wide FDR support, not clinical validity or causality."
+    ]
+  },
+  "audit": {
+    "schema_version": "tcga-trace-immune-pancancer-atlas-audit-v2",
+    "reproducibility_hash": "4d942e93715ec953f0501b13a818d2f19e34f21d851367057924f0af3c2d0252",
+    "software_versions": {
+      "python": "3.12.3",
+      "R": "R version 4.4.2 (2024-10-31)",
+      "survival": "3.8.9",
+      "jsonlite": "2.0.0"
+    },
+    "expression_matrix_count": 32
+  },
+  "method_notes": [
+    "Primary and ordinal-adjusted Cox models use expression z-scored within each cancer.",
+    "Stage 0/I/II/III/IV maps to 0/1/2/3/4 and grade G1-G5 maps to 1-5; unknown values remain missing.",
+    "Gene-cancer BH-FDR and gene-level random-effects meta-analysis are calculated separately by model family.",
+    "The availability-selected sensitivity hierarchy is stage+grade, stage, then grade; mixed selected families are never meta-analyzed.",
+    "The atlas is association analysis, not causal inference; tumor purity, immune composition and treatment are not included as covariates."
+  ]
+}

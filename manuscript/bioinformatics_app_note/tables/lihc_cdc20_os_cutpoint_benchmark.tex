@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-LIHC CDC20 OS cutpoint-sensitivity benchmark.}
+\label{tab:lihc-cdc20-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
+\midrule
+Maxstat & 365 & 130 & 2.24e-05 & 6.75e-08 & 0.008 & -251 & Marker-specific PH caution; Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 365 & 130 & 7.37e-05 & 4.00e-05 & 0.003 & -207 & Marker-specific PH caution \\
+Upper Q & 365 & 130 & 5.98e-05 & 1.62e-05 & 0.022 & -229 & Marker-specific PH caution \\
+Outer Q & 184 & 70 & 7.37e-05 & 6.61e-05 & 2.79e-04 & -315 & Marker-specific PH caution; Middle 50\% excluded \\
+\bottomrule
+\end{tabular}
+\end{table}

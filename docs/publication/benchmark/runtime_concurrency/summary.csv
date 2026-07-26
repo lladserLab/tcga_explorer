@@ -1,0 +1,7 @@
+benchmark_id,workflow,units,cached,wall_seconds,queue_wait_seconds,compute_seconds,peak_memory_mib,peak_delta_mib,status
+single_uncached,"Single analysis, uncached result",1,False,5.120607,0.939393,3.201809,553.56,329.99,completed
+single_cached_repeat,"Single analysis, exact cached repeat",1,True,0.037202,,,224.73,0.0,completed
+two_job_concurrency,Two independent single analyses,2,False,5.231355,0.938048,3.397899,775.66,551.96,completed
+batch_10,"Public batch, 10 analyses",10,False,32.469335,0.216025,31.78316,561.66,335.38,completed
+multiverse_72,"Prespecified multiverse, 72 cells",72,False,218.797564,0.48703,217.878213,568.93,341.07,completed
+pancancer_all_cohorts,"Pan-cancer scan, 33 requested cohorts",33,False,7.179898,0.224278,6.536566,439.86,213.21,completed

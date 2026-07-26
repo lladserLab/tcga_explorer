@@ -1,0 +1,631 @@
+{
+  "capsules": {
+    "Single gene": {
+      "analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+      "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
+      "capsule_manifest_sha256": "63418e15f6138f5a6aee0ffff46d4376512903f4d635f91e90ebff6afdfa77a1",
+      "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
+      "path": "docs/publication/benchmark/clean_container_reproduction/capsules/single_gene",
+      "reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7"
+    },
+    "Two signatures": {
+      "analysis_id": "d126076114ea42d4ae94f1ca7706b31c",
+      "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
+      "capsule_manifest_sha256": "298d37c00486a595fa898102cd62dd2f895811206cce1385da8a5b58c2aa6d9a",
+      "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
+      "path": "docs/publication/benchmark/clean_container_reproduction/capsules/two_signatures",
+      "reproducibility_hash": "007047e76dc972985df9f8857525c3cfc25ee052ed6930305402bf5a09ce8c5e"
+    },
+    "Weighted signature": {
+      "analysis_id": "a9b10394b0e74132859f8fe428e135af",
+      "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
+      "capsule_manifest_sha256": "b10848e985b6f1f31b63111d28a303f9dc25abe6061d43342acabfc032596dfa",
+      "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
+      "path": "docs/publication/benchmark/clean_container_reproduction/capsules/weighted_signature",
+      "reproducibility_hash": "dd267fde950e5147cb5fea76e5b7af6a33fe467ee35482c30b52d7574ed3c6b1"
+    }
+  },
+  "design": {
+    "base_image": "rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c",
+    "cran_snapshot": "https://p3m.dev/cran/2026-07-25",
+    "host": {
+      "machine": "arm64",
+      "python": "3.9.6",
+      "system": "Darwin"
+    },
+    "numeric_comparison": {
+      "classes": {
+        "effect": {
+          "absolute": 1e-08,
+          "relative": 1e-08
+        },
+        "exact": {
+          "absolute": 0.0,
+          "relative": 0.0
+        },
+        "generic": {
+          "absolute": 1e-10,
+          "relative": 1e-08
+        },
+        "probability": {
+          "absolute": 1e-12,
+          "relative": 1e-06
+        },
+        "time": {
+          "absolute": 1e-06,
+          "relative": 1e-09
+        }
+      },
+      "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+      "policy_version": "tcga-trace-numeric-comparison-v1"
+    },
+    "renv_version": "1.2.3",
+    "runtime_isolation": [
+      "No TCGA matrix, PostgreSQL database, FastAPI service or application source is mounted.",
+      "The capsule is mounted read-only.",
+      "The container root filesystem is read-only.",
+      "Network access is disabled.",
+      "Only /tmp and /output are writable."
+    ]
+  },
+  "environments": [
+    {
+      "cases": [
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Single gene",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 56,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].standard_error",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].standard_error"
+              },
+              "exact": {
+                "comparisons": 28,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].n_patients"
+              },
+              "generic": {
+                "comparisons": 17,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 23,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].ph_p_value",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].ph_p_value"
+              },
+              "time": {
+                "comparisons": 46,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.rmst.tau_time_unit",
+                "max_relative_error": 0,
+                "max_relative_path": "$.rmst.tau_time_unit"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 3.679,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        },
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Weighted signature",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 32,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].standard_error",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].standard_error"
+              },
+              "exact": {
+                "comparisons": 24,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].n_patients"
+              },
+              "generic": {
+                "comparisons": 13,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 17,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].ph_p_value",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].ph_p_value"
+              },
+              "time": {
+                "comparisons": 45,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.rmst.tau_time_unit",
+                "max_relative_error": 0,
+                "max_relative_path": "$.rmst.tau_time_unit"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 3.126,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        },
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Two signatures",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 84,
+                "max_absolute_error": 3.1086e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.hazard_ratio",
+                "max_relative_error": 6.7525e-15,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.log_hr"
+              },
+              "exact": {
+                "comparisons": 35,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count",
+                "max_relative_error": 0,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count"
+              },
+              "generic": {
+                "comparisons": 19,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 19,
+                "max_absolute_error": 4.0634e-14,
+                "max_absolute_path": "$.signature_interaction_cox_models[1].penalized_sensitivity.p_value",
+                "max_relative_error": 5.8193e-14,
+                "max_relative_path": "$.signature_interaction_cox_models[1].penalized_sensitivity.p_value"
+              },
+              "time": {
+                "comparisons": 2,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.median_survival_days.Low_Low",
+                "max_relative_error": 0,
+                "max_relative_path": "$.median_survival_days.Low_Low"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 2.446,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        }
+      ],
+      "image": "tcga-trace-reproduction:2026-07-25-native",
+      "image_metadata": {
+        "architecture": "arm64",
+        "created": "2026-07-25T13:59:10.199787339Z",
+        "image_id": "sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385",
+        "os": "linux",
+        "repo_digests": [
+          "tcga-trace-reproduction@sha256:fbd145454686a48fbfe583071eda64b67e11f9cfb7f768fe64cc7c4550b59385"
+        ]
+      },
+      "input_tamper": {
+        "detected": true,
+        "difference_count": 92,
+        "first_difference": "$.n_events [exact]: 130 != 129 (abs 1 > 0)",
+        "returncode": 1
+      },
+      "requested_platform": "native"
+    },
+    {
+      "cases": [
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Single gene",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 56,
+                "max_absolute_error": 7.1054e-15,
+                "max_absolute_path": "$.cox_models[3].hr_conf_high",
+                "max_relative_error": 3.6055e-15,
+                "max_relative_path": "$.cox_models[3].log_hr"
+              },
+              "exact": {
+                "comparisons": 28,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].n_patients"
+              },
+              "generic": {
+                "comparisons": 17,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 23,
+                "max_absolute_error": 4.6838e-17,
+                "max_absolute_path": "$.cox_models[1].ph_global_p_value",
+                "max_relative_error": 4.0007e-14,
+                "max_relative_path": "$.cox_models[3].p_value"
+              },
+              "time": {
+                "comparisons": 46,
+                "max_absolute_error": 1.1369e-13,
+                "max_absolute_path": "$.rmst.groups.High.conf_low",
+                "max_relative_error": 2.1891e-16,
+                "max_relative_path": "$.rmst.tau_sensitivity[2].conf_high"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 6.551,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        },
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Weighted signature",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 32,
+                "max_absolute_error": 1.2434e-14,
+                "max_absolute_path": "$.cox_models[1].hr_conf_high",
+                "max_relative_error": 1.4617e-15,
+                "max_relative_path": "$.cox_models[1].hr_conf_high"
+              },
+              "exact": {
+                "comparisons": 24,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].n_patients",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].n_patients"
+              },
+              "generic": {
+                "comparisons": 13,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 17,
+                "max_absolute_error": 2.2204e-16,
+                "max_absolute_path": "$.cox_models[1].ph_global_p_value",
+                "max_relative_error": 7.3914e-15,
+                "max_relative_path": "$.cox_models[1].p_value"
+              },
+              "time": {
+                "comparisons": 45,
+                "max_absolute_error": 2.8422e-14,
+                "max_absolute_path": "$.rmst.tau_sensitivity[2].conf_high",
+                "max_relative_error": 2.2278e-16,
+                "max_relative_path": "$.rmst.tau_sensitivity[0].conf_high"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 5.714,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        },
+        {
+          "analysis_id": null,
+          "differences": [],
+          "label": "Two signatures",
+          "numeric_comparison": {
+            "classes": {
+              "effect": {
+                "absolute": 1e-08,
+                "relative": 1e-08
+              },
+              "exact": {
+                "absolute": 0,
+                "relative": 0
+              },
+              "generic": {
+                "absolute": 1e-10,
+                "relative": 1e-08
+              },
+              "probability": {
+                "absolute": 1e-12,
+                "relative": 1e-06
+              },
+              "time": {
+                "absolute": 1e-06,
+                "relative": 1e-09
+              }
+            },
+            "observed_errors": {
+              "effect": {
+                "comparisons": 84,
+                "max_absolute_error": 3.9968e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.hr_conf_high",
+                "max_relative_error": 3.4628e-15,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.log_hr"
+              },
+              "exact": {
+                "comparisons": 35,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count",
+                "max_relative_error": 0,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.parameter_count"
+              },
+              "generic": {
+                "comparisons": 19,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty",
+                "max_relative_error": 0,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.penalty"
+              },
+              "probability": {
+                "comparisons": 19,
+                "max_absolute_error": 4.3299e-15,
+                "max_absolute_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.p_value",
+                "max_relative_error": 3.4277e-14,
+                "max_relative_path": "$.signature_interaction_cox_models[4].penalized_sensitivity.p_value"
+              },
+              "time": {
+                "comparisons": 2,
+                "max_absolute_error": 0,
+                "max_absolute_path": "$.median_survival_days.Low_Low",
+                "max_relative_error": 0,
+                "max_relative_path": "$.median_survival_days.Low_Low"
+              }
+            },
+            "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+            "policy_version": "tcga-trace-numeric-comparison-v1"
+          },
+          "package_versions": {
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "package_versions_match_lock": true,
+          "r_version": "R version 4.4.2 (2024-10-31)",
+          "returncode": 0,
+          "runtime_seconds": 4.613,
+          "status": "passed",
+          "stderr": "",
+          "stdout": "Standalone reproduction passed"
+        }
+      ],
+      "image": "tcga-trace-reproduction:2026-07-25-amd64",
+      "image_metadata": {
+        "architecture": "amd64",
+        "created": "2026-07-25T14:10:06.132408837Z",
+        "image_id": "sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1",
+        "os": "linux",
+        "repo_digests": [
+          "tcga-trace-reproduction@sha256:dc14a7f5f16ddb5d0a0625986d62fac87824f97d742dee0d6d3fff7e74f7b8f1"
+        ]
+      },
+      "input_tamper": {
+        "detected": true,
+        "difference_count": 92,
+        "first_difference": "$.n_events [exact]: 130 != 129 (abs 1 > 0)",
+        "returncode": 1
+      },
+      "requested_platform": "linux/amd64"
+    }
+  ],
+  "generated_at": "2026-07-25T19:12:33.534368+00:00",
+  "negative_controls": {
+    "data_snapshot_hash_change_detected": true,
+    "mutated_input_rejected_by_all_environments": true
+  },
+  "schema_version": "tcga-trace-clean-reproduction-benchmark-v1"
+}

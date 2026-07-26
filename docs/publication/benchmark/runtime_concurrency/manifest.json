@@ -1,0 +1,23 @@
+{
+  "schema_version": "tcga-trace-runtime-benchmark-manifest-v1",
+  "generated_at": "2026-07-25T20:31:41.399686+00:00",
+  "run_id": "20260725T202243684364Z",
+  "files": {
+    "docs/publication/benchmark/runtime_concurrency/benchmark_results.raw.json": {
+      "bytes": 14526,
+      "sha256": "fef636f573e712c17dfc78a0ac042e8f1357ff2c4939b70ac5b780a8cf80a10a"
+    },
+    "docs/publication/benchmark/runtime_concurrency/summary.csv": {
+      "bytes": 781,
+      "sha256": "70b3d1f379a6d4b111e25af4e8f5311c61ddd34f90d4237227644e418f2e4658"
+    },
+    "docs/publication/benchmark/runtime_concurrency/summary.md": {
+      "bytes": 3058,
+      "sha256": "93c3da8e10f38fc846e57197035c052b053ee25026b777da96ed228fd0ce4ff7"
+    },
+    "manuscript/bioinformatics_app_note/tables/runtime_concurrency_benchmark.tex": {
+      "bytes": 997,
+      "sha256": "cb8f61bae566c90bfbc797542d72db3a1bd183f0f81454bafc2ea101ed252e47"
+    }
+  }
+}

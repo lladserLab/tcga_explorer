@@ -1,16 +1,14 @@
 \documentclass[12pt]{article}
 
 \usepackage[margin=1in]{geometry}
-\usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{lineno}
 \usepackage{natbib}
 \usepackage{setspace}
-\usepackage{tabularx}
 \usepackage{tikz}
 
-\usetikzlibrary{arrows.meta, positioning}
+\usetikzlibrary{arrows.meta, calc, fit, positioning}
 
 \hypersetup{
   colorlinks=true,
@@ -23,10 +21,22 @@
 \linenumbers
 \doublespacing
 
-\title{TCGA Explorer: Auditable and Robust Survival Analysis Workflows for TCGA Transcriptomic Biomarkers}
+\title{TCGA-TRACE: auditable survival analysis for TCGA transcriptomic biomarkers}
 \author{
-  Author One$^{1}$, Author Two$^{1}$, and Author Three$^{1}$\\
-  $^{1}$Affiliation placeholder\\
+  Sergio Hernández-Galaz$^{1,2,3}$,
+  Andrés Hernández-Oliveras$^{1,2}$,
+  Ignacio Pezoa-Soto$^{1,3,4}$,\\
+  Javiera Reyes-Alvarez$^{1}$,
+  Vincenzo Benedetti$^{1}$,\\
+  Alberto J. M. Martin$^{1,4}$, and
+  Alvaro Lladser$^{1,3}$\\
+  $^{1}$Centro BASAL Ciencia \& Vida, Fundación Ciencia \& Vida, Santiago, Chile.\\
+  $^{2}$Fundación Arturo López Pérez (FALP), OECI Cancer Center,
+  Laboratorio de Medicina Traslacional, Centro de Investigación e Innovación
+  en Cáncer, Santiago, Chile.\\
+  $^{3}$Facultad de Medicina, Universidad San Sebastián, Santiago, Chile.\\
+  $^{4}$Escuela de Ingeniería, Facultad de Ingeniería,
+  Universidad San Sebastián, Santiago, Chile.\\
   Correspondence: email@example.org
 }
 \date{}
@@ -36,146 +46,290 @@
 
 \begin{abstract}
 \noindent
-\textbf{Motivation:}
-Kaplan-Meier web tools are widely used for exploratory TCGA biomarker survival
-analysis, but many analyses remain difficult to reproduce because the exact
-endpoint, patient set, sample-selection rule, cutpoint, package versions and
-model diagnostics are not captured as a single verifiable object.
-\textbf{Results:}
-TCGA Explorer is a Dockerized web application for endpoint-aware TCGA
-transcriptomic survival analysis. It supports TCGA-CDR overall,
-disease-specific, disease-free and progression-free endpoints, one
-RNA-seq sample per participant, single-gene and weighted signature scoring,
-two-signature stratification, Cox models, pan-cancer Cox/FDR scans,
-proportional-hazards diagnostics, restricted mean survival time (RMST) for
-two-group comparisons and a cutpoint robustness panel. Each completed analysis
-exports raw records, methods text and a JSON/HTML audit report with SHA-256
-hashes for reproducibility.
-\textbf{Availability:}
-Source code, Docker deployment instructions, benchmark scripts and example
-outputs will be made available at the project repository before submission.
+\textbf{Summary:}
+Interactive TCGA survival results are difficult to audit when cohort,
+expression and model decisions are detached from the output. TCGA-TRACE
+combines continuous Cox and spline models, grouped sensitivities, signatures,
+interactions and pan-cancer analysis with a prespecified
+endpoint--score--cutpoint multiverse, an optional post hoc session history and
+a server-signed record of participants, expression, sources, software and
+results; three frozen runs and six isolated reruns reconstructed the outputs;
+11 marker scenarios exposed nonlinear, low-information, cutpoint-dependent
+and PH-discordant interpretations.
+\textbf{Availability and Implementation:}
+The registration-free service is available at
+\url{https://apps.cienciavida.org/tcga_explorer/}. Source code and
+reproducibility materials are at
+\url{https://github.com/lladserLab/tcga_explorer}; the exact submitted release,
+benchmarks and 33-cohort snapshot manifest are archived at
+\texttt{ARCHIVE-DOI-PENDING}. The Dockerized application uses FastAPI, React
+and R.
+\textbf{Contact:} email@example.org.
+\textbf{Supplementary information:} Supplementary data are available with the
+manuscript.
 \end{abstract}
 
-\section*{Introduction}
+\section{Introduction}
 
-Transcriptomic survival analysis is a common first step in evaluating candidate
-cancer biomarkers. Existing resources make this analysis accessible, including
-GEPIA2 for large-scale expression profiling \citep{gepia22019}, cSurvival for
-biomarker interactions and two-predictor cutpoint discovery
-\citep{csurvival2022}, DoSurvive for multi-omic survival analyses
-\citep{dousurvive2023}, and PESSA for pathway enrichment score-based survival
-analysis using ssGSEA \citep{pessa2024}. These tools have made exploratory
-survival analysis easier, but they usually optimize for interactive results
-rather than verifiable reruns of an exact patient-level analysis.
+Transcriptomic survival associations can prioritize hypotheses, but their
+apparent strength depends on endpoint, eligibility, RNA-sample selection,
+expression scale, cutpoint and model. Outcome-optimized cutpoints are
+particularly vulnerable when alternatives are hidden
+\citep{altmanRoyston2006,cutpoints2025}.
 
-TCGA Explorer addresses this reproducibility gap. Its contribution is not a new
-Kaplan-Meier estimator, nor a claim that two-biomarker interaction is novel.
-Instead, the application packages common TCGA survival workflows with explicit
-endpoint provenance, sample-selection rules, model-quality diagnostics and
-audit artifacts that can be inspected and cited.
+Established resources make TCGA survival exploration accessible, including
+GEPIA2 \citep{gepia22019}, PESSA pathway and continuous Cox models
+\citep{pessa2024}, and cSurvival two-predictor and gene-set models
+\citep{csurvival2022}. These capabilities are complementary; the unresolved
+problem is preserving the path from participants and RNA samples to
+diagnostics and software as one reconstructable record.
 
-\input{tables/comparator_matrix}
+TCGA-TRACE was developed for researchers evaluating transcriptomic survival
+hypotheses. It connects endpoint-aware cohorts to single-gene, signature,
+interaction and pan-cancer analyses. Rather than proposing a new estimator, it
+provides a verifiable run record and prespecified specification curve;
+Supplementary Table S1 compares representative resources, and
+Figure~\ref{fig:trace-workflow} summarizes the reporting workflow.
 
-\section*{Implementation}
-
-The backend is implemented in Python/FastAPI with R scripts for survival
-modeling. Expression data are read from cached TCGA RNA-seq matrices, while
-clinical outcomes use the TCGA Pan-Cancer Clinical Data Resource when available
-\citep{liu2018tcga}. The application exposes OS, DSS, DFI and PFI only when
-cohort-level endpoint QC is sufficient. Before modeling, it retains one
-eligible RNA-seq sample per TCGA participant using a documented biospecimen
-priority rule.
-
-Analyses can use single genes, unweighted signatures or weighted z-score
-signatures. Patients may be stratified by median, maximally selected rank
-statistics, tertiles, upper quartile, outer quartiles or a user-selected
-percentile. Two-signature workflows cross the two independently stratified
-scores and also fit continuous z-scored Cox interaction models.
-
-\section*{Reproducible Survival Workflow}
-
-For each completed survival run, TCGA Explorer writes raw patient records,
-Kaplan-Meier plots, Cox outputs, methods text and an audit report. The audit
-report records the request payload, endpoint source, sample filters, exact
-patient rows, software versions, artifact checksums and a reproducibility hash.
-This creates a compact provenance object for supplementary material and review.
-
-The statistical output emphasizes model interpretation and quality control.
-Two-group analyses report log-rank p-values, univariable and stage/grade
-adjusted Cox models, and proportional-hazards tests from \texttt{cox.zph}. They
-also report RMST using \texttt{survRM2::rmst2}, with tau defined as the smaller
-maximum follow-up time across groups. RMST complements hazard ratios with an
-interpretable time-scale effect and responds to concerns about overreliance on
-single dichotomized Kaplan-Meier p-values \citep{rmstBiomarker2016}.
-
-\begin{figure}[t]
+\begin{figure*}[!t]
 \centering
-\resizebox{\linewidth}{!}{\input{figures/workflow}}
-\caption{Auditable survival-analysis workflow implemented by TCGA Explorer.}
-\label{fig:workflow}
-\end{figure}
+\input{figures/graphical_abstract}
+\caption{TCGA-TRACE links versioned RNA and outcome data to deterministic
+participant-level cohort construction, continuous and grouped survival
+analyses, model diagnostics and a server-signed run record. The exported record
+supports reconstruction of scores and statistical outputs and verification of
+its server origin.
+\textbf{Alt text:} A five-stage flow diagram connects TCGA inputs, cohort
+construction, three analysis branches, diagnostic checks and an exported run
+record. A SHA-256 provenance rail links source, request, population, scoring
+and result hashes to a detached Ed25519 receipt.}
+\label{fig:trace-workflow}
+\end{figure*}
 
-\section*{Benchmarking and Application}
+\section{Methods}
 
-The benchmark records endpoint definitions, patient counts, event counts,
-cutpoint rules, hazard ratios, log-rank p-values, Cox p-values, RMST outputs,
-PH diagnostics, downloads and whether an exact patient-level analysis can be
-reproduced from exported artifacts. We ran six single-gene endpoint scenarios
-across TCGA-KIRC, TCGA-BRCA, TCGA-SKCM and TCGA-LUAD, applying the five
-two-group cutpoint methods available in the interface
-(Table~\ref{tab:single-gene-benchmark-overview}).
-A signal is considered robust only when the
-BH-adjusted log-rank p-value, univariable Cox p-value, strongest available
-adjusted Cox p-value and RMST p-value are all below 0.05 and the adjusted PH
-global test is not flagged. This criterion is intentionally stricter than a
-single optimized cutpoint and follows current concerns about cutoff-driven
-survival analyses \citep{cutpoints2025}.
-Across the benchmark, nominal survival evidence was common, but only two
-marker-endpoint settings retained at least one cutpoint after all downstream
-checks, illustrating how TCGA Explorer separates exploratory association from
-robust reporting.
+\subsection{Data and cohort construction}
 
-\input{tables/single_gene_benchmark_overview}
+TCGA-TRACE links retrospective bulk RNA-seq matrices from the Genomic Data
+Commons \citep{gdcDataset2026} to TCGA-CDR overall survival (OS),
+disease-specific survival (DSS), disease-free interval (DFI) and
+progression-free interval (PFI) \citep{liu2018tcga}. Endpoints
+require at least 10 linked participants and five events as operational QC.
+After filters and endpoint completeness, the requested score is required before
+a documented biospecimen rule selects one expression-complete RNA sample per
+participant. Adjusted models repeat the 10-participant/five-event check after
+complete-case filtering.
+For DSS, DFI and PFI, TCGA-CDR status 0/1/2 denotes censoring, the endpoint
+event and an endpoint-specific competing death. Kaplan--Meier/Cox censor code
+2, whereas companion cumulative-incidence, Gray-test and Fine--Gray outputs
+retain it; cause-specific HRs and subdistribution HRs are reported as distinct
+estimands \citep{gray1988,fineGray1999}.
 
-We also ran three workflow benchmarks covering the main supported analysis
-surfaces beyond single-gene dichotomization: a weighted hypoxia z-score
-signature in TCGA-KIRC, a two-signature immune effector-by-exhaustion analysis
-in TCGA-SKCM, and a CA9 pan-cancer continuous Cox/FDR scan
-(Table~\ref{tab:feature-benchmark-summary}). These examples are intentionally
-reported as software capability and reproducibility checks rather than as new
-biological discoveries. The hypoxia signature showed nominal log-rank and RMST
-evidence but failed adjusted Cox and PH criteria, the two-signature interaction
-was not significant, and the pan-cancer CA9 scan found cohort-specific FDR
-signals with a modest heterogeneous random-effects estimate.
+\subsection{Survival analyses}
 
-\input{tables/feature_benchmark_summary}
+Inputs may be individual genes or signatures scored by the mean, z-score or
+weighted method (Supplementary Table S2). Z-score signatures standardize genes
+among eligible participants; because eligibility changes with endpoint and
+filters, their numerical scores are not transportable across runs. Weighted
+scores use \(\sum_g w_g x_{ig}/\sum_g |w_g|\). The primary analysis reports a
+Cox HR per score SD. A three-degree-of-freedom restricted cubic spline
+(percentile knots 5, 35, 65 and 95) tests nonlinearity by likelihood-ratio test
+and reports a median-referenced 5th--95th-percentile profile; it requires 20
+participants and 15 events.
 
-\section*{Discussion}
+Grouping options are median, tertiles, upper or outer quartiles, custom
+percentile and maximally selected rank statistics. Secondary Kaplan--Meier,
+log-rank, grouped Cox and restricted mean survival time (RMST) outputs label
+maxstat as outcome-optimized. Lau94 adjusts its rank-test \(p\), but grouped HR,
+confidence interval and RMST remain post-selection. The benchmark compares four
+nonredundant two-group rules (maxstat, median, upper and outer quartiles);
+tertiles are three-group and custom percentiles are user-defined. Their
+\(p\)-values form a within-scenario Holm family, using Lau94 for maxstat. BH is
+applied separately across 11 linear and 11 spline-nonlinearity hypotheses.
+The 11 scenarios were assembled after exploratory triage and then frozen in a
+versioned registry; this is a heterogeneous software stress test, not
+prospective biomarker selection. OS is the registered primary endpoint except
+for UVM BAP1 DSS, while BRCA MKI67 PFI and LUAD CD274 PFI are linked endpoint
+sensitivities that cannot replace their OS parent because of observed results.
 
-TCGA Explorer should be evaluated as a reproducibility-oriented survival
-analysis application. Its strongest novelty is the integration of audit reports,
-endpoint rigor, proportional-hazards diagnostics, RMST and cutpoint robustness
-in an interactive TCGA workflow. Gene-set survival and two-predictor interaction
-already exist in prior tools, so these features are presented as supported
-capabilities rather than the central claim.
+Continuous and grouped Cox models use Efron handling of ties. Users may
+prespecify an exact complete-case adjustment using age per 10 years, ordinal
+stage or grade, and categorical GDC gender or race; unavailable models are not
+replaced. Marker-term and global \texttt{cox.zph} tests are separate
+interpretation cautions, never exclusion rules. When marker-term \(p<0.05\), a
+diagnostic counting-process Cox model reports marker HRs before and after a
+fixed two-year split and their ratio, using Efron ties, participant-clustered
+robust variance, at least five events per period and 10 participants entering
+the late period. The group-independent RMST horizon is the smaller of five years
+and the eligible cohort's 75th
+endpoint-time percentile, requires five participants at risk per group and has
+0.75/0.90 sensitivities \citep{rmstBiomarker2016}. Cox outputs report fitted
+parameters and events per parameter, cautioning below 10 and severely below 5.
+Low-information, unstable, non-finite or extreme fits add, but do not substitute,
+a Firth/\texttt{coxphf} sensitivity \citep{heinzeSchemper2001}. Crossed
+signatures report stratified groups and a continuous z-scored interaction.
+
+Pan-cancer cohort models report a descriptive HR per within-cohort expression
+SD and do not pool these cohort-specific increments. Eligible single-gene,
+mean or weighted effects are recovered per common input-score unit and
+synthesized only within one endpoint and model family using REML,
+Hartung--Knapp--Sidik--Jonkman inference and a 95\% prediction interval.
+Z-score signatures, mixed endpoints and availability-selected adjustment
+families are not pooled.
+
+\subsection{Web server and run record}
+
+The React interface calls a Python/FastAPI backend that constructs cohorts and
+invokes R. A multiverse freezes up to 72 endpoint--score--cutpoint
+specifications before execution. Unique endpoint--score Cox tests and grouped
+sensitivities form separate multiplicity families. Every planned cell,
+including failures, retains request, child-analysis and audit hashes; PH is not
+a filter and no binary verdict is calculated.
+Outside a declared multiverse, an opt-in browser-local history exports up to
+200 selected events that reference terminal jobs. It deduplicates exact
+hypotheses and separates
+continuous, grouped and interaction multiplicity families; multiverse and
+pan-cancer corrections are referenced without recounting. This post hoc scope
+cannot attest that no other runs occurred.
+Operating characteristics were evaluated separately by permuting expression
+2,000 times in a frozen observed cohort and simulating 2,000 datasets of
+\(n=300\) under null, linear PH, delayed non-PH and U-shaped effects. Each
+replicate refitted continuous Cox, spline, marker PH and four grouped rules;
+rejection proportions have Wilson 95\% intervals.
+
+Each run exports de-identified participant records, endpoint source,
+exclusions, expression-artifact hashes, GDC identifiers, gene components,
+standardization parameters, software and results. Separate hashes bind
+continuous and grouped populations. Two-group exports add patient-level input,
+a standalone R runner, \texttt{renv.lock} and an immutable-base Dockerfile. The
+verifier recomputes hashes, reconstructs scores and reruns the frozen input,
+adapting REMARK principles to exploratory web analysis \citep{remark2012}.
+A detached Ed25519 receipt signs the exact audit bytes, schema and recorded run
+hash. The public key is exposed through the HTTPS API and archived with the
+benchmark; verification establishes server origin under that trusted key, not
+scientific correctness or append-only publication time.
+
+\section{Case Studies and Evaluation}
+
+\subsection{Case 1: Analysis Record Reconstruction}
+
+Three frozen exports---single-gene (365 participants), weighted-signature (79)
+and crossed-signature (80)---passed dependent integrity and reconstruction
+checks. Six isolated arm64/amd64 capsule reruns matched core outputs under
+quantity-specific tolerances (Supplementary Table S3). Mutating bound request,
+participant, score or source fields changed the reproducibility hash; plot and
+methods mutations instead failed artifact checksums. Generation time and
+quality annotations lie outside the run hash. For a frozen BAP1/UVM DSS export,
+the server receipt verified the exact audit report. Altering the report failed
+its signed binding; even after recomputing the report SHA-256 and canonical
+payload hash, the unchanged Ed25519 signature failed. Hosted Linux/amd64 CI
+repeats the reconstruction contract.
+
+\subsection{Case 2: Cutpoint and PH Sensitivity}
+
+We evaluated the 11 registered marker--endpoint scenarios from seven cohorts.
+BH was applied
+separately to linear and nonlinearity tests; four grouped rules used Holm within
+each scenario. Cox, fixed-horizon RMST, marker/global PH and Lau94 remain
+separate outputs without a retention score (Supplementary Table S4).
+
+Six of 11 linear continuous effects and two of 11 nonlinearity tests had BH
+\(q<0.05\); grouped support was 4/4 in five scenarios, 3/4 in one and 0/4 in
+five. CDC20/LIHC gave HR/SD 1.65 (1.38--1.98), age-adjusted HR 1.67
+(1.39--2.01), and median-split RMST difference -207 days at
+\(\tau=1091\) days; RMST effects are horizon-specific. EMP3/LGG had
+age-adjusted HR 2.29 (1.93--2.72) and marker PH \(p=0.0115\). Its fixed
+two-year diagnostic gave early HR 2.78 (2.20--3.51), late HR 1.82
+(1.39--2.39) and late/early ratio 0.66 (0.46--0.94; \(p=0.023\)), quantifying
+attenuation without erasing RMST. CA9/KIRC was nonlinear
+(\(q_{\mathrm{NL}}=0.0122\)) despite unsupported linear and grouped tests.
+Three BAP1/UVM cuts required finite Firth sensitivities; the outer-quartile
+adjusted fit had 5.0 events per parameter.
+
+Maxstat had larger absolute log-HR than median in all 10 estimable scenarios
+(median ratio 1.80); relative to the continuous-implied group contrast, median
+amplification was 1.88. These are descriptive, not selection-corrected,
+diagnostics; complete scenario-level estimates remain in Supplementary Table S4.
+Across three prespecified cBioPortal PanCancer Atlas comparisons, PDCD1/SKCM
+agreed in direction and nominal support, CA9/KIRC agreed only in direction, and
+CD274/LUAD was unsupported in both with point estimates straddling the null.
+
+\subsection{Case 3: BAP1/PRAME in Uveal Melanoma}
+
+BAP1/PRAME groups in uveal melanoma, used as gene-expression analogues of
+immunohistochemistry markers \citep{han2023bap1prame}, differed globally
+(\(p=0.002\)), but the continuous interaction did not (\(p=0.637\));
+age-adjusted Firth sensitivity was also unsupported (\(p=0.126\)).
+
+\subsection{Case 4: BIRC5 Across TCGA Cohorts}
+
+BIRC5 pan-cancer models \citep{faldtBeding2022birc5} gave common-scale REML HR 1.20
+(HKSJ 95\% CI 1.06--1.37), yet \(I^2=86.1\%\) and the prediction interval
+was 0.64--2.24. Non-pooled cohort effects and the interval therefore accompany
+the mean (Supplementary Tables S5--S6).
+
+\subsection{Calibration and Runtime}
+
+Under observed-cohort expression permutation, rejection proportions were
+5.0\% for linear Cox, 5.8\% for spline nonlinearity, 5.1\% for marker PH and
+3.2\% for the grouped Holm family. Naive maxstat rejected 39.6\%, versus
+1.8\% for Lau94. Marker PH detected 88.2\% of delayed effects and the spline
+detected 100\% of U-shaped effects in known-truth simulations (Supplementary
+Table S7); these are separate operating characteristics, not votes.
+
+On an Apple M1 Ultra Docker host, public-API wall times were 5.12\,s for an
+uncached single run, 32.5\,s for a 10-run batch, 219\,s for a 72-cell
+multiverse and 7.18\,s for 33 requested pan-cancer cohorts; an exact cached
+repeat took 0.037\,s, and two jobs overlapped under concurrency two
+(Supplementary Table S8).
+
+\section{Future Plans}
+
+TCGA-TRACE currently supports retrospective bulk-TCGA screening rather than
+independent biomarker validation. Its literature-anchored cases test the
+reporting contract; they do not reproduce protein, mutation or qRT-PCR assays.
+Z-score and weighted signatures are transparent summaries rather than
+replacements for pathway-activity methods such as ssGSEA. Generic clinical
+fields and user-provided covariates cannot remove residual confounding by
+molecular subtype, tumour purity or unmeasured factors, and a common expression
+unit does not erase pan-cancer heterogeneity.
+
+Future releases will prioritize independent-cohort evaluation and
+cohort-specific covariate modules. An externally witnessed timestamp or
+transparency log could add append-only publication time to the current signed
+receipt, while broader simulations and selection-aware maxstat intervals will
+extend calibration. TCGA-TRACE keeps declared choices, effects, diagnostics
+and provenance beside supported and unsupported results; biological and
+clinical claims still require independent data.
 
 \section*{Data and Software Availability}
 
-The source code, Docker deployment instructions, benchmark scripts and example
-outputs will be released at [FINAL PUBLIC REPOSITORY URL] under [SOFTWARE
-LICENSE]. The submitted version will be archived at [ARCHIVAL DOI OR STABLE
-RELEASE URL]. TCGA expression and clinical data are obtained from public TCGA
-and TCGA-CDR resources; benchmark summaries and compact API outputs are included
-with the repository, while full patient-level exports are generated locally by
-the application audit workflow.
+A registration-free public instance is available at
+\url{https://apps.cienciavida.org/tcga_explorer/}, and the source code is
+at \url{https://github.com/lladserLab/tcga_explorer}. Release, container,
+benchmarks, reconstruction bundles and snapshot manifest are archived at
+\texttt{ARCHIVE-DOI-PENDING}; TCGA matrices are regenerated from public inputs.
+THREE-YEAR-MAINTENANCE-COMMITMENT-PENDING.
+
+\section*{Author Contributions}
+
+CRediT contribution statement placeholder.
 
 \section*{Funding}
 
-Funding placeholder.
+This work was funded by Centro Basal Ciencia \& Vida, grant FB210008 from
+ANID---Agencia Nacional de Investigación y Desarrollo; ANID Fondecyt projects
+1251312 to A.L. and 1231629 to A.J.M.M.; and ANID postdoctoral fellowship
+3260791 to S.H.-G. Powered@NLHPC: this research was partially supported by the
+supercomputing infrastructure of the NLHPC (CCSS210001).
 
 \section*{Conflict of Interest}
 
-Conflict-of-interest statement placeholder.
+The authors declare no conflicts of interest.
+
+\section*{Acknowledgements}
+
+AI-use disclosure pending independent author review.
 
 \bibliographystyle{plainnat}
 \bibliography{references}

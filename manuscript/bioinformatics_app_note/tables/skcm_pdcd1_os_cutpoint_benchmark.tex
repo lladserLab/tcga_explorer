@@ -1,16 +1,15 @@
 \begin{table}[t]
 \centering
-\caption{TCGA-SKCM PDCD1 OS cutpoint robustness benchmark.}
+\caption{TCGA-SKCM PDCD1 OS cutpoint-sensitivity benchmark.}
 \label{tab:skcm-pdcd1-os-cutpoints}
 \begin{tabular}{lrrrrrrl}
 \toprule
-Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
 \midrule
-Maxstat & 453 & 213 & 9.14e-07 & 3.22e-07 & 0.011 & 2139 & Yes \\
-Median & 453 & 213 & 5.27e-06 & 4.59e-06 & 0.094 & 2027 & Fails adjusted \\
-Upper Q & 453 & 213 & 0.003 & 0.003 & 0.132 & 1129 & Fails adjusted \\
-Outer Q & 228 & 110 & 5.27e-06 & 4.71e-06 & 7.12e-04 & 1858 & Yes \\
-75th pct. & 453 & 213 & 0.002 & 0.002 & 0.078 & 1175 & Fails adjusted \\
+Maxstat & 453 & 213 & 3.97e-05 & 1.50e-06 & 0.561 & 253 & Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 453 & 213 & 9.48e-06 & 2.02e-05 & 0.795 & 218 & No model-diagnostic caution recorded \\
+Upper Q & 453 & 213 & 0.003 & 0.003 & 0.280 & 182 & No model-diagnostic caution recorded \\
+Outer Q & 228 & 110 & 8.95e-06 & 6.63e-06 & 0.044 & 412 & Marker-specific PH caution; Middle 50\% excluded \\
 \bottomrule
 \end{tabular}
 \end{table}

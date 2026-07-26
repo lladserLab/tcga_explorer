@@ -1,0 +1,257 @@
+{
+  "schema_version": "tcga-trace-publication-scenario-registry-v1",
+  "registry_version": "1.0.0",
+  "frozen_at": "2026-07-25",
+  "status": "frozen_for_future_regeneration",
+  "selection_history": {
+    "initial_panel_origin": "retrospective_exploratory_triage",
+    "initial_panel_date": "2026-07-23",
+    "statement": "The marker panel was assembled after exploratory TCGA-TRACE triage. This registry does not claim prospective initial marker selection. It freezes the existing heterogeneous software stress-test panel before subsequent publication regeneration and revision.",
+    "future_change_rule": "A scenario may be added, removed or reclassified only in a new registry version with a written rationale. Observed effect direction, effect magnitude or p-value from a regeneration cannot trigger an in-place change."
+  },
+  "scope": {
+    "purpose": "Software-behaviour benchmark, not biomarker discovery or clinical validation.",
+    "scenario_count": 11,
+    "unique_marker_cohort_pairs": 9,
+    "expression_scale": "log2(TPM + 1)",
+    "primary_model": "Continuous Cox effect per within-run score standard deviation, followed by a restricted cubic spline nonlinearity test.",
+    "grouped_sensitivities": [
+      "maxstat",
+      "median",
+      "upper_quartile",
+      "upper_lower_quartile"
+    ]
+  },
+  "endpoint_policy": {
+    "default_primary_endpoint": "OS",
+    "default_rule": "OS is the primary endpoint for cross-scenario comparability when it satisfies TCGA-CDR operational QC.",
+    "prespecified_exception": "TCGA-UVM BAP1 uses DSS as its primary endpoint because the literature anchor concerns disease-specific metastatic prognosis in uveal melanoma. Current DSS analysis treats other-cause death as non-informative censoring.",
+    "sensitivity_rule": "Additional endpoints are labelled endpoint sensitivities and cannot replace the registered primary endpoint because of a more favorable effect or p-value.",
+    "registered_endpoint_sensitivities": [
+      "brca_mki67_pfi_cutpoints",
+      "luad_cd274_pfi_cutpoints"
+    ],
+    "unavailable_endpoint_rule": "A registered endpoint that fails operational QC remains a visible non-evaluable scenario; no outcome-driven endpoint substitution is allowed."
+  },
+  "multiplicity_contract": {
+    "continuous_linear_family": "BH across all 11 registered marker-endpoint scenarios.",
+    "continuous_nonlinearity_family": "BH across all 11 registered spline-versus-linear tests.",
+    "grouped_family": "Holm across four grouped cutpoint rules within each registered marker-endpoint scenario.",
+    "interpretation": "Endpoint-sensitivity rows remain inside the full reported 11-test continuous families, but do not supersede the primary endpoint interpretation for their marker-cohort pair."
+  },
+  "scenarios": [
+    {
+      "benchmark_id": "lihc_cdc20_os_cutpoints",
+      "cohort": "TCGA-LIHC",
+      "marker": "CDC20",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_agreement_stress_test",
+      "inclusion_rationale": "Preserves a literature-guided hepatocellular carcinoma marker as an agreement case across continuous and grouped reporting layers.",
+      "endpoint_rationale": "OS is the registered default primary endpoint and supports cross-scenario comparison.",
+      "literature_anchors": [
+        {
+          "citation_key": "lai2022cdc20",
+          "doi": "10.1155/2022/9117205",
+          "scope": "CDC20-containing prognostic gene signature in hepatocellular carcinoma; the TCGA-TRACE single-gene assay and thresholds are not an exact replication."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "luad_birc5_os_cutpoints",
+      "cohort": "TCGA-LUAD",
+      "marker": "BIRC5",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_cutpoint_dependence_stress_test",
+      "inclusion_rationale": "Preserves a literature-guided lung adenocarcinoma marker for quantifying how grouped estimates depend on cutpoint choice.",
+      "endpoint_rationale": "OS is the registered default primary endpoint and matches the survival outcome emphasized by the literature anchor.",
+      "literature_anchors": [
+        {
+          "citation_key": "cao2019birc5",
+          "doi": "10.1155/2019/5451290",
+          "scope": "BIRC5 prognostic context in lung adenocarcinoma; the publication cohort and molecular restrictions are not reproduced by this all-eligible TCGA workflow."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "uvm_bap1_dss_cutpoints",
+      "cohort": "TCGA-UVM",
+      "marker": "BAP1",
+      "endpoint": "DSS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_low_event_diagnostic",
+      "inclusion_rationale": "Preserves a disease-specific uveal melanoma marker while exposing sparse-event Cox behaviour, events-per-parameter warnings and Firth sensitivity.",
+      "endpoint_rationale": "DSS is the sole prespecified exception to the default OS rule because BAP1 is anchored to metastatic and disease-specific prognosis in uveal melanoma.",
+      "literature_anchors": [
+        {
+          "citation_key": "vanEssen2014bap1",
+          "doi": "10.1136/bjophthalmol-2014-305047",
+          "scope": "BAP1 expression and uveal melanoma prognostic parameters; RNA abundance does not reproduce immunohistochemical classification."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "lgg_emp3_os_cutpoints",
+      "cohort": "TCGA-LGG",
+      "marker": "EMP3",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_marker_ph_diagnostic",
+      "inclusion_rationale": "Preserves a strong literature-guided association whose marker-specific proportional-hazards caution tests whether the interface separates effect estimation from model diagnostics.",
+      "endpoint_rationale": "OS is the registered default primary endpoint. Generic clinical adjustment does not replace LGG molecular subtype adjustment.",
+      "literature_anchors": [
+        {
+          "citation_key": "wang2020emp3",
+          "doi": "10.7150/jca.41123",
+          "scope": "EMP3 appears in a lower-grade glioma prognostic analysis; TCGA-TRACE does not claim independence from IDH or 1p/19q status."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "kirc_ca9_cutpoints",
+      "cohort": "TCGA-KIRC",
+      "marker": "CA9",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_nonlinearity_and_concordance_diagnostic",
+      "inclusion_rationale": "Preserves a canonical clear-cell renal carcinoma marker for nonlinear continuous modelling and comparison with an external survival resource.",
+      "endpoint_rationale": "OS is the registered default primary endpoint and is available in both TCGA-TRACE and the external comparison.",
+      "literature_anchors": [
+        {
+          "citation_key": "tostain2010ca9",
+          "doi": "10.1016/j.ejca.2010.07.020",
+          "scope": "CA9 biology and debated prognostic value in clear-cell renal carcinoma; RNA abundance is not equivalent to immunohistochemical CA9."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "brca_mki67_os_cutpoints",
+      "cohort": "TCGA-BRCA",
+      "marker": "MKI67",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_endpoint_reference",
+      "inclusion_rationale": "Preserves a familiar proliferation marker as the primary endpoint reference for an explicit OS-versus-PFI sensitivity pair.",
+      "endpoint_rationale": "OS is the registered primary endpoint. PFI is evaluated only in the linked sensitivity row.",
+      "literature_anchors": [
+        {
+          "citation_key": "petrelli2015ki67",
+          "doi": "10.1007/s10549-015-3559-0",
+          "scope": "Ki-67 protein cutpoint meta-analysis for breast cancer OS and disease-free outcomes; MKI67 RNA abundance and TCGA cutpoints are not equivalent assays."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "brca_mki67_pfi_cutpoints",
+      "cohort": "TCGA-BRCA",
+      "marker": "MKI67",
+      "endpoint": "PFI",
+      "endpoint_role": "sensitivity",
+      "parent_benchmark_id": "brca_mki67_os_cutpoints",
+      "benchmark_role": "endpoint_sensitivity",
+      "inclusion_rationale": "Tests whether the reporting profile changes under a progression-like TCGA-CDR endpoint without replacing the registered OS interpretation.",
+      "endpoint_rationale": "PFI is a prespecified sensitivity paired with the MKI67 OS primary scenario and cannot become primary because of its observed result.",
+      "literature_anchors": [
+        {
+          "citation_key": "petrelli2015ki67",
+          "doi": "10.1007/s10549-015-3559-0",
+          "scope": "The literature reports OS and disease-free outcomes, motivating an endpoint sensitivity while not equating PFI with study-specific DFS."
+        },
+        {
+          "citation_key": "liu2018tcga",
+          "doi": "10.1016/j.cell.2018.02.052",
+          "scope": "TCGA-CDR definition and harmonization of PFI."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "skcm_pdcd1_os_cutpoints",
+      "cohort": "TCGA-SKCM",
+      "marker": "PDCD1",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_immune_and_sample_composition_diagnostic",
+      "inclusion_rationale": "Preserves an immune-checkpoint marker for testing prognostic direction and the explicit primary-versus-metastatic sample-composition sensitivity.",
+      "endpoint_rationale": "OS is the registered default primary endpoint and matches the cited pan-cancer SKCM analysis.",
+      "literature_anchors": [
+        {
+          "citation_key": "miao2020pdcd1",
+          "doi": "10.1016/j.intimp.2020.107080",
+          "scope": "Pan-cancer PDCD1 expression analysis reporting SKCM OS and DSS associations; TCGA reuse makes this a software stress test, not external validation."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "skcm_tmem176b_os_cutpoints",
+      "cohort": "TCGA-SKCM",
+      "marker": "TMEM176B",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_prioritized_exploratory_immune_case",
+      "inclusion_rationale": "Preserves an exploratory immune-regulatory marker with biological and SKCM prognostic literature while keeping biological validation outside the benchmark claim.",
+      "endpoint_rationale": "OS is the registered default primary endpoint and matches the SKCM prognostic literature.",
+      "literature_anchors": [
+        {
+          "citation_key": "tmem176bAntitumor2019",
+          "doi": "10.1016/j.ccell.2019.04.003",
+          "scope": "Mechanistic antitumour-immunity context for TMEM176B."
+        },
+        {
+          "citation_key": "tmem176bSkcm2022",
+          "doi": "10.3389/fcell.2022.859958",
+          "scope": "SKCM prognostic and immune-infiltration context; the TCGA-derived component is not independent validation."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "luad_cd274_os_cutpoints",
+      "cohort": "TCGA-LUAD",
+      "marker": "CD274",
+      "endpoint": "OS",
+      "endpoint_role": "primary",
+      "parent_benchmark_id": null,
+      "benchmark_role": "literature_guided_null_or_weak_signal_diagnostic",
+      "inclusion_rationale": "Preserves a clinically familiar immune-checkpoint marker whose unsupported or weak TCGA-TRACE result remains visible rather than being removed after exploratory triage.",
+      "endpoint_rationale": "OS is the registered primary endpoint and matches the literature's primary survival outcome. PFI is evaluated only as a linked sensitivity.",
+      "literature_anchors": [
+        {
+          "citation_key": "chen2020pdl1luad",
+          "doi": "10.1093/ejcts/ezaa172",
+          "scope": "PD-L1 protein and transcript prognostic meta-analysis in resected lung adenocarcinoma; TCGA-TRACE CD274 RNA does not replicate protein thresholds or treatment context."
+        }
+      ]
+    },
+    {
+      "benchmark_id": "luad_cd274_pfi_cutpoints",
+      "cohort": "TCGA-LUAD",
+      "marker": "CD274",
+      "endpoint": "PFI",
+      "endpoint_role": "sensitivity",
+      "parent_benchmark_id": "luad_cd274_os_cutpoints",
+      "benchmark_role": "endpoint_sensitivity",
+      "inclusion_rationale": "Tests whether the CD274 reporting profile changes under a progression-like endpoint while preserving an unsupported result if the sensitivity is also null.",
+      "endpoint_rationale": "PFI is a prespecified sensitivity paired with the CD274 OS primary scenario and cannot supersede OS because of its observed result.",
+      "literature_anchors": [
+        {
+          "citation_key": "chen2020pdl1luad",
+          "doi": "10.1093/ejcts/ezaa172",
+          "scope": "The literature includes disease-free outcomes, motivating but not equating the TCGA-CDR PFI sensitivity."
+        },
+        {
+          "citation_key": "liu2018tcga",
+          "doi": "10.1016/j.cell.2018.02.052",
+          "scope": "TCGA-CDR definition and harmonization of PFI."
+        }
+      ]
+    }
+  ]
+}

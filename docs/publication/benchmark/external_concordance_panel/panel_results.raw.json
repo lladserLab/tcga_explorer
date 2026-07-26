@@ -1,0 +1,634 @@
+{
+  "cases": [
+    {
+      "accessed_date": "2026-07-25",
+      "case_id": "kirc_ca9_os_median",
+      "cohort": "TCGA-KIRC",
+      "comparison": {
+        "decision": "direction_concordant_nominal_support_discordant",
+        "external_direction": "higher expression protective",
+        "external_nominal_supported": false,
+        "independent_validation": false,
+        "limitations": [
+          "Both resources derive from TCGA and therefore are not independent biological validation.",
+          "cBioPortal PanCancer Atlas RSEM and TCGA-TRACE GDC STAR-count TPM are different expression pipelines and releases.",
+          "cBioPortal OS fields and TCGA-TRACE TCGA-CDR OS may differ in endpoint curation and eligible participants.",
+          "The external model is unadjusted; TCGA-TRACE additionally reports an exact age-adjusted model.",
+          "A median split is rank-comparable but its numerical expression threshold is not comparable across pipelines."
+        ],
+        "tcga_trace_direction": "higher expression protective",
+        "tcga_trace_holm_supported": false,
+        "tcga_trace_nominal_supported": true
+      },
+      "cutoff": "median",
+      "endpoint": "OS",
+      "external": {
+        "expression_processing": "Batch-normalized RSEM from Illumina HiSeq RNASeqV2 as labelled by cBioPortal PanCancer Atlas.",
+        "molecular_profile": {
+          "datatype": "CONTINUOUS",
+          "description": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "molecularAlterationType": "MRNA_EXPRESSION",
+          "molecularProfileId": "kirc_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "name": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "patientLevel": false,
+          "showProfileInAnalysisTab": false,
+          "studyId": "kirc_tcga_pan_can_atlas_2018"
+        },
+        "result": {
+          "contrast": "High vs Low",
+          "cox": {
+            "coefficient": -0.20936743114884052,
+            "conf_high": 1.0989516356968039,
+            "conf_low": 0.5986419958777424,
+            "hazard_ratio": 0.8110971585245779,
+            "p_value": 0.1766728970871223,
+            "standard_error": 0.15496412201574747,
+            "ties": "efron"
+          },
+          "cutoff_method": "median",
+          "cutoff_value": 5650.46,
+          "group_summary": {
+            "High": {
+              "events": 77,
+              "group": "High",
+              "median_survival_months": 116.8425552,
+              "patients": 255
+            },
+            "Low": {
+              "events": 91,
+              "group": "Low",
+              "median_survival_months": 75.58273334,
+              "patients": 255
+            }
+          },
+          "logrank": {
+            "chisq": 1.832187938925619,
+            "degrees_of_freedom": 1,
+            "p_value": 0.17586933551481415
+          },
+          "n_events": 168,
+          "n_patients": 510,
+          "software": {
+            "r_version": "R version 4.6.1 (2026-06-24)",
+            "survival_version": "3.8.6"
+          },
+          "status": "completed"
+        },
+        "sample_list": {
+          "category": "all_cases_with_mrna_rnaseq_data",
+          "description": "Samples with mRNA expression data (510 samples)",
+          "name": "Samples with mRNA data (RNA Seq V2)",
+          "sampleListId": "kirc_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "studyId": "kirc_tcga_pan_can_atlas_2018"
+        },
+        "selection": {
+          "events": 168,
+          "expression_records": 510,
+          "patients_with_complete_os_and_expression": 510,
+          "patients_with_multiple_eligible_samples": 0,
+          "rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+        },
+        "source_snapshot": "docs/publication/benchmark/external_concordance_panel/kirc_ca9_os_median/cbioportal_snapshot.json.gz",
+        "source_snapshot_sha256": "095a0b186eab75fdcac6a00e95be37d7159ac06ec36d7a8b2bc7922cb855fbbe",
+        "study": {
+          "allSampleCount": 512,
+          "cancerType": {
+            "dedicatedColor": "Orange",
+            "id": "ccrcc",
+            "name": "Renal Clear Cell Carcinoma",
+            "parent": "rcc",
+            "shortName": "CCRCC"
+          },
+          "cancerTypeId": "ccrcc",
+          "citation": "TCGA, Cell 2018",
+          "cnaSampleCount": 509,
+          "completeSampleCount": 352,
+          "description": "Kidney Renal Clear Cell Carcinoma TCGA PanCancer data. The original data is <a href=\"https://gdc.cancer.gov/about-data/publications/pancanatlas\">here</a>. The publications are <a href=\"https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html\">here</a>.",
+          "groups": "PUBLIC;PANCAN",
+          "importDate": "2026-06-05 20:35:31",
+          "massSpectrometrySampleCount": 0,
+          "methylationHm27SampleCount": 0,
+          "miRnaSampleCount": 0,
+          "mrnaMicroarraySampleCount": 0,
+          "mrnaRnaSeqSampleCount": 0,
+          "mrnaRnaSeqV2SampleCount": 510,
+          "name": "Kidney Renal Clear Cell Carcinoma (TCGA, PanCancer Atlas)",
+          "pmid": "29625048,29596782,29622463,29617662,29625055,29625050,29617662,30643250,32214244,29625049,29850653,36334560",
+          "publicStudy": true,
+          "readPermission": true,
+          "referenceGenome": "hg19",
+          "resourceCounts": [
+            {
+              "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+              "description": "Computed Radiography",
+              "displayName": "Computed Radiography",
+              "openByDefault": true,
+              "patientCount": 1,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_CR",
+              "resourceType": "PATIENT",
+              "sampleCount": 1
+            },
+            {
+              "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+              "description": "Computed Tomography",
+              "displayName": "Computed Tomography",
+              "openByDefault": true,
+              "patientCount": 221,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_CT",
+              "resourceType": "PATIENT",
+              "sampleCount": 221
+            },
+            {
+              "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+              "description": "Magnetic Resonance",
+              "displayName": "Magnetic Resonance",
+              "openByDefault": true,
+              "patientCount": 60,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_MR",
+              "resourceType": "PATIENT",
+              "sampleCount": 60
+            },
+            {
+              "cancerStudyIdentifier": "kirc_tcga_pan_can_atlas_2018",
+              "description": "Slide Microscopy",
+              "displayName": "Slide Microscopy",
+              "openByDefault": true,
+              "patientCount": 512,
+              "priority": "1",
+              "resourceId": "IDC_SLIM",
+              "resourceType": "PATIENT",
+              "sampleCount": 512
+            }
+          ],
+          "rppaSampleCount": 455,
+          "sequencedSampleCount": 402,
+          "status": 0,
+          "structuralVariantCount": 153,
+          "studyId": "kirc_tcga_pan_can_atlas_2018",
+          "treatmentCount": 98
+        },
+        "tool": "cBioPortal"
+      },
+      "gene": "CA9",
+      "prespecified_role": "direction and significance-discordance case",
+      "tcga_trace": {
+        "age_adjusted_cox": {
+          "conf_high": 0.9520026713344716,
+          "conf_low": 0.5210212340515176,
+          "hazard_ratio": 0.7042823344646859,
+          "p_value": 0.022617445857293327
+        },
+        "analysis_id": "9281f0877ce24ce79d683a0c0a19f07c",
+        "cohort": "TCGA-KIRC",
+        "cox": {
+          "conf_high": 0.9232359091342277,
+          "conf_low": 0.5059102095035746,
+          "hazard_ratio": 0.683428468979249,
+          "p_value": 0.013121611408119736
+        },
+        "cutoff_value": 8.629610061645508,
+        "endpoint": "OS",
+        "endpoint_source": "tcga_cdr",
+        "event_counts": {
+          "High": 73,
+          "Low": 102
+        },
+        "expression_scale": "log2(TPM + 1)",
+        "gene": "CA9",
+        "group_counts": {
+          "High": 265,
+          "Low": 266
+        },
+        "grouped_holm_p_value": 0.05037488422240736,
+        "logrank_p_value": 0.01259372105560184,
+        "median_survival_days": {
+          "High": null,
+          "Low": 2299
+        },
+        "n_events": 175,
+        "n_patients": 531,
+        "patient_records_sha256": "a9b9a351f99ebd870c6a006a8bacc5eb6441ca1887dac24e3bbf0358dad9e2c3",
+        "reproducibility_hash": "7d3ca49db684f5331b52b132c5bcf064a3240e877dc05094e041a236e4c83585"
+      }
+    },
+    {
+      "accessed_date": "2026-07-25",
+      "case_id": "skcm_pdcd1_os_median",
+      "cohort": "TCGA-SKCM",
+      "comparison": {
+        "decision": "direction_and_nominal_support_concordant",
+        "external_direction": "higher expression protective",
+        "external_nominal_supported": true,
+        "independent_validation": false,
+        "limitations": [
+          "Both resources derive from TCGA and therefore are not independent biological validation.",
+          "cBioPortal PanCancer Atlas RSEM and TCGA-TRACE GDC STAR-count TPM are different expression pipelines and releases.",
+          "cBioPortal OS fields and TCGA-TRACE TCGA-CDR OS may differ in endpoint curation and eligible participants.",
+          "The external model is unadjusted; TCGA-TRACE additionally reports an exact age-adjusted model.",
+          "A median split is rank-comparable but its numerical expression threshold is not comparable across pipelines."
+        ],
+        "tcga_trace_direction": "higher expression protective",
+        "tcga_trace_holm_supported": true,
+        "tcga_trace_nominal_supported": true
+      },
+      "cutoff": "median",
+      "endpoint": "OS",
+      "external": {
+        "expression_processing": "Batch-normalized RSEM from Illumina HiSeq RNASeqV2 as labelled by cBioPortal PanCancer Atlas.",
+        "molecular_profile": {
+          "datatype": "CONTINUOUS",
+          "description": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "molecularAlterationType": "MRNA_EXPRESSION",
+          "molecularProfileId": "skcm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "name": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "patientLevel": false,
+          "showProfileInAnalysisTab": false,
+          "studyId": "skcm_tcga_pan_can_atlas_2018"
+        },
+        "result": {
+          "contrast": "High vs Low",
+          "cox": {
+            "coefficient": -0.5576556706629023,
+            "conf_high": 0.7560658107580986,
+            "conf_low": 0.4335776020404036,
+            "hazard_ratio": 0.5725497368903684,
+            "p_value": 8.452525817712789e-05,
+            "standard_error": 0.14185404299871776,
+            "ties": "efron"
+          },
+          "cutoff_method": "median",
+          "cutoff_value": 53.6875,
+          "group_summary": {
+            "High": {
+              "events": 83,
+              "group": "High",
+              "median_survival_months": 111.0891935,
+              "patients": 213
+            },
+            "Low": {
+              "events": 127,
+              "group": "Low",
+              "median_survival_months": 58.0596377,
+              "patients": 213
+            }
+          },
+          "logrank": {
+            "chisq": 15.846675838390995,
+            "degrees_of_freedom": 1,
+            "p_value": 6.868708937837031e-05
+          },
+          "n_events": 210,
+          "n_patients": 426,
+          "software": {
+            "r_version": "R version 4.6.1 (2026-06-24)",
+            "survival_version": "3.8.6"
+          },
+          "status": "completed"
+        },
+        "sample_list": {
+          "category": "all_cases_with_mrna_rnaseq_data",
+          "description": "Samples with mRNA expression data (443 samples)",
+          "name": "Samples with mRNA data (RNA Seq V2)",
+          "sampleListId": "skcm_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "studyId": "skcm_tcga_pan_can_atlas_2018"
+        },
+        "selection": {
+          "events": 210,
+          "expression_records": 443,
+          "patients_with_complete_os_and_expression": 426,
+          "patients_with_multiple_eligible_samples": 2,
+          "rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+        },
+        "source_snapshot": "docs/publication/benchmark/external_concordance_panel/skcm_pdcd1_os_median/cbioportal_snapshot.json.gz",
+        "source_snapshot_sha256": "bee9803fc3f8636dfac3e66e176696a38777dc2923c6436a7845326d17590752",
+        "study": {
+          "allSampleCount": 448,
+          "cancerType": {
+            "dedicatedColor": "Black",
+            "id": "skcm",
+            "name": "Cutaneous Melanoma",
+            "parent": "mel",
+            "shortName": "SKCM"
+          },
+          "cancerTypeId": "skcm",
+          "citation": "TCGA, Cell 2018",
+          "cnaSampleCount": 367,
+          "completeSampleCount": 363,
+          "description": "Skin Cutaneous Melanoma TCGA PanCancer data. The original data is <a href=\"https://gdc.cancer.gov/about-data/publications/pancanatlas\">here</a>. The publications are <a href=\"https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html\">here</a>.",
+          "groups": "PUBLIC;PANCAN",
+          "importDate": "2026-06-04 23:22:12",
+          "massSpectrometrySampleCount": 0,
+          "methylationHm27SampleCount": 0,
+          "miRnaSampleCount": 0,
+          "mrnaMicroarraySampleCount": 0,
+          "mrnaRnaSeqSampleCount": 0,
+          "mrnaRnaSeqV2SampleCount": 443,
+          "name": "Skin Cutaneous Melanoma (TCGA, PanCancer Atlas)",
+          "pmid": "29625048,29596782,29622463,29617662,29625055,29625050,29617662,30643250,32214244,29625049,29850653,36334560",
+          "publicStudy": true,
+          "readPermission": true,
+          "referenceGenome": "hg19",
+          "resourceCounts": [
+            {
+              "cancerStudyIdentifier": "skcm_tcga_pan_can_atlas_2018",
+              "description": "Slide Microscopy",
+              "displayName": "Slide Microscopy",
+              "openByDefault": true,
+              "patientCount": 442,
+              "priority": "1",
+              "resourceId": "IDC_SLIM",
+              "resourceType": "PATIENT",
+              "sampleCount": 448
+            }
+          ],
+          "rppaSampleCount": 329,
+          "sequencedSampleCount": 440,
+          "status": 0,
+          "structuralVariantCount": 313,
+          "studyId": "skcm_tcga_pan_can_atlas_2018",
+          "treatmentCount": 200
+        },
+        "tool": "cBioPortal"
+      },
+      "gene": "PDCD1",
+      "prespecified_role": "supported immune-marker case",
+      "tcga_trace": {
+        "age_adjusted_cox": {
+          "conf_high": 0.723381464195511,
+          "conf_low": 0.41688644533731867,
+          "hazard_ratio": 0.5491520073999288,
+          "p_value": 2.0155342496963993e-05
+        },
+        "analysis_id": "50587193715341759cf0b4b765583abb",
+        "cohort": "TCGA-SKCM",
+        "cox": {
+          "conf_high": 0.6919016429855384,
+          "conf_low": 0.3989989474984243,
+          "hazard_ratio": 0.5254217613723858,
+          "p_value": 4.591000797392644e-06
+        },
+        "cutoff_value": 2.4242234230041504,
+        "endpoint": "OS",
+        "endpoint_source": "tcga_cdr",
+        "event_counts": {
+          "High": 85,
+          "Low": 128
+        },
+        "expression_scale": "log2(TPM + 1)",
+        "gene": "PDCD1",
+        "group_counts": {
+          "High": 226,
+          "Low": 227
+        },
+        "grouped_holm_p_value": 9.480215712425098e-06,
+        "logrank_p_value": 3.160071904141699e-06,
+        "median_survival_days": {
+          "High": 3564,
+          "Low": 1655
+        },
+        "n_events": 213,
+        "n_patients": 453,
+        "patient_records_sha256": "8dab9305760c2f2c0afa6c671ddba73a73391ddbcef59e866749bf4efe7faa7a",
+        "reproducibility_hash": "c41dcfa4afe2ccdfb33dcf884018e3a4078ec4085cc6861d86b94e73d2d2f185"
+      }
+    },
+    {
+      "accessed_date": "2026-07-25",
+      "case_id": "luad_cd274_os_median",
+      "cohort": "TCGA-LUAD",
+      "comparison": {
+        "decision": "both_unsupported_point_direction_differs",
+        "external_direction": "higher expression adverse",
+        "external_nominal_supported": false,
+        "independent_validation": false,
+        "limitations": [
+          "Both resources derive from TCGA and therefore are not independent biological validation.",
+          "cBioPortal PanCancer Atlas RSEM and TCGA-TRACE GDC STAR-count TPM are different expression pipelines and releases.",
+          "cBioPortal OS fields and TCGA-TRACE TCGA-CDR OS may differ in endpoint curation and eligible participants.",
+          "The external model is unadjusted; TCGA-TRACE additionally reports an exact age-adjusted model.",
+          "A median split is rank-comparable but its numerical expression threshold is not comparable across pipelines."
+        ],
+        "tcga_trace_direction": "higher expression protective",
+        "tcga_trace_holm_supported": false,
+        "tcga_trace_nominal_supported": false
+      },
+      "cutoff": "median",
+      "endpoint": "OS",
+      "external": {
+        "expression_processing": "Batch-normalized RSEM from Illumina HiSeq RNASeqV2 as labelled by cBioPortal PanCancer Atlas.",
+        "molecular_profile": {
+          "datatype": "CONTINUOUS",
+          "description": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "molecularAlterationType": "MRNA_EXPRESSION",
+          "molecularProfileId": "luad_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "name": "mRNA Expression, RSEM (Batch normalized from Illumina HiSeq_RNASeqV2)",
+          "patientLevel": false,
+          "showProfileInAnalysisTab": false,
+          "studyId": "luad_tcga_pan_can_atlas_2018"
+        },
+        "result": {
+          "contrast": "High vs Low",
+          "cox": {
+            "coefficient": 0.08152246962262921,
+            "conf_high": 1.4537835068521858,
+            "conf_low": 0.8096732288332227,
+            "hazard_ratio": 1.084937595448464,
+            "p_value": 0.5850757074977487,
+            "standard_error": 0.1493124393286908,
+            "ties": "efron"
+          },
+          "cutoff_method": "median",
+          "cutoff_value": 60.9405,
+          "group_summary": {
+            "High": {
+              "events": 88,
+              "group": "High",
+              "median_survival_months": 45.33648946,
+              "patients": 251
+            },
+            "Low": {
+              "events": 93,
+              "group": "Low",
+              "median_survival_months": 50.23506592,
+              "patients": 250
+            }
+          },
+          "logrank": {
+            "chisq": 0.29851057263795927,
+            "degrees_of_freedom": 1,
+            "p_value": 0.5848176680030568
+          },
+          "n_events": 181,
+          "n_patients": 501,
+          "software": {
+            "r_version": "R version 4.6.1 (2026-06-24)",
+            "survival_version": "3.8.6"
+          },
+          "status": "completed"
+        },
+        "sample_list": {
+          "category": "all_cases_with_mrna_rnaseq_data",
+          "description": "Samples with mRNA expression data (510 samples)",
+          "name": "Samples with mRNA data (RNA Seq V2)",
+          "sampleListId": "luad_tcga_pan_can_atlas_2018_rna_seq_v2_mrna",
+          "studyId": "luad_tcga_pan_can_atlas_2018"
+        },
+        "selection": {
+          "events": 181,
+          "expression_records": 510,
+          "patients_with_complete_os_and_expression": 501,
+          "patients_with_multiple_eligible_samples": 0,
+          "rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+        },
+        "source_snapshot": "docs/publication/benchmark/external_concordance_panel/luad_cd274_os_median/cbioportal_snapshot.json.gz",
+        "source_snapshot_sha256": "e56d0a6e7f45525b6c470f1bc463b50f117c12240415c73cf9fb731eeda34369",
+        "study": {
+          "allSampleCount": 566,
+          "cancerType": {
+            "dedicatedColor": "Gainsboro",
+            "id": "luad",
+            "name": "Lung Adenocarcinoma",
+            "parent": "nsclc",
+            "shortName": "LUAD"
+          },
+          "cancerTypeId": "luad",
+          "citation": "TCGA, Cell 2018",
+          "cnaSampleCount": 511,
+          "completeSampleCount": 503,
+          "description": "Lung Adenocarcinoma TCGA PanCancer data. The original data is <a href=\"https://gdc.cancer.gov/about-data/publications/pancanatlas\">here</a>. The publications are <a href=\"https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html\">here</a>.",
+          "groups": "PUBLIC;PANCAN",
+          "importDate": "2026-06-04 18:48:28",
+          "massSpectrometrySampleCount": 0,
+          "methylationHm27SampleCount": 0,
+          "miRnaSampleCount": 0,
+          "mrnaMicroarraySampleCount": 0,
+          "mrnaRnaSeqSampleCount": 0,
+          "mrnaRnaSeqV2SampleCount": 510,
+          "name": "Lung Adenocarcinoma (TCGA, PanCancer Atlas)",
+          "pmid": "29625048,29596782,29622463,29617662,29625055,29625050,29617662,30643250,32214244,29625049,29850653,36334560",
+          "publicStudy": true,
+          "readPermission": true,
+          "referenceGenome": "hg19",
+          "resourceCounts": [
+            {
+              "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+              "description": "Computed Tomography",
+              "displayName": "Computed Tomography",
+              "openByDefault": true,
+              "patientCount": 60,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_CT",
+              "resourceType": "PATIENT",
+              "sampleCount": 60
+            },
+            {
+              "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+              "description": "Nuclear Medicine",
+              "displayName": "Nuclear Medicine",
+              "openByDefault": true,
+              "patientCount": 2,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_NM",
+              "resourceType": "PATIENT",
+              "sampleCount": 2
+            },
+            {
+              "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+              "description": "Positron Emission Tomography",
+              "displayName": "Positron Emission Tomography",
+              "openByDefault": true,
+              "patientCount": 23,
+              "priority": "1",
+              "resourceId": "IDC_OHIF_PT",
+              "resourceType": "PATIENT",
+              "sampleCount": 23
+            },
+            {
+              "cancerStudyIdentifier": "luad_tcga_pan_can_atlas_2018",
+              "description": "Slide Microscopy",
+              "displayName": "Slide Microscopy",
+              "openByDefault": true,
+              "patientCount": 514,
+              "priority": "1",
+              "resourceId": "IDC_SLIM",
+              "resourceType": "PATIENT",
+              "sampleCount": 514
+            }
+          ],
+          "rppaSampleCount": 360,
+          "sequencedSampleCount": 566,
+          "status": 0,
+          "structuralVariantCount": 403,
+          "studyId": "luad_tcga_pan_can_atlas_2018",
+          "treatmentCount": 202
+        },
+        "tool": "cBioPortal"
+      },
+      "gene": "CD274",
+      "prespecified_role": "unsupported or weak-signal case",
+      "tcga_trace": {
+        "age_adjusted_cox": {
+          "conf_high": 1.256211542296366,
+          "conf_low": 0.6982025075288064,
+          "hazard_ratio": 0.9365308584440515,
+          "p_value": 0.6616542746023163
+        },
+        "analysis_id": "aaa1cceb5cd04ca59a9d59b694221062",
+        "cohort": "TCGA-LUAD",
+        "cox": {
+          "conf_high": 1.3285205358118806,
+          "conf_low": 0.7420149435790572,
+          "hazard_ratio": 0.9928655953471605,
+          "p_value": 0.9615672322807484
+        },
+        "cutoff_value": 3.0359933376312256,
+        "endpoint": "OS",
+        "endpoint_source": "tcga_cdr",
+        "event_counts": {
+          "High": 87,
+          "Low": 95
+        },
+        "expression_scale": "log2(TPM + 1)",
+        "gene": "CD274",
+        "group_counts": {
+          "High": 252,
+          "Low": 253
+        },
+        "grouped_holm_p_value": 1.0,
+        "logrank_p_value": 0.9618174116556687,
+        "median_survival_days": {
+          "High": 1501,
+          "Low": 1499
+        },
+        "n_events": 182,
+        "n_patients": 505,
+        "patient_records_sha256": "ac02621f429d7b9ebbc84c5ffcb402a8ef7cfe621cfa50d1d32e10d9d4c9d1d1",
+        "reproducibility_hash": "1797b1e98a6dc61cc1ef8d955e3db12c39a925e3a21612742e341eed01896bc3"
+      }
+    }
+  ],
+  "comparison_contract": {
+    "contrast": "High vs Low",
+    "cutoff": "median",
+    "endpoint": "OS",
+    "external_cox": "univariable Cox with Efron ties",
+    "interpretation": "Directional and nominal-support concordance are descriptive software checks, not independent biomarker validation.",
+    "sample_rule": "Among cBioPortal samples with the requested expression value and complete OS_MONTHS/OS_STATUS, select one sample per patient using TCGA sample-code priority: primary, recurrent, additional primary, metastatic, other; resolve ties lexicographically by sample ID."
+  },
+  "external_source": {
+    "api_base": "https://www.cbioportal.org/api",
+    "api_documentation": "https://docs.cbioportal.org/web-api-and-clients/",
+    "dataset_family": "TCGA PanCancer Atlas",
+    "tool": "cBioPortal"
+  },
+  "generated_at": "2026-07-25T19:24:40.490119+00:00",
+  "prespecification": {
+    "document": "docs/publication/concordance_validation_plan.md",
+    "statement": "The three marker-cohort cases and their supported, discordant and unsupported roles were documented before this panel was run.",
+    "status_date": "2026-07-23"
+  },
+  "schema_version": "tcga-trace-external-concordance-panel-v1"
+}

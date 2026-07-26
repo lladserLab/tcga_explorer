@@ -1,0 +1,19 @@
+{
+  "author_latex": "Sergio Hernández-Galaz$^{1,2,3}$, Andrés Hernández-Oliveras$^{1,2}$, Ignacio Pezoa-Soto$^{1,3,4}$, Javiera Reyes-Alvarez$^{1}$, Vincenzo Benedetti$^{1}$, Alberto J. M. Martin$^{1,4}$, and Alvaro Lladser$^{1,3}$",
+  "author_markdown": "Sergio Hernández-Galaz¹˒²˒³; Andrés Hernández-Oliveras¹˒²; Ignacio Pezoa-Soto¹˒³˒⁴; Javiera Reyes-Alvarez¹; Vincenzo Benedetti¹; Alberto J. M. Martin¹˒⁴; Alvaro Lladser¹˒³",
+  "affiliations_latex": "$^{1}$Centro BASAL Ciencia \\& Vida, Fundación Ciencia \\& Vida, Santiago, Chile; $^{2}$Fundación Arturo López Pérez (FALP), OECI Cancer Center, Laboratorio de Medicina Traslacional, Centro de Investigación e Innovación en Cáncer, Santiago, Chile; $^{3}$Facultad de Medicina, Universidad San Sebastián, Santiago, Chile; $^{4}$Escuela de Ingeniería, Facultad de Ingeniería, Universidad San Sebastián, Santiago, Chile",
+  "affiliations_markdown": "¹ Centro BASAL Ciencia & Vida, Fundación Ciencia & Vida, Santiago, Chile.\n² Fundación Arturo López Pérez (FALP), OECI Cancer Center, Laboratorio de Medicina Traslacional, Centro de Investigación e Innovación en Cáncer, Santiago, Chile.\n³ Facultad de Medicina, Universidad San Sebastián, Santiago, Chile.\n⁴ Escuela de Ingeniería, Facultad de Ingeniería, Universidad San Sebastián, Santiago, Chile.",
+  "corresponding_author_name": "REPLACE_WITH_CORRESPONDING_AUTHOR_NAME",
+  "corresponding_email": "REPLACE_WITH_EMAIL",
+  "corresponding_author_orcid": "REPLACE_WITH_ORCID_0000-0000-0000-0000",
+  "author_contributions_statement": "REPLACE_WITH_FINAL_CREDIT_AUTHOR_CONTRIBUTIONS",
+  "funding_statement": "This work was funded by Centro Basal Ciencia & Vida, grant FB210008 from ANID—Agencia Nacional de Investigación y Desarrollo; ANID Fondecyt projects 1251312 to A.L. and 1231629 to A.J.M.M.; and ANID postdoctoral fellowship 3260791 to S.H.-G. Powered@NLHPC: this research was partially supported by the supercomputing infrastructure of the NLHPC (CCSS210001).",
+  "conflict_of_interest_statement": "The authors declare no conflicts of interest.",
+  "ai_use_disclosure": "REPLACE_WITH_DETAILED_AI_USE_DISCLOSURE_NAMING_TOOLS_VERSIONS_TASKS_AND_INDEPENDENT_AUTHOR_REWRITE_AND_VERIFICATION",
+  "software_license": "REPLACE_WITH_LICENSE_NAME",
+  "repository_url": "https://github.com/lladserLab/tcga_explorer",
+  "release_url_or_doi": "REPLACE_WITH_ZENODO_VERSION_DOI_OR_RECORD_URL",
+  "demo_or_access_statement": "https://apps.cienciavida.org/tcga_explorer/",
+  "maintenance_commitment": "REPLACE_WITH_THREE_YEAR_WEB_SERVICE_MAINTENANCE_COMMITMENT",
+  "data_availability_note": "REPLACE_WITH_FINAL_DATA_AVAILABILITY_NOTE_IF_DIFFERENT"
+}

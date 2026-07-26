@@ -1,16 +1,15 @@
 \begin{table}[t]
 \centering
-\caption{TCGA-BRCA MKI67 PFI cutpoint robustness benchmark.}
+\caption{TCGA-BRCA MKI67 PFI cutpoint-sensitivity benchmark.}
 \label{tab:brca-mki67-pfi-cutpoints}
 \begin{tabular}{lrrrrrrl}
 \toprule
-Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
 \midrule
-Maxstat & 1080 & 145 & 0.014 & 0.004 & 3.51e-04 & -2535 & Yes \\
-Median & 1080 & 145 & 0.359 & 0.216 & 0.083 & -147 & Fails BH \\
-Upper Q & 1080 & 145 & 0.384 & 0.385 & 0.352 & 545 & Fails BH \\
-Outer Q & 540 & 71 & 0.328 & 0.133 & 0.057 & -435 & Fails BH \\
-75th pct. & 1080 & 145 & 0.384 & 0.385 & 0.352 & 545 & Fails BH \\
+Maxstat & 1080 & 145 & 0.391 & 0.003 & 0.548 & -82 & Global PH caution; marker term not flagged; Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 1080 & 145 & 0.430 & 0.188 & 0.790 & -32 & Global PH caution; marker term not flagged \\
+Upper Q & 1080 & 145 & 0.430 & 0.356 & 0.292 & -31 & Global PH caution; marker term not flagged \\
+Outer Q & 540 & 71 & 0.394 & 0.261 & 0.726 & -39 & Middle 50\% excluded \\
 \bottomrule
 \end{tabular}
 \end{table}

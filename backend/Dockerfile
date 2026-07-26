@@ -1,8 +1,8 @@
-FROM rocker/r-ver:4.4.2
+FROM rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    RENV_CONFIG_REPOS_OVERRIDE=https://cloud.r-project.org
+    RENV_CONFIG_REPOS_OVERRIDE=https://p3m.dev/cran/2026-07-25
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN Rscript -e "pkgs <- c('jsonlite','survival','survminer','ggplot2','svglite','survRM2'); install.packages(pkgs, repos='https://cloud.r-project.org'); missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)]; if (length(missing)) stop('Missing R packages: ', paste(missing, collapse=', '))"
+COPY backend/renv.lock /opt/tcga-trace/renv.lock
+RUN Rscript -e "install.packages('renv', repos='https://p3m.dev/cran/2026-07-25'); stopifnot(as.character(packageVersion('renv')) == '1.2.3'); renv::restore(lockfile='/opt/tcga-trace/renv.lock', library=.libPaths()[1], repos='https://p3m.dev/cran/2026-07-25', prompt=FALSE)"
 
 WORKDIR /app
 
@@ -32,8 +33,14 @@ COPY backend/requirements.txt /app/requirements.txt
 RUN python3 -m pip install --break-system-packages --no-cache-dir -r /app/requirements.txt
 
 COPY backend/app /app/app
+COPY backend/renv.lock /app/renv.lock
+COPY backend/alembic.ini /app/alembic.ini
+COPY backend/alembic /app/alembic
 COPY backend/scripts /app/scripts
+COPY docs/API.md /app/docs/API.md
+COPY docs/API_ES.md /app/docs/API_ES.md
+COPY docs/publication/benchmark /app/publication/benchmark
 
 ENV PYTHONPATH=/app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "alembic -c /app/alembic.ini upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000"]

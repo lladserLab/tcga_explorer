@@ -1,0 +1,6 @@
+model,model_label,role,completed_gene_cohort_models,global_fdr_hits,meta_fdr_gene_hits,ph_flagged_models,global_fdr_ph_flagged,recurrent_harmful_genes_ge5,recurrent_protective_genes_ge5
+primary,Primary continuous expression,primary_estimand,96779,12234,881,7907,1930,508,73
+stage_grade_adjusted,Ordinal stage + grade,clinical_sensitivity,30326,178,100,7391,108,0,0
+stage_adjusted,Ordinal stage,clinical_sensitivity,66547,1342,346,17061,402,0,0
+grade_adjusted,Ordinal grade,clinical_sensitivity,36410,2841,119,8338,785,0,0
+availability_selected,Availability-selected sensitivity,descriptive_sensitivity_no_mixed_meta,72633,2379,,19055,899,0,0

@@ -1,0 +1,404 @@
+{
+  "schema_version": "tcga-trace-runtime-concurrency-benchmark-v1",
+  "run_id": "20260725T202243684364Z",
+  "generated_at": "2026-07-25T20:27:23.609628+00:00",
+  "api_base_url": "http://192.168.1.31:3000/tcga_explorer",
+  "definitions": {
+    "uncached": "No completed compute job or analysis artifact matched the exact request. A unique display-only plot title or session label forced a cache miss without changing the statistical specification.",
+    "cached_repeat": "The exact single-analysis request was resubmitted after completion and returned the retained compute job.",
+    "wall_time": "Client-observed time from the start of POST submission through the first terminal job response.",
+    "queue_wait": "Job started_at minus created_at.",
+    "compute_time": "Job completed_at minus started_at.",
+    "memory": "Backend plus worker Docker cgroup memory. Absolute peak includes resident baseline; delta is peak minus pre-request baseline.",
+    "cold_scope": "Cold denotes an analysis-result cache miss, not a cold operating-system page cache or a fresh TCGA data import."
+  },
+  "service": {
+    "health": {
+      "status": "ok",
+      "app_version": "1.0.0",
+      "api_version": "v1",
+      "pipeline_versions": {
+        "analysis": "expression-complete-interpretation-contract-v6.6",
+        "combined_signatures": "expression-complete-interpretation-contract-v3.8",
+        "multiverse": "prespecified-multiverse-interpretation-contract-v1.5",
+        "pancancer": "common-scale-reml-hksj-interpretation-contract-v2.9",
+        "immune_atlas": "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1"
+      },
+      "cohorts": 33,
+      "cache_status": "ready",
+      "data_dates": {
+        "source_summary_file": "2026-04-22T16:16:36+00:00",
+        "source_latest_metadata_file": "2026-04-22T16:16:36+00:00",
+        "database_imported_at": "2026-04-27T16:45:36.888931+00:00",
+        "rna_cache_generated_at": "2026-07-25T20:03:43.914172+00:00",
+        "tcga_cdr_source_file": "2026-04-27T16:45:29.753288+00:00",
+        "tcga_cdr_imported_at": "2026-04-27T16:45:38.378020+00:00",
+        "data_through_date": null,
+        "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264"
+      },
+      "queue": {
+        "available": true,
+        "queued": 0,
+        "running": 0,
+        "limits": {
+          "global_concurrency": 2,
+          "queue_size": 50,
+          "active_per_client": 5,
+          "hourly_per_client": {
+            "analysis_or_combined": 10,
+            "batch": 2,
+            "multiverse": 1,
+            "pancancer": 2
+          },
+          "request_size": {
+            "batch_analyses": 25,
+            "multiverse_specifications": 72
+          }
+        }
+      }
+    },
+    "queue_limits": {
+      "global_concurrency": 2,
+      "queue_size": 50,
+      "active_per_client": 5,
+      "hourly_per_client": {
+        "analysis_or_combined": 10,
+        "batch": 2,
+        "multiverse": 1,
+        "pancancer": 2
+      },
+      "request_size": {
+        "batch_analyses": 25,
+        "multiverse_specifications": 72
+      }
+    },
+    "benchmark_client_session_id": "runtime-benchmark-20260725T202243684364Z",
+    "client_limit_scope": "All jobs in this run share one isolated session key, so the published per-client limits apply within the benchmark without being contaminated by unrelated local requests."
+  },
+  "environment": {
+    "host": {
+      "system": "Darwin",
+      "release": "23.6.0",
+      "machine": "arm64",
+      "processor": "Apple M1 Ultra",
+      "logical_cpus": 20,
+      "physical_memory_bytes": 68719476736,
+      "model": "Mac13,2"
+    },
+    "python": "3.9.6",
+    "docker": {
+      "server_version": "29.4.1",
+      "architecture": "aarch64",
+      "operating_system": "Docker Desktop",
+      "cpus": 20,
+      "memory_bytes": 8319131648,
+      "containers": {
+        "backend": {
+          "name": "/tcga_explorer-backend-1",
+          "image": "sha256:6518af8229d4b7c7e2c517b8a2bbadc61526096e60604fb902edc460c77b7d65",
+          "memory_limit": 0,
+          "nano_cpus": 0
+        },
+        "worker": {
+          "name": "/tcga_explorer-worker-1",
+          "image": "sha256:6518af8229d4b7c7e2c517b8a2bbadc61526096e60604fb902edc460c77b7d65",
+          "memory_limit": 0,
+          "nano_cpus": 0
+        }
+      }
+    },
+    "source": {
+      "git_commit": "ac32eb643e6c60b0281881cd879ce0d6e88b2843",
+      "dirty": true
+    },
+    "pipeline_versions": {
+      "analysis": "expression-complete-interpretation-contract-v6.6",
+      "combined_signatures": "expression-complete-interpretation-contract-v3.8",
+      "multiverse": "prespecified-multiverse-interpretation-contract-v1.5",
+      "pancancer": "common-scale-reml-hksj-interpretation-contract-v2.9",
+      "immune_atlas": "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1"
+    },
+    "data_manifest_hash": "6964900d3c7d20f9fcefa8c4c78399bbe12a29dc9e6d23a25a0929f9bb180264"
+  },
+  "workloads": [
+    {
+      "benchmark_id": "single_uncached",
+      "label": "Single analysis, uncached result",
+      "kind": "analysis",
+      "workload_size": 1,
+      "status": "completed",
+      "cached_at_submission": false,
+      "job_id": "1a1ff090b88c4ea4b5e1f84f6115b0d2",
+      "result_id": "fd751dcee60d47b982be1589952717b7",
+      "timing": {
+        "wall_seconds": 5.120607,
+        "submit_seconds": 0.032314,
+        "queue_wait_seconds": 0.939393,
+        "compute_seconds": 3.201809,
+        "retained_source_queue_wait_seconds": null,
+        "retained_source_compute_seconds": null
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 18,
+        "baseline_total_bytes": 234430137,
+        "peak_total_bytes": 580449731,
+        "peak_delta_bytes": 346019594,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 98010399,
+            "peak_bytes": 98010399,
+            "peak_delta_bytes": 0
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 136419738,
+            "peak_bytes": 482449818,
+            "peak_delta_bytes": 346030080
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "patients": 531,
+        "events": 175,
+        "pipeline_version": null
+      }
+    },
+    {
+      "benchmark_id": "single_cached_repeat",
+      "label": "Single analysis, exact cached repeat",
+      "kind": "analysis",
+      "workload_size": 1,
+      "status": "completed",
+      "cached_at_submission": true,
+      "job_id": "1a1ff090b88c4ea4b5e1f84f6115b0d2",
+      "result_id": "fd751dcee60d47b982be1589952717b7",
+      "timing": {
+        "wall_seconds": 0.037202,
+        "submit_seconds": 0.026545,
+        "queue_wait_seconds": null,
+        "compute_seconds": null,
+        "retained_source_queue_wait_seconds": 0.939393,
+        "retained_source_compute_seconds": 3.201809
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 2,
+        "baseline_total_bytes": 235646484,
+        "peak_total_bytes": 235646484,
+        "peak_delta_bytes": 0,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 99121889,
+            "peak_bytes": 99121889,
+            "peak_delta_bytes": 0
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 136524595,
+            "peak_bytes": 136524595,
+            "peak_delta_bytes": 0
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "patients": 531,
+        "events": 175,
+        "pipeline_version": null
+      }
+    },
+    {
+      "benchmark_id": "two_job_concurrency",
+      "label": "Two independent single analyses",
+      "kind": "concurrency_probe",
+      "workload_size": 2,
+      "status": "completed",
+      "cached_at_submission": false,
+      "job_id": null,
+      "result_id": null,
+      "job_ids": [
+        "1cd00611e45943f284a45b2e63be92ad",
+        "74c6fb25a3b948c2bf03bcaf3dd89503"
+      ],
+      "timing": {
+        "wall_seconds": 5.231355,
+        "submit_seconds": null,
+        "queue_wait_seconds": 0.938048,
+        "compute_seconds": 3.397899,
+        "retained_source_queue_wait_seconds": null,
+        "retained_source_compute_seconds": null,
+        "execution_overlap_seconds": 2.53275
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 18,
+        "baseline_total_bytes": 234566451,
+        "peak_total_bytes": 813338460,
+        "peak_delta_bytes": 578772009,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 98041856,
+            "peak_bytes": 98041856,
+            "peak_delta_bytes": 0
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 136524595,
+            "peak_bytes": 715338547,
+            "peak_delta_bytes": 578813952
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "submitted_jobs": 2,
+        "completed_jobs": 2,
+        "peak_running_jobs_observed": 2,
+        "execution_overlap_seconds": 2.53275
+      }
+    },
+    {
+      "benchmark_id": "batch_10",
+      "label": "Public batch, 10 analyses",
+      "kind": "batch",
+      "workload_size": 10,
+      "status": "completed",
+      "cached_at_submission": false,
+      "job_id": "11fce1a1ce874763a3fce51bb25b6767",
+      "result_id": "11fce1a1ce874763a3fce51bb25b6767",
+      "timing": {
+        "wall_seconds": 32.469335,
+        "submit_seconds": 0.034331,
+        "queue_wait_seconds": 0.216025,
+        "compute_seconds": 31.78316,
+        "retained_source_queue_wait_seconds": null,
+        "retained_source_compute_seconds": null
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 126,
+        "baseline_total_bytes": 237271777,
+        "peak_total_bytes": 588943196,
+        "peak_delta_bytes": 351671419,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 98020884,
+            "peak_bytes": 99079946,
+            "peak_delta_bytes": 1059062
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 139250893,
+            "peak_bytes": 490943283,
+            "peak_delta_bytes": 351692390
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "total": 10,
+        "completed": 10,
+        "failed": 0,
+        "effective_child_concurrency": 1
+      }
+    },
+    {
+      "benchmark_id": "multiverse_72",
+      "label": "Prespecified multiverse, 72 cells",
+      "kind": "multiverse",
+      "workload_size": 72,
+      "status": "completed",
+      "cached_at_submission": false,
+      "job_id": "462d40c06cc04bc7ad3d237c337373a1",
+      "result_id": "mv_a0efc25b60b9132e4c7da438",
+      "timing": {
+        "wall_seconds": 218.797564,
+        "submit_seconds": 0.031584,
+        "queue_wait_seconds": 0.48703,
+        "compute_seconds": 217.878213,
+        "retained_source_queue_wait_seconds": null,
+        "retained_source_compute_seconds": null
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 872,
+        "baseline_total_bytes": 238928527,
+        "peak_total_bytes": 596566343,
+        "peak_delta_bytes": 357637816,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 97999913,
+            "peak_bytes": 107688755,
+            "peak_delta_bytes": 9688842
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 140928614,
+            "peak_bytes": 497759027,
+            "peak_delta_bytes": 356830413
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "planned": 72,
+        "completed": 72,
+        "failed": 0,
+        "pipeline_version": "prespecified-multiverse-interpretation-contract-v1.5"
+      }
+    },
+    {
+      "benchmark_id": "pancancer_all_cohorts",
+      "label": "Pan-cancer scan, 33 requested cohorts",
+      "kind": "pancancer",
+      "workload_size": 33,
+      "status": "completed",
+      "cached_at_submission": false,
+      "job_id": "46c76abdd916488fb6b476325b49188a",
+      "result_id": "pc_508cd1d2ca88b4e18a3229b7",
+      "timing": {
+        "wall_seconds": 7.179898,
+        "submit_seconds": 0.033474,
+        "queue_wait_seconds": 0.224278,
+        "compute_seconds": 6.536566,
+        "retained_source_queue_wait_seconds": null,
+        "retained_source_compute_seconds": null
+      },
+      "memory": {
+        "available": true,
+        "method": "Docker cgroup MemUsage sampled with streaming docker stats; absolute peaks include the resident application baseline.",
+        "sampling_interval": "Docker stats stream, approximately 1 second",
+        "sample_count": 26,
+        "baseline_total_bytes": 237659750,
+        "peak_total_bytes": 461226639,
+        "peak_delta_bytes": 223566889,
+        "containers": {
+          "tcga_explorer-backend-1": {
+            "baseline_bytes": 97989427,
+            "peak_bytes": 97999913,
+            "peak_delta_bytes": 10486
+          },
+          "tcga_explorer-worker-1": {
+            "baseline_bytes": 139670323,
+            "peak_bytes": 363226726,
+            "peak_delta_bytes": 223556403
+          }
+        },
+        "error": null
+      },
+      "result_summary": {
+        "cohorts_requested": 33,
+        "cohorts_completed": 32,
+        "cohorts_skipped": null,
+        "pipeline_version": "common-scale-reml-hksj-interpretation-contract-v2.9"
+      }
+    }
+  ]
+}

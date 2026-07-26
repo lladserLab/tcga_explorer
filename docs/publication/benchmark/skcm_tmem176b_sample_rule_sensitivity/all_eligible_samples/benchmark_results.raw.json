@@ -1,0 +1,932 @@
+{
+  "completed": 1,
+  "failed": 0,
+  "max_concurrency": 1,
+  "results": [
+    {
+      "code": null,
+      "error": null,
+      "index": 0,
+      "result": {
+        "cached": true,
+        "cohort": "TCGA-SKCM",
+        "cutpoint_method": "median",
+        "diagnostics": {
+          "cohort_information_count": 2,
+          "information_count": 2,
+          "legacy_warning_count": 4,
+          "method_information_count": 0,
+          "model_caution_count": 2,
+          "not_evaluable_count": 0,
+          "selected_adjusted_model": "continuous_stage_adjusted",
+          "selected_adjusted_model_family": "continuous",
+          "selected_adjusted_model_label": "Continuous expression adjusted for ordinal stage",
+          "selected_adjusted_status": "caution",
+          "selected_model_caution_count": 1
+        },
+        "downloads": {
+          "audit_html": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/audit_html",
+          "audit_json": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/audit_json",
+          "continuous_csv": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/continuous_csv",
+          "continuous_png": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/continuous_png",
+          "continuous_svg": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/continuous_svg",
+          "cox_png": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/cox_png",
+          "cox_svg": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/cox_svg",
+          "csv": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/csv",
+          "json": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/json",
+          "png": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/png",
+          "svg": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/svg",
+          "txt": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/txt",
+          "zip": "/api/v1/analyses/0c604217ab5d4eac833778fac81bc9c8/download/zip"
+        },
+        "error": null,
+        "expression_scale": "log2_tpm",
+        "expression_scale_label": "log2(TPM + 1)",
+        "gene_symbol": "TMEM176B",
+        "id": "0c604217ab5d4eac833778fac81bc9c8",
+        "metrics": {
+          "audit_report": {
+            "continuous_patient_records_sha256": "6cbbf87f2f6cb2c918e489d74a75f1c6d7d723ec51318202a929f67f242c7a64",
+            "generated_at": "2026-07-25T02:23:28.112547+00:00",
+            "patient_records_sha256": "8124add9985c91adb36191eefb1bb00ab3103660c32f514fa1cc63b44447c98a",
+            "reproducibility_hash": "85538694498f0cf83adf4ef2156f058f288cb6730280c515fcdf9806da9882d2",
+            "schema_version": "tcga-trace-analysis-audit-v3"
+          },
+          "continuous_analysis": {
+            "cutpoint_independent": true,
+            "linear_models": [
+              {
+                "contrast": "per +1 SD expression",
+                "covariate_encoding": [],
+                "covariates": [],
+                "effect_unit": "per +1 SD expression",
+                "expression_center": 5.965572269810219,
+                "expression_sd": 1.5120985843332158,
+                "hazard_ratio": 0.7671065979432938,
+                "hr_conf_high": 0.8742923070748925,
+                "hr_conf_low": 0.6730615468605822,
+                "information_diagnostics": {
+                  "caution_threshold": 10,
+                  "events_per_parameter": 213,
+                  "extreme_marker_estimate": false,
+                  "low_information": false,
+                  "n_events": 213,
+                  "parameter_count": 1,
+                  "penalized_sensitivity_recommended": false,
+                  "severe_low_information": false,
+                  "severe_threshold": 5,
+                  "standard_fit_instability": false,
+                  "status": "adequate",
+                  "trigger_reasons": []
+                },
+                "label": "Continuous expression",
+                "log_hr": -0.2651295069024046,
+                "model": "continuous_univariable",
+                "n_events": 213,
+                "n_patients": 453,
+                "p_value": 7.09283762691946e-05,
+                "penalized_sensitivity": {
+                  "method": "Firth penalized partial likelihood",
+                  "package": "coxphf",
+                  "penalty": 0.5,
+                  "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+                  "status": "not_triggered",
+                  "trigger_reasons": []
+                },
+                "ph_global_p_value": 0.38351463029374255,
+                "ph_p_value": 0.38351463029374255,
+                "standard_error": 0.06673030532523928,
+                "status": "completed",
+                "term": "expression_z",
+                "ties": "efron",
+                "warnings": []
+              },
+              {
+                "contrast": "per +1 SD expression",
+                "covariate_encoding": {
+                  "stage_ordinal": {
+                    "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+                    "encoded_name": "stage_ordinal",
+                    "mapped_patients": 407,
+                    "observed_scores": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "source": "stage",
+                    "type": "ordinal_numeric",
+                    "unit": "one major-stage increase",
+                    "unmapped_values": []
+                  }
+                },
+                "covariates": [
+                  "stage_ordinal"
+                ],
+                "effect_unit": "per +1 SD expression",
+                "expression_center": 5.965572269810219,
+                "expression_sd": 1.5120985843332158,
+                "hazard_ratio": 0.7038109926824936,
+                "hr_conf_high": 0.808945092402076,
+                "hr_conf_low": 0.6123405878510596,
+                "information_diagnostics": {
+                  "caution_threshold": 10,
+                  "events_per_parameter": 94.5,
+                  "extreme_marker_estimate": false,
+                  "low_information": false,
+                  "n_events": 189,
+                  "parameter_count": 2,
+                  "penalized_sensitivity_recommended": false,
+                  "severe_low_information": false,
+                  "severe_threshold": 5,
+                  "standard_fit_instability": false,
+                  "status": "adequate",
+                  "trigger_reasons": []
+                },
+                "label": "Continuous expression adjusted for ordinal stage",
+                "log_hr": -0.3512454351735854,
+                "model": "continuous_stage_adjusted",
+                "n_events": 189,
+                "n_patients": 407,
+                "p_value": 7.620124723859521e-07,
+                "penalized_sensitivity": {
+                  "method": "Firth penalized partial likelihood",
+                  "package": "coxphf",
+                  "penalty": 0.5,
+                  "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+                  "status": "not_triggered",
+                  "trigger_reasons": []
+                },
+                "ph_global_p_value": 0.020570742330612235,
+                "ph_p_value": 0.9180674121465772,
+                "standard_error": 0.07103252972786026,
+                "status": "completed",
+                "term": "expression_z",
+                "ties": "efron",
+                "warnings": [
+                  "Global proportional hazards test p < 0.05 while the expression term was not flagged."
+                ]
+              },
+              {
+                "covariate_encoding": {
+                  "grade_ordinal": {
+                    "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+                    "encoded_name": "grade_ordinal",
+                    "mapped_patients": 0,
+                    "observed_scores": [],
+                    "source": "grade",
+                    "type": "ordinal_numeric",
+                    "unit": "one grade increase",
+                    "unmapped_values": []
+                  }
+                },
+                "covariates": [
+                  "grade_ordinal"
+                ],
+                "label": "Continuous expression adjusted for ordinal grade",
+                "model": "continuous_grade_adjusted",
+                "n_events": 0,
+                "n_patients": 0,
+                "reason": "Fewer than 10 complete patients after ordinal covariate filtering.",
+                "status": "skipped"
+              },
+              {
+                "covariate_encoding": {
+                  "grade_ordinal": {
+                    "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+                    "encoded_name": "grade_ordinal",
+                    "mapped_patients": 0,
+                    "observed_scores": [],
+                    "source": "grade",
+                    "type": "ordinal_numeric",
+                    "unit": "one grade increase",
+                    "unmapped_values": []
+                  },
+                  "stage_ordinal": {
+                    "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+                    "encoded_name": "stage_ordinal",
+                    "mapped_patients": 407,
+                    "observed_scores": [
+                      1,
+                      2,
+                      3,
+                      4
+                    ],
+                    "source": "stage",
+                    "type": "ordinal_numeric",
+                    "unit": "one major-stage increase",
+                    "unmapped_values": []
+                  }
+                },
+                "covariates": [
+                  "stage_ordinal",
+                  "grade_ordinal"
+                ],
+                "label": "Continuous expression adjusted for ordinal stage and grade",
+                "model": "continuous_stage_grade_adjusted",
+                "n_events": 0,
+                "n_patients": 0,
+                "reason": "Fewer than 10 complete patients after ordinal covariate filtering.",
+                "status": "skipped"
+              }
+            ],
+            "n_events": 213,
+            "n_patients": 453,
+            "population": "unstratified expression-complete eligible cohort",
+            "predictor": {
+              "center": 5.965572269810219,
+              "effect_unit": "hazard ratio per +1 SD expression",
+              "scale": "within-analysis z-score",
+              "source": "expression_value",
+              "standard_deviation": 1.5120985843332158
+            },
+            "reason": null,
+            "spline": {
+              "aic_linear": 2180.5669558520012,
+              "aic_spline": 2179.9593811139357,
+              "degrees_freedom": 3,
+              "implementation": "splines::ns with linear tails",
+              "knot_percentiles": [
+                5,
+                35,
+                65,
+                95
+              ],
+              "knots_expression": [
+                3.3623180389404297,
+                5.4010213851928714,
+                6.606647396087647,
+                8.368611907958984
+              ],
+              "knots_z": [
+                -1.7216167370580118,
+                -0.373355871413831,
+                0.42396384264860604,
+                1.5892083115787214
+              ],
+              "method": "restricted cubic spline",
+              "n_events": 213,
+              "n_patients": 453,
+              "nonlinear_degrees_freedom": 2,
+              "nonlinearity_chisq": 4.607574738065523,
+              "nonlinearity_p_value": 0.0998798446405566,
+              "overall_p_value": 0.0001592692901184878,
+              "ph_global_p_value": 0.2590132124576483,
+              "profile": [
+                {
+                  "expression_value": 3.3623180389404297,
+                  "expression_z": -1.7216167370580118,
+                  "hazard_ratio": 1.2475995950884442,
+                  "hr_conf_high": 1.9061978097813157,
+                  "hr_conf_low": 0.8165494376700687,
+                  "percentile": 5
+                },
+                {
+                  "expression_value": 4.049013710021972,
+                  "expression_z": -1.2674825435627164,
+                  "hazard_ratio": 1.3744919252490408,
+                  "hr_conf_high": 1.8124633266332628,
+                  "hr_conf_low": 1.042353809212872,
+                  "percentile": 10
+                },
+                {
+                  "expression_value": 4.328207778930665,
+                  "expression_z": -1.0828424203581786,
+                  "hazard_ratio": 1.4059236448767791,
+                  "hr_conf_high": 1.7969642224345985,
+                  "hr_conf_low": 1.0999781022604904,
+                  "percentile": 15.000000000000002
+                },
+                {
+                  "expression_value": 4.626337146759033,
+                  "expression_z": -0.8856797677922196,
+                  "hazard_ratio": 1.4133264083745394,
+                  "hr_conf_high": 1.7718137832766818,
+                  "hr_conf_low": 1.1273710338311282,
+                  "percentile": 20
+                },
+                {
+                  "expression_value": 4.847661018371582,
+                  "expression_z": -0.7393110892512331,
+                  "hazard_ratio": 1.3962219693216835,
+                  "hr_conf_high": 1.7286139544519568,
+                  "hr_conf_low": 1.1277450251953873,
+                  "percentile": 25
+                },
+                {
+                  "expression_value": 5.118490219116211,
+                  "expression_z": -0.5602029255701889,
+                  "hazard_ratio": 1.3448327138638274,
+                  "hr_conf_high": 1.6272333672165873,
+                  "hr_conf_low": 1.1114417051144596,
+                  "percentile": 30
+                },
+                {
+                  "expression_value": 5.4010213851928714,
+                  "expression_z": -0.373355871413831,
+                  "hazard_ratio": 1.2536776847427549,
+                  "hr_conf_high": 1.4535023632258524,
+                  "hr_conf_low": 1.0813245144877242,
+                  "percentile": 35
+                },
+                {
+                  "expression_value": 5.6602864265441895,
+                  "expression_z": -0.20189546265639197,
+                  "hazard_ratio": 1.1413719974719905,
+                  "hr_conf_high": 1.2450575722862474,
+                  "hr_conf_low": 1.0463211225012292,
+                  "percentile": 40
+                },
+                {
+                  "expression_value": 5.8177349090576165,
+                  "expression_z": -0.09776965753710706,
+                  "hazard_ratio": 1.0677016571627251,
+                  "hr_conf_high": 1.1145105670659667,
+                  "hr_conf_low": 1.022858699051307,
+                  "percentile": 45
+                },
+                {
+                  "expression_value": 5.963929653167725,
+                  "expression_z": -0.0010863158391349883,
+                  "hazard_ratio": 1,
+                  "hr_conf_high": 1,
+                  "hr_conf_low": 1,
+                  "percentile": 50
+                },
+                {
+                  "expression_value": 6.10374231338501,
+                  "expression_z": 0.0913763460969834,
+                  "hazard_ratio": 0.9382842841327566,
+                  "hr_conf_high": 0.9774048994789496,
+                  "hr_conf_low": 0.9007294707851832,
+                  "percentile": 55.00000000000001
+                },
+                {
+                  "expression_value": 6.361890602111816,
+                  "expression_z": 0.26209821000286154,
+                  "hazard_ratio": 0.8375656646563503,
+                  "hr_conf_high": 0.9345736120637311,
+                  "hr_conf_low": 0.7506270598226514,
+                  "percentile": 60.00000000000001
+                },
+                {
+                  "expression_value": 6.606647396087647,
+                  "expression_z": 0.42396384264860604,
+                  "hazard_ratio": 0.763026782927262,
+                  "hr_conf_high": 0.8942019453986807,
+                  "hr_conf_low": 0.6510943914405692,
+                  "percentile": 65.00000000000001
+                },
+                {
+                  "expression_value": 6.8904242515563965,
+                  "expression_z": 0.6116347117367387,
+                  "hazard_ratio": 0.7044866353445594,
+                  "hr_conf_high": 0.8520716588131103,
+                  "hr_conf_low": 0.5824644139325315,
+                  "percentile": 70
+                },
+                {
+                  "expression_value": 7.178049087524414,
+                  "expression_z": 0.8018503755486657,
+                  "hazard_ratio": 0.6686234286649931,
+                  "hr_conf_high": 0.8227175665666439,
+                  "hr_conf_low": 0.5433909612813858,
+                  "percentile": 75.00000000000001
+                },
+                {
+                  "expression_value": 7.4081359863281255,
+                  "expression_z": 0.9540143291345173,
+                  "hazard_ratio": 0.6522567454228625,
+                  "hr_conf_high": 0.8165441832169886,
+                  "hr_conf_low": 0.5210236882387644,
+                  "percentile": 80
+                },
+                {
+                  "expression_value": 7.649108982086182,
+                  "expression_z": 1.1133776128878168,
+                  "hazard_ratio": 0.6437475004041014,
+                  "hr_conf_high": 0.8329965678729986,
+                  "hr_conf_low": 0.49749405971107313,
+                  "percentile": 85.00000000000001
+                },
+                {
+                  "expression_value": 7.878258609771729,
+                  "expression_z": 1.264921718582879,
+                  "hazard_ratio": 0.6416356814888323,
+                  "hr_conf_high": 0.8727250759514126,
+                  "hr_conf_low": 0.47173658590114675,
+                  "percentile": 90.00000000000001
+                },
+                {
+                  "expression_value": 8.368611907958984,
+                  "expression_z": 1.5892083115787214,
+                  "hazard_ratio": 0.6479334408012464,
+                  "hr_conf_high": 1.0280579283551081,
+                  "hr_conf_low": 0.40836000786478077,
+                  "percentile": 95
+                }
+              ],
+              "reference_expression": 5.963929653167725,
+              "reference_percentile": 50,
+              "reference_z": -0.0010863158391349883,
+              "status": "completed",
+              "warnings": []
+            },
+            "status": "completed"
+          },
+          "cox_models": [
+            {
+              "contrast": "High vs Low",
+              "covariate_encoding": [],
+              "covariates": [],
+              "hazard_ratio": 0.5144748479881656,
+              "hr_conf_high": 0.6766758827905718,
+              "hr_conf_low": 0.39115383885251415,
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 213,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 213,
+                "parameter_count": 1,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
+              "label": "Univariable",
+              "log_hr": -0.6646086112233858,
+              "model": "univariable",
+              "n_events": 213,
+              "n_patients": 453,
+              "p_value": 2.0016878408422398e-06,
+              "penalized_sensitivity": {
+                "method": "Firth penalized partial likelihood",
+                "package": "coxphf",
+                "penalty": 0.5,
+                "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+                "status": "not_triggered",
+                "trigger_reasons": []
+              },
+              "ph_global_p_value": 0.7728332116843837,
+              "ph_p_value": 0.7728332116843837,
+              "standard_error": 0.13982182201581492,
+              "status": "completed",
+              "term": "groupHigh",
+              "ties": "efron",
+              "warnings": []
+            },
+            {
+              "contrast": "High vs Low",
+              "covariate_encoding": {
+                "stage_ordinal": {
+                  "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+                  "encoded_name": "stage_ordinal",
+                  "mapped_patients": 407,
+                  "observed_scores": [
+                    1,
+                    2,
+                    3,
+                    4
+                  ],
+                  "source": "stage",
+                  "type": "ordinal_numeric",
+                  "unit": "one major-stage increase",
+                  "unmapped_values": []
+                }
+              },
+              "covariates": [
+                "stage_ordinal"
+              ],
+              "hazard_ratio": 0.4382237499998579,
+              "hr_conf_high": 0.5907534722849233,
+              "hr_conf_low": 0.3250764727986501,
+              "information_diagnostics": {
+                "caution_threshold": 10,
+                "events_per_parameter": 94.5,
+                "extreme_marker_estimate": false,
+                "low_information": false,
+                "n_events": 189,
+                "parameter_count": 2,
+                "penalized_sensitivity_recommended": false,
+                "severe_low_information": false,
+                "severe_threshold": 5,
+                "standard_fit_instability": false,
+                "status": "adequate",
+                "trigger_reasons": []
+              },
+              "label": "Adjusted for ordinal stage",
+              "log_hr": -0.8250256542939154,
+              "model": "stage_adjusted",
+              "n_events": 189,
+              "n_patients": 407,
+              "p_value": 6.160255333224623e-08,
+              "penalized_sensitivity": {
+                "method": "Firth penalized partial likelihood",
+                "package": "coxphf",
+                "penalty": 0.5,
+                "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+                "status": "not_triggered",
+                "trigger_reasons": []
+              },
+              "ph_global_p_value": 0.02590092389355797,
+              "ph_p_value": 0.47893260874587273,
+              "standard_error": 0.15238502925275393,
+              "status": "completed",
+              "term": "groupHigh",
+              "ties": "efron",
+              "warnings": [
+                "Global proportional hazards test p < 0.05; inspect time-varying effects."
+              ]
+            },
+            {
+              "covariate_encoding": {
+                "grade_ordinal": {
+                  "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+                  "encoded_name": "grade_ordinal",
+                  "mapped_patients": 0,
+                  "observed_scores": [],
+                  "source": "grade",
+                  "type": "ordinal_numeric",
+                  "unit": "one grade increase",
+                  "unmapped_values": []
+                }
+              },
+              "covariates": [
+                "grade_ordinal"
+              ],
+              "label": "Adjusted for ordinal grade",
+              "model": "grade_adjusted",
+              "n_events": 0,
+              "n_patients": 0,
+              "reason": "Fewer than 10 complete patients after ordinal covariate filtering.",
+              "status": "skipped"
+            },
+            {
+              "covariate_encoding": {
+                "grade_ordinal": {
+                  "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+                  "encoded_name": "grade_ordinal",
+                  "mapped_patients": 0,
+                  "observed_scores": [],
+                  "source": "grade",
+                  "type": "ordinal_numeric",
+                  "unit": "one grade increase",
+                  "unmapped_values": []
+                },
+                "stage_ordinal": {
+                  "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+                  "encoded_name": "stage_ordinal",
+                  "mapped_patients": 407,
+                  "observed_scores": [
+                    1,
+                    2,
+                    3,
+                    4
+                  ],
+                  "source": "stage",
+                  "type": "ordinal_numeric",
+                  "unit": "one major-stage increase",
+                  "unmapped_values": []
+                }
+              },
+              "covariates": [
+                "stage_ordinal",
+                "grade_ordinal"
+              ],
+              "label": "Adjusted for ordinal stage and grade",
+              "model": "stage_grade_adjusted",
+              "n_events": 0,
+              "n_patients": 0,
+              "reason": "Fewer than 10 complete patients after ordinal covariate filtering.",
+              "status": "skipped"
+            }
+          ],
+          "cutpoint_details": {
+            "method": "median",
+            "threshold": 5.963929653167725
+          },
+          "endpoint": "OS",
+          "endpoint_label": "Overall survival",
+          "endpoint_qc": {
+            "available": true,
+            "events": 213,
+            "label": "Overall survival",
+            "patients": 453,
+            "reason": "453 linked patients and 213 events from TCGA-CDR.",
+            "source": "tcga_cdr",
+            "value": "OS"
+          },
+          "endpoint_source": "tcga_cdr",
+          "event_counts": {
+            "High": 90,
+            "Low": 123
+          },
+          "expression_distribution": {
+            "bins": [
+              {
+                "count": 1,
+                "label": "1.31-2.14"
+              },
+              {
+                "count": 10,
+                "label": "2.14-2.97"
+              },
+              {
+                "count": 26,
+                "label": "2.97-3.79"
+              },
+              {
+                "count": 54,
+                "label": "3.79-4.62"
+              },
+              {
+                "count": 73,
+                "label": "4.62-5.45"
+              },
+              {
+                "count": 101,
+                "label": "5.45-6.28"
+              },
+              {
+                "count": 71,
+                "label": "6.28-7.11"
+              },
+              {
+                "count": 77,
+                "label": "7.11-7.93"
+              },
+              {
+                "count": 33,
+                "label": "7.93-8.76"
+              },
+              {
+                "count": 7,
+                "label": "8.76-9.59"
+              }
+            ],
+            "max": 9.58987045288086,
+            "median": 5.963929653167725,
+            "min": 1.3111543655395508,
+            "n": 453,
+            "q1": 4.847661018371582,
+            "q3": 7.178049087524414
+          },
+          "expression_scale": "log2_tpm",
+          "expression_scale_label": "log2(TPM + 1)",
+          "group_counts": {
+            "High": 226,
+            "Low": 227
+          },
+          "hazard_ratio": 0.5144748479881656,
+          "hr_conf_high": 0.6766758827905718,
+          "hr_conf_low": 0.39115383885251415,
+          "hr_p_value": 2.0016878408422398e-06,
+          "logrank_p_value": 1.3172136451403429e-06,
+          "median_survival_days": {
+            "High": 4062,
+            "Low": 1544
+          },
+          "median_survival_status": {
+            "High": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            },
+            "Low": {
+              "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+              "status": "estimated"
+            }
+          },
+          "n_events": 213,
+          "n_patients": 453,
+          "quality": {
+            "groups": {
+              "High": {
+                "events": 90,
+                "patients": 226
+              },
+              "Low": {
+                "events": 123,
+                "patients": 227
+              }
+            },
+            "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+            "low_event_groups": []
+          },
+          "rmst": {
+            "at_risk_at_tau": {
+              "High": 94,
+              "Low": 58
+            },
+            "comparison_group": "High",
+            "difference": {
+              "conf_high": 342.19098317911937,
+              "conf_low": 120.27019331883743,
+              "estimate_days": 231.2305882489784,
+              "p_value": 4.419601738534369e-05
+            },
+            "groups": {
+              "High": {
+                "conf_high": 1611.6438244748344,
+                "conf_low": 1469.663253238118,
+                "rmst_days": 1540.6535388564762,
+                "standard_error": 36.22019903341113
+              },
+              "Low": {
+                "conf_high": 1394.7024240514443,
+                "conf_low": 1224.1434771635513,
+                "rmst_days": 1309.4229506074978,
+                "standard_error": 43.51073495055016
+              }
+            },
+            "method": "survRM2::rmst2",
+            "minimum_at_risk_per_group": 5,
+            "n_events": 213,
+            "n_patients": 453,
+            "ratio": {
+              "conf_high": 1.274303462874174,
+              "conf_low": 1.086368616691633,
+              "estimate": 1.1765896864276748,
+              "p_value": 6.46590800969396e-05
+            },
+            "reference_group": "Low",
+            "rmtl_ratio": {
+              "conf_high": 0.7446971815344043,
+              "conf_low": 0.4100487218072737,
+              "estimate": 0.5525958083641802,
+              "p_value": 9.761123323769336e-05
+            },
+            "status": "completed",
+            "tau_days": 1826.25,
+            "tau_definition": {
+              "cap_days": 1826.25,
+              "cutpoint_independent": true,
+              "quantile": 0.75,
+              "rule": "minimum of 5 years and the 75th percentile of observed endpoint times in the unstratified, expression-complete eligible cohort",
+              "source_n_patients": 453,
+              "status": "available",
+              "tau_days": 1826.25
+            },
+            "tau_rule": "minimum of 5 years and the 75th percentile of observed endpoint times in the unstratified, expression-complete eligible cohort",
+            "tau_sensitivity": [
+              {
+                "conf_high": 202.43524804730887,
+                "conf_low": 56.35914113376802,
+                "estimate_days": 129.39719459053845,
+                "p_value": 0.000515919124607227,
+                "status": "completed",
+                "tau_days": 1369.6875,
+                "tau_fraction": 0.75,
+                "tau_time_unit": 45
+              },
+              {
+                "conf_high": 283.5849608724607,
+                "conf_low": 92.52937686782838,
+                "estimate_days": 188.05716887014455,
+                "p_value": 0.00011412761621405622,
+                "status": "completed",
+                "tau_days": 1643.625,
+                "tau_fraction": 0.9,
+                "tau_time_unit": 54
+              },
+              {
+                "conf_high": 342.19098317911937,
+                "conf_low": 120.27019331883743,
+                "estimate_days": 231.2305882489784,
+                "p_value": 4.419601738534369e-05,
+                "status": "completed",
+                "tau_days": 1826.25,
+                "tau_fraction": 1,
+                "tau_time_unit": 60
+              }
+            ],
+            "tau_time_unit": 60,
+            "time_unit": "months"
+          },
+          "sample_selection": {
+            "after_user_filters": 473,
+            "complete_endpoint_samples": 457,
+            "complete_os_samples": 457,
+            "duplicate_samples_removed": 4,
+            "endpoint": "OS",
+            "endpoint_label": "Overall survival",
+            "endpoint_source": "tcga_cdr",
+            "input_samples": 473,
+            "missing_endpoint_removed": 16,
+            "missing_os_removed": 16,
+            "priority_order": [
+              "Primary tumor / primary blood-derived cancer",
+              "Recurrent tumor",
+              "Additional new primary",
+              "Metastatic / additional metastatic",
+              "Human tumor original cells",
+              "Normal tissue / normal blood",
+              "Control, cell line, xenograft or unknown"
+            ],
+            "removed_duplicate_sample_types": {
+              "Additional Metastatic": 1,
+              "Metastatic": 2,
+              "Solid Tissue Normal": 1
+            },
+            "retained_patients": 453,
+            "retained_sample_types": {
+              "Metastatic": 351,
+              "Primary Tumor": 102
+            },
+            "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+            "rule_description": "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode.",
+            "sample_type_filter_applied": false
+          },
+          "signature": {
+            "genes": [
+              {
+                "query": "TMEM176B",
+                "resolved_symbol": "TMEM176B",
+                "status": "exact",
+                "weight": 1.0
+              }
+            ],
+            "label": "TMEM176B",
+            "method": "single",
+            "scoring_population": {
+              "complete_case_barcode_count": 453,
+              "component_value_hashes": {
+                "TMEM176B": "cdf22a2995e5bba43c0b46aae7c8978a43d912089897ff5af40b0d341f3617a2"
+              },
+              "eligible_barcode_count": 453,
+              "rule": "endpoint-complete samples after user filters and one-sample-per-participant biospecimen selection; multi-gene scores additionally require complete expression for every signature gene",
+              "score_values_sha256": "c449411dfaefa0380583bfed611990b83a18ac649e8d2f222b87f4c3470a77fb"
+            }
+          },
+          "signature_interaction_cox_models": [],
+          "software_versions": {
+            "R": "R version 4.4.2 (2024-10-31)",
+            "coxphf": "1.13.4",
+            "ggplot2": "4.0.3",
+            "jsonlite": "2.0.0",
+            "maxstat": "0.7.26",
+            "survRM2": "1.0.4",
+            "survival": "3.8.9",
+            "survminer": "0.5.2",
+            "svglite": "2.2.2"
+          },
+          "time_axis_label": "Time (months)",
+          "time_unit": "months",
+          "warnings": [
+            "Cox model warning: Adjusted for ordinal stage: Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "Cox model warning: Continuous expression adjusted for ordinal stage: Global proportional hazards test p < 0.05 while the expression term was not flagged."
+          ]
+        },
+        "notices": [
+          {
+            "category": "model",
+            "code": "model_diagnostic_caution",
+            "message": "Global proportional hazards test p < 0.05 while the expression term was not flagged.",
+            "model": "continuous_stage_adjusted",
+            "model_label": "Continuous expression adjusted for ordinal stage",
+            "selected_model": true,
+            "severity": "caution"
+          },
+          {
+            "category": "model",
+            "code": "model_diagnostic_caution",
+            "message": "Global proportional hazards test p < 0.05; inspect time-varying effects.",
+            "model": "stage_adjusted",
+            "model_label": "Adjusted for ordinal stage",
+            "selected_model": false,
+            "severity": "caution"
+          },
+          {
+            "category": "cohort",
+            "code": "cohort_provenance",
+            "message": "16 samples were excluded because Overall survival was not usable.",
+            "model": null,
+            "model_label": null,
+            "selected_model": false,
+            "severity": "info"
+          },
+          {
+            "category": "cohort",
+            "code": "cohort_provenance",
+            "message": "4 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+            "model": null,
+            "model_label": null,
+            "selected_model": false,
+            "severity": "info"
+          }
+        ],
+        "status": "completed",
+        "warnings": [
+          "16 samples were excluded because Overall survival was not usable.",
+          "4 extra sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+          "Cox model warning: Adjusted for ordinal stage: Global proportional hazards test p < 0.05; inspect time-varying effects.",
+          "Cox model warning: Continuous expression adjusted for ordinal stage: Global proportional hazards test p < 0.05 while the expression term was not flagged."
+        ]
+      },
+      "status": "completed"
+    }
+  ],
+  "total": 1
+}

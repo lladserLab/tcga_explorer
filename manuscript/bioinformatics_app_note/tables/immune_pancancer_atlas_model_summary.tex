@@ -1,0 +1,18 @@
+\begin{table}[p]
+\centering
+\caption{Versioned 3,118-gene ImmPort pan-cancer atlas. Gene--cancer BH-FDR and gene-level meta-FDR are calculated separately within each comparable model family. PH cautions count global-FDR hits whose model-level global \texttt{cox.zph} $p<0.05$. H/P is the number of harmful/protective genes recurring as global-FDR hits in at least five cancers. The availability-selected row has no mixed-family meta-analysis.}
+\label{tab:immune-atlas-model-summary}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Model family & Completed & FDR hits & Meta-FDR genes & FDR + PH caution & Recurrent H/P $\geq 5$ \\
+\midrule
+Primary expression & 96,779 & 12,234 & 881 & 1,930 & 508 / 73 \\
+Stage + grade & 30,326 & 178 & 100 & 108 & 0 / 0 \\
+Stage & 66,547 & 1,342 & 346 & 402 & 0 / 0 \\
+Grade & 36,410 & 2,841 & 119 & 785 & 0 / 0 \\
+Availability-selected & 72,633 & 2,379 & -- & 899 & 0 / 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

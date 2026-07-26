@@ -1,65 +1,63 @@
 # Comparator Matrix for Bioinformatics Application Note
 
-Status: literature-backed working comparison, July 22, 2026.
+Status: literature-backed working comparison, July 24, 2026.
 
 ## Interpretation
 
-TCGA Explorer should not be positioned as the first web tool for TCGA survival
-analysis, two-marker survival interaction or gene-set survival analysis. The
-defensible gap is the combination of patient-level auditability, endpoint
-provenance, PH diagnostics, RMST reporting and cutpoint robustness in one TCGA
-transcriptomic survival workflow.
+TCGA-TRACE should not be positioned as the first web tool for TCGA survival
+analysis, two-marker survival interaction, gene-set survival analysis or PH
+testing. The defensible gap is not any one survival method. It is the executable
+combination of exact participant and expression-component provenance,
+score/result reconstruction, endpoint-aware cohort construction, RMST and
+cutpoint sensitivity in one TCGA transcriptomic survival workflow.
+
+Source claims below were rechecked on 2026-07-22. Peer-reviewed papers are used
+where available; official project pages are used for current web-only feature
+claims.
 
 ## Compact Comparator Table
 
-| Tool | Confirmed strengths | Overlap with TCGA Explorer | Gap TCGA Explorer targets |
-| --- | --- | --- | --- |
-| GEPIA2 | TCGA/GTEx expression, survival maps, gene/isoform/signature analysis, API. | Web-based expression survival and signature scoring. | Does not present an analysis audit bundle with exact patient rows, artifact checksums, PH QC and RMST robustness reporting as the central workflow. |
-| cSurvival | Two genomic predictors, two-continuous-predictor optimal cutoffs, gene-set survival and cell-line integration. | Strong overlap with two-predictor/grouped survival and gene sets. | TCGA Explorer must cite this as prior art; its different contribution is auditability, CDR endpoint workflow, PH diagnostics, RMST and cutpoint robustness panels. |
-| DoSurvive | Multi-omic biomarker survival, log-rank, Cox, AFT, four survival endpoint types and combined effects. | Strong overlap with multivariable and combined biomarker survival. | TCGA Explorer should not claim uniqueness in multivariate survival; the gap is transparent patient-level provenance, hashable audit exports and RMST/cutpoint robustness. |
-| PESSA | ssGSEA pathway activation scores, median/optimal cutoffs, Cox, 238 datasets, 51 cancer types and 13 survival outcomes. | Stronger pathway/gene-set survival framework than weighted z-scores. | TCGA Explorer uses simpler scores for transparent auditability and adds PH/RMST/robustness/audit outputs. |
-| UALCAN | TCGA/CPTAC expression, subgroup expression and survival visualizations. | User-friendly TCGA biomarker exploration. | Publication graphics rather than complete survival provenance and model diagnostics. |
-| KM Plotter | Large survival biomarker screening across mRNA, miRNA, protein and DNA with many samples. | Broad biomarker survival screening. | Screening-oriented; not centered on exact TCGA-CDR endpoint selection, audit hashes, RMST or PH diagnostics. |
-| UCSC Xena | General cancer genomics browser, data hubs and Kaplan-Meier survival analysis. | Flexible TCGA-like exploration with genomic/phenotypic stratification. | Powerful manual browser, but reproducibility depends on user workflow rather than an exported audit object. |
-| cBioPortal | Broad cancer genomics exploration, group comparison and survival analysis. | Clinical-genomic subgroup survival. | Broad portal; not specialized for RNA survival cutpoint robustness, RMST and audit bundles. |
-| TCGAbiolinks | Programmable TCGA workflows. | Reproducible code-based data acquisition and analysis. | Requires coding; TCGA Explorer offers an interactive workflow with standardized audit artifacts. |
-| TCGAplot | R package for TCGA pan-cancer analysis and visualization. | Pan-cancer TCGA analysis. | Programmable package rather than web audit workflow; does not define the same survival robustness/audit contract. |
+The supplement uses a compact evidence table so the reader can see the
+TCGA-TRACE comparison point before reading the detailed source-by-source
+register. Negative entries below mean that a capability was not reported in the
+cited paper, not that every current interface state was exhaustively audited.
+
+| Tool | Signature or two-marker analysis | PH test described | RMST described | Multiple cutpoints | Reconstructable audited score/cohort |
+| --- | --- | --- | --- | --- | --- |
+| GEPIA2 | Yes | Not reported in cited paper | Not reported | Limited | Not reported |
+| KM Plotter | Limited | Not reported in cited paper | Not reported | Limited | Not reported |
+| cSurvival | Yes | Not reported in cited paper | Not reported | Yes | Not reported |
+| DoSurvive | Yes | Not reported in cited paper | Not reported | Limited | Not reported |
+| PESSA | Yes, ssGSEA | Yes, for continuous Cox | Not reported | Median and optimal | Not reported |
+| TCGA-TRACE | Yes | Yes | Yes | Yes | Yes |
+
+The longer evidence register below keeps the qualitative interpretation for
+additional comparators that do not fit in the short Application Note table.
 
 ## Manuscript-Safe Claim
 
 > Existing resources provide strong interactive survival exploration,
-> two-predictor interaction analysis, multi-omic survival modeling and ssGSEA
-> gene-set survival. TCGA Explorer complements these tools by making the
-> reproducibility object the primary output: exact patient rows, endpoint source,
-> sample-selection rule, software versions, artifact hashes, PH diagnostics, RMST
-> and cutpoint robustness are exported together for each analysis.
+> two-predictor interaction analysis, multi-omic survival modeling, ssGSEA
+> gene-set survival and, in PESSA, Schoenfeld PH testing. TCGA-TRACE complements
+> these tools by making reconstruction a standard output: exact participant
+> records, source-expression hashes, component values, GDC identifiers, endpoint
+> source, sample-selection rule, software versions and result hashes are exported
+> together and verified by an executable round trip.
 
-## Source Notes
+## Source Evidence Register
 
-- GEPIA2 reports TCGA/GTEx expression analysis, survival maps and
-  gene/isoform/signature survival support, including a Python API.
-  Source: https://academic.oup.com/nar/article/47/W1/W556/5494747
-- cSurvival explicitly supports joint analysis with two genomic predictors,
-  optimal cutoffs for two continuous predictors and gene-set survival.
-  Source: https://academic.oup.com/bib/article/23/3/bbac090/6562683
-- DoSurvive supports log-rank, Cox and AFT models over mRNA, miRNA, lncRNA,
-  protein and methylation with OS/DSS/DFI/PFI.
-  Source: https://pubmed.ncbi.nlm.nih.gov/37609633/
-- PESSA uses ssGSEA pathway activation scores, median/optimal cutoffs and Cox
-  analyses across TCGA/GEO/EGA/article datasets.
-  Source: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012024
-- UALCAN is positioned as a TCGA/CPTAC cancer omics, expression and survival
-  analysis portal.
-  Source: https://ualcan.path.uab.edu/
-- KM Plotter is positioned as a biomarker survival screening tool across mRNA,
-  miRNA, protein and DNA in more than 40,000 samples.
-  Source: https://kmplot.com/
-- UCSC Xena supports Kaplan-Meier survival analysis over genomic and phenotypic
-  variables.
-  Source: https://xena.ucsc.edu/kaplan-survival-analysis
-- cBioPortal describes survival analysis and group comparisons over large cancer
-  genomics datasets.
-  Source: https://docs.cbioportal.org/user-guide/faq/
-- TCGAplot is an R package for built-in multi-omic TCGA pan-cancer analysis and
-  visualization.
-  Source: https://pmc.ncbi.nlm.nih.gov/articles/PMC10726608/
+| Tool | Evidence checked | Primary source | Safe interpretation for TCGA-TRACE |
+| --- | --- | --- | --- |
+| GEPIA2 | TCGA/GTEx expression analysis, survival maps, gene/isoform/signature survival support and API. | https://academic.oup.com/nar/article/47/W1/W556/5494747 | Cite as established expression-survival and signature prior art; do not claim basic KM/survival-map novelty. |
+| cSurvival | Joint survival analysis with two genomic predictors, optimal cutoffs for two continuous predictors, gene-set survival and cell-line integration. | https://academic.oup.com/bib/article/23/3/bbac090/6562683 | Treat two-predictor survival and gene-set survival as prior art; position TCGA-TRACE on reconstructable run records, endpoint provenance, RMST and sensitivity outputs rather than PH alone. |
+| DoSurvive | Log-rank, Cox and AFT survival over mRNA, miRNA, lncRNA, protein and methylation with OS, DSS, DFI and PFI. | https://pmc.ncbi.nlm.nih.gov/articles/PMC10440714/ | Do not claim uniqueness in multi-omic or combined-biomarker survival; emphasize patient-level provenance and model-QC exports. |
+| PESSA | ssGSEA pathway activation scores, median/optimal cutoffs, grouped and continuous Cox models, and `cox.zph` Schoenfeld tests across 238 datasets, 51 cancer types and 13 outcome types. | https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012024 | Acknowledge stronger pathway-survival scope and PH testing; frame TCGA-TRACE signatures as simpler and focus the comparison on auditable score/cohort reconstruction, RMST and endpoint/sample provenance. |
+| UALCAN | TCGA/MET500/CPTAC/CBTTC cancer omics access, biomarker validation, expression profiles and patient-survival plots. | https://ualcan.path.uab.edu/ | Use as portal/context comparator; avoid suggesting it lacks survival visualization. The gap is exported survival provenance and diagnostics. |
+| KM Plotter | Current site states screening across mRNA, miRNA, protein and DNA assays in 40k+ samples; pan-cancer RNA-seq work is also published. | https://kmplot.com/ and https://www.nature.com/articles/s41598-021-84787-5 | Use as strong screening prior art; TCGA-TRACE should claim traceable endpoint/sample/run outputs rather than screening breadth. |
+| UCSC Xena | General cancer genomics visualization platform; survival documentation describes stratification by genomic or phenotypic variables. | https://www.nature.com/articles/s41587-020-0546-8 and https://xena.ucsc.edu/kaplan-survival-analysis | Treat as flexible manual browser; the differentiator is a standardized exported run record per survival run. |
+| cBioPortal | Large-scale cancer genomics exploration with survival analysis, group comparisons, APIs and shareable sessions. | https://docs.cbioportal.org/user-guide/faq/ and https://aacrjournals.org/cancerdiscovery/article/2/5/401/3246/The-cBio-Cancer-Genomics-Portal-An-Open-Platform | Use as broad clinical-genomics portal prior art; do not overstate absence of survival or sharing features. |
+| TIMER2.0 | Immune, exploration, estimation and outcome modules for TCGA/user-provided data. | https://pmc.ncbi.nlm.nih.gov/articles/PMC7319575/ | Use as immune/outcome portal prior art; TCGA-TRACE should not claim broad TCGA outcome exploration novelty. |
+| SurvExpress | Gene-expression biomarker validation, risk groups and survival analysis across cancer datasets. | https://pmc.ncbi.nlm.nih.gov/articles/PMC3774754/ | Use as gene-signature survival/risk prior art; TCGA-TRACE differs by TCGA-CDR endpoint provenance and run-record export. |
+| TCGAbiolinks | R/Bioconductor workflow to query, download and perform integrative analyses of GDC/TCGA data. | https://academic.oup.com/nar/article/44/8/e71/2465925 and https://gdc.cancer.gov/content/tcgabiolinks | Code-based reproducibility is established prior art; TCGA-TRACE's gap is an interactive workflow with standardized run artifacts. |
+| TCGAplot | R package with built-in TCGA multi-omic pan-cancer data, expression/correlation/survival/user-defined analyses and visualization outputs. | https://link.springer.com/article/10.1186/s12859-023-05615-3 | Use as programmable pan-cancer analysis prior art; keep TCGA-TRACE's claim focused on transparent survival workflow behavior. |
+| OncoLnc | Links TCGA survival data to mRNA, miRNA and lncRNA expression levels, with downloadable clinical/expression coupling. | https://www.oncolnc.org/ and https://doaj.org/article/9733114d14464feebda2a410f09e148f | Historical single-marker TCGA survival prior art; not part of the main manuscript comparator table unless more space is needed. |

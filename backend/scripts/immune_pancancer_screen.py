@@ -441,6 +441,7 @@ def prepare_cohorts(
             "event",
             "sample_type",
             "stage",
+            "grade",
             "gender",
             "race",
             "age_at_index",
@@ -487,6 +488,7 @@ def survival_records_without_expression(samples: list[Sample], endpoint_by_patie
                 "event": int(outcome.event),
                 "sample_type": sample.sample_type,
                 "stage": sample.stage,
+                "grade": sample.grade,
                 "gender": sample.gender,
                 "race": sample.race,
                 "age_at_index": sample.age_at_index,
@@ -663,11 +665,16 @@ def build_term_summary(
     term_meta = {row["term_id"]: row for row in panel_terms}
     term_rows = []
     for term_id, genes in sorted(genes_by_term.items()):
-        summaries = [summary_by_gene[gene] for gene in genes if gene in summary_by_gene]
+        ordered_genes = sorted(genes)
+        summaries = [
+            summary_by_gene[gene]
+            for gene in ordered_genes
+            if gene in summary_by_gene
+        ]
         completed_genes = [row for row in summaries if row.get("completed_cohorts", 0)]
         meta_hits = [row for row in completed_genes if is_threshold(row.get("meta_fdr"), fdr_threshold)]
         cohort_hits = []
-        for gene in genes:
+        for gene in ordered_genes:
             cohort_hits.extend([row for row in results_by_gene.get(gene, []) if is_threshold(row.get("global_fdr"), fdr_threshold)])
         best_gene = top_gene_summary(completed_genes)
         meta = term_meta.get(term_id, {})
@@ -915,7 +922,14 @@ def top_gene_summary(rows: list[dict]) -> dict:
     finite = [row for row in rows if row.get("meta_fdr") is not None]
     if not finite:
         return {}
-    return min(finite, key=lambda row: float(row["meta_fdr"]))
+    return min(
+        finite,
+        key=lambda row: (
+            float(row["meta_fdr"]),
+            nulls_last(row.get("meta_p_value")),
+            row.get("gene_symbol", ""),
+        ),
+    )
 
 
 def gene_sort_key(row: dict) -> tuple:

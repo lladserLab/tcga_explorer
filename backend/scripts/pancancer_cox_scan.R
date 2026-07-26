@@ -3,6 +3,15 @@ suppressPackageStartupMessages({
   library(survival)
 })
 
+script_argument <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+script_directory <- if (length(script_argument)) {
+  dirname(normalizePath(sub("^--file=", "", script_argument[[1]])))
+} else {
+  getwd()
+}
+source(file.path(script_directory, "clinical_covariates.R"))
+source(file.path(script_directory, "cox_diagnostics.R"))
+
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) != 1) {
   stop("Usage: Rscript pancancer_cox_scan.R <input.json>")
@@ -32,6 +41,7 @@ record_fields <- c(
   "event",
   "sample_type",
   "stage",
+  "grade",
   "gender",
   "race",
   "age_at_index"
@@ -75,6 +85,10 @@ fit_cohort <- function(cohort) {
   data$time_days <- as.numeric(data$time_days)
   data$event <- as.integer(data$event)
   data$expression_value <- as.numeric(data$expression_value)
+  data$stage <- trimws(as.character(data$stage))
+  data$stage[is.na(data$stage) | data$stage == ""] <- NA
+  data$grade <- trimws(as.character(data$grade))
+  data$grade[is.na(data$grade) | data$grade == ""] <- NA
   data <- data[complete.cases(data[, c("time_days", "event", "expression_value")]), , drop = FALSE]
   data <- data[data$time_days > 0 & data$event %in% c(0, 1), , drop = FALSE]
 
@@ -94,23 +108,221 @@ fit_cohort <- function(cohort) {
   }
 
   data$expression_z <- (data$expression_value - expression_mean) / expression_sd
-  surv_obj <- Surv(data$time_days, data$event)
-  fit <- tryCatch(coxph(surv_obj ~ expression_z, data = data), error = function(e) e)
-  if (inherits(fit, "error")) {
-    return(empty_result(cohort, "failed", "COX_FAILED", conditionMessage(fit)))
+
+  model_skip <- function(model_id, label, covariates, reason, model_data, covariate_encoding = list()) {
+    list(
+      model = model_id,
+      label = label,
+      covariates = as.list(covariates),
+      covariate_encoding = covariate_encoding,
+      status = "skipped",
+      reason = reason,
+      n_patients = nrow(model_data),
+      n_events = sum(model_data$event, na.rm = TRUE),
+      warnings = list()
+    )
   }
 
-  cox_summary <- summary(fit)
-  coefficient <- cox_summary$coefficients[1, "coef"]
-  standard_error <- cox_summary$coefficients[1, "se(coef)"]
-  p_value <- cox_summary$coefficients[1, "Pr(>|z|)"]
-  hazard_ratio <- cox_summary$conf.int[1, "exp(coef)"]
-  hr_conf_low <- cox_summary$conf.int[1, "lower .95"]
-  hr_conf_high <- cox_summary$conf.int[1, "upper .95"]
-  ph_test <- tryCatch(cox.zph(fit), error = function(e) NULL)
-  ph_p_value <- NULL
-  if (!is.null(ph_test) && "GLOBAL" %in% rownames(ph_test$table)) {
-    ph_p_value <- as_null_if_bad(ph_test$table["GLOBAL", "p"])
+  fit_expression_model <- function(model_id, label, covariates) {
+    model_data <- data[, c("time_days", "event", "expression_z", covariates), drop = FALSE]
+    prepared <- prepare_ordinal_covariates(model_data, covariates)
+    encoded_covariates <- prepared$covariates
+    covariate_encoding <- prepared$metadata
+    model_data <- prepared$data[, c("time_days", "event", "expression_z", encoded_covariates), drop = FALSE]
+    model_data <- model_data[complete.cases(model_data), , drop = FALSE]
+
+    if (nrow(model_data) < payload$min_patients) {
+      return(model_skip(
+        model_id,
+        label,
+        encoded_covariates,
+        sprintf("Requires at least %s complete patients after ordinal covariate filtering; found %s.", payload$min_patients, nrow(model_data)),
+        model_data,
+        covariate_encoding
+      ))
+    }
+    model_events <- sum(model_data$event == 1, na.rm = TRUE)
+    if (model_events < payload$min_events) {
+      return(model_skip(
+        model_id,
+        label,
+        encoded_covariates,
+        sprintf("Requires at least %s events after ordinal covariate filtering; found %s.", payload$min_events, model_events),
+        model_data,
+        covariate_encoding
+      ))
+    }
+    for (covariate in encoded_covariates) {
+      observed <- model_data[[covariate]][is.finite(model_data[[covariate]])]
+      if (length(unique(observed)) < 2) {
+        return(model_skip(
+          model_id,
+          label,
+          encoded_covariates,
+          paste0("Ordinal covariate ", covariate, " has fewer than two observed scores after filtering."),
+          model_data,
+          covariate_encoding
+        ))
+      }
+    }
+
+    formula_terms <- c("expression_z", encoded_covariates)
+    formula <- as.formula(paste("Surv(time_days, event) ~", paste(formula_terms, collapse = " + ")))
+    model_warnings <- character()
+    fit <- tryCatch(
+      withCallingHandlers(
+        coxph(formula, data = model_data, ties = "efron"),
+        warning = function(warning) {
+          model_warnings <<- c(model_warnings, conditionMessage(warning))
+          invokeRestart("muffleWarning")
+        }
+      ),
+      error = function(error) error
+    )
+    if (inherits(fit, "error")) {
+      return(list(
+        model = model_id,
+        label = label,
+        covariates = as.list(encoded_covariates),
+        covariate_encoding = covariate_encoding,
+        status = "failed",
+        reason = conditionMessage(fit),
+        n_patients = nrow(model_data),
+        n_events = model_events,
+        warnings = as.list(unique(model_warnings))
+      ))
+    }
+
+    cox_summary <- summary(fit)
+    coefficient_names <- rownames(cox_summary$coefficients)
+    row_index <- match("expression_z", coefficient_names)
+    if (is.na(row_index)) {
+      return(model_skip(
+        model_id,
+        label,
+        encoded_covariates,
+        "Could not isolate the standardized expression coefficient.",
+        model_data,
+        covariate_encoding
+      ))
+    }
+    coefficient <- unname(cox_summary$coefficients[row_index, "coef"])
+    standard_error <- unname(cox_summary$coefficients[row_index, "se(coef)"])
+    p_value <- unname(cox_summary$coefficients[row_index, "Pr(>|z|)"])
+    hazard_ratio <- unname(cox_summary$conf.int[row_index, "exp(coef)"])
+    hr_conf_low <- unname(cox_summary$conf.int[row_index, "lower .95"])
+    hr_conf_high <- unname(cox_summary$conf.int[row_index, "upper .95"])
+    if (!all(is.finite(c(coefficient, standard_error, p_value, hazard_ratio, hr_conf_low, hr_conf_high)))) {
+      return(model_skip(
+        model_id,
+        label,
+        encoded_covariates,
+        "Cox model returned non-finite standardized-expression estimates.",
+        model_data,
+        covariate_encoding
+      ))
+    }
+    common_scale_log_hr <- coefficient / expression_sd
+    common_scale_standard_error <- standard_error / expression_sd
+    common_scale_hazard_ratio <- exp(common_scale_log_hr)
+    common_scale_hr_conf_low <- exp(
+      common_scale_log_hr - 1.96 * common_scale_standard_error
+    )
+    common_scale_hr_conf_high <- exp(
+      common_scale_log_hr + 1.96 * common_scale_standard_error
+    )
+
+    ph_p_value <- NA_real_
+    ph_global_p_value <- NA_real_
+    ph_test <- tryCatch(cox.zph(fit), error = function(error) error)
+    if (inherits(ph_test, "error")) {
+      model_warnings <- c(model_warnings, paste("cox.zph failed:", conditionMessage(ph_test)))
+    } else if (!is.null(ph_test$table) && "p" %in% colnames(ph_test$table)) {
+      ph_table <- ph_test$table
+      if ("expression_z" %in% rownames(ph_table)) {
+        ph_p_value <- unname(ph_table["expression_z", "p"])
+      }
+      if ("GLOBAL" %in% rownames(ph_table)) {
+        ph_global_p_value <- unname(ph_table["GLOBAL", "p"])
+      }
+      if (is.finite(ph_p_value) && ph_p_value < 0.05) {
+        model_warnings <- c(
+          model_warnings,
+          paste(
+            "Expression-specific proportional hazards test p < 0.05; interpret",
+            "the average per-SD HR with the prespecified two-year temporal diagnostic."
+          )
+        )
+      } else if (is.finite(ph_global_p_value) && ph_global_p_value < 0.05) {
+        model_warnings <- c(
+          model_warnings,
+          "Global proportional hazards test p < 0.05 while the expression term was not flagged."
+        )
+      }
+    }
+    time_varying_effect <- fit_prespecified_time_varying_effect(
+      data = model_data,
+      formula_terms = formula_terms,
+      marker_formula_term = "expression_z",
+      marker_coefficient = "expression_z",
+      effect_label = "Expression per +1 within-cohort SD",
+      ph_p_value = ph_p_value
+    )
+
+    list(
+      model = model_id,
+      label = label,
+      covariates = as.list(encoded_covariates),
+      covariate_encoding = covariate_encoding,
+      status = "completed",
+      term = "expression_z",
+      n_patients = nrow(model_data),
+      n_events = model_events,
+      log_hr = as_null_if_bad(coefficient),
+      standard_error = as_null_if_bad(standard_error),
+      hazard_ratio = as_null_if_bad(hazard_ratio),
+      hr_conf_low = as_null_if_bad(hr_conf_low),
+      hr_conf_high = as_null_if_bad(hr_conf_high),
+      p_value = as_null_if_bad(p_value),
+      ph_p_value = as_null_if_bad(ph_p_value),
+      ph_global_p_value = as_null_if_bad(ph_global_p_value),
+      time_varying_effect = time_varying_effect,
+      common_scale_term = "expression_value",
+      common_scale_unit = "per +1 input score unit",
+      common_scale_log_hr = as_null_if_bad(common_scale_log_hr),
+      common_scale_standard_error = as_null_if_bad(
+        common_scale_standard_error
+      ),
+      common_scale_hazard_ratio = as_null_if_bad(
+        common_scale_hazard_ratio
+      ),
+      common_scale_hr_conf_low = as_null_if_bad(
+        common_scale_hr_conf_low
+      ),
+      common_scale_hr_conf_high = as_null_if_bad(
+        common_scale_hr_conf_high
+      ),
+      common_scale_p_value = as_null_if_bad(p_value),
+      warnings = as.list(unique(model_warnings))
+    )
+  }
+
+  cox_models <- list(
+    fit_expression_model("univariable", "Primary univariable continuous Cox", character(0)),
+    fit_expression_model("stage_adjusted", "Sensitivity adjusted for ordinal stage", c("stage")),
+    fit_expression_model("grade_adjusted", "Sensitivity adjusted for ordinal grade", c("grade")),
+    fit_expression_model("stage_grade_adjusted", "Sensitivity adjusted for ordinal stage and grade", c("stage", "grade"))
+  )
+  primary_model <- cox_models[[1]]
+  if (is.null(primary_model$status) || primary_model$status != "completed") {
+    result <- empty_result(
+      cohort,
+      "failed",
+      "COX_FAILED",
+      primary_model$reason %||% "Primary continuous Cox model did not complete."
+    )
+    result$cox_models <- cox_models
+    return(result)
   }
 
   list(
@@ -122,21 +334,46 @@ fit_cohort <- function(cohort) {
     endpoint_label = cohort$endpoint_label,
     endpoint_source = cohort$endpoint_source,
     status = "completed",
-    n_patients = n_patients,
-    n_events = n_events,
+    n_patients = primary_model$n_patients,
+    n_events = primary_model$n_events,
     expression_mean = as_null_if_bad(expression_mean),
     expression_sd = as_null_if_bad(expression_sd),
-    log_hr = as_null_if_bad(coefficient),
-    standard_error = as_null_if_bad(standard_error),
-    hazard_ratio = as_null_if_bad(hazard_ratio),
-    hr_conf_low = as_null_if_bad(hr_conf_low),
-    hr_conf_high = as_null_if_bad(hr_conf_high),
-    p_value = as_null_if_bad(p_value),
-    ph_p_value = ph_p_value,
+    log_hr = primary_model$log_hr,
+    standard_error = primary_model$standard_error,
+    hazard_ratio = primary_model$hazard_ratio,
+    hr_conf_low = primary_model$hr_conf_low,
+    hr_conf_high = primary_model$hr_conf_high,
+    p_value = primary_model$p_value,
+    ph_p_value = primary_model$ph_p_value,
+    ph_global_p_value = primary_model$ph_global_p_value,
+    time_varying_effect = primary_model$time_varying_effect,
+    common_scale_log_hr = primary_model$common_scale_log_hr,
+    common_scale_standard_error = primary_model$common_scale_standard_error,
+    common_scale_hazard_ratio = primary_model$common_scale_hazard_ratio,
+    common_scale_hr_conf_low = primary_model$common_scale_hr_conf_low,
+    common_scale_hr_conf_high = primary_model$common_scale_hr_conf_high,
+    common_scale_p_value = primary_model$common_scale_p_value,
+    cox_models = cox_models,
     warnings = cohort$warnings %||% list()
   )
 }
 
 results <- lapply(payload$cohorts %||% list(), fit_cohort)
-output <- list(scan_id = payload$scan_id, results = results)
-write_json(output, payload$output_path, auto_unbox = TRUE, null = "null", na = "null", pretty = TRUE)
+output <- list(
+  scan_id = payload$scan_id,
+  software_versions = list(
+    R = R.version.string,
+    survival = as.character(packageVersion("survival")),
+    jsonlite = as.character(packageVersion("jsonlite"))
+  ),
+  results = results
+)
+write_json(
+  output,
+  payload$output_path,
+  auto_unbox = TRUE,
+  null = "null",
+  na = "null",
+  pretty = TRUE,
+  digits = NA
+)

@@ -1,0 +1,174 @@
+{
+  "bundles": [
+    {
+      "analysis_id": "d7a5cea9a427469885f6534cc03678b2",
+      "analysis_type": "single",
+      "checks": 40,
+      "checks_passed": 40,
+      "clean_reruns": 2,
+      "clean_reruns_passed": 2,
+      "expression_artifact_hashed": true,
+      "gdc_identifiers": 365,
+      "label": "Single gene",
+      "max_absolute_error": 1.1369e-13,
+      "max_relative_error": 4.0007e-14,
+      "numeric_comparisons": 170,
+      "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
+      "patients": 365,
+      "r_roundtrip": true,
+      "reproducibility_hash": "21d6130e1dd31fb8d7823ac121f5a42ee6e96f334652d20eb619dc169790e1b7",
+      "score_reconstructed": true,
+      "status": "passed"
+    },
+    {
+      "analysis_id": "55c7f5da98b744e2ba62fe199c319e83",
+      "analysis_type": "weighted",
+      "checks": 43,
+      "checks_passed": 43,
+      "clean_reruns": 2,
+      "clean_reruns_passed": 2,
+      "expression_artifact_hashed": true,
+      "gdc_identifiers": 79,
+      "label": "Weighted signature",
+      "max_absolute_error": 2.8422e-14,
+      "max_relative_error": 7.3914e-15,
+      "numeric_comparisons": 131,
+      "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
+      "patients": 79,
+      "r_roundtrip": true,
+      "reproducibility_hash": "13e2d1fff4a3f9cd418faaa5da02d299b03544989cd721ff91774a90929a8202",
+      "score_reconstructed": true,
+      "status": "passed"
+    },
+    {
+      "analysis_id": "4b6f0bfa40a44a7fae8f3c013db24ec5",
+      "analysis_type": "combined_signatures",
+      "checks": 42,
+      "checks_passed": 42,
+      "clean_reruns": 2,
+      "clean_reruns_passed": 2,
+      "expression_artifact_hashed": true,
+      "gdc_identifiers": 80,
+      "label": "Two signatures",
+      "max_absolute_error": 4.0634e-14,
+      "max_relative_error": 5.8193e-14,
+      "numeric_comparisons": 159,
+      "numeric_policy_version": "tcga-trace-numeric-comparison-v1",
+      "patients": 80,
+      "r_roundtrip": true,
+      "reproducibility_hash": "8cd06bd6b09ef9c9232dd9db53ce28d9feeb18c8e8f029a62eb8128297a209ef",
+      "score_reconstructed": true,
+      "status": "passed"
+    }
+  ],
+  "clean_container_reproduction": {
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "cases": {
+      "Single gene": {
+        "max_absolute_error": 1.1369e-13,
+        "max_relative_error": 4.0007e-14,
+        "numeric_comparisons": 170,
+        "passed": 2,
+        "total": 2
+      },
+      "Two signatures": {
+        "max_absolute_error": 4.0634e-14,
+        "max_relative_error": 5.8193e-14,
+        "numeric_comparisons": 159,
+        "passed": 2,
+        "total": 2
+      },
+      "Weighted signature": {
+        "max_absolute_error": 2.8422e-14,
+        "max_relative_error": 7.3914e-15,
+        "numeric_comparisons": 131,
+        "passed": 2,
+        "total": 2
+      }
+    },
+    "environment_count": 2,
+    "negative_controls": {
+      "checks": {
+        "data_snapshot_hash_change_detected": true,
+        "mutated_input_rejected_by_all_environments": true
+      },
+      "passed": 2,
+      "total": 2
+    },
+    "numeric_comparison": {
+      "classes": {
+        "effect": {
+          "absolute": 1e-08,
+          "relative": 1e-08
+        },
+        "exact": {
+          "absolute": 0.0,
+          "relative": 0.0
+        },
+        "generic": {
+          "absolute": 1e-10,
+          "relative": 1e-08
+        },
+        "probability": {
+          "absolute": 1e-12,
+          "relative": 1e-06
+        },
+        "time": {
+          "absolute": 1e-06,
+          "relative": 1e-09
+        }
+      },
+      "pass_rule": "absolute_error <= absolute + relative * max(abs(expected), abs(observed))",
+      "policy_version": "tcga-trace-numeric-comparison-v1"
+    },
+    "source": "docs/publication/benchmark/clean_container_reproduction/benchmark_results.raw.json",
+    "status": "passed"
+  },
+  "design": {
+    "clean_capsule_reproduction": "Rebuild the pinned R environment from an immutable base-image digest and renv.lock, then re-execute self-contained capsules with no network, application source, TCGA matrices or database.",
+    "integrity_boundary": "Mutate request, patient, scoring and source fields bound by the reproducibility hash; mutate plot and methodology artifacts covered only by file checksums; and confirm that generated-at and quality metadata are intentionally outside the reproducibility hash.",
+    "integrity_checks": "Recompute patient-record, scoring-provenance, reproducibility and artifact SHA-256 values.",
+    "scoring_roundtrip": "Reconstruct single-gene, weighted-signature or combined-signature scores from audited component values, weights and standardization parameters.",
+    "statistical_roundtrip": "Re-execute each bundle's checksummed km_analysis.R from its frozen input.json and compare all core outputs using the recorded quantity-aware absolute-plus-relative policy; exact fields remain exact and maximum observed errors are retained.",
+    "threat_model": {
+      "covered": "Detection of accidental drift, corruption or incomplete transfer relative to the hashes and checksums recorded in an export.",
+      "excluded": "Adversarial forgery by an exporter able to alter content and recompute every unsigned hash. No authenticity or authorship claim is made without third-party attestation."
+    }
+  },
+  "schema_version": "tcga-trace-reproducibility-benchmark-v3",
+  "tamper_detection": {
+    "artifact_only_fields": [
+      "png",
+      "methodology"
+    ],
+    "bound_fields": [
+      "request",
+      "patient records",
+      "scoring provenance",
+      "source-data provenance",
+      "core results"
+    ],
+    "checks": {
+      "baseline_reproducibility_hash_valid": true,
+      "expression_component_tamper_detected": true,
+      "generated_at_outside_reproducibility_hash": true,
+      "methodology_checksum_tamper_detected": true,
+      "methodology_outside_reproducibility_hash": true,
+      "patient_row_tamper_detected": true,
+      "plot_checksum_tamper_detected": true,
+      "plot_outside_reproducibility_hash": true,
+      "quality_metadata_outside_reproducibility_hash": true,
+      "request_tamper_detected": true,
+      "source_provenance_tamper_detected": true
+    },
+    "security_boundary": "The controls detect drift relative to recorded unsigned hashes. An exporter able to modify content and recompute every hash is outside scope; authenticity requires independent attestation.",
+    "status": "passed",
+    "unbound_report_metadata": [
+      "generated_at",
+      "quality.warnings"
+    ]
+  }
+}

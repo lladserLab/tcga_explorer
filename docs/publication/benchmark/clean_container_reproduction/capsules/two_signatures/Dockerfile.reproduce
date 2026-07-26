@@ -1,0 +1,26 @@
+FROM rocker/r-ver@sha256:df26749182af64d5263bf64149d51a427b476ed28c4e046997143be3f97fdd7c
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    RENV_CONFIG_REPOS_OVERRIDE=https://p3m.dev/cran/2026-07-25
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    cmake \
+    libcairo2-dev \
+    libcurl4-openssl-dev \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    libfribidi-dev \
+    libharfbuzz-dev \
+    libjpeg-dev \
+    libnlopt-dev \
+    libpng-dev \
+    libssl-dev \
+    libtiff5-dev \
+    libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY renv.lock /opt/tcga-trace/renv.lock
+RUN Rscript -e "install.packages('renv', repos='https://p3m.dev/cran/2026-07-25'); stopifnot(as.character(packageVersion('renv')) == '1.2.3'); renv::restore(lockfile='/opt/tcga-trace/renv.lock', library=.libPaths()[1], repos='https://p3m.dev/cran/2026-07-25', prompt=FALSE)"
+
+WORKDIR /analysis
+CMD ["Rscript", "/analysis/rerun_analysis.R", "/output"]

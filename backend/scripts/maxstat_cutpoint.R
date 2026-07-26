@@ -71,6 +71,40 @@ statistic <- if ("statistic" %in% colnames(cutpoint_table)) {
   NA
 }
 
+corrected_p_value <- NA_real_
+corrected_p_raw_value <- NA_real_
+corrected_p_clamped <- FALSE
+corrected_p_method <- NA_character_
+corrected_p_status <- "unavailable"
+corrected_p_error <- NA_character_
+if (requireNamespace("maxstat", quietly = TRUE)) {
+  maxstat_fit <- tryCatch(
+    maxstat::maxstat.test(
+      survival::Surv(time_days, event) ~ expression_value,
+      data = records,
+      smethod = "LogRank",
+      pmethod = "Lau94",
+      minprop = minprop,
+      maxprop = 1 - minprop
+    ),
+    error = function(e) e
+  )
+  if (inherits(maxstat_fit, "error")) {
+    corrected_p_error <- conditionMessage(maxstat_fit)
+  } else if (!is.null(maxstat_fit$p.value) && is.finite(as.numeric(maxstat_fit$p.value))) {
+    corrected_p_raw_value <- unname(as.numeric(maxstat_fit$p.value))
+    corrected_p_value <- min(1, max(0, corrected_p_raw_value))
+    corrected_p_clamped <- !isTRUE(all.equal(
+      corrected_p_value,
+      corrected_p_raw_value
+    ))
+    corrected_p_method <- "maxstat::maxstat.test LogRank pmethod=Lau94"
+    corrected_p_status <- "completed"
+  }
+} else {
+  corrected_p_error <- "R package maxstat is not installed."
+}
+
 if (is.na(threshold)) {
   stop("Maxstat did not produce a finite cutpoint.")
 }
@@ -80,7 +114,14 @@ result <- list(
   threshold = threshold,
   statistic = statistic,
   minprop = minprop,
-  package = "survminer::surv_cutpoint"
+  package = "survminer::surv_cutpoint",
+  corrected_p_value = corrected_p_value,
+  corrected_p_raw_value = corrected_p_raw_value,
+  corrected_p_clamped = corrected_p_clamped,
+  corrected_p_method = corrected_p_method,
+  corrected_p_status = corrected_p_status,
+  corrected_p_error = corrected_p_error,
+  inference_note = "The downstream log-rank and Cox p-values use the selected groups and should be treated as post-selection summaries; corrected_p_value records the maximally selected rank statistic p-value using maxstat::maxstat.test pmethod=Lau94 when available and is clamped to the valid [0,1] probability interval. corrected_p_raw_value preserves the unbounded approximation returned by the package."
 )
 
 write_json(result, payload$output_path, pretty = TRUE, auto_unbox = TRUE, null = "null", digits = 16)

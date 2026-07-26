@@ -1,0 +1,193 @@
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1cm,y=1cm]
+\definecolor{traceInk}{HTML}{24343B}
+\definecolor{traceMuted}{HTML}{5B6970}
+\definecolor{traceLine}{HTML}{AEB9BC}
+\definecolor{traceTeal}{HTML}{1F7A75}
+\definecolor{traceTealLight}{HTML}{E7F2F0}
+\definecolor{traceBlue}{HTML}{396A93}
+\definecolor{traceBlueLight}{HTML}{EAF0F5}
+\definecolor{traceAmber}{HTML}{A87325}
+\definecolor{traceAmberLight}{HTML}{F7F0E4}
+\definecolor{traceOlive}{HTML}{667A4C}
+\definecolor{traceOliveLight}{HTML}{EDF1E8}
+
+\tikzset{
+  panel/.style={
+    draw=traceLine,
+    fill=white,
+    line width=0.7pt,
+    rounded corners=1.5pt
+  },
+  branch/.style={
+    draw=traceLine,
+    fill=white,
+    line width=0.6pt,
+    rounded corners=1.2pt,
+    align=left,
+    inner sep=5pt,
+    font=\sffamily\fontsize{6.8}{8.0}\selectfont,
+    text=traceInk
+  },
+  stage title/.style={
+    anchor=west,
+    font=\sffamily\bfseries\fontsize{8.2}{9.2}\selectfont,
+    text=traceInk
+  },
+  stage number/.style={
+    circle,
+    minimum size=0.42cm,
+    inner sep=0pt,
+    font=\sffamily\bfseries\fontsize{7.3}{8}\selectfont,
+    text=white
+  },
+  item/.style={
+    anchor=north west,
+    align=left,
+    font=\sffamily\fontsize{7.2}{8.5}\selectfont,
+    text=traceInk
+  },
+  small/.style={
+    anchor=north west,
+    align=left,
+    font=\sffamily\fontsize{6.8}{8.0}\selectfont,
+    text=traceMuted
+  },
+  flow/.style={
+    -{Stealth[length=2.1mm,width=1.35mm]},
+    draw=traceInk,
+    line width=0.75pt
+  }
+}
+
+\path[use as bounding box] (0,0.05) rectangle (18.1,8.42);
+
+% A. Inputs
+\node[panel, minimum width=2.75cm, minimum height=6.35cm, anchor=north west] (inputs) at (0,8.35) {};
+\node[stage number, fill=traceTeal] at (0.34,8.02) {A};
+\node[stage title] at (0.65,8.02) {INPUTS};
+\draw[traceLine, line width=0.45pt] (0.18,7.70) -- (2.57,7.70);
+\node[item, text width=2.25cm] at (0.25,7.46) {
+  \textbf{RNA snapshot}\\
+  \textcolor{traceMuted}{versioned TCGA matrices}
+};
+\node[item, text width=2.25cm] at (0.25,6.48) {
+  \textbf{Clinical outcomes}\\
+  \textcolor{traceMuted}{TCGA-CDR OS, DSS, DFI, PFI}
+};
+\node[item, text width=2.25cm] at (0.25,5.25) {
+  \textbf{Analysis request}\\
+  \textcolor{traceMuted}{cohort and endpoint family}\\
+  \textcolor{traceMuted}{gene, score and cutpoint family}\\
+  \textcolor{traceMuted}{filters and model choices}
+};
+\node[small, text width=2.25cm, fill=traceTealLight, rounded corners=1pt, inner sep=4pt]
+  at (0.25,3.67) {Every input is identified before modelling begins.};
+
+% B. Deterministic cohort construction
+\node[panel, minimum width=3.05cm, minimum height=6.35cm, anchor=north west] (cohort) at (3.25,8.35) {};
+\node[stage number, fill=traceBlue] at (3.59,8.02) {B};
+\node[stage title] at (3.90,8.02) {COHORT};
+\draw[traceLine, line width=0.45pt] (3.43,7.70) -- (6.12,7.70);
+\node[item, text width=2.55cm] at (3.50,7.43) {
+  \textbf{Deterministic construction}\\[2pt]
+  1.\ Apply tissue/clinical filters\\
+  2.\ Require endpoint completeness\\
+  3.\ Require complete requested expression\\
+  4.\ Select one expression-complete sample per participant\\
+  5.\ Score the eligible cohort
+};
+\node[small, text width=2.55cm, fill=traceBlueLight, rounded corners=1pt, inner sep=4pt]
+  at (3.50,3.42) {
+  Records selected patients, exclusions, events and covariate completeness.
+};
+
+% C. Analysis branches
+\node[panel, minimum width=4.35cm, minimum height=6.35cm, anchor=north west] (analysis) at (6.80,8.35) {};
+\node[stage number, fill=traceAmber] at (7.14,8.02) {C};
+\node[stage title] at (7.45,8.02) {ANALYSIS BRANCH};
+\draw[traceLine, line width=0.45pt] (6.98,7.70) -- (10.97,7.70);
+\node[branch, text width=3.62cm] (single) at (8.98,6.92) {
+  \textbf{\textcolor{traceBlue}{Single gene or signature}}\\
+  Continuous Cox + spline $\rightarrow$ grouped cutpoint sensitivities
+};
+\node[branch, text width=3.62cm] (crossed) at (8.98,5.10) {
+  \textbf{\textcolor{traceTeal}{Two markers or signatures}}\\
+  Independent splits $\rightarrow$ four groups + continuous interaction Cox
+};
+\node[branch, text width=3.62cm] (pancancer) at (8.98,3.10) {
+  \textbf{\textcolor{traceAmber}{Pan-cancer}}\\
+  Per-SD cohort Cox + BH-FDR\\
+  Common-unit REML/HKSJ + prediction interval
+};
+
+% D. Diagnostics
+\node[panel, minimum width=2.65cm, minimum height=6.35cm, anchor=north west] (diagnostics) at (11.65,8.35) {};
+\node[stage number, fill=traceOlive] at (11.99,8.02) {D};
+\node[stage title] at (12.30,8.02) {CHECKS};
+\draw[traceLine, line width=0.45pt] (11.83,7.70) -- (14.12,7.70);
+\node[item, text width=2.15cm] at (11.90,7.43) {
+  \textbf{Diagnostics reported}\\[2pt]
+  Spline nonlinearity\\
+  Specification curve\\
+  Cutpoint sensitivity\\
+  RMST tau sensitivity\\
+  PH tests\\
+  EPV + Firth sensitivity
+};
+\node[small, text width=2.15cm, fill=traceOliveLight, rounded corners=1pt, inner sep=4pt]
+  at (11.90,3.58) {Discordant and null results remain visible.};
+
+% E. Exported record
+\node[panel, minimum width=3.25cm, minimum height=6.35cm, anchor=north west] (export) at (14.80,8.35) {};
+\node[stage number, fill=traceTeal] at (15.14,8.02) {E};
+\node[stage title] at (15.45,8.02) {RUN RECORD};
+\draw[traceLine, line width=0.45pt] (14.98,7.70) -- (17.87,7.70);
+\node[item, text width=2.68cm,
+  font=\sffamily\fontsize{6.6}{7.7}\selectfont] at (15.05,7.43) {
+  \textbf{Results and provenance}\\[2pt]
+  Plots + specification curve\\
+  Continuous/grouped CSVs\\
+  Complete family ledger\\
+  Methods + audit JSON\\
+  Source/GDC identifiers\\
+  Expression components\\
+  SHA-256 + Ed25519 receipt
+};
+\node[small, text width=2.68cm, fill=traceTealLight, rounded corners=1pt, inner sep=4pt]
+  at (15.05,3.08) {One export binds the result to the choices that produced it.};
+
+% Main flow
+\draw[flow] (inputs.east) -- (cohort.west);
+\draw[flow] (cohort.east) -- (analysis.west);
+\draw[flow] (analysis.east) -- (diagnostics.west);
+\draw[flow] (diagnostics.east) -- (export.west);
+
+% Re-execution loop
+\draw[-{Stealth[length=1.8mm,width=1.2mm]}, draw=traceTeal, line width=0.65pt, dashed]
+  (16.40,1.84) -- (16.40,1.52) -- (4.76,1.52) -- (4.76,1.84);
+\node[font=\sffamily\fontsize{6.7}{7.5}\selectfont, text=traceTeal, fill=white, inner sep=1.5pt]
+  at (10.58,1.52) {reconstruct from the audited record};
+
+% Provenance rail
+\node[panel, fill=traceInk, draw=traceInk, minimum width=18.05cm, minimum height=0.82cm, anchor=south west]
+  (rail) at (0,0.12) {};
+\node[font=\sffamily\bfseries\fontsize{5.8}{6.6}\selectfont, text=white]
+  at (1.44,0.53) {SOURCE ARTIFACT SHA-256};
+\node[font=\sffamily\bfseries\fontsize{7}{7.5}\selectfont, text=traceTealLight] at (3.02,0.53) {$\rightarrow$};
+\node[font=\sffamily\bfseries\fontsize{5.8}{6.6}\selectfont, text=white]
+  at (4.25,0.53) {REQUEST SHA-256};
+\node[font=\sffamily\bfseries\fontsize{7}{7.5}\selectfont, text=traceTealLight] at (5.58,0.53) {$\rightarrow$};
+\node[font=\sffamily\bfseries\fontsize{5.8}{6.6}\selectfont, text=white]
+  at (7.35,0.53) {POPULATION SHA-256};
+\node[font=\sffamily\bfseries\fontsize{7}{7.5}\selectfont, text=traceTealLight] at (9.28,0.53) {$\rightarrow$};
+\node[font=\sffamily\bfseries\fontsize{5.8}{6.6}\selectfont, text=white]
+  at (10.85,0.53) {SCORING SHA-256};
+\node[font=\sffamily\bfseries\fontsize{7}{7.5}\selectfont, text=traceTealLight] at (12.40,0.53) {$\rightarrow$};
+\node[font=\sffamily\bfseries\fontsize{5.8}{6.6}\selectfont, text=white]
+  at (14.43,0.53) {RESULT SHA-256};
+\node[font=\sffamily\bfseries\fontsize{7}{7.5}\selectfont, text=traceTealLight] at (16.18,0.53) {$\rightarrow$};
+\node[font=\sffamily\bfseries\fontsize{5.2}{6.0}\selectfont, text=white]
+  at (17.18,0.53) {ED25519 RECEIPT};
+\end{tikzpicture}%
+}

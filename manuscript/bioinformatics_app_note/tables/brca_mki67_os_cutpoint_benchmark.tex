@@ -1,16 +1,15 @@
 \begin{table}[t]
 \centering
-\caption{TCGA-BRCA MKI67 OS cutpoint robustness benchmark.}
+\caption{TCGA-BRCA MKI67 OS cutpoint-sensitivity benchmark.}
 \label{tab:brca-mki67-os-cutpoints}
 \begin{tabular}{lrrrrrrl}
 \toprule
-Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
 \midrule
-Maxstat & 1080 & 151 & 0.186 & 0.071 & 0.220 & -317 & Fails BH \\
-Median & 1080 & 151 & 0.583 & 0.583 & 0.692 & 128 & Fails BH \\
-Upper Q & 1080 & 151 & 0.186 & 0.113 & 0.100 & 52 & Fails BH \\
-Outer Q & 540 & 88 & 0.428 & 0.343 & 0.356 & 70 & Fails BH \\
-75th pct. & 1080 & 151 & 0.186 & 0.113 & 0.100 & 52 & Fails BH \\
+Maxstat & 1080 & 151 & 1.000 & 0.008 & 0.510 & -46 & Outcome-optimized cutpoint; grouped estimates are post-selection; Raw Lau94 approximation lay outside [0,1] and was clamped \\
+Median & 1080 & 151 & 1.000 & 0.148 & 0.683 & -18 & No model-diagnostic caution recorded \\
+Upper Q & 1080 & 151 & 0.447 & 0.017 & 0.203 & -51 & No model-diagnostic caution recorded \\
+Outer Q & 540 & 88 & 1.000 & 0.082 & 0.607 & -40 & Middle 50\% excluded \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -1,0 +1,1139 @@
+{
+  "cached": false,
+  "cohort": "TCGA-SKCM",
+  "cutpoint_method": "combined_median",
+  "diagnostics": {
+    "cohort_information_count": 2,
+    "information_count": 3,
+    "legacy_warning_count": 2,
+    "method_information_count": 1,
+    "model_caution_count": 1,
+    "not_evaluable_count": 0,
+    "selected_adjusted_model": "signature_interaction_user_adjusted",
+    "selected_adjusted_model_family": "interaction",
+    "selected_adjusted_model_label": "Signature interaction user-adjusted for Age",
+    "selected_adjusted_status": "clean",
+    "selected_model_caution_count": 0
+  },
+  "downloads": {
+    "attestation": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/attestation",
+    "audit_html": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/audit_html",
+    "audit_json": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/audit_json",
+    "csv": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/csv",
+    "json": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/json",
+    "png": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/png",
+    "r_script": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/r_script",
+    "reproduction_manifest": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/reproduction_manifest",
+    "svg": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/svg",
+    "txt": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/txt",
+    "zip": "/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/zip"
+  },
+  "error": null,
+  "expression_scale": "log2_tpm",
+  "expression_scale_label": "log2(TPM + 1)",
+  "gene_symbol": "Effector x Exhaustion",
+  "id": "72271ce991d04807ac2b1394e1cc92d1",
+  "metrics": {
+    "audit_report": {
+      "generated_at": "2026-07-26T01:32:18.241709+00:00",
+      "patient_records_sha256": "f3e9333ff7a4b9df19c355c8a96cb7e4561abcfee2f61116b42516462014f3a0",
+      "reproducibility_hash": "159dcbb071d27ec33357a8ed3e84455db7528217b083f08c171b71780bb2d70e",
+      "schema_version": "tcga-trace-analysis-audit-v4",
+      "server_attestation": {
+        "algorithm": "Ed25519",
+        "audit_report_sha256": "3202d14fef0b65567651f1477544e70a3706dbee2508de57c12fdaf6f8674091",
+        "canonicalization": "tcga-trace-canonical-json-v1",
+        "issued_at": "2026-07-26T01:32:18.329051+00:00",
+        "issuer": "https://apps.cienciavida.org/tcga_explorer",
+        "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+        "public_key_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/attestation/keys/ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+        "receipt_filename": "attestation_receipt.json",
+        "receipt_url": "https://apps.cienciavida.org/tcga_explorer/api/v1/analyses/72271ce991d04807ac2b1394e1cc92d1/download/attestation",
+        "schema_version": "tcga-trace-server-attestation-v1",
+        "scope": "The detached server receipt signs the exact audit_report.json SHA-256, byte count, audit schema and recorded reproducibility hash.",
+        "signed_payload_sha256": "c31fd6e8bc484b982a3c90d925a6f90ffd6ff93aa4739d701b54987f5abb84d1",
+        "status": "detached_receipt",
+        "trust_model": "Origin is established only after the Ed25519 signature is checked against the key obtained from the declared HTTPS endpoint or an independently archived matching fingerprint. The receipt does not establish scientific correctness or append-only publication time."
+      }
+    },
+    "clinical_adjustment": {
+      "continuous_model": "continuous_user_adjusted",
+      "grouped_model": "user_adjusted",
+      "interaction_model": "signature_interaction_user_adjusted",
+      "label": "Age",
+      "requested_covariates": [
+        "age_at_index"
+      ],
+      "status": "requested"
+    },
+    "combined_signature": {
+      "group_levels": [
+        "Low_Low",
+        "Low_High",
+        "High_Low",
+        "High_High"
+      ],
+      "label": "Effector x Exhaustion",
+      "method": "median",
+      "sample_overlap": 453,
+      "signature_a": {
+        "genes": [
+          {
+            "query": "CD8A",
+            "resolved_symbol": "CD8A",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "GZMB",
+            "resolved_symbol": "GZMB",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "PRF1",
+            "resolved_symbol": "PRF1",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "IFNG",
+            "resolved_symbol": "IFNG",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CXCL9",
+            "resolved_symbol": "CXCL9",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CXCL10",
+            "resolved_symbol": "CXCL10",
+            "status": "exact",
+            "weight": 1.0
+          }
+        ],
+        "label": "ZSCORE(CD8A+GZMB+PRF1+IFNG+CXCL9+CXCL10)",
+        "method": "zscore",
+        "name": "Effector",
+        "sample_overlap": 453,
+        "scoring_population": {
+          "complete_case_barcode_count": 453,
+          "component_value_hashes": {
+            "CD8A": "546c12ad5fc00c3006ba8351db34ef10e9ab6a94cf53deacb20e48ee88544d73",
+            "CXCL10": "41f99622710326de023249bbcbf8e898f70b2075e70e3f4a5eddbec444a2ccde",
+            "CXCL9": "7a28f00bf97baee13af7b1b8537466baa8faae084eaac1f5f4185583704df98c",
+            "GZMB": "95fa05b2295c22da4e7d16d56649297d99c09daae276407ae86316f09f9e0744",
+            "IFNG": "51cd006bf84aad9071327e7d81faa1c0640132442ae46a737fc83d0145011125",
+            "PRF1": "7ab6c7ff54aa87088fef1429ab886a77013caa9bed62df9b319d0fe6503f5871"
+          },
+          "eligible_barcode_count": 453,
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "score_values_sha256": "696667d48853d54a85ea4d7a0b13d17c3d0e63b63a3cb9e75a5417c017f3127e"
+        },
+        "standardization": [
+          {
+            "center": 3.79967399369144,
+            "n": 453,
+            "resolved_symbol": "CD8A",
+            "sample_standard_deviation": 2.106335595330699
+          },
+          {
+            "center": 3.662132426076641,
+            "n": 453,
+            "resolved_symbol": "GZMB",
+            "sample_standard_deviation": 1.8888721998765379
+          },
+          {
+            "center": 3.850277167940245,
+            "n": 453,
+            "resolved_symbol": "PRF1",
+            "sample_standard_deviation": 1.9280742023054063
+          },
+          {
+            "center": 1.3629381942581262,
+            "n": 453,
+            "resolved_symbol": "IFNG",
+            "sample_standard_deviation": 1.3769876795970863
+          },
+          {
+            "center": 5.528790302525293,
+            "n": 453,
+            "resolved_symbol": "CXCL9",
+            "sample_standard_deviation": 2.5882926293131168
+          },
+          {
+            "center": 5.3912823874232,
+            "n": 453,
+            "resolved_symbol": "CXCL10",
+            "sample_standard_deviation": 2.4618755144315836
+          }
+        ]
+      },
+      "signature_b": {
+        "genes": [
+          {
+            "query": "PDCD1",
+            "resolved_symbol": "PDCD1",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "CTLA4",
+            "resolved_symbol": "CTLA4",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "LAG3",
+            "resolved_symbol": "LAG3",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "HAVCR2",
+            "resolved_symbol": "HAVCR2",
+            "status": "exact",
+            "weight": 1.0
+          },
+          {
+            "query": "TIGIT",
+            "resolved_symbol": "TIGIT",
+            "status": "exact",
+            "weight": 1.0
+          }
+        ],
+        "label": "ZSCORE(PDCD1+CTLA4+LAG3+HAVCR2+TIGIT)",
+        "method": "zscore",
+        "name": "Exhaustion",
+        "sample_overlap": 453,
+        "scoring_population": {
+          "complete_case_barcode_count": 453,
+          "component_value_hashes": {
+            "CTLA4": "9e549af23a6fd90f6189029e585f48f5459d67cd1fac5a46eb5bc516910d8f55",
+            "HAVCR2": "809a36251cca1e138206934ea660b2be789029fe086704e8e1fb2020fbc9e9e2",
+            "LAG3": "62deb4e8a3f1952b4e6756615c71c1023b0b7bcb7f82b05db5a4563257451cf1",
+            "PDCD1": "c5180c6b4cc0c9251e1daaa0a514a19f250cb73182ba7162cd51e755e0626639",
+            "TIGIT": "7d53c9624685e164aec599d2e7616df7b8bb4feb7b9f58be34d1011b4be07841"
+          },
+          "eligible_barcode_count": 453,
+          "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+          "score_values_sha256": "9e2bad38d984a642b703d2269590a8ac4772593916d19d38c7b849bc8e43fe44"
+        },
+        "standardization": [
+          {
+            "center": 2.578028220461299,
+            "n": 453,
+            "resolved_symbol": "PDCD1",
+            "sample_standard_deviation": 1.7882384862300578
+          },
+          {
+            "center": 2.5988022881841686,
+            "n": 453,
+            "resolved_symbol": "CTLA4",
+            "sample_standard_deviation": 1.5914914151217345
+          },
+          {
+            "center": 3.322889681222949,
+            "n": 453,
+            "resolved_symbol": "LAG3",
+            "sample_standard_deviation": 1.9550154952656944
+          },
+          {
+            "center": 3.740667682971649,
+            "n": 453,
+            "resolved_symbol": "HAVCR2",
+            "sample_standard_deviation": 1.4296238611189036
+          },
+          {
+            "center": 2.1664884428125672,
+            "n": 453,
+            "resolved_symbol": "TIGIT",
+            "sample_standard_deviation": 1.5435259977528633
+          }
+        ]
+      }
+    },
+    "competing_risks": {
+      "applicable": false,
+      "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+      "status": "not_applicable"
+    },
+    "continuous_analysis": {
+      "reason": "An unstratified expression-complete population was not supplied.",
+      "status": "skipped"
+    },
+    "cox_models": [],
+    "cutpoint_details": {
+      "combination": "signature_a_x_signature_b",
+      "method": "median",
+      "signature_a_levels": "Low/High",
+      "signature_a_threshold": -0.06236462220332747,
+      "signature_b_levels": "Low/High",
+      "signature_b_threshold": -0.07281337630155729
+    },
+    "endpoint": "OS",
+    "endpoint_label": "Overall survival",
+    "endpoint_qc": {
+      "available": true,
+      "competing_events": 0,
+      "competing_risk_available": false,
+      "events": 213,
+      "label": "Overall survival",
+      "patients": 453,
+      "reason": "453 linked patients and 213 events from TCGA-CDR.",
+      "source": "tcga_cdr",
+      "value": "OS"
+    },
+    "endpoint_source": "tcga_cdr",
+    "event_counts": {
+      "High_High": 74,
+      "High_Low": 7,
+      "Low_High": 14,
+      "Low_Low": 118
+    },
+    "expression_distribution_a": {
+      "bins": [
+        {
+          "count": 33,
+          "label": "-1.70--1.27"
+        },
+        {
+          "count": 68,
+          "label": "-1.27--0.85"
+        },
+        {
+          "count": 72,
+          "label": "-0.85--0.43"
+        },
+        {
+          "count": 64,
+          "label": "-0.43--0.00"
+        },
+        {
+          "count": 57,
+          "label": "-0.00-0.42"
+        },
+        {
+          "count": 70,
+          "label": "0.42-0.85"
+        },
+        {
+          "count": 47,
+          "label": "0.85-1.27"
+        },
+        {
+          "count": 21,
+          "label": "1.27-1.69"
+        },
+        {
+          "count": 16,
+          "label": "1.69-2.12"
+        },
+        {
+          "count": 5,
+          "label": "2.12-2.54"
+        }
+      ],
+      "max": 2.53922883885704,
+      "median": -0.06236462220332747,
+      "min": -1.6955308641725864,
+      "n": 453,
+      "q1": -0.7612074923859163,
+      "q3": 0.6713096645802029
+    },
+    "expression_distribution_b": {
+      "bins": [
+        {
+          "count": 29,
+          "label": "-1.62--1.22"
+        },
+        {
+          "count": 72,
+          "label": "-1.22--0.83"
+        },
+        {
+          "count": 66,
+          "label": "-0.83--0.43"
+        },
+        {
+          "count": 69,
+          "label": "-0.43--0.03"
+        },
+        {
+          "count": 56,
+          "label": "-0.03-0.37"
+        },
+        {
+          "count": 60,
+          "label": "0.37-0.76"
+        },
+        {
+          "count": 52,
+          "label": "0.76-1.16"
+        },
+        {
+          "count": 28,
+          "label": "1.16-1.56"
+        },
+        {
+          "count": 10,
+          "label": "1.56-1.96"
+        },
+        {
+          "count": 11,
+          "label": "1.96-2.36"
+        }
+      ],
+      "max": 2.3551730739687846,
+      "median": -0.07281337630155729,
+      "min": -1.6203650440128012,
+      "n": 453,
+      "q1": -0.7290585858771405,
+      "q3": 0.6954380106293849
+    },
+    "expression_scale": "log2_tpm",
+    "expression_scale_label": "log2(TPM + 1)",
+    "external_covariates": {
+      "schema_version": null,
+      "selected_covariates": [],
+      "status": "not_provided"
+    },
+    "group_counts": {
+      "High_High": 202,
+      "High_Low": 24,
+      "Low_High": 24,
+      "Low_Low": 203
+    },
+    "logrank_p_value": 1.1203326065884393e-06,
+    "median_survival_days": {
+      "High_High": 4634,
+      "High_Low": 2454,
+      "Low_High": 2184,
+      "Low_Low": 1525
+    },
+    "median_survival_status": {
+      "High_High": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "High_Low": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "Low_High": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      },
+      "Low_Low": {
+        "explanation": "Median survival was reached and estimated from the Kaplan-Meier curve.",
+        "status": "estimated"
+      }
+    },
+    "n_events": 213,
+    "n_patients": 453,
+    "quality": {
+      "groups": {
+        "High_High": {
+          "events": 74,
+          "patients": 202
+        },
+        "High_Low": {
+          "events": 7,
+          "patients": 24
+        },
+        "Low_High": {
+          "events": 14,
+          "patients": 24
+        },
+        "Low_Low": {
+          "events": 118,
+          "patients": 203
+        }
+      },
+      "interpretation": "Exploratory research analysis only; not for clinical decision-making.",
+      "low_event_groups": []
+    },
+    "rmst": {
+      "reason": "RMST is reported only for two expression groups.",
+      "status": "skipped"
+    },
+    "sample_selection": {
+      "after_user_filters": 473,
+      "candidate_patients": 453,
+      "complete_endpoint_samples": 457,
+      "complete_os_samples": 457,
+      "duplicate_samples_removed": 4,
+      "endpoint": "OS",
+      "endpoint_label": "Overall survival",
+      "endpoint_source": "tcga_cdr",
+      "expression_complete_patients": 453,
+      "expression_complete_samples": 457,
+      "expression_priority_fallback_barcodes": [],
+      "expression_priority_fallbacks": 0,
+      "expression_requirement_applied": true,
+      "input_samples": 473,
+      "missing_endpoint_removed": 16,
+      "missing_expression_patients_removed": 0,
+      "missing_expression_samples_removed": 0,
+      "missing_os_removed": 16,
+      "priority_order": [
+        "Primary tumor / primary blood-derived cancer",
+        "Recurrent tumor",
+        "Additional new primary",
+        "Metastatic / additional metastatic",
+        "Human tumor original cells",
+        "Normal tissue / normal blood",
+        "Control, cell line, xenograft or unknown"
+      ],
+      "removed_duplicate_sample_types": {
+        "Additional Metastatic": 1,
+        "Metastatic": 2,
+        "Solid Tissue Normal": 1
+      },
+      "retained_patients": 453,
+      "retained_sample_types": {
+        "Metastatic": 351,
+        "Primary Tumor": 102
+      },
+      "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
+      "rule_description": "one expression-complete eligible RNA-seq sample per TCGA participant; clinical filters and endpoint completeness are applied first, samples lacking the requested gene or complete signature score are removed second, and biospecimen priority is applied last. Primary tumor or primary blood-derived cancer samples are preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no higher-priority expression-complete sample remains; ties are resolved by RNA analyte/portion metadata and barcode.",
+      "sample_type_filter_applied": false,
+      "selection_order": [
+        "user_filters",
+        "endpoint_completeness",
+        "requested_expression_or_score_completeness",
+        "biospecimen_priority"
+      ]
+    },
+    "signature": {
+      "label": "Effector x Exhaustion",
+      "method": "combined",
+      "signatures": [
+        {
+          "genes": [
+            {
+              "query": "CD8A",
+              "resolved_symbol": "CD8A",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "GZMB",
+              "resolved_symbol": "GZMB",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "PRF1",
+              "resolved_symbol": "PRF1",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "IFNG",
+              "resolved_symbol": "IFNG",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CXCL9",
+              "resolved_symbol": "CXCL9",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CXCL10",
+              "resolved_symbol": "CXCL10",
+              "status": "exact",
+              "weight": 1.0
+            }
+          ],
+          "label": "ZSCORE(CD8A+GZMB+PRF1+IFNG+CXCL9+CXCL10)",
+          "method": "zscore",
+          "name": "Effector",
+          "sample_overlap": 453,
+          "scoring_population": {
+            "complete_case_barcode_count": 453,
+            "component_value_hashes": {
+              "CD8A": "546c12ad5fc00c3006ba8351db34ef10e9ab6a94cf53deacb20e48ee88544d73",
+              "CXCL10": "41f99622710326de023249bbcbf8e898f70b2075e70e3f4a5eddbec444a2ccde",
+              "CXCL9": "7a28f00bf97baee13af7b1b8537466baa8faae084eaac1f5f4185583704df98c",
+              "GZMB": "95fa05b2295c22da4e7d16d56649297d99c09daae276407ae86316f09f9e0744",
+              "IFNG": "51cd006bf84aad9071327e7d81faa1c0640132442ae46a737fc83d0145011125",
+              "PRF1": "7ab6c7ff54aa87088fef1429ab886a77013caa9bed62df9b319d0fe6503f5871"
+            },
+            "eligible_barcode_count": 453,
+            "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+            "score_values_sha256": "696667d48853d54a85ea4d7a0b13d17c3d0e63b63a3cb9e75a5417c017f3127e"
+          },
+          "standardization": [
+            {
+              "center": 3.79967399369144,
+              "n": 453,
+              "resolved_symbol": "CD8A",
+              "sample_standard_deviation": 2.106335595330699
+            },
+            {
+              "center": 3.662132426076641,
+              "n": 453,
+              "resolved_symbol": "GZMB",
+              "sample_standard_deviation": 1.8888721998765379
+            },
+            {
+              "center": 3.850277167940245,
+              "n": 453,
+              "resolved_symbol": "PRF1",
+              "sample_standard_deviation": 1.9280742023054063
+            },
+            {
+              "center": 1.3629381942581262,
+              "n": 453,
+              "resolved_symbol": "IFNG",
+              "sample_standard_deviation": 1.3769876795970863
+            },
+            {
+              "center": 5.528790302525293,
+              "n": 453,
+              "resolved_symbol": "CXCL9",
+              "sample_standard_deviation": 2.5882926293131168
+            },
+            {
+              "center": 5.3912823874232,
+              "n": 453,
+              "resolved_symbol": "CXCL10",
+              "sample_standard_deviation": 2.4618755144315836
+            }
+          ]
+        },
+        {
+          "genes": [
+            {
+              "query": "PDCD1",
+              "resolved_symbol": "PDCD1",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "CTLA4",
+              "resolved_symbol": "CTLA4",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "LAG3",
+              "resolved_symbol": "LAG3",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "HAVCR2",
+              "resolved_symbol": "HAVCR2",
+              "status": "exact",
+              "weight": 1.0
+            },
+            {
+              "query": "TIGIT",
+              "resolved_symbol": "TIGIT",
+              "status": "exact",
+              "weight": 1.0
+            }
+          ],
+          "label": "ZSCORE(PDCD1+CTLA4+LAG3+HAVCR2+TIGIT)",
+          "method": "zscore",
+          "name": "Exhaustion",
+          "sample_overlap": 453,
+          "scoring_population": {
+            "complete_case_barcode_count": 453,
+            "component_value_hashes": {
+              "CTLA4": "9e549af23a6fd90f6189029e585f48f5459d67cd1fac5a46eb5bc516910d8f55",
+              "HAVCR2": "809a36251cca1e138206934ea660b2be789029fe086704e8e1fb2020fbc9e9e2",
+              "LAG3": "62deb4e8a3f1952b4e6756615c71c1023b0b7bcb7f82b05db5a4563257451cf1",
+              "PDCD1": "c5180c6b4cc0c9251e1daaa0a514a19f250cb73182ba7162cd51e755e0626639",
+              "TIGIT": "7d53c9624685e164aec599d2e7616df7b8bb4feb7b9f58be34d1011b4be07841"
+            },
+            "eligible_barcode_count": 453,
+            "rule": "samples after user filters and endpoint completeness, followed by complete expression for the requested gene or every signature component, then one-expression-complete-sample-per-participant biospecimen selection",
+            "score_values_sha256": "9e2bad38d984a642b703d2269590a8ac4772593916d19d38c7b849bc8e43fe44"
+          },
+          "standardization": [
+            {
+              "center": 2.578028220461299,
+              "n": 453,
+              "resolved_symbol": "PDCD1",
+              "sample_standard_deviation": 1.7882384862300578
+            },
+            {
+              "center": 2.5988022881841686,
+              "n": 453,
+              "resolved_symbol": "CTLA4",
+              "sample_standard_deviation": 1.5914914151217345
+            },
+            {
+              "center": 3.322889681222949,
+              "n": 453,
+              "resolved_symbol": "LAG3",
+              "sample_standard_deviation": 1.9550154952656944
+            },
+            {
+              "center": 3.740667682971649,
+              "n": 453,
+              "resolved_symbol": "HAVCR2",
+              "sample_standard_deviation": 1.4296238611189036
+            },
+            {
+              "center": 2.1664884428125672,
+              "n": 453,
+              "resolved_symbol": "TIGIT",
+              "sample_standard_deviation": 1.5435259977528633
+            }
+          ]
+        }
+      ]
+    },
+    "signature_interaction_cox_models": [
+      {
+        "covariate_encoding": [],
+        "covariates": [],
+        "information_diagnostics": {
+          "caution_threshold": 10,
+          "events_per_parameter": 71,
+          "extreme_marker_estimate": false,
+          "low_information": false,
+          "n_events": 213,
+          "parameter_count": 3,
+          "penalized_sensitivity_recommended": false,
+          "severe_low_information": false,
+          "severe_threshold": 5,
+          "standard_fit_instability": false,
+          "status": "adequate",
+          "trigger_reasons": []
+        },
+        "interaction_term": {
+          "hazard_ratio": 0.9854351386208654,
+          "hr_conf_high": 1.1336956169899135,
+          "hr_conf_low": 0.8565636118511729,
+          "label": "Signature A x Signature B",
+          "log_hr": -0.014671970262195272,
+          "p_value": 0.8374337969697314,
+          "standard_error": 0.07150882633079993,
+          "term": "score_a_z:score_b_z"
+        },
+        "label": "Signature interaction",
+        "model": "signature_interaction",
+        "n_events": 213,
+        "n_patients": 453,
+        "penalized_sensitivity": {
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "penalty": 0.5,
+          "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+          "status": "not_triggered",
+          "trigger_reasons": []
+        },
+        "ph_global_p_value": 0.05585523366296145,
+        "ph_p_value": 0.07363382775134934,
+        "score_scale": "within-analysis z-score",
+        "status": "completed",
+        "terms": [
+          {
+            "hazard_ratio": 0.8199268696013144,
+            "hr_conf_high": 1.2596293628910444,
+            "hr_conf_low": 0.5337126072952317,
+            "label": "Signature A score",
+            "log_hr": -0.19854012611394647,
+            "p_value": 0.36477134139014766,
+            "standard_error": 0.21906404952125758,
+            "term": "score_a_z"
+          },
+          {
+            "hazard_ratio": 0.7929097817735143,
+            "hr_conf_high": 1.2299786800910264,
+            "hr_conf_low": 0.5111518859705713,
+            "label": "Signature B score",
+            "log_hr": -0.23204583207472929,
+            "p_value": 0.3002518010811894,
+            "standard_error": 0.22400547740296117,
+            "term": "score_b_z"
+          },
+          {
+            "hazard_ratio": 0.9854351386208654,
+            "hr_conf_high": 1.1336956169899135,
+            "hr_conf_low": 0.8565636118511729,
+            "label": "Signature A x Signature B",
+            "log_hr": -0.014671970262195272,
+            "p_value": 0.8374337969697314,
+            "standard_error": 0.07150882633079993,
+            "term": "score_a_z:score_b_z"
+          }
+        ],
+        "ties": "efron",
+        "time_varying_effect": {
+          "effect_label": "Signature A x Signature B",
+          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "method": "Prespecified two-period Cox marker effect",
+          "min_at_risk_at_split": 10,
+          "min_events_per_period": 5,
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "split_days": 730.5,
+          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "status": "not_triggered",
+          "ties": "efron",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.07363382775134934,
+          "variance": "participant-clustered robust sandwich"
+        },
+        "warnings": []
+      },
+      {
+        "covariate_encoding": {
+          "stage_ordinal": {
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "encoded_name": "stage_ordinal",
+            "mapped_patients": 407,
+            "observed_scores": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "source": "stage",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "unmapped_values": []
+          }
+        },
+        "covariates": [
+          "stage_ordinal"
+        ],
+        "information_diagnostics": {
+          "caution_threshold": 10,
+          "events_per_parameter": 47.25,
+          "extreme_marker_estimate": false,
+          "low_information": false,
+          "n_events": 189,
+          "parameter_count": 4,
+          "penalized_sensitivity_recommended": false,
+          "severe_low_information": false,
+          "severe_threshold": 5,
+          "standard_fit_instability": false,
+          "status": "adequate",
+          "trigger_reasons": []
+        },
+        "interaction_term": {
+          "hazard_ratio": 1.0514571530834038,
+          "hr_conf_high": 1.2245825711392144,
+          "hr_conf_low": 0.9028073490722355,
+          "label": "Signature A x Signature B",
+          "log_hr": 0.050176966955110015,
+          "p_value": 0.5187904049040561,
+          "standard_error": 0.0777682967232486,
+          "term": "score_a_z:score_b_z"
+        },
+        "label": "Signature interaction adjusted for ordinal stage",
+        "model": "signature_interaction_stage_adjusted",
+        "n_events": 189,
+        "n_patients": 407,
+        "penalized_sensitivity": {
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "penalty": 0.5,
+          "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+          "status": "not_triggered",
+          "trigger_reasons": []
+        },
+        "ph_global_p_value": 0.004730844821273693,
+        "ph_p_value": 0.05405865689722619,
+        "score_scale": "within-analysis z-score",
+        "status": "completed",
+        "terms": [
+          {
+            "hazard_ratio": 1.0576217301734783,
+            "hr_conf_high": 1.7133680599868328,
+            "hr_conf_low": 0.6528449725762588,
+            "label": "Signature A score",
+            "log_hr": 0.056022736588658355,
+            "p_value": 0.8199578906352566,
+            "standard_error": 0.24614652426530295,
+            "term": "score_a_z"
+          },
+          {
+            "hazard_ratio": 0.5510458800469422,
+            "hr_conf_high": 0.9027359112732193,
+            "hr_conf_low": 0.33636809849343274,
+            "label": "Signature B score",
+            "log_hr": -0.5959372064228629,
+            "p_value": 0.01796870476746391,
+            "standard_error": 0.2518474752166778,
+            "term": "score_b_z"
+          },
+          {
+            "hazard_ratio": 1.0514571530834038,
+            "hr_conf_high": 1.2245825711392144,
+            "hr_conf_low": 0.9028073490722355,
+            "label": "Signature A x Signature B",
+            "log_hr": 0.050176966955110015,
+            "p_value": 0.5187904049040561,
+            "standard_error": 0.0777682967232486,
+            "term": "score_a_z:score_b_z"
+          }
+        ],
+        "ties": "efron",
+        "time_varying_effect": {
+          "effect_label": "Signature A x Signature B",
+          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "method": "Prespecified two-period Cox marker effect",
+          "min_at_risk_at_split": 10,
+          "min_events_per_period": 5,
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "split_days": 730.5,
+          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "status": "not_triggered",
+          "ties": "efron",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.05405865689722619,
+          "variance": "participant-clustered robust sandwich"
+        },
+        "warnings": [
+          "Global proportional hazards test p < 0.05 while the signature interaction term was not flagged."
+        ]
+      },
+      {
+        "covariate_encoding": {
+          "grade_ordinal": {
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "encoded_name": "grade_ordinal",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "source": "grade",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "unmapped_values": []
+          }
+        },
+        "covariates": [
+          "grade_ordinal"
+        ],
+        "label": "Signature interaction adjusted for ordinal grade",
+        "model": "signature_interaction_grade_adjusted",
+        "n_events": 0,
+        "n_patients": 0,
+        "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+        "status": "skipped"
+      },
+      {
+        "covariate_encoding": {
+          "grade_ordinal": {
+            "coding": "Histologic grade trend: G1 through G5 map to 1 through 5.",
+            "encoded_name": "grade_ordinal",
+            "mapped_patients": 0,
+            "observed_scores": [],
+            "source": "grade",
+            "type": "ordinal_numeric",
+            "unit": "one grade increase",
+            "unmapped_values": []
+          },
+          "stage_ordinal": {
+            "coding": "Major stage trend: Stage 0, I, II, III and IV map to 0, 1, 2, 3 and 4; substages A/B/C collapse to their major stage.",
+            "encoded_name": "stage_ordinal",
+            "mapped_patients": 407,
+            "observed_scores": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "source": "stage",
+            "type": "ordinal_numeric",
+            "unit": "one major-stage increase",
+            "unmapped_values": []
+          }
+        },
+        "covariates": [
+          "stage_ordinal",
+          "grade_ordinal"
+        ],
+        "label": "Signature interaction adjusted for ordinal stage and grade",
+        "model": "signature_interaction_stage_grade_adjusted",
+        "n_events": 0,
+        "n_patients": 0,
+        "reason": "Fewer than 10 complete patients after clinical covariate filtering.",
+        "status": "skipped"
+      },
+      {
+        "covariate_encoding": {
+          "age_at_index_per_10y": {
+            "coding": "Age at index is modeled continuously after division by 10; the hazard ratio is per 10-year increase.",
+            "encoded_name": "age_at_index_per_10y",
+            "mapped_patients": 453,
+            "observed_range_years": [
+              15,
+              89
+            ],
+            "source": "age_at_index",
+            "type": "continuous_numeric",
+            "unit": "10-year increase"
+          }
+        },
+        "covariates": [
+          "age_at_index_per_10y"
+        ],
+        "information_diagnostics": {
+          "caution_threshold": 10,
+          "events_per_parameter": 53.25,
+          "extreme_marker_estimate": false,
+          "low_information": false,
+          "n_events": 213,
+          "parameter_count": 4,
+          "penalized_sensitivity_recommended": false,
+          "severe_low_information": false,
+          "severe_threshold": 5,
+          "standard_fit_instability": false,
+          "status": "adequate",
+          "trigger_reasons": []
+        },
+        "interaction_term": {
+          "hazard_ratio": 1.00862920843882,
+          "hr_conf_high": 1.1596047140916883,
+          "hr_conf_low": 0.8773100589822902,
+          "label": "Signature A x Signature B",
+          "log_hr": 0.008592189629255453,
+          "p_value": 0.9039042291519801,
+          "standard_error": 0.07116814125262709,
+          "term": "score_a_z:score_b_z"
+        },
+        "label": "Signature interaction user-adjusted for Age",
+        "model": "signature_interaction_user_adjusted",
+        "n_events": 213,
+        "n_patients": 453,
+        "penalized_sensitivity": {
+          "method": "Firth penalized partial likelihood",
+          "package": "coxphf",
+          "penalty": 0.5,
+          "reason": "The standard Cox fit had at least 10 events per fitted parameter and no instability trigger.",
+          "status": "not_triggered",
+          "trigger_reasons": []
+        },
+        "ph_global_p_value": 0.2055580845063318,
+        "ph_p_value": 0.15580536559168887,
+        "score_scale": "within-analysis z-score",
+        "status": "completed",
+        "terms": [
+          {
+            "hazard_ratio": 0.8409353499707057,
+            "hr_conf_high": 1.2990135852324036,
+            "hr_conf_low": 0.5443917375997532,
+            "label": "Signature A score",
+            "log_hr": -0.17324049476939843,
+            "p_value": 0.4348963053053467,
+            "standard_error": 0.22186412304345435,
+            "term": "score_a_z"
+          },
+          {
+            "hazard_ratio": 0.7784492202764368,
+            "hr_conf_high": 1.2100240666894106,
+            "hr_conf_low": 0.5008025916434407,
+            "label": "Signature B score",
+            "log_hr": -0.2504515174829796,
+            "p_value": 0.2657660582803502,
+            "standard_error": 0.22505095511910644,
+            "term": "score_b_z"
+          },
+          {
+            "hazard_ratio": 1.00862920843882,
+            "hr_conf_high": 1.1596047140916883,
+            "hr_conf_low": 0.8773100589822902,
+            "label": "Signature A x Signature B",
+            "log_hr": 0.008592189629255453,
+            "p_value": 0.9039042291519801,
+            "standard_error": 0.07116814125262709,
+            "term": "score_a_z:score_b_z"
+          }
+        ],
+        "ties": "efron",
+        "time_varying_effect": {
+          "effect_label": "Signature A x Signature B",
+          "estimand": "Marker hazard ratio before and after a fixed two-year follow-up split, plus the late-to-early hazard-ratio ratio.",
+          "method": "Prespecified two-period Cox marker effect",
+          "min_at_risk_at_split": 10,
+          "min_events_per_period": 5,
+          "reason": "The marker-specific proportional-hazards diagnostic was not below the prespecified 0.05 trigger.",
+          "split_days": 730.5,
+          "split_rule": "The follow-up split is fixed at 2 years (730.5 days) for every analysis and is not selected from marker values, event times or effect estimates.",
+          "split_years": 2,
+          "status": "not_triggered",
+          "ties": "efron",
+          "trigger": "Marker-specific cox.zph p < 0.05",
+          "trigger_alpha": 0.05,
+          "trigger_ph_p_value": 0.15580536559168887,
+          "variance": "participant-clustered robust sandwich"
+        },
+        "warnings": []
+      }
+    ],
+    "software_versions": {
+      "R": "R version 4.4.2 (2024-10-31)",
+      "cmprsk": "2.2.12",
+      "coxphf": "1.13.4",
+      "ggplot2": "4.0.3",
+      "jsonlite": "2.0.0",
+      "maxstat": "0.7.26",
+      "survRM2": "1.0.4",
+      "survival": "3.8.9",
+      "survminer": "0.5.2",
+      "svglite": "2.2.2"
+    },
+    "time_axis_label": "Time (months)",
+    "time_unit": "months",
+    "warnings": []
+  },
+  "notices": [
+    {
+      "category": "method",
+      "code": "zscore_run_specific_standardization",
+      "message": "Z-score signature genes are standardized among the expression-complete patients eligible in this run. Changing the endpoint or filters can change that reference population and the resulting score values; numerical z-score signature scores are not transportable across runs.",
+      "model": null,
+      "model_label": null,
+      "selected_model": false,
+      "severity": "info"
+    },
+    {
+      "category": "model",
+      "code": "model_diagnostic_caution",
+      "message": "Global proportional hazards test p < 0.05 while the signature interaction term was not flagged.",
+      "model": "signature_interaction_stage_adjusted",
+      "model_label": "Signature interaction adjusted for ordinal stage",
+      "selected_model": false,
+      "severity": "caution"
+    },
+    {
+      "category": "cohort",
+      "code": "cohort_provenance",
+      "message": "16 samples were excluded because Overall survival was not usable.",
+      "model": null,
+      "model_label": null,
+      "selected_model": false,
+      "severity": "info"
+    },
+    {
+      "category": "cohort",
+      "code": "cohort_provenance",
+      "message": "4 extra expression-complete sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority.",
+      "model": null,
+      "model_label": null,
+      "selected_model": false,
+      "severity": "info"
+    }
+  ],
+  "status": "completed",
+  "warnings": [
+    "16 samples were excluded because Overall survival was not usable.",
+    "4 extra expression-complete sample records from patients with multiple eligible barcodes were removed; one sample per patient was retained using TCGA biospecimen priority."
+  ]
+}

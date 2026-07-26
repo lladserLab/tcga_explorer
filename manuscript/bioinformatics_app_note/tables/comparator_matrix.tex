@@ -1,15 +1,24 @@
 \begin{table}[t]
 \centering
-\caption{Positioning against representative survival-analysis resources.}
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Capability matrix based on the cited publications. ``Not reported''
+means that the capability was not described in the cited paper; it is not a
+claim that no undocumented implementation exists.}
 \label{tab:comparator-matrix}
-\begin{tabularx}{\linewidth}{lXX}
+\begin{tabularx}{\linewidth}{lXXXXX}
 \toprule
-Resource & Main overlap & TCGA Explorer distinction \\
+Resource & Signature/two-marker & PH test & RMST & Cutpoints & Audited reconstruction \\
 \midrule
-GEPIA2 & TCGA/GTEx expression survival and signature analysis. & Patient-level audit bundle, PH QC, RMST and cutpoint robustness as exported outputs. \\
-cSurvival & Two-predictor survival interaction, optimal two-predictor cutoffs and gene-set survival. & Not positioned as first two-predictor tool; emphasis is auditability, endpoint provenance and robustness reporting. \\
-DoSurvive & Multi-omic log-rank, Cox, AFT and combined biomarker survival across TCGA endpoints. & Does not claim uniqueness in multivariable survival; adds hashable records, PH/RMST and cutpoint survival checks. \\
-PESSA & ssGSEA gene-set survival with median/optimal cutoffs and Cox outputs. & Simpler transparent signatures plus endpoint/sample audit, PH diagnostics, RMST and robustness summaries. \\
+GEPIA2~\citep{gepia22019} & Yes & Not reported & Not reported & Limited & Not reported \\
+KM Plotter~\citep{kmplotter2021} & Limited & Not reported & Not reported & Limited & Not reported \\
+cSurvival~\citep{csurvival2022} & Yes & Not reported & Not reported & Yes & Not reported \\
+DoSurvive~\citep{dousurvive2023} & Yes & Not reported & Not reported & Limited & Not reported \\
+PESSA~\citep{pessa2024} & Yes, ssGSEA & Yes & Not reported & Median/optimal & Not reported \\
+TCGA-TRACE & Yes & Yes & Yes & Yes & Yes \\
 \bottomrule
 \end{tabularx}
+\endgroup
 \end{table}

@@ -1,0 +1,23 @@
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Complete registered single-gene cutpoint-sensitivity panel. P denotes a primary endpoint and S a linked endpoint sensitivity. Holm counts the four prespecified grouped rules supported after within-scenario adjustment; support across all four is the primary grouped summary. Age-adj. and RMST count nominal p-values at or below 0.05. Marker PH and Global PH count diagnostics below 0.05 for the biomarker term and complete age-adjusted model, respectively. Low-info counts methods whose grouped univariable or selected adjusted Cox fit was below 10 events per parameter; Firth counts methods with at least one completed grouped penalized sensitivity. These correlated summaries are not combined into a decision rule.}
+\label{tab:single-gene-benchmark-full-overview}
+\begin{tabular}{llllrrrrrrr}
+\toprule
+Cohort & Gene & Endpoint & Role & Holm & Age-adj. & RMST & Marker PH & Global PH & Low-info & Firth \\
+\midrule
+LIHC & CDC20 & OS & P & 4 & 4 & 4 & 4 & 4 & 0 & 0 \\
+LUAD & BIRC5 & OS & P & 3 & 4 & 3 & 0 & 0 & 0 & 0 \\
+UVM & BAP1 & DSS & P & 4 & 1 & 4 & 0 & 0 & 1 & 3 \\
+SKCM & TMEM176B & OS & P & 4 & 4 & 4 & 0 & 0 & 0 & 0 \\
+LGG & EMP3 & OS & P & 4 & 4 & 4 & 3 & 3 & 0 & 1 \\
+KIRC & CA9 & OS & P & 0 & 2 & 2 & 0 & 0 & 0 & 0 \\
+BRCA & MKI67 & OS & P & 0 & 2 & 0 & 0 & 0 & 0 & 0 \\
+BRCA & MKI67 & PFI & S & 0 & 1 & 1 & 0 & 3 & 0 & 0 \\
+SKCM & PDCD1 & OS & P & 4 & 4 & 4 & 1 & 0 & 0 & 0 \\
+LUAD & CD274 & OS & P & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+LUAD & CD274 & PFI & S & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

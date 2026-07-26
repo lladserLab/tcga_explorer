@@ -1,0 +1,425 @@
+{
+  "base_url": "http://192.168.1.31:3000/tcga_explorer/",
+  "generated_at": "2026-07-26T03:10:13.454134+00:00",
+  "playwright": {
+    "image": "mcr.microsoft.com/playwright:v1.56.1-noble",
+    "version": "1.56.1"
+  },
+  "release": {
+    "commit": "ac32eb643e6c60b0281881cd879ce0d6e88b2843",
+    "dirty": true,
+    "exact_tag": null,
+    "tags_at_head": []
+  },
+  "required_checks": [
+    "landing_and_keyboard",
+    "survival_suggestions_analysis_and_download",
+    "competing_risk_analysis",
+    "compare_suggestions_preview_and_four_method_run",
+    "exploratory_session_history",
+    "paper_examples",
+    "pancancer_and_dataset",
+    "reduced_motion"
+  ],
+  "required_engines": [
+    "chromium",
+    "firefox",
+    "webkit"
+  ],
+  "results": [
+    {
+      "browser_version": "141.0.7390.37",
+      "checks": [
+        {
+          "details": {
+            "app_version": "1.0.0",
+            "cohorts": 33,
+            "release_commit": "development",
+            "release_ref": "development"
+          },
+          "duration_ms": 2713,
+          "id": "landing_and_keyboard",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_algorithm": "Ed25519",
+            "attestation_download_bytes": 1475,
+            "attestation_schema": "tcga-trace-server-attestation-v1",
+            "audit_download_bytes": 816911,
+            "external_covariate_csv_ui": "passed"
+          },
+          "duration_ms": 3394,
+          "id": "survival_suggestions_analysis_and_download",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "cif_natural_dimensions": {
+              "height": 1584,
+              "width": 1584
+            },
+            "cif_png_bytes": 82867,
+            "cohort": "TCGA-UVM",
+            "endpoint": "DSS",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "imageWidth": 326,
+              "panelScrollWidth": 326,
+              "panelWidth": 326,
+              "viewportWidth": 390
+            }
+          },
+          "duration_ms": 5351,
+          "id": "competing_risk_analysis",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "completed_cells": 4,
+            "selected_methods": [
+              "Maxstat\nSurvival-optimized cutpoint, min 15% per group",
+              "Median\nTwo balanced expression groups",
+              "Upper quartile\nTop 25% against the rest",
+              "Outer quartiles\nTop 25% against bottom 25%"
+            ]
+          },
+          "duration_ms": 2404,
+          "id": "compare_suggestions_preview_and_four_method_run",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_subject": "exploratory_session",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "sessionLabelHeight": 44,
+              "viewportWidth": 390
+            },
+            "recorded_runs": 3,
+            "report_id": "sh_89a46198568bdf7f7a9a3af0"
+          },
+          "duration_ms": 2529,
+          "id": "exploratory_session_history",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "temporal_diagnostics": 2,
+            "visible_case": "EMP3 in lower-grade glioma"
+          },
+          "duration_ms": 553,
+          "id": "paper_examples",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "dataset_csv_bytes": 6000,
+            "dataset_svg_count": 4
+          },
+          "duration_ms": 1240,
+          "id": "pancancer_and_dataset",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "animationDuration": "0.14s",
+            "scrollBehavior": "auto",
+            "transform": "none"
+          },
+          "duration_ms": 2693,
+          "id": "reduced_motion",
+          "status": "passed"
+        }
+      ],
+      "console_errors": [],
+      "duration_ms": 20991,
+      "engine": "chromium",
+      "fatal_error": null,
+      "gene_api_requests": [
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-UVM/genes?query=BAP&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        }
+      ],
+      "page_errors": [],
+      "runtime_os": "Linux 6.12.76-linuxkit arm64",
+      "schema_version": "tcga-trace-browser-engine-v1",
+      "started_at": "2026-07-26T03:10:15.116Z",
+      "status": "passed"
+    },
+    {
+      "browser_version": "142.0.1",
+      "checks": [
+        {
+          "details": {
+            "app_version": "1.0.0",
+            "cohorts": 33,
+            "release_commit": "development",
+            "release_ref": "development"
+          },
+          "duration_ms": 2858,
+          "id": "landing_and_keyboard",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_algorithm": "Ed25519",
+            "attestation_download_bytes": 1475,
+            "attestation_schema": "tcga-trace-server-attestation-v1",
+            "audit_download_bytes": 816911,
+            "external_covariate_csv_ui": "passed"
+          },
+          "duration_ms": 4244,
+          "id": "survival_suggestions_analysis_and_download",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "cif_natural_dimensions": {
+              "height": 1584,
+              "width": 1584
+            },
+            "cif_png_bytes": 82867,
+            "cohort": "TCGA-UVM",
+            "endpoint": "DSS",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "imageWidth": 326,
+              "panelScrollWidth": 326,
+              "panelWidth": 326,
+              "viewportWidth": 390
+            }
+          },
+          "duration_ms": 6227,
+          "id": "competing_risk_analysis",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "completed_cells": 4,
+            "selected_methods": [
+              "Maxstat\nSurvival-optimized cutpoint, min 15% per group",
+              "Median\nTwo balanced expression groups",
+              "Upper quartile\nTop 25% against the rest",
+              "Outer quartiles\nTop 25% against bottom 25%"
+            ]
+          },
+          "duration_ms": 3353,
+          "id": "compare_suggestions_preview_and_four_method_run",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_subject": "exploratory_session",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "sessionLabelHeight": 44,
+              "viewportWidth": 390
+            },
+            "recorded_runs": 3,
+            "report_id": "sh_a42ab0a19d163f3e3ea8e4f0"
+          },
+          "duration_ms": 2933,
+          "id": "exploratory_session_history",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "temporal_diagnostics": 2,
+            "visible_case": "EMP3 in lower-grade glioma"
+          },
+          "duration_ms": 754,
+          "id": "paper_examples",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "dataset_csv_bytes": 6000,
+            "dataset_svg_count": 4
+          },
+          "duration_ms": 1382,
+          "id": "pancancer_and_dataset",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "animationDuration": "0.14s",
+            "scrollBehavior": "auto",
+            "transform": "none"
+          },
+          "duration_ms": 2713,
+          "id": "reduced_motion",
+          "status": "passed"
+        }
+      ],
+      "console_errors": [],
+      "duration_ms": 25252,
+      "engine": "firefox",
+      "fatal_error": null,
+      "gene_api_requests": [
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-UVM/genes?query=BAP&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        }
+      ],
+      "page_errors": [],
+      "runtime_os": "Linux 6.12.76-linuxkit arm64",
+      "schema_version": "tcga-trace-browser-engine-v1",
+      "started_at": "2026-07-26T03:10:38.144Z",
+      "status": "passed"
+    },
+    {
+      "browser_version": "26.0",
+      "checks": [
+        {
+          "details": {
+            "app_version": "1.0.0",
+            "cohorts": 33,
+            "release_commit": "development",
+            "release_ref": "development"
+          },
+          "duration_ms": 2748,
+          "id": "landing_and_keyboard",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_algorithm": "Ed25519",
+            "attestation_download_bytes": 1475,
+            "attestation_schema": "tcga-trace-server-attestation-v1",
+            "audit_download_bytes": 816911,
+            "external_covariate_csv_ui": "passed"
+          },
+          "duration_ms": 16507,
+          "id": "survival_suggestions_analysis_and_download",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "cif_natural_dimensions": {
+              "height": 1584,
+              "width": 1584
+            },
+            "cif_png_bytes": 82867,
+            "cohort": "TCGA-UVM",
+            "endpoint": "DSS",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "imageWidth": 326,
+              "panelScrollWidth": 326,
+              "panelWidth": 326,
+              "viewportWidth": 390
+            }
+          },
+          "duration_ms": 10027,
+          "id": "competing_risk_analysis",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "completed_cells": 4,
+            "selected_methods": [
+              "Maxstat\nSurvival-optimized cutpoint, min 15% per group\n",
+              "Median\nTwo balanced expression groups\n",
+              "Upper quartile\nTop 25% against the rest\n",
+              "Outer quartiles\nTop 25% against bottom 25%\n"
+            ]
+          },
+          "duration_ms": 8702,
+          "id": "compare_suggestions_preview_and_four_method_run",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "attestation_subject": "exploratory_session",
+            "mobile_layout": {
+              "documentScrollWidth": 390,
+              "sessionLabelHeight": 44,
+              "viewportWidth": 390
+            },
+            "recorded_runs": 3,
+            "report_id": "sh_0409c49878d5d6584e5eaad5"
+          },
+          "duration_ms": 3394,
+          "id": "exploratory_session_history",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "temporal_diagnostics": 2,
+            "visible_case": "EMP3 in lower-grade glioma"
+          },
+          "duration_ms": 1569,
+          "id": "paper_examples",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "dataset_csv_bytes": 6000,
+            "dataset_svg_count": 4
+          },
+          "duration_ms": 1542,
+          "id": "pancancer_and_dataset",
+          "status": "passed"
+        },
+        {
+          "details": {
+            "animationDuration": "0.14s",
+            "scrollBehavior": "auto",
+            "transform": "none"
+          },
+          "duration_ms": 2874,
+          "id": "reduced_motion",
+          "status": "passed"
+        }
+      ],
+      "console_errors": [],
+      "duration_ms": 47916,
+      "engine": "webkit",
+      "fatal_error": null,
+      "gene_api_requests": [
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-UVM/genes?query=BAP&limit=20"
+        },
+        {
+          "status": 200,
+          "url": "http://192.168.1.31:3000/tcga_explorer/api/v1/cohorts/TCGA-LIHC/genes?query=CDC&limit=20"
+        }
+      ],
+      "page_errors": [],
+      "runtime_os": "Linux 6.12.76-linuxkit arm64",
+      "schema_version": "tcga-trace-browser-engine-v1",
+      "started_at": "2026-07-26T03:11:05.804Z",
+      "status": "passed"
+    }
+  ],
+  "schema_version": "tcga-trace-browser-compatibility-v1",
+  "scope": {
+    "final_contract": "Final evidence is generated only from a clean exact-tag checkout against an HTTPS deployment whose public health release commit and ref match that checkout.",
+    "webkit_note": "Playwright WebKit exercises the WebKit engine but is not an exact substitute for a manual Safari build/version check."
+  },
+  "status": "passed_provisional",
+  "tester": "Codex-release-identity-ref"
+}

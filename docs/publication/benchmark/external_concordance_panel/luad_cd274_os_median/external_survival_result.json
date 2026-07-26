@@ -1,0 +1,40 @@
+{
+  "status": "completed",
+  "contrast": "High vs Low",
+  "cutoff_method": "median",
+  "cutoff_value": 60.9405,
+  "n_patients": 501,
+  "n_events": 181,
+  "group_summary": {
+    "Low": {
+      "group": "Low",
+      "patients": 250,
+      "events": 93,
+      "median_survival_months": 50.235065919999997
+    },
+    "High": {
+      "group": "High",
+      "patients": 251,
+      "events": 88,
+      "median_survival_months": 45.336489460000003
+    }
+  },
+  "logrank": {
+    "chisq": 0.29851057263795927,
+    "degrees_of_freedom": 1,
+    "p_value": 0.58481766800305679
+  },
+  "cox": {
+    "ties": "efron",
+    "coefficient": 0.081522469622629212,
+    "standard_error": 0.14931243932869079,
+    "hazard_ratio": 1.0849375954484639,
+    "conf_low": 0.80967322883322268,
+    "conf_high": 1.4537835068521858,
+    "p_value": 0.58507570749774873
+  },
+  "software": {
+    "r_version": "R version 4.6.1 (2026-06-24)",
+    "survival_version": "3.8.6"
+  }
+}

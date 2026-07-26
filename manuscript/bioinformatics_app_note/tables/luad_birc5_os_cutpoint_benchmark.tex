@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-LUAD BIRC5 OS cutpoint-sensitivity benchmark.}
+\label{tab:luad-birc5-os-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
+\midrule
+Maxstat & 505 & 182 & 0.008 & 9.09e-06 & 0.959 & -121 & Outcome-optimized cutpoint; grouped estimates are post-selection \\
+Median & 505 & 182 & 0.002 & 1.69e-04 & 0.678 & -107 & No model-diagnostic caution recorded \\
+Upper Q & 505 & 182 & 0.092 & 0.047 & 0.933 & -52 & No model-diagnostic caution recorded \\
+Outer Q & 254 & 89 & 0.008 & 5.11e-04 & 0.598 & -113 & Middle 50\% excluded \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,16 +1,15 @@
 \begin{table}[t]
 \centering
-\caption{TCGA-LUAD CD274 OS cutpoint robustness benchmark.}
+\caption{TCGA-LUAD CD274 OS cutpoint-sensitivity benchmark.}
 \label{tab:luad-cd274-os-cutpoints}
 \begin{tabular}{lrrrrrrl}
 \toprule
-Method & n & Events & BH $p$ & Cox $p$ & Adj. $p$ & RMST $\Delta$ & Decision \\
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
 \midrule
-Maxstat & 505 & 182 & 0.334 & 0.068 & 0.251 & -282 & Fails BH \\
-Median & 505 & 182 & 0.962 & 0.962 & 0.651 & -9 & Fails BH \\
-Upper Q & 505 & 182 & 0.605 & 0.364 & 0.495 & -230 & Fails BH \\
-Outer Q & 254 & 103 & 0.962 & 0.771 & 0.978 & -155 & Fails BH \\
-75th pct. & 505 & 182 & 0.605 & 0.336 & 0.431 & -237 & Fails BH \\
+Maxstat & 505 & 182 & 1.000 & 0.104 & 0.643 & -85 & Outcome-optimized cutpoint; grouped estimates are post-selection; Raw Lau94 approximation lay outside [0,1] and was clamped \\
+Median & 505 & 182 & 1.000 & 0.662 & 0.637 & -5 & No model-diagnostic caution recorded \\
+Upper Q & 505 & 182 & 1.000 & 0.499 & 0.804 & -35 & No model-diagnostic caution recorded \\
+Outer Q & 254 & 103 & 1.000 & 0.930 & 0.919 & -9 & Middle 50\% excluded \\
 \bottomrule
 \end{tabular}
 \end{table}

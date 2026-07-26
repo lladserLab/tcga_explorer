@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\caption{Diagnostic feature-workflow cases carried forward from the original benchmark panel. They show adjusted-model, interaction and pan-cancer meta-analysis discordance rather than selected positive results.}
+\label{tab:feature-benchmark-diagnostic-summary}
+\begin{tabularx}{\linewidth}{P{1.55cm}YP{1.55cm}YY}
+\toprule
+Workflow & Inputs & Cohort, n/events & Readout & Diagnostic interpretation \\
+\midrule
+KIRC hypoxia signature & CA9, VEGFA, SLC2A1, LDHA, PGK1 & KIRC OS; 531/175 & HR per SD 0.85 (0.74-0.98); nonlinearity p=4.51e-04; continuous Cox p=0.024; adjusted p=0.016; nonlinearity p=4.51e-04; marker PH p=0.998; global PH p=0.652; grouped log-rank p=1.23e-04; RMST p=6.85e-04; 87.5 events/parameter & Continuous and grouped summaries are shown together; clinical adjustment, PH and nonlinearity remain separate diagnostics. \\
+SKCM effector x exhaustion & Effector: CD8A, GZMB, PRF1, IFNG, CXCL9, CXCL10; Exhaustion: PDCD1, CTLA4, LAG3, HAVCR2, TIGIT & SKCM OS; 453/213 & Global separation; 4 KM groups; four-group log-rank p=1.12e-06; interaction p=0.837; global PH p=0.056; 53.2 events/parameter & Four-group separation is significant, but the continuous interaction term is not. \\
+CA9 pan-cancer primary + sensitivity & CA9; primary continuous within-cohort z-score plus ordinal sensitivity & pan-cancer OS; 10183/3149 & 8/32 cohorts q below 0.10; common-scale REML HR 1.04 (1.00-1.08); 95\% PI 0.93-1.16; REML/HKSJ meta-analysis p=0.031; I2=60.7\%; Ordinal sensitivity: 26/33 cohorts evaluable; 3 selected adjusted FDR hits; stage-adjusted common-scale REML HR 1.03 (HKSJ p=0.065; 95\% PI 0.94-1.13). & The modest primary estimate attenuates under ordinal clinical sensitivity. \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{table}

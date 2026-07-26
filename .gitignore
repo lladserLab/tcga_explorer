@@ -33,3 +33,10 @@ jcga/*
 
 # Generated manuscript outputs
 manuscript/bioinformatics_app_note/build/
+
+# Local point-in-time backups are retained on the workstation, not in Git.
+release_backups/
+
+# Filled owner metadata may include private reviewer URLs or contact details.
+manuscript/bioinformatics_app_note/submission/owner_metadata*.json
+!manuscript/bioinformatics_app_note/submission/owner_metadata.template.json

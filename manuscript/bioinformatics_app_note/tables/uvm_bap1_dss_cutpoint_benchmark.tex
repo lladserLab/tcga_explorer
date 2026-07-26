@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-UVM BAP1 DSS cutpoint-sensitivity benchmark.}
+\label{tab:uvm-bap1-dss-cutpoints}
+\begin{tabular}{lrrrrrrl}
+\toprule
+Method & n & Events & Holm $p$ & Adj. $p$ & Marker PH $p$ & RMST $\Delta$ & Notes \\
+\midrule
+Maxstat & 80 & 21 & 3.06e-04 &  &  & 299 & Standard adjusted Cox failed; Outcome-optimized cutpoint; grouped estimates are post-selection; Firth adjusted sensitivity HR 0.02 (0.00-0.17), p 8.91e-07 \\
+Median & 80 & 21 & 6.17e-04 & 0.003 & 0.514 & 224 & No model-diagnostic caution recorded \\
+Upper Q & 80 & 21 & 0.002 &  &  & 245 & Standard adjusted Cox failed; Firth adjusted sensitivity HR 0.05 (0.00-0.40), p 6.98e-04 \\
+Outer Q & 40 & 10 & 5.46e-04 &  &  & 262 & Standard adjusted Cox failed; Middle 50\% excluded; Adjusted Cox 5.0 events/parameter (caution); Firth adjusted sensitivity HR 0.03 (0.00-0.22), p 6.13e-05 \\
+\bottomrule
+\end{tabular}
+\end{table}

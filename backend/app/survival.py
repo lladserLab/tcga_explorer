@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from statistics import median
 
 from app.models import Sample
 from app.schemas import AnalysisFilters
+
+
+MIN_ANALYSIS_PATIENTS = 10
+MIN_ANALYSIS_EVENTS = 5
+RMST_TAU_QUANTILE = 75.0
+RMST_TAU_CAP_DAYS = 5 * 365.25
 
 
 SAMPLE_CODE_PRIORITY = {
@@ -54,9 +60,11 @@ SAMPLE_TYPE_PRIORITY = {
 }
 
 SAMPLE_SELECTION_RULE = (
-    "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are "
-    "preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no "
-    "higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode."
+    "one expression-complete eligible RNA-seq sample per TCGA participant; clinical filters and endpoint completeness "
+    "are applied first, samples lacking the requested gene or complete signature score are removed second, and "
+    "biospecimen priority is applied last. Primary tumor or primary blood-derived cancer samples are preferred, "
+    "followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no "
+    "higher-priority expression-complete sample remains; ties are resolved by RNA analyte/portion metadata and barcode."
 )
 
 SAMPLE_SELECTION_PRIORITY_ORDER = [
@@ -76,6 +84,9 @@ class ClinicalOutcome:
     time_days: float
     event: int
     source: str
+    competing_risk_status: int | None = None
+    competing_event: int | None = None
+    competing_risk_source: str | None = None
 
 
 @dataclass(frozen=True)
@@ -93,10 +104,14 @@ class SurvivalRecord:
     gender: str | None
     race: str | None
     age_at_index: float | None
+    competing_risk_status: int | None = None
+    competing_event: int | None = None
+    competing_risk_source: str | None = None
     expression_value_a: float | None = None
     expression_value_b: float | None = None
     group_a: str | None = None
     group_b: str | None = None
+    external_covariates: dict[str, str | float | None] = field(default_factory=dict)
 
     def as_dict(self) -> dict:
         return {
@@ -111,12 +126,16 @@ class SurvivalRecord:
             "group_b": self.group_b,
             "time_days": self.time_days,
             "event": self.event,
+            "competing_risk_status": self.competing_risk_status,
+            "competing_event": self.competing_event,
+            "competing_risk_source": self.competing_risk_source,
             "sample_type": self.sample_type,
             "stage": self.stage,
             "grade": self.grade,
             "gender": self.gender,
             "race": self.race,
             "age_at_index": self.age_at_index,
+            "external_covariates": self.external_covariates,
         }
 
 
@@ -131,13 +150,15 @@ def sample_os_outcome(sample: Sample) -> ClinicalOutcome | None:
     )
 
 
-def filter_samples(
+def filter_sample_candidates(
     samples: list[Sample],
     filters: AnalysisFilters,
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
     endpoint: str = "OS",
     endpoint_label: str = "overall survival",
 ) -> tuple[list[Sample], list[str], dict]:
+    """Apply user and endpoint eligibility without choosing a biospecimen."""
+
     warnings: list[str] = []
     selected = samples
 
@@ -170,35 +191,15 @@ def filter_samples(
     if dropped:
         warnings.append(f"{dropped} samples were excluded because {endpoint_label} was not usable.")
 
-    deduplicated: dict[str, Sample] = {}
-    removed_duplicates: list[Sample] = []
-    for sample in sorted(with_endpoint, key=sample_selection_key):
-        if sample.patient_id in deduplicated:
-            removed_duplicates.append(sample)
-            continue
-        deduplicated[sample.patient_id] = sample
-    retained = list(deduplicated.values())
-    if removed_duplicates:
-        warnings.append(
-            f"{len(removed_duplicates)} extra sample records from patients with multiple eligible barcodes were removed; "
-            "one sample per patient was retained using TCGA biospecimen priority."
-        )
-
-    retained_non_tumor = [
-        sample
-        for sample in retained
-        if sample_priority(sample) >= 80
-    ]
-    if retained_non_tumor and not filters.sample_types:
-        sample_word = "sample is" if len(retained_non_tumor) == 1 else "samples are"
-        warnings.append(
-            f"{len(retained_non_tumor)} retained patient-level {sample_word} normal/control/unknown sample type because no "
-            "higher-priority tumor sample was available after user filters."
-        )
-
     summary = {
-        "rule": "tcga_biospecimen_priority_one_sample_per_patient",
+        "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
         "rule_description": SAMPLE_SELECTION_RULE,
+        "selection_order": [
+            "user_filters",
+            "endpoint_completeness",
+            "requested_expression_or_score_completeness",
+            "biospecimen_priority",
+        ],
         "priority_order": SAMPLE_SELECTION_PRIORITY_ORDER,
         "endpoint": endpoint,
         "endpoint_label": endpoint_label,
@@ -209,14 +210,131 @@ def filter_samples(
         "complete_os_samples": len(with_endpoint),
         "missing_endpoint_removed": dropped,
         "missing_os_removed": dropped,
+        "candidate_patients": len({sample.patient_id for sample in with_endpoint}),
+        "sample_type_filter_applied": bool(filters.sample_types),
+    }
+    return with_endpoint, warnings, summary
+
+
+def select_expression_complete_samples(
+    candidates: list[Sample],
+    expression_barcodes: set[str] | None,
+    *,
+    warnings: list[str] | None = None,
+    summary: dict | None = None,
+) -> tuple[list[Sample], list[str], dict]:
+    """Select one sample per patient after required-expression completeness."""
+
+    warnings = list(warnings or [])
+    summary = dict(summary or {})
+    expression_requirement_applied = expression_barcodes is not None
+    complete = (
+        [sample for sample in candidates if sample.barcode in expression_barcodes]
+        if expression_requirement_applied
+        else list(candidates)
+    )
+    complete_barcodes = {sample.barcode for sample in complete}
+    missing_expression = [
+        sample for sample in candidates if sample.barcode not in complete_barcodes
+    ]
+    candidate_patients = {sample.patient_id for sample in candidates}
+    complete_patients = {sample.patient_id for sample in complete}
+    missing_expression_patients = candidate_patients - complete_patients
+    if missing_expression:
+        warnings.append(
+            f"{len(missing_expression)} samples from "
+            f"{len({sample.patient_id for sample in missing_expression})} participants "
+            "were excluded because the requested gene or complete signature score "
+            "was unavailable."
+        )
+
+    deduplicated: dict[str, Sample] = {}
+    removed_duplicates: list[Sample] = []
+    for sample in sorted(complete, key=sample_selection_key):
+        if sample.patient_id in deduplicated:
+            removed_duplicates.append(sample)
+            continue
+        deduplicated[sample.patient_id] = sample
+    retained = list(deduplicated.values())
+
+    candidates_by_patient: dict[str, list[Sample]] = {}
+    for sample in candidates:
+        candidates_by_patient.setdefault(sample.patient_id, []).append(sample)
+    candidate_priority = {
+        patient_id: min(candidates_by_patient[patient_id], key=sample_selection_key)
+        for patient_id in complete_patients
+    }
+    expression_priority_fallbacks = [
+        sample
+        for patient_id, sample in deduplicated.items()
+        if candidate_priority[patient_id].barcode != sample.barcode
+    ]
+    if expression_priority_fallbacks:
+        warnings.append(
+            f"{len(expression_priority_fallbacks)} participants used a lower-priority "
+            "biospecimen because a higher-priority eligible candidate lacked complete "
+            "required expression."
+        )
+    if removed_duplicates:
+        warnings.append(
+            f"{len(removed_duplicates)} extra expression-complete sample records from "
+            "patients with multiple eligible barcodes were removed; one sample per "
+            "patient was retained using TCGA biospecimen priority."
+        )
+
+    retained_non_tumor = [
+        sample
+        for sample in retained
+        if sample_priority(sample) >= 80
+    ]
+    if retained_non_tumor and not summary.get("sample_type_filter_applied", False):
+        sample_word = "sample is" if len(retained_non_tumor) == 1 else "samples are"
+        warnings.append(
+            f"{len(retained_non_tumor)} retained patient-level {sample_word} normal/control/unknown sample type because no "
+            "higher-priority tumor sample was available after user filters."
+        )
+
+    summary.update({
+        "expression_requirement_applied": expression_requirement_applied,
+        "expression_complete_samples": len(complete),
+        "expression_complete_patients": len(complete_patients),
+        "missing_expression_samples_removed": len(missing_expression),
+        "missing_expression_patients_removed": len(missing_expression_patients),
+        "expression_priority_fallbacks": len(expression_priority_fallbacks),
+        "expression_priority_fallback_barcodes": [
+            sample.barcode for sample in expression_priority_fallbacks
+        ],
         "duplicate_samples_removed": len(removed_duplicates),
         "retained_patients": len(retained),
         "retained_sample_types": count_sample_types(retained),
         "removed_duplicate_sample_types": count_sample_types(removed_duplicates),
-        "sample_type_filter_applied": bool(filters.sample_types),
-    }
+    })
 
     return retained, warnings, summary
+
+
+def filter_samples(
+    samples: list[Sample],
+    filters: AnalysisFilters,
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    endpoint_label: str = "overall survival",
+) -> tuple[list[Sample], list[str], dict]:
+    """Backward-compatible clinical/endpoint filtering and sample selection."""
+
+    candidates, warnings, summary = filter_sample_candidates(
+        samples,
+        filters,
+        endpoint_by_patient=endpoint_by_patient,
+        endpoint=endpoint,
+        endpoint_label=endpoint_label,
+    )
+    return select_expression_complete_samples(
+        candidates,
+        None,
+        warnings=warnings,
+        summary=summary,
+    )
 
 
 def sample_selection_key(sample: Sample) -> tuple[int, int, int, str]:
@@ -353,6 +471,11 @@ def _apply_time_ceiling(outcome: ClinicalOutcome, max_time_days: float) -> Clini
         time_days=max_time_days,
         event=0,
         source=outcome.source,
+        competing_risk_status=(
+            0 if outcome.competing_risk_status is not None else None
+        ),
+        competing_event=0 if outcome.competing_event is not None else None,
+        competing_risk_source=outcome.competing_risk_source,
     )
 
 
@@ -365,6 +488,9 @@ def build_survival_records(
     endpoint: str = "OS",
     precomputed_cutpoint: dict | None = None,
     max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
 ) -> tuple[list[SurvivalRecord], list[str], dict]:
     samples_with_expression = [sample for sample in samples if sample.barcode in expression_by_barcode]
     values = [expression_by_barcode[sample.barcode] for sample in samples_with_expression]
@@ -393,15 +519,71 @@ def build_survival_records(
                 group=label,
                 time_days=float(outcome.time_days),
                 event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
                 sample_type=sample.sample_type,
                 stage=sample.stage,
                 grade=sample.grade,
                 gender=sample.gender,
                 race=sample.race,
                 age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
             )
         )
     return records, group_levels, cutpoint_details
+
+
+def build_continuous_survival_records(
+    samples: list[Sample],
+    expression_by_barcode: dict[str, float],
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
+) -> list[SurvivalRecord]:
+    """Build the expression-complete population before any cutpoint exclusions."""
+    records: list[SurvivalRecord] = []
+    for sample in samples:
+        if sample.barcode not in expression_by_barcode:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None:
+            continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
+        records.append(
+            SurvivalRecord(
+                patient_id=sample.patient_id,
+                sample_barcode=sample.barcode,
+                endpoint=endpoint,
+                expression_value=expression_by_barcode[sample.barcode],
+                group="All eligible",
+                time_days=float(outcome.time_days),
+                event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
+                sample_type=sample.sample_type,
+                stage=sample.stage,
+                grade=sample.grade,
+                gender=sample.gender,
+                race=sample.race,
+                age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
+            )
+        )
+    return records
 
 
 def build_combined_survival_records(
@@ -412,6 +594,9 @@ def build_combined_survival_records(
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
     endpoint: str = "OS",
     max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
 ) -> tuple[list[SurvivalRecord], list[str], dict]:
     samples_with_expression = [
         sample
@@ -447,12 +632,20 @@ def build_combined_survival_records(
                 group_b=label_b,
                 time_days=float(outcome.time_days),
                 event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
                 sample_type=sample.sample_type,
                 stage=sample.stage,
                 grade=sample.grade,
                 gender=sample.gender,
                 race=sample.race,
                 age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
             )
         )
 
@@ -465,6 +658,50 @@ def build_combined_survival_records(
     ]
     cutpoint_details = combined_cutpoint_details(method, details_a, details_b, levels_a, levels_b)
     return records, group_levels, cutpoint_details
+
+
+def select_rmst_tau(
+    samples: list[Sample],
+    expression_barcodes: set[str],
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    max_time_days: float | None = None,
+) -> dict:
+    """Choose one cutpoint-independent RMST horizon from the eligible cohort."""
+    times: list[float] = []
+    for sample in samples:
+        if sample.barcode not in expression_barcodes:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None or outcome.time_days <= 0:
+            continue
+        time_days = float(outcome.time_days)
+        if max_time_days is not None:
+            time_days = min(time_days, float(max_time_days))
+        times.append(time_days)
+
+    if len(times) < MIN_ANALYSIS_PATIENTS:
+        return {
+            "status": "unavailable",
+            "reason": "Fewer than 10 eligible patients were available to define a fixed RMST horizon.",
+            "source_n_patients": len(times),
+        }
+
+    tau_days = min(
+        RMST_TAU_CAP_DAYS,
+        percentile(sorted(times), RMST_TAU_QUANTILE),
+    )
+    return {
+        "status": "available",
+        "tau_days": tau_days,
+        "source_n_patients": len(times),
+        "rule": (
+            "minimum of 5 years and the 75th percentile of observed endpoint times "
+            "in the unstratified, expression-complete eligible cohort"
+        ),
+        "quantile": RMST_TAU_QUANTILE / 100.0,
+        "cap_days": RMST_TAU_CAP_DAYS,
+        "cutpoint_independent": True,
+    }
 
 
 def combined_cutpoint_details(
@@ -490,7 +727,7 @@ def combined_cutpoint_details(
 
 
 def validate_records(records: list[SurvivalRecord], endpoint_label: str = "survival endpoint") -> None:
-    if len(records) < 10:
+    if len(records) < MIN_ANALYSIS_PATIENTS:
         raise ValueError(f"The analysis requires at least 10 patients with usable {endpoint_label} and expression.")
     groups: dict[str, int] = {}
     for record in records:
@@ -500,5 +737,9 @@ def validate_records(records: list[SurvivalRecord], endpoint_label: str = "survi
     small = {group: n for group, n in groups.items() if n < 5}
     if small:
         raise ValueError(f"Each group must contain at least 5 patients; undersized groups: {small}.")
-    if sum(record.event for record in records) == 0:
-        raise ValueError("No survival events remain after applying filters.")
+    n_events = sum(record.event for record in records)
+    if n_events < MIN_ANALYSIS_EVENTS:
+        raise ValueError(
+            f"The analysis requires at least {MIN_ANALYSIS_EVENTS} survival events after applying filters; "
+            f"{n_events} remain."
+        )

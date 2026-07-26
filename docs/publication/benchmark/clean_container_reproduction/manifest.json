@@ -1,0 +1,149 @@
+{
+  "files": {
+    "benchmark_results.raw.json": {
+      "bytes": 23818,
+      "sha256": "2b5cf7df1bd412474830206323e10f362cd76399e0746d46adf9aad4668c457f"
+    },
+    "capsules/single_gene/Dockerfile.reproduce": {
+      "bytes": 945,
+      "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
+    },
+    "capsules/single_gene/REPRODUCE.md": {
+      "bytes": 1209,
+      "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
+    },
+    "capsules/single_gene/audit_report.json": {
+      "bytes": 678585,
+      "sha256": "7d6c99284e27300e38e02629f394feb96cfcaf6419b44950d626fd80add81b19"
+    },
+    "capsules/single_gene/clinical_covariates.R": {
+      "bytes": 7375,
+      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+    },
+    "capsules/single_gene/cox_diagnostics.R": {
+      "bytes": 9065,
+      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+    },
+    "capsules/single_gene/input.json": {
+      "bytes": 300220,
+      "sha256": "7b1270af24562b6370728987b184014a82647a2fa57b5fff07697c309e1f2f9c"
+    },
+    "capsules/single_gene/km_analysis.R": {
+      "bytes": 66975,
+      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+    },
+    "capsules/single_gene/metrics.json": {
+      "bytes": 40167,
+      "sha256": "0fe710bfbe55c70cdd27d06f0680e581f4165cee4b7da8f39b8097c57517d33f"
+    },
+    "capsules/single_gene/renv.lock": {
+      "bytes": 204337,
+      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+    },
+    "capsules/single_gene/reproduction_manifest.json": {
+      "bytes": 2881,
+      "sha256": "63418e15f6138f5a6aee0ffff46d4376512903f4d635f91e90ebff6afdfa77a1"
+    },
+    "capsules/single_gene/rerun_analysis.R": {
+      "bytes": 7241,
+      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+    },
+    "capsules/two_signatures/Dockerfile.reproduce": {
+      "bytes": 945,
+      "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
+    },
+    "capsules/two_signatures/REPRODUCE.md": {
+      "bytes": 1209,
+      "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
+    },
+    "capsules/two_signatures/audit_report.json": {
+      "bytes": 158712,
+      "sha256": "840e7352ed1774ed85729d0aa2e72c9f8b309381daa84f942eba99ab4815bbec"
+    },
+    "capsules/two_signatures/clinical_covariates.R": {
+      "bytes": 7375,
+      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+    },
+    "capsules/two_signatures/cox_diagnostics.R": {
+      "bytes": 9065,
+      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+    },
+    "capsules/two_signatures/input.json": {
+      "bytes": 37372,
+      "sha256": "94f068fec39ab96efe8ab45227344d6428fd5f43e8d8e9564d4a399ee05b4b8b"
+    },
+    "capsules/two_signatures/km_analysis.R": {
+      "bytes": 66975,
+      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+    },
+    "capsules/two_signatures/metrics.json": {
+      "bytes": 24974,
+      "sha256": "0ba1182af39e8895cc117fa92b6dde192d1658cf5f24d509eb90237bf303e37f"
+    },
+    "capsules/two_signatures/renv.lock": {
+      "bytes": 204337,
+      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+    },
+    "capsules/two_signatures/reproduction_manifest.json": {
+      "bytes": 2880,
+      "sha256": "298d37c00486a595fa898102cd62dd2f895811206cce1385da8a5b58c2aa6d9a"
+    },
+    "capsules/two_signatures/rerun_analysis.R": {
+      "bytes": 7241,
+      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+    },
+    "capsules/weighted_signature/Dockerfile.reproduce": {
+      "bytes": 945,
+      "sha256": "54bb48ba510bee5d9fddb36bb0956050e14ab1631795c63e88443db8593b15bc"
+    },
+    "capsules/weighted_signature/REPRODUCE.md": {
+      "bytes": 1209,
+      "sha256": "31239d8d6cd1b710ee1daf4321c063be93ce7aa2a93e118f1097ede7a8d320e3"
+    },
+    "capsules/weighted_signature/audit_report.json": {
+      "bytes": 194798,
+      "sha256": "3738b36c20d6941338fa48691729a0b88d5626cf78e9913294d6d2867385b11e"
+    },
+    "capsules/weighted_signature/clinical_covariates.R": {
+      "bytes": 7375,
+      "sha256": "ed49c434268121f7aaf6c6a6fcc00eddff401d2939ae88cdbd772387621b51dc"
+    },
+    "capsules/weighted_signature/cox_diagnostics.R": {
+      "bytes": 9065,
+      "sha256": "f01e6c1c70af068c7b6b3e5df4860cfb3408dfd1ff84be3c907763fe93da9ab7"
+    },
+    "capsules/weighted_signature/input.json": {
+      "bytes": 66890,
+      "sha256": "d6e3336148a152a4e2f8c1d24e84491d0228a5bb3c5be371003092b9de435cca"
+    },
+    "capsules/weighted_signature/km_analysis.R": {
+      "bytes": 66975,
+      "sha256": "de1be7c241a6ea295436b5c4ea9b4e0c6877d0c3549395df9513c9c4db9854c5"
+    },
+    "capsules/weighted_signature/metrics.json": {
+      "bytes": 32125,
+      "sha256": "af877155ddac24bd359c67140aab3f527af8509671799baa2cd5f173344b89b9"
+    },
+    "capsules/weighted_signature/renv.lock": {
+      "bytes": 204337,
+      "sha256": "55b3c634a29e4f25ae990be5211cee0d50a4b47fdb82d5ab8cb154b07e3de2f1"
+    },
+    "capsules/weighted_signature/reproduction_manifest.json": {
+      "bytes": 2880,
+      "sha256": "b10848e985b6f1f31b63111d28a303f9dc25abe6061d43342acabfc032596dfa"
+    },
+    "capsules/weighted_signature/rerun_analysis.R": {
+      "bytes": 7241,
+      "sha256": "95c8ab9309eec34c71fa0cbcdea68eec5ff66e96dbdf7b5655e742bee35f3dbc"
+    },
+    "summary.csv": {
+      "bytes": 1178,
+      "sha256": "603f76cad07f327208b76b4c7efbab2e97f15a6a891f43d13622aa90bcb17d7c"
+    },
+    "summary.md": {
+      "bytes": 1584,
+      "sha256": "1070d663fd5c0618ee561d246d743d0eaf8dd65022ca079b429e55889319401d"
+    }
+  },
+  "schema_version": "tcga-trace-clean-reproduction-manifest-v1"
+}

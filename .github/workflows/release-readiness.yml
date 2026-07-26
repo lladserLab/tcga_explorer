@@ -1,0 +1,130 @@
+name: Release readiness
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_ref:
+        description: Exact pushed release tag to validate
+        required: true
+        type: string
+      deployment_url:
+        description: HTTPS deployment of that exact tag
+        required: true
+        default: https://apps.cienciavida.org/tcga_explorer/
+        type: string
+      tester:
+        description: Name recorded in browser evidence
+        required: true
+        default: GitHub Actions release gate
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-readiness-${{ inputs.release_ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      RELEASE_REF: ${{ inputs.release_ref }}
+      DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+      RELEASE_TESTER: ${{ inputs.tester }}
+    steps:
+      - name: Check out exact release tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.release_ref }}
+          fetch-depth: 0
+
+      - name: Verify clean exact tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_REF" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]]
+          test -z "$(git status --porcelain --untracked-files=all)"
+          test "$(git describe --tags --exact-match HEAD)" = "$RELEASE_REF"
+          git diff --check
+
+      - name: Scan exact release source for secrets
+        run: >-
+          docker run --rm
+          -v "$PWD:/repo:ro"
+          zricethezav/gitleaks@sha256:e1b35e12a8c6fa8901f060459cfb6b2fc4c484d3afbe3b029733a3bbfab07055
+          git --config /repo/.gitleaks.toml --redact --no-banner /repo
+
+      - name: Verify deployed tag in Chromium, Gecko and WebKit
+        run: >-
+          python3 scripts/publication/run_browser_compatibility.py
+          --base-url "$DEPLOYMENT_URL"
+          --tester "$RELEASE_TESTER"
+          --final-release
+
+      - name: Build backend image
+        run: docker compose build backend
+
+      - name: Run backend and publication tests
+        run: |
+          docker compose run --rm --no-deps \
+            -v "$PWD/backend/tests:/app/tests:ro" \
+            backend pytest -q /app/tests
+          docker compose run --rm --no-deps \
+            -v "$PWD:/workspace:ro" \
+            -w /workspace \
+            backend pytest -q -p no:cacheprovider scripts/publication/tests scripts/tests
+
+      - name: Run frontend tests and production build
+        run: |
+          docker run --rm \
+            -v "$PWD:/workspace:ro" \
+            -w /tmp \
+            node:22-alpine \
+            sh -lc 'cp -R /workspace/frontend /tmp/frontend && cd /tmp/frontend && npm ci --silent && npm test'
+          docker build -f frontend/Dockerfile -t tcga-trace-frontend-release .
+
+      - name: Build manuscript and enforce editorial contract
+        run: make -C manuscript/bioinformatics_app_note all compliance
+
+      - name: Enforce final owner metadata and frozen evidence
+        run: |
+          python3 scripts/publication/check_project_identity.py
+          python3 scripts/publication/check_submission_metadata.py --strict
+          python3 scripts/publication/run_browser_compatibility.py --check-only --require-final
+          python3 scripts/publication/run_clean_reproduction_benchmark.py --check-only
+          python3 scripts/publication/run_statistical_calibration.py --check-only
+          python3 scripts/publication/run_runtime_benchmark.py --check-only
+          python3 scripts/publication/check_submission_artifacts.py --strict-owner-metadata
+
+      - name: Build and verify reviewer archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          archive="dist/tcga-trace-${RELEASE_REF}-review.tar.gz"
+          python3 scripts/publication/build_submission_archive.py \
+            --strict-owner-metadata \
+            --output "$archive"
+          python3 scripts/publication/verify_submission_archive.py "$archive"
+          sha256sum \
+            "$archive" \
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-application-note.pdf \
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-oup-preview.pdf \
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-supplement.pdf \
+            > dist/SHA256SUMS
+
+      - name: Upload validated release package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tcga-trace-${{ inputs.release_ref }}-submission
+          path: |
+            dist/
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-application-note.pdf
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-oup-preview.pdf
+            manuscript/bioinformatics_app_note/build/tcga-trace-bioinformatics-supplement.pdf
+            manuscript/bioinformatics_app_note/submission/browser_compatibility_record.md
+            docs/publication/benchmark/browser_compatibility/
+          if-no-files-found: error
+          retention-days: 90

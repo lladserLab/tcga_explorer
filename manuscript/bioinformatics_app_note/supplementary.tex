@@ -2,7 +2,10 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{natbib}
 \usepackage{setspace}
 \usepackage{tabularx}
 
@@ -16,93 +19,448 @@
 \doublespacing
 
 \renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 
-\title{Supplementary Material for TCGA Explorer}
+\title{Supplementary Material for TCGA-TRACE}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{Supplementary Benchmark Reproduction}
+\section*{Scope and Reproduction}
 
-The benchmark artifacts in this supplement were generated from a running local
-TCGA Explorer stack at \texttt{http://localhost:3000/tcga\_explorer}. The
-single-gene cutpoint suite can be reproduced with:
+This supplement documents a retrospective software evaluation. It does not
+constitute prognostic-marker validation, causal inference or a prospective
+sample-size design. Endpoint availability requires at least 10 linked
+participants and five events; adjusted models are screened again for five
+events and 10 complete participants after covariate filtering. The exported audit reports
+retain participant selection, exclusions, group and event counts, covariate
+completeness and model diagnostics in accordance with the reporting intent of
+REMARK \citep{remark2012}. Audit schema v4 stores separate patient records and
+SHA-256 hashes for the full continuous population and the cutpoint-specific
+grouped population and binds the complete report to a detached server receipt.
+Every Cox model also records its fitted parameter count and events per
+parameter. Values below 10 are flagged as low-information and values below 5
+as severe. Low-information, unstable, non-finite or extreme standard fits add
+a \texttt{coxphf} Firth sensitivity with penalty 0.5, profile
+penalized-likelihood inference and Breslow ties; this remains separate from the
+standard Efron-ties Cox estimate \citep{heinzeSchemper2001}.
+
+Unless a user filter restricts sample types, selection prioritizes primary
+tumor or primary blood-derived cancer, recurrent tumor, additional new primary,
+metastatic tumor, tumor-derived cells, normal tissue and control samples, in
+that order, after samples without the requested gene or complete signature score
+have been removed; RNA analyte/portion metadata and barcode resolve ties. The
+audit records participants for whom a lower-priority expression-complete sample
+replaced a higher-priority candidate lacking the requested score. Stage 0--IV
+and grade 1--5 are encoded as numeric ordinal trends after substage collapse.
+An exact user-selected complete-case model can include age per 10 years,
+ordinal stage or grade, and categorical GDC gender or race. Unknown and
+nonstandard categories become missing. Fixed stage/grade fits remain
+auxiliary; an unavailable requested model is not replaced by another
+adjustment.
+
+The frozen benchmarks are generated through the public HTTP interface with:
 
 \begin{verbatim}
 scripts/publication/run_single_gene_benchmark_suite.py
-\end{verbatim}
-
-The feature-level workflow benchmarks can be reproduced with:
-
-\begin{verbatim}
 scripts/publication/run_feature_benchmarks.py
+scripts/publication/run_reproducibility_benchmark.py
+scripts/publication/run_server_attestation_benchmark.py --check-only
+scripts/publication/run_clean_reproduction_benchmark.py --build --platform native
+scripts/publication/run_runtime_benchmark.py
+scripts/publication/capture_reviewer_screenshots.py
 \end{verbatim}
 
-Tracked benchmark outputs include compact API responses, summary tables,
-endpoint metadata, audit hashes and patient-record SHA-256 values. Full audit
-bundles and patient-level exports remain local analysis artifacts and are not
-tracked in git.
+The marker panel was assembled after exploratory triage on 23 July 2026 and is
+therefore not presented as prospectively selected biomarker validation. Before
+subsequent regeneration, the exact 11 scenarios, literature anchors, endpoint
+roles and change-control rule were frozen in
+\path{docs/publication/benchmark/scenario_registry_v1.json}. OS is the default
+primary endpoint; UVM BAP1 DSS is the registered disease-specific exception.
+BRCA MKI67 PFI and LUAD CD274 PFI are endpoint sensitivities linked to OS
+parents and cannot replace those parents because of a more favourable result.
+The registry's exact SHA-256 is copied into every scenario metadata file.
 
-\section*{Supplementary Comparator Matrix}
+For every two-group run, the RMST horizon is defined without group labels as
+the smaller of five years and the 75th percentile of observed endpoint times in
+the unstratified, expression-complete eligible cohort. Both groups must support
+the horizon and retain at least five participants at risk. Sensitivity
+estimates use 0.75, 0.90 and 1.00 times that fixed horizon; reported differences
+are comparison minus reference (high minus low for standard two-group runs).
 
-\begin{table}[h]
+\section*{Competing-Risk Estimands}
+
+TCGA-CDR \texttt{ExtraEndpoints} columns encode DSS, DFI and PFI as
+\texttt{0=censored}, \texttt{1=event of interest} and
+\texttt{2=endpoint-specific competing death}. For DSS these are index-cancer
+death and other-cause death; for DFI they are documented recurrence and death
+before recurrence; for PFI they are progression/death with tumour and death
+without preceding progression. Kaplan--Meier and Cox outputs censor code 2 at
+its recorded time and therefore retain an event-free/cause-specific
+interpretation. Companion cumulative-incidence functions retain code 2,
+compare groups with Gray's test \citep{gray1988}, and report pointwise
+Aalen-variance intervals and numbers at risk at one, three and five years.
+Values with fewer than five at risk remain visible with a support caution.
+
+Grouped and continuous Fine--Gray models estimate subdistribution HRs for code
+1 while retaining code 2 in the risk-set construction
+\citep{fineGray1999}. They use the requested exact complete-case adjustment
+and the same available auxiliary stage/grade specifications as Cox, and report
+model-specific participants, endpoint events, competing events, fitted
+parameters, events per parameter, coding and contrasts. Cause-specific HRs and
+subdistribution HRs are not interchangeable. The exact source columns,
+patient-level status, CIF/Gray/Fine--Gray output, plots, package version and R
+helper are retained in methodology, audit and standalone reproduction
+artifacts.
+
+\section*{AI Assistance Disclosure}
+
+Detailed AI-assistance disclosure pending independent author rewrite and verification.
+
+\section*{Comparison with Existing Resources}
+
+The comparison is restricted to capabilities described in peer-reviewed papers
+or current official interfaces. It does not use basic survival analysis,
+two-predictor analysis, ssGSEA or PH testing as novelty claims. In particular,
+PESSA reports continuous Cox models and \texttt{cox.zph} Schoenfeld tests
+\citep{pessa2024}, and cSurvival implements joint analysis and optimized
+cutoffs for two continuous predictors \citep{csurvival2022}.
+
+\begin{table}[H]
 \centering
-\caption{Extended positioning against representative survival-analysis
-resources.}
+\begingroup
+\setstretch{1.0}
+\footnotesize
+\renewcommand{\arraystretch}{1.0}
+\caption{Evidence-based positioning against representative web resources. The
+right column states the narrower reporting function evaluated for TCGA-TRACE,
+not an assertion that a comparator lacks all provenance or downloads.}
 \label{tab:supp-comparator-matrix}
 \begin{tabularx}{\linewidth}{lXX}
 \toprule
-Resource & Confirmed strengths & Gap targeted by TCGA Explorer \\
+Resource & Established capability & TCGA-TRACE comparison point \\
 \midrule
-GEPIA2 & TCGA/GTEx expression, survival maps, gene/isoform/signature analysis
-and API support. & Patient-level audit bundle, PH diagnostics, RMST and
-cutpoint robustness as exported outputs. \\
-cSurvival & Two genomic predictors, optimal cutoffs for two continuous
-predictors, gene-set survival and cell-line integration. & Cited as prior art;
-TCGA Explorer emphasizes endpoint provenance, auditability, PH diagnostics,
-RMST and robustness panels. \\
-DoSurvive & Multi-omic biomarker survival, log-rank, Cox, AFT, four survival
-endpoint types and combined effects. & TCGA Explorer does not claim uniqueness
-in multivariable survival; it adds hashable patient-level provenance and
-RMST/cutpoint robustness outputs. \\
-PESSA & ssGSEA pathway activation scores, median/optimal cutoffs, Cox models,
-238 datasets, 51 cancer types and 13 survival outcomes. & TCGA Explorer uses
-simpler auditable signatures and adds sample-selection audit, endpoint QC,
-PH diagnostics and RMST. \\
-UALCAN & TCGA/CPTAC expression, subgroup expression and survival
-visualizations. & Does not center the workflow on exported survival provenance
-and model diagnostics. \\
-KM Plotter & Large-scale biomarker survival screening across mRNA, miRNA,
-protein and DNA assays. & Screening-oriented; not centered on TCGA-CDR endpoint
-provenance, PH diagnostics, RMST or cutpoint robustness. \\
-UCSC Xena & Flexible cancer genomics browser, data hubs and Kaplan-Meier
-survival analysis. & Reproducibility depends on manual user workflow rather
-than a single exported audit object. \\
-cBioPortal & Broad cancer genomics exploration, group comparisons and survival
-analysis. & General portal rather than a transcriptomic survival robustness and
-audit workflow. \\
-TCGAbiolinks & Programmable TCGA data acquisition and analysis workflows. &
-Requires coding; TCGA Explorer standardizes an interactive audit artifact. \\
-TCGAplot & R package for TCGA pan-cancer analysis and visualization. &
-Programmable package rather than a web workflow with a survival robustness
-contract and exported audit bundle. \\
+GEPIA2 & TCGA/GTEx expression, survival maps and gene/signature
+analysis~\citep{gepia22019}. & One machine-verifiable bundle joining the exact
+eligible cohort, expression components, diagnostics and result hashes. \\
+cBioPortal & Multidimensional cancer-genomics exploration, survival analysis,
+public APIs and persistent sessions~\citep{cbioportal2012,cbioportalApi2026}. &
+Used here as a reproducible external TCGA cross-pipeline comparator; shared TCGA
+origin is not independent validation. \\
+cSurvival & Two-predictor interaction, optimized two-predictor cutoffs and
+gene-set survival~\citep{csurvival2022}. & These are prior art; TCGA-TRACE tests
+reconstruction and integrates TCGA-CDR/sample-selection provenance with RMST
+and cutpoint panels. \\
+DoSurvive & Single and combined multi-omic biomarkers, log-rank, Cox, AFT and
+four endpoint types~\citep{dousurvive2023}. & Multi-biomarker and endpoint
+breadth are prior art; the evaluated difference is the server-signed,
+reconstructable run record. \\
+PESSA & ssGSEA, median/optimal grouping, continuous and grouped Cox, and
+Schoenfeld PH tests across 238 datasets~\citep{pessa2024}. & PH and gene-set
+survival are prior art; TCGA-TRACE records source-expression hashes, scoring
+components, selected GDC identifiers and RMST. \\
+KM Plotter & Large-scale screening across RNA, protein and DNA
+assays~\citep{kmplotter2021,kmplotterWeb2026}. & TCGA-TRACE is narrower in data
+breadth and centers each TCGA run on endpoint/sample provenance and executable
+audit verification. \\
 \bottomrule
 \end{tabularx}
+\endgroup
 \end{table}
 
-\section*{Supplementary Single-Gene Cutpoint Benchmarks}
+\section*{Paper Examples and Feature Definitions}
 
-\input{tables/kirc_ca9_cutpoint_benchmark}
-\input{tables/brca_mki67_os_cutpoint_benchmark}
-\input{tables/brca_mki67_pfi_cutpoint_benchmark}
-\input{tables/skcm_pdcd1_os_cutpoint_benchmark}
-\input{tables/luad_cd274_os_cutpoint_benchmark}
-\input{tables/luad_cd274_pfi_cutpoint_benchmark}
+The Paper Examples page reads the same registered frozen artifacts summarized
+below. The
+11 single-gene cases are \path{LIHC/CDC20/OS},
+\path{LUAD/BIRC5/OS}, \path{UVM/BAP1/DSS},
+\path{SKCM/TMEM176B/OS}, \path{LGG/EMP3/OS},
+\path{KIRC/CA9/OS}, \path{BRCA/MKI67/OS},
+\path{BRCA/MKI67/PFI}, \path{SKCM/PDCD1/OS},
+\path{LUAD/CD274/OS} and \path{LUAD/CD274/PFI}. The six broader workflows
+are \path{ACC/BUB1B-PINK1/OS}, \path{UVM/BAP1xPRAME/DSS},
+\path{PAN-CANCER/BIRC5/OS}, \path{KIRC/HYPOXIA/OS},
+\path{SKCM/EFFECTORxEXHAUSTION/OS} and
+\path{PAN-CANCER/CA9/OS}. Thus, Tables S4--S6 cover all 17 web examples,
+including null and discordant outputs; the complete per-method records remain
+in the accompanying CSV and JSON files.
 
-\section*{Supplementary Feature Benchmarks}
+All examples use log2(TPM + 1). Mean and weighted signatures are complete-case
+averages of raw transformed expression. Z-score signatures standardize each
+gene among the endpoint-complete, expression-complete participants in the run
+and use \(\sum_g w_g z_{ig}/\sum_g |w_g|\). These compact scores test
+workflow behaviour and are not substitutes for pathway-activity methods such as
+ssGSEA. The ACC contrast is an RNA-seq analogue of a published qRT-PCR score,
+not a replication of its assay or threshold \citep{fragoso2012bub1b}. The UVM
+gene-expression groups likewise do not replace BAP1 immunohistochemistry or a clinical PRAME
+classifier \citep{han2023bap1prame}.
+
+Pan-cancer cohort rows retain the Cox HR per within-cohort score SD for
+descriptive comparison. These effects are not pooled. For single-gene, mean
+and weighted scores, the standardized coefficient and standard error are
+divided by that cohort's score SD to recover the algebraically equivalent
+effect per one shared input-score unit. Only effects with the same endpoint and
+adjustment family enter REML synthesis with HKSJ inference; a 95\% prediction
+interval is reported for at least three cohorts. Z-score signatures are
+standardized inside each cohort and therefore have no transportable raw score
+unit; their pooled estimate is intentionally unavailable.
+
+\input{tables/feature_signature_definitions}
+
+\section*{Executable Audit Benchmark}
+
+The verifier recomputes participant, scoring, result and artifact hashes;
+reconstructs single-gene, weighted or crossed-signature scores from audited
+components; and re-executes the frozen R input. Each two-group export additionally carries
+that input, the exact R engine and helpers, a standalone runner,
+\texttt{renv.lock}, a Dockerfile fixed to an immutable
+\texttt{rocker/r-ver} digest and instructions. Three representative capsules
+were run with a read-only root and capsule, disabled network and no application
+source, TCGA matrix or database; only temporary and output directories were
+writable. Native arm64 and locally emulated amd64 produced 6/6 core-result
+matches under the recorded quantity-specific
+\(\mathrm{atol}+\mathrm{rtol}\times\max(|x|,|y|)\) policy, with exact matching
+for counts and categorical fields. An independent GitHub-hosted Linux/amd64 job
+repeats this contract. Internal check counts describe coverage within three
+frozen analyses and are not independent replications. Request, participant,
+scoring and source-data mutations changed the reproducibility hash; plot and
+methods mutations remained
+outside that hash but failed artifact checksums. The threat model is accidental
+drift, corruption or incomplete transfer for the internal hashes alone.
+
+Audit schema v4 adds a detached Ed25519 receipt that signs the exact audit byte
+count, SHA-256, schema and recorded reproducibility hash. The private key is
+stored in a persistent server volume outside the application images; the
+corresponding key ID and raw public key are available through the HTTPS API.
+The frozen BAP1/UVM DSS receipt verified against its archived public key. Two
+negative controls were then applied: changing a generation-time field caused
+the exact-report binding to fail, and recomputing both the altered report
+SHA-256 and canonical payload SHA-256 still failed Ed25519 verification because
+the original signature could not be recomputed. This extends the threat model
+to an exporter without the server private key, conditional on trusting the
+HTTPS or independently archived key fingerprint. It does not establish
+scientific correctness, prespecification, append-only time, or protection
+against server-key compromise.
+
+\input{tables/reproducibility_benchmark}
+
+\section*{Prespecified Multiverse Contract}
+
+Pipeline \texttt{prespecified-multiverse-family-v1.1} freezes a Cartesian
+endpoint-by-scoring-by-cutpoint grid before execution, with a maximum of 72
+specifications. Its primary continuous family contains each unique endpoint
+and scoring combination once, even when several cutpoints reuse the same
+expression-complete population. Its grouped sensitivity family contains every
+declared endpoint, scoring and cutpoint combination. BH and Bonferroni
+corrections are computed independently within the two families. For maxstat,
+the Lau94 selection-adjusted rank-test p-value enters grouped multiplicity;
+the grouped HR, confidence interval and RMST remain explicitly
+post-selection.
+
+The parent ledger stores every planned specification, including failures and
+endpoint-QC exclusions, with the normalized request hash, child analysis ID,
+child audit hash and status. Its family hash binds the declared dimensions,
+data and pipeline versions, and ledger. The export contains result JSON,
+continuous and grouped CSV tables, an SVG specification curve, ledger JSON,
+audit JSON/HTML, parameter-specific methodology and a ZIP bundle. It computes
+no retained/not-retained verdict, and marker-term and global PH diagnostics
+remain interpretation fields. The ledger is scoped to the declared
+multiverse; it does not imply that unrelated ad hoc browser runs were
+prespecified.
+
+The browser integration test declares TCGA-LIHC CDC20 OS with single-gene
+scoring and median plus upper-quartile cutpoints. It requires 2/2 planned
+grouped cells, one deduplicated continuous reference, visible family-specific
+q-values, a rendered curve, the complete ledger and no horizontal page
+overflow at 390 pixels. This is a software-contract test, not biomarker
+validation.
+
+\section*{Exploratory Session-History Contract}
+
+The optional browser history is disabled by default and remains local until
+export. It stores server job identifiers, timestamps, status and compact design
+labels, but not patient records or uploaded covariate-row values. A user may
+export up to 200 selected events. The backend resolves the exact requests and
+results from those job identifiers, retains repeated execution events and
+deduplicates exact hypotheses.
+
+Continuous Cox, grouped cutpoint and two-signature interaction tests form
+separate post hoc BH and Bonferroni families. Multiverse and pan-cancer jobs
+retain their internal correction and are referenced without entering these
+families again. Failed, expired, missing or non-terminal sources remain in the
+ledger with their status and, when excluded, a reason. JSON, run and hypothesis
+CSVs, methodology,
+ledger, audit HTML/JSON and a signed receipt state that the report covers only
+the selected export and cannot establish that no other analyses occurred.
+
+\section*{Continuous and Cutpoint Diagnostics}
+
+Each of the 11 scenarios first fits one cutpoint-independent continuous Cox
+model over all eligible expression-complete participants. Expression is
+standardized within the analysis, so the primary effect is an HR per one score
+standard deviation. A three-degree-of-freedom restricted cubic spline uses
+knots at the 5th, 35th, 65th and 95th expression percentiles; a
+likelihood-ratio test compares it with the linear model and the effect profile
+uses median expression as reference. BH correction is applied separately to
+the 11 primary linear tests and the 11 nonlinearity tests.
+Six linear tests and two nonlinearity tests (UVM BAP1 and KIRC CA9) had
+suite-family BH \(q<0.05\). These counts summarize distinct prespecified
+families and are not combined into a decision rule.
+
+The same scenarios are crossed with four nonredundant two-group rules:
+maxstat, median, upper quartile and outer quartiles. The custom
+percentile and three-group tertile options remain available in the application
+but were excluded from this frozen two-group panel to avoid a redundant
+publication comparison. Holm adjustment is applied within each
+marker--endpoint scenario to these four dependent sensitivities. Maxstat
+contributes its Lau94 selection-adjusted rank-test p-value; the other rules
+contribute their log-rank p-values. Lau94 values are bounded to \([0,1]\), with
+the raw approximation and a clamping flag retained; two null-like scenarios
+required this bound. Each row reports the within-scenario Holm p-value,
+univariable and prespecified age-adjusted Cox estimates, fixed-horizon RMST,
+marker-term PH, global PH and, when
+applicable, the selection-adjusted maxstat rank-test p-value. No composite
+retention rule is applied because log-rank, Cox and RMST are correlated
+summaries of the same outcomes, whereas PH evaluates a model assumption. A
+marker-term PH caution modifies interpretation of the HR but does not exclude
+the analysis; a global-only caution may arise from another covariate. For each
+model with marker-term \texttt{cox.zph} \(p<0.05\), a prespecified diagnostic
+splits follow-up at two years (730.5 days) and estimates marker HRs for
+0--2 years and \(>2\) years plus their ratio. The split is never selected from
+expression, event times or effects. The counting-process Cox fit uses Efron
+ties and participant-clustered robust variance and requires at least five
+events in each period and 10 participants at risk at two years; otherwise its
+status and support failure are exported. This diagnostic is not a primary
+test, replacement estimand or retention criterion.
+Downstream p-values are not presented as a separate multiplicity-controlled
+confirmatory family. Maxstat-grouped HRs, confidence intervals and RMST
+comparisons remain post-selection. The selected adjusted estimate is the exact
+age model; no stage/grade fallback is substituted when it is not evaluable.
+Fixed stage, grade and stage-plus-grade models remain in the raw output as
+auxiliary sensitivities.
+Parameter counts, events per parameter and any triggered Firth estimate are
+retained in the machine-readable per-method records. UVM BAP1 triggered three
+grouped Firth sensitivities after non-finite standard intervals, and LGG EMP3
+maxstat triggered one because the standard marker estimate exceeded the
+prespecified extreme-effect threshold.
+
+\input{tables/single_gene_benchmark_full_overview}
+
+To compare maxstat with a cutpoint-independent reference on a common scale,
+the continuous log-HR per SD was multiplied by the observed difference in
+group-mean expression measured in SD units for each split. The resulting
+continuous-implied group HR was compared with the grouped HR by their absolute
+log-HR ratio. This is a descriptive amplification diagnostic and does not
+correct the grouped estimate or interval for selection. UVM BAP1 maxstat was
+not included because its standard grouped Cox estimate was non-finite. The
+complete diagnostic remains available as a machine-readable CSV; its compact
+scenario-level amplification column is reported in Supplementary Table S4.
+
+The registered literature anchors cover CDC20/LIHC, BIRC5/LUAD, BAP1/UVM,
+EMP3/LGG, CA9/KIRC, MKI67/BRCA, PDCD1/SKCM, TMEM176B/SKCM and CD274/LUAD
+\citep{lai2022cdc20,cao2019birc5,vanEssen2014bap1,wang2020emp3,
+tostain2010ca9,petrelli2015ki67,miao2020pdcd1,tmem176bSkcm2022,
+chen2020pdl1luad}. These cases are software stress tests rather than external
+replications. The
+complete four-row estimates for every scenario, including thresholds,
+confidence intervals, fixed-\(\tau\) RMST sensitivity and hashes, are provided
+as machine-readable benchmark files. In TCGA-SKCM, separate all-eligible,
+primary-only and metastatic-only runs for PDCD1 and TMEM176B used separate
+three-test BH families for continuous Cox and grouped log-rank results. For
+both markers, the all-eligible and metastatic-only effects had \(q<0.05\) in
+both families, whereas primary-only effects did not. This demonstrates why
+sample composition is preserved as an explicit sensitivity setting rather than
+an implicit preprocessing choice.
+
+\section*{Signature and Pan-Cancer Diagnostics}
+
+Tables S5--S6 preserve all six non-single-gene examples. They separate global
+group differences from continuous interaction terms and primary pan-cancer
+effects from ordinal clinical sensitivity families. Availability-selected
+stage/grade effects are not pooled because they mix model definitions. In the
+three-case panel prespecified on 23 July 2026, official cBioPortal PanCancer
+Atlas API snapshots accessed on 25 July 2026 were frozen before median-split OS
+analysis~\citep{cbioportal2012,cbioportalApi2026}. PDCD1/SKCM agreed in direction
+and nominal support: cBioPortal HR 0.57 (95\% CI 0.43--0.76; \(p=8.45\times
+10^{-5}\)) versus TCGA-TRACE HR 0.53 (0.40--0.69; \(p=4.59\times10^{-6}\)).
+CA9/KIRC agreed in protective direction but not nominal support: 0.81
+(0.60--1.10; \(p=0.177\)) versus 0.68 (0.51--0.92; \(p=0.013\)); the latter's
+four-cutpoint Holm value was 0.0504. CD274/LUAD was unsupported in both despite
+point estimates on opposite sides of one: 1.08 (0.81--1.45; \(p=0.585\))
+versus 0.99 (0.74--1.33; \(p=0.962\)). PanCancer Atlas RSEM and GDC STAR-count
+TPM, clinical OS versus TCGA-CDR, sample sets and releases differ, so these are
+cross-pipeline checks rather than replications or independent validation. The
+older KIRC CA9 median-split KM Plotter record likewise agreed in direction but
+not nominal significance~\citep{kmplotterWeb2026}.
 
 \input{tables/feature_benchmark_summary}
+\input{tables/feature_benchmark_diagnostic_summary}
+
+\begingroup
+\setstretch{1.0}
+\section*{Null Calibration and Known-Truth Simulations}
+
+Calibration targeted the revised evidence profile, not the removed binary
+retention rule. Expression was permuted 2,000 times in the frozen TCGA-LIHC
+CDC20 OS population (365 participants; 130 events), preserving endpoint
+records and a prespecified 1,091-day RMST horizon. Four known-truth scenarios
+each used 2,000 datasets of \(n=300\): null; linear PH with HR 1.5 per SD;
+no effect before time 2.5 followed by HR 2; and U-shaped log hazard
+\(\log(1.8)(x^2-1)\). Every replicate refitted linear Cox, spline
+nonlinearity, marker-term \texttt{cox.zph}, fixed-horizon RMST and four grouped
+methods. Within-replicate Holm used the Lau94 p-value for maxstat. Wilson intervals
+quantify Monte Carlo uncertainty.
+
+In the observed and simulated null experiments, linear Cox, spline and marker
+PH rejection remained near 5\%; grouped-family rejection was 3.2--4.0\%.
+Naive maxstat rejected 38.2--39.6\%, versus 1.8--2.4\% with Lau94. Power was
+99.2\% for linear Cox under linear PH; the PH diagnostic rejected 88.2\% under
+the delayed effect, and the spline test rejected 100\% under the U-shaped
+effect. Under observed permutation, median-split log-rank and Cox
+\(-\log_{10}p\) values correlated 1.000; their correlations with RMST were
+0.664 and 0.665. These are therefore related summaries, while PH modifies
+interpretation. The benchmark includes replicate-level data, source hashes,
+seeds, versions and the complete design.
+
+\input{tables/statistical_calibration}
+\endgroup
+
+\begingroup
+\setstretch{1.0}
+\section*{Runtime and Concurrency Benchmark}
+
+The public v1 asynchronous API was benchmarked from submission through the
+first terminal job response on a Mac13,2 with Apple M1 Ultra, 20 logical CPUs
+and 64\,GiB host memory. Docker Engine 29.4.1 exposed 20 CPUs and 7.75\,GiB to
+the arm64 stack. A unique display-only title or session label forced each
+uncached result without changing its statistical specification; this was not
+an operating-system page-cache or fresh data-import benchmark. The exact
+single-analysis request was then resubmitted to measure the completed-job
+cache.
+
+All jobs in the run shared one isolated client session and remained subject to
+the public contract: two global workers, queue capacity 50, five active jobs
+per client, and request limits of 25 batch analyses and 72 multiverse cells.
+The two-job probe observed both workers running and 2.53\,s of execution
+overlap. Batch children execute serially within one worker slot. Queue and
+compute intervals came from server timestamps; wall time was measured by the
+client. Peak memory is the observed aggregate backend-plus-worker Docker
+cgroup usage sampled approximately once per second, so sub-second allocator
+peaks may be missed. The raw JSON, CSV and checksum manifest bind the workload
+definitions, service limits, source commit, pipeline versions and data
+snapshot.
+
+\input{tables/runtime_concurrency_benchmark}
+\endgroup
+
+\clearpage
+\begingroup
+\singlespacing
+\small
+\bibliographystyle{plainnat}
+\bibliography{references}
+\endgroup
 
 \end{document}

@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-23T20:51:37Z",
+  "title": "Design System: TCGA-TRACE",
+  "extensions": {
+    "colorMeta": {
+      "evidence-cyan": {
+        "role": "primary",
+        "displayName": "Evidence Signal Cyan",
+        "canonical": "oklch(43.5% 0.083 218)",
+        "tonalRamp": [
+          "oklch(15% 0.083 218)",
+          "oklch(25% 0.083 218)",
+          "oklch(35% 0.083 218)",
+          "oklch(43.5% 0.083 218)",
+          "oklch(56% 0.083 218)",
+          "oklch(69% 0.083 218)",
+          "oklch(82% 0.083 218)",
+          "oklch(94% 0.083 218)"
+        ]
+      },
+      "evidence-ink": {
+        "role": "neutral",
+        "displayName": "Evidence Ink",
+        "canonical": "oklch(24% 0.018 252)",
+        "tonalRamp": [
+          "oklch(15% 0.018 252)",
+          "oklch(24% 0.018 252)",
+          "oklch(35% 0.018 252)",
+          "oklch(46% 0.018 252)",
+          "oklch(58% 0.018 252)",
+          "oklch(70% 0.018 252)",
+          "oklch(83% 0.018 252)",
+          "oklch(95% 0.018 252)"
+        ]
+      },
+      "evidence-ink-strong": {
+        "role": "neutral",
+        "displayName": "Strong Evidence Ink",
+        "canonical": "oklch(17% 0.02 252)",
+        "tonalRamp": [
+          "oklch(15% 0.02 252)",
+          "oklch(17% 0.02 252)",
+          "oklch(31% 0.02 252)",
+          "oklch(44% 0.02 252)",
+          "oklch(57% 0.02 252)",
+          "oklch(70% 0.02 252)",
+          "oklch(83% 0.02 252)",
+          "oklch(95% 0.02 252)"
+        ]
+      },
+      "grid-canvas": {
+        "role": "neutral",
+        "displayName": "Grid Canvas",
+        "canonical": "oklch(96.5% 0.006 238)",
+        "tonalRamp": [
+          "oklch(15% 0.006 238)",
+          "oklch(27% 0.006 238)",
+          "oklch(40% 0.006 238)",
+          "oklch(53% 0.006 238)",
+          "oklch(66% 0.006 238)",
+          "oklch(79% 0.006 238)",
+          "oklch(90% 0.006 238)",
+          "oklch(96.5% 0.006 238)"
+        ]
+      },
+      "paper-surface": {
+        "role": "neutral",
+        "displayName": "Paper Surface",
+        "canonical": "oklch(99% 0.003 245)",
+        "tonalRamp": [
+          "oklch(15% 0.003 245)",
+          "oklch(27% 0.003 245)",
+          "oklch(40% 0.003 245)",
+          "oklch(53% 0.003 245)",
+          "oklch(66% 0.003 245)",
+          "oklch(79% 0.003 245)",
+          "oklch(91% 0.003 245)",
+          "oklch(99% 0.003 245)"
+        ]
+      },
+      "instrument-line": {
+        "role": "neutral",
+        "displayName": "Instrument Line",
+        "canonical": "oklch(86% 0.011 240)",
+        "tonalRamp": [
+          "oklch(15% 0.011 240)",
+          "oklch(27% 0.011 240)",
+          "oklch(39% 0.011 240)",
+          "oklch(51% 0.011 240)",
+          "oklch(63% 0.011 240)",
+          "oklch(75% 0.011 240)",
+          "oklch(86% 0.011 240)",
+          "oklch(95% 0.011 240)"
+        ]
+      },
+      "warning-amber": {
+        "role": "tertiary",
+        "displayName": "Warning Amber",
+        "canonical": "oklch(64% 0.13 70)",
+        "tonalRamp": [
+          "oklch(15% 0.13 70)",
+          "oklch(26% 0.13 70)",
+          "oklch(38% 0.13 70)",
+          "oklch(50% 0.13 70)",
+          "oklch(64% 0.13 70)",
+          "oklch(75% 0.13 70)",
+          "oklch(86% 0.13 70)",
+          "oklch(95% 0.13 70)"
+        ]
+      },
+      "danger-rust": {
+        "role": "tertiary",
+        "displayName": "Danger Rust",
+        "canonical": "oklch(49% 0.12 32)",
+        "tonalRamp": [
+          "oklch(15% 0.12 32)",
+          "oklch(26% 0.12 32)",
+          "oklch(37% 0.12 32)",
+          "oklch(49% 0.12 32)",
+          "oklch(61% 0.12 32)",
+          "oklch(73% 0.12 32)",
+          "oklch(85% 0.12 32)",
+          "oklch(95% 0.12 32)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Journal Display",
+        "purpose": "Page titles and the product name only."
+      },
+      "headline": {
+        "displayName": "Instrument Headline",
+        "purpose": "Major workflow and panel headings."
+      },
+      "body": {
+        "displayName": "Research Body",
+        "purpose": "Controls, methods context and dense evidence."
+      },
+      "label": {
+        "displayName": "Parameter Label",
+        "purpose": "Compact status and parameter labels."
+      },
+      "identifier": {
+        "displayName": "Trace Identifier",
+        "purpose": "Cohort codes, versions and pipeline identifiers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "instrument-surface",
+        "value": "0 0 0 1px oklch(20% 0.02 250 / 0.075), 0 1px 2px -1px oklch(20% 0.02 250 / 0.08), 0 14px 32px -28px oklch(20% 0.02 250 / 0.22)",
+        "purpose": "Structural boundary and low ambient depth for panels and controls."
+      },
+      {
+        "name": "instrument-hover",
+        "value": "0 0 0 1px oklch(20% 0.02 250 / 0.12), 0 2px 8px -5px oklch(20% 0.02 250 / 0.16), 0 22px 44px -32px oklch(20% 0.02 250 / 0.28)",
+        "purpose": "Fine-pointer feedback for interactive surfaces."
+      },
+      {
+        "name": "anchored-popover",
+        "value": "0 0 0 1px oklch(20% 0.02 250 / 0.1), 0 18px 52px -26px oklch(20% 0.02 250 / 0.32)",
+        "purpose": "Depth for cohort and help popovers."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Entering elements and responsive UI feedback."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "purpose": "Loading signals and movement already on screen."
+      },
+      {
+        "name": "page-acquire",
+        "value": "220ms",
+        "purpose": "Analytical page content after navigation."
+      },
+      {
+        "name": "anchored-popover",
+        "value": "130ms exit / 190ms enter",
+        "purpose": "Interruptible help and cohort popovers."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-mobile",
+        "value": "560px"
+      },
+      {
+        "name": "mobile-tablet",
+        "value": "860px"
+      },
+      {
+        "name": "single-column-shell",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Evidence-channel action with calibrated press feedback.",
+      "html": "<button class=\"ds-button-primary\">Run analysis</button>",
+      "css": ".ds-button-primary { min-height: 44px; border: 0; border-radius: 6px; padding: 0 14px; background: var(--accent, oklch(43.5% 0.083 218)); color: oklch(99% 0.003 245); font: 760 14px/1.2 var(--font-sans, system-ui); transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-button-primary:hover { background: var(--accent-strong, oklch(34% 0.084 220)); } .ds-button-primary:focus-visible { outline: 2px solid var(--accent, oklch(43.5% 0.083 218)); outline-offset: 3px; } .ds-button-primary:active { transform: scale(0.96); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "description": "Quiet command on a paper surface.",
+      "html": "<button class=\"ds-button-secondary\">Methods</button>",
+      "css": ".ds-button-secondary { min-height: 44px; border: 0; border-radius: 6px; padding: 0 14px; background: oklch(98.2% 0.004 245); color: var(--accent-strong, oklch(34% 0.084 220)); font: 760 14px/1.2 var(--font-sans, system-ui); box-shadow: 0 0 0 1px oklch(20% 0.02 250 / 0.075), 0 1px 2px -1px oklch(20% 0.02 250 / 0.08); transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-button-secondary:hover { box-shadow: 0 0 0 1px oklch(20% 0.02 250 / 0.12), 0 2px 8px -5px oklch(20% 0.02 250 / 0.16); } .ds-button-secondary:focus-visible { outline: 2px solid var(--accent, oklch(43.5% 0.083 218)); outline-offset: 3px; } .ds-button-secondary:active { transform: scale(0.96); }"
+    },
+    {
+      "name": "Research Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "High-contrast parameter entry with an explicit focus ring.",
+      "html": "<label class=\"ds-field\"><span>Gene symbols</span><input placeholder=\"TP53, KRAS, EGFR\" /></label>",
+      "css": ".ds-field { display: grid; gap: 7px; color: oklch(38% 0.02 248); font: 780 13px/1.2 var(--font-sans, system-ui); } .ds-field input { min-height: 44px; border: 1px solid oklch(76.5% 0.019 240); border-radius: 6px; padding: 9px 11px; background: oklch(99% 0.003 245); color: oklch(17% 0.02 252); font: 400 14px/1.2 var(--font-sans, system-ui); outline: none; transition: border-color 150ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-field input:focus { border-color: var(--accent, oklch(43.5% 0.083 218)); box-shadow: 0 0 0 3px oklch(43.5% 0.083 218 / 0.24); }"
+    },
+    {
+      "name": "Parameter Selection",
+      "kind": "custom",
+      "description": "Selected method with a square acquisition indicator.",
+      "html": "<button class=\"ds-parameter selected\"><strong>Median</strong><span>Two balanced expression groups</span></button>",
+      "css": ".ds-parameter { position: relative; min-height: 62px; display: grid; gap: 3px; width: 100%; border: 0; border-radius: 6px; padding: 10px 28px 10px 12px; background: oklch(98.5% 0.003 245); color: oklch(17% 0.02 252); text-align: left; box-shadow: 0 0 0 1px oklch(20% 0.02 250 / 0.075); } .ds-parameter strong { font: 820 13px/1.2 var(--font-sans, system-ui); } .ds-parameter span { color: oklch(51% 0.018 248); font: 400 12px/1.35 var(--font-sans, system-ui); } .ds-parameter::after { content: ''; position: absolute; top: 11px; right: 11px; width: 6px; height: 6px; border-radius: 1px; background: var(--accent, oklch(43.5% 0.083 218)); box-shadow: 0 0 0 3px var(--accent-soft, oklch(92.8% 0.026 218)); } .ds-parameter.selected { background: linear-gradient(180deg, oklch(99% 0.003 245), var(--accent-soft, oklch(92.8% 0.026 218))); box-shadow: inset 0 0 0 1px var(--accent, oklch(43.5% 0.083 218)); } .ds-parameter:focus-visible { outline: 2px solid var(--accent, oklch(43.5% 0.083 218)); outline-offset: 3px; }"
+    },
+    {
+      "name": "Navigation Item",
+      "kind": "nav",
+      "description": "Dark-rail navigation with a calibrated scientific icon and horizontal active trace.",
+      "html": "<button class=\"ds-nav selected\"><span><strong>Compare</strong><small>Genes x cutpoints</small></span></button>",
+      "css": ".ds-nav { position: relative; min-height: 58px; width: 236px; display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: 11px; border: 0; border-radius: 6px; padding: 9px 10px; background: transparent; color: oklch(94% 0.008 248); text-align: left; } .ds-nav span { display: grid; gap: 2px; } .ds-nav strong { font: 760 13px/1.15 var(--font-sans, system-ui); } .ds-nav small { color: oklch(72% 0.019 246); font: 680 11px/1.2 var(--font-sans, system-ui); } .ds-nav::after { content: ''; position: absolute; right: 10px; bottom: 0; left: 10px; height: 1px; background: var(--accent, oklch(43.5% 0.083 218)); transform: scaleX(0.2); transform-origin: left; opacity: 0; transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1), transform 180ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-nav.selected { background: oklch(100% 0 0 / 0.1); box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 0.13); } .ds-nav.selected::after { opacity: 1; transform: scaleX(1); } .ds-nav:focus-visible { outline: 2px solid var(--accent, oklch(43.5% 0.083 218)); outline-offset: 3px; }"
+    },
+    {
+      "name": "Scientific Icon",
+      "kind": "custom",
+      "description": "Structural glyph inside a calibrated frame with an acquisition microtrace.",
+      "html": "<span class=\"ds-scientific-icon\"><svg aria-hidden=\"true\"></svg><span class=\"ds-signal\"><i></i><i></i><i></i></span></span>",
+      "css": ".ds-scientific-icon { position: relative; width: 36px; height: 36px; display: inline-grid; place-items: center; overflow: hidden; border-radius: 4px; background: var(--accent-soft, oklch(92.8% 0.026 218)); box-shadow: inset 0 0 0 1px oklch(43.5% 0.083 218 / 0.13); color: var(--accent-strong, oklch(34% 0.084 220)); } .ds-signal { position: absolute; right: 4px; bottom: 4px; height: 6px; display: inline-flex; align-items: end; gap: 1px; } .ds-signal i { width: 1px; height: 4px; background: currentColor; opacity: .34; transform: scaleY(.38); transform-origin: bottom; transition: transform 170ms cubic-bezier(.2,0,0,1), opacity 170ms cubic-bezier(.2,0,0,1), filter 170ms cubic-bezier(.2,0,0,1); }"
+    },
+    {
+      "name": "Instrument Panel",
+      "kind": "card",
+      "refersTo": "instrument-panel",
+      "description": "Nearly square paper surface with a calibration corner.",
+      "html": "<section class=\"ds-panel\"><h2>Dataset</h2><p>Choose one cancer cohort and one or more RNA gene symbols.</p></section>",
+      "css": ".ds-panel { position: relative; width: 390px; min-height: 150px; border-radius: 4px; padding: 20px; background: oklch(99% 0.003 245); color: oklch(24% 0.018 252); box-shadow: 0 0 0 1px oklch(20% 0.02 250 / 0.075), 0 1px 2px -1px oklch(20% 0.02 250 / 0.08), 0 14px 32px -28px oklch(20% 0.02 250 / 0.22); } .ds-panel::before { content: ''; position: absolute; top: 8px; left: 8px; width: 11px; height: 11px; background: linear-gradient(var(--accent, oklch(43.5% 0.083 218)), var(--accent, oklch(43.5% 0.083 218))) 0 0 / 9px 1px no-repeat, linear-gradient(var(--accent, oklch(43.5% 0.083 218)), var(--accent, oklch(43.5% 0.083 218))) 0 0 / 1px 9px no-repeat; opacity: 0.48; } .ds-panel h2 { margin: 0; color: oklch(17% 0.02 252); font: 780 19px/1.18 var(--font-sans, system-ui); } .ds-panel p { margin: 8px 0 0; color: oklch(51% 0.018 248); font: 400 14px/1.45 var(--font-sans, system-ui); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Traceable Research Instrument",
+    "overview": "TCGA-TRACE should feel like a calibrated scientific instrument placed on a quiet laboratory bench. The gridded paper canvas, journal-like headings, legible controls and patient-level metrics communicate rigor before decoration. The interface is dense because the work is dense, but every screen preserves a clear sequence from setup to evidence to provenance. Personality comes from a restrained analytical trace: small calibration corners, one evidence signal color, original scientific icon frames, tabular numerals and brief acquisition motion.",
+    "keyCharacteristics": [
+      "Evidence remains the visual foreground.",
+      "One muted evidence color connects every analytical module.",
+      "Structural icons combine familiar glyphs with calibrated frames and acquisition microtraces.",
+      "Major surfaces are square, quiet and calibrated.",
+      "Motion explains acquisition, location, loading or completion.",
+      "Methodological context stays beside the parameter it affects."
+    ],
+    "rules": [
+      {
+        "name": "The One Channel Rule",
+        "body": "One evidence signal color controls navigation, selection and focus throughout the product. Modules never change the interface accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Evidence Rule",
+        "body": "Color may classify state or analytical context. It may not imply biological significance that is absent from the statistics.",
+        "section": "colors"
+      },
+      {
+        "name": "The Journal Heading Rule",
+        "body": "Serif type is reserved for page-level titles and the product name. Buttons, labels, tables and parameters always use the sans family.",
+        "section": "typography"
+      },
+      {
+        "name": "The Stable Number Rule",
+        "body": "Dynamic metrics and numeric table cells always use tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Calibrated Surface Rule",
+        "body": "Major panels use a restrained 4px corner and one small calibration corner. Rounded floating cards are forbidden.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Flat Data Rule",
+        "body": "Tables, metric strips and evidence matrices stay flat. Depth is reserved for interaction and layering.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep evidence, uncertainty and model diagnostics visible.",
+      "Do use exactly one evidence signal color for selection and focus.",
+      "Do preserve visible keyboard focus, 40px to 44px targets and WCAG 2.2 AA contrast.",
+      "Do use tabular numerals in metrics and numeric tables.",
+      "Do animate only state, location, acquisition, loading or completion.",
+      "Do keep mobile pages free of horizontal overflow at 320px and wider."
+    ],
+    "donts": [
+      "Don't turn the app into a generic SaaS dashboard.",
+      "Don't use marketing-style hero layouts or landing-page composition.",
+      "Don't imitate hospital or electronic-health-record visual language.",
+      "Don't use neon genomics aesthetics, decorative gradients or glowing biological imagery.",
+      "Don't create decorative card grids or cards inside cards.",
+      "Don't add gratuitous motion, bounce, elastic easing or animations over 300ms for ordinary UI state changes.",
+      "Don't hide statistical assumptions behind simplified scores.",
+      "Don't use color as the only signal of significance, availability or failure.",
+      "Don't use colored side-stripe borders, gradient text or decorative glassmorphism."
+    ]
+  }
+}

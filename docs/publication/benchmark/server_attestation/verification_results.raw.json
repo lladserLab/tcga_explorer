@@ -1,0 +1,348 @@
+{
+  "schema_version": "tcga-trace-server-attestation-benchmark-v1",
+  "status": "passed",
+  "design": {
+    "positive_control": "Verify the exact frozen audit bytes against the detached receipt and independently archived Ed25519 public key.",
+    "report_replacement_control": "Alter an audit field outside the internal reproducibility hash while retaining the original receipt; exact-report binding must fail.",
+    "unsigned_recomputation_control": "Alter the audit, recompute its SHA-256 and the canonical payload SHA-256, but retain the original Ed25519 signature; all recomputable digest checks pass while signature verification must fail.",
+    "trust_model": {
+      "covered": "Server origin and exact audit-report bytes, provided the public key was obtained from the declared HTTPS issuer or matched to an independently archived fingerprint.",
+      "excluded": "Scientific correctness, user prespecification, append-only publication time, server-key compromise and a malicious server that legitimately signs a new report."
+    }
+  },
+  "subject": {
+    "type": "survival_analysis",
+    "id": "ba68bc76e27641268a6566d72324c789"
+  },
+  "issuer": "https://apps.cienciavida.org/tcga_explorer",
+  "issued_at": "2026-07-26T01:18:52.911638+00:00",
+  "audit_report": {
+    "schema_version": "tcga-trace-analysis-audit-v4",
+    "bytes": 258301,
+    "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
+    "reproducibility_hash": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
+    "receipt_binding": {
+      "filename": "audit_report.json",
+      "bytes": 258301,
+      "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
+      "schema_version": "tcga-trace-analysis-audit-v4",
+      "reproducibility_hash": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+    }
+  },
+  "public_key": {
+    "key_id": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+    "fingerprint_sha256": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+    "algorithm": "Ed25519",
+    "format": "raw",
+    "encoding": "base64url-no-padding",
+    "created_at": "2026-07-26T01:12:50.457497+00:00"
+  },
+  "receipt": {
+    "schema_version": "tcga-trace-server-attestation-v1",
+    "signed_payload_sha256": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
+    "sha256": "47550e15252b3d3ab6ae46363e3a8ada2ea313b509b5671af11ae5f07c22915e"
+  },
+  "frozen_files": {
+    "audit_report.json": {
+      "bytes": 258301,
+      "sha256": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+    },
+    "attestation_receipt.json": {
+      "bytes": 1475,
+      "sha256": "47550e15252b3d3ab6ae46363e3a8ada2ea313b509b5671af11ae5f07c22915e"
+    },
+    "public_key.json": {
+      "bytes": 499,
+      "sha256": "b746cbca647d523813f7e7c41f2b60f700c4ad316e7c02501292fa8388cf2981"
+    }
+  },
+  "acceptance_assertions": {
+    "exact_report_passes": true,
+    "altered_report_is_rejected": true,
+    "recomputed_unsigned_fields_do_not_forge_signature": true
+  },
+  "verification": {
+    "exact_report": {
+      "status": "passed",
+      "checks": [
+        {
+          "name": "receipt_schema",
+          "passed": true,
+          "detail": "tcga-trace-server-attestation-v1"
+        },
+        {
+          "name": "signature_algorithm",
+          "passed": true,
+          "detail": "Ed25519"
+        },
+        {
+          "name": "canonicalization",
+          "passed": true,
+          "detail": "tcga-trace-canonical-json-v1"
+        },
+        {
+          "name": "key_id",
+          "passed": true,
+          "detail": {
+            "receipt": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "key_document": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "issuer",
+          "passed": true,
+          "detail": {
+            "receipt": "https://apps.cienciavida.org/tcga_explorer",
+            "key_document": "https://apps.cienciavida.org/tcga_explorer"
+          }
+        },
+        {
+          "name": "signed_payload_sha256",
+          "passed": true,
+          "detail": {
+            "observed": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
+            "expected": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee"
+          }
+        },
+        {
+          "name": "public_key_fingerprint",
+          "passed": true,
+          "detail": {
+            "observed": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "expected": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "ed25519_signature",
+          "passed": true,
+          "detail": "valid"
+        },
+        {
+          "name": "audit_report_bytes",
+          "passed": true,
+          "detail": {
+            "observed": 258301,
+            "expected": 258301
+          }
+        },
+        {
+          "name": "audit_report_sha256",
+          "passed": true,
+          "detail": {
+            "observed": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0",
+            "expected": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+          }
+        },
+        {
+          "name": "audit_report_json",
+          "passed": true,
+          "detail": "valid object"
+        },
+        {
+          "name": "audit_schema_version",
+          "passed": true,
+          "detail": {
+            "observed": "tcga-trace-analysis-audit-v4",
+            "expected": "tcga-trace-analysis-audit-v4"
+          }
+        },
+        {
+          "name": "audit_reproducibility_hash",
+          "passed": true,
+          "detail": {
+            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
+            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+          }
+        }
+      ]
+    },
+    "altered_report": {
+      "status": "failed",
+      "checks": [
+        {
+          "name": "receipt_schema",
+          "passed": true,
+          "detail": "tcga-trace-server-attestation-v1"
+        },
+        {
+          "name": "signature_algorithm",
+          "passed": true,
+          "detail": "Ed25519"
+        },
+        {
+          "name": "canonicalization",
+          "passed": true,
+          "detail": "tcga-trace-canonical-json-v1"
+        },
+        {
+          "name": "key_id",
+          "passed": true,
+          "detail": {
+            "receipt": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "key_document": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "issuer",
+          "passed": true,
+          "detail": {
+            "receipt": "https://apps.cienciavida.org/tcga_explorer",
+            "key_document": "https://apps.cienciavida.org/tcga_explorer"
+          }
+        },
+        {
+          "name": "signed_payload_sha256",
+          "passed": true,
+          "detail": {
+            "observed": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee",
+            "expected": "5e008a810e8859fc4e598da695c4506827a3606b38ee9fd570296957931d8cee"
+          }
+        },
+        {
+          "name": "public_key_fingerprint",
+          "passed": true,
+          "detail": {
+            "observed": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "expected": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "ed25519_signature",
+          "passed": true,
+          "detail": "valid"
+        },
+        {
+          "name": "audit_report_bytes",
+          "passed": false,
+          "detail": {
+            "observed": 258318,
+            "expected": 258301
+          }
+        },
+        {
+          "name": "audit_report_sha256",
+          "passed": false,
+          "detail": {
+            "observed": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41",
+            "expected": "1c1d83e143b2af02db26ade89bfdd89fbaff03de7be8afd5600849157edf77e0"
+          }
+        },
+        {
+          "name": "audit_report_json",
+          "passed": true,
+          "detail": "valid object"
+        },
+        {
+          "name": "audit_schema_version",
+          "passed": true,
+          "detail": {
+            "observed": "tcga-trace-analysis-audit-v4",
+            "expected": "tcga-trace-analysis-audit-v4"
+          }
+        },
+        {
+          "name": "audit_reproducibility_hash",
+          "passed": true,
+          "detail": {
+            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
+            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+          }
+        }
+      ]
+    },
+    "recomputed_unsigned_fields": {
+      "status": "failed",
+      "checks": [
+        {
+          "name": "receipt_schema",
+          "passed": true,
+          "detail": "tcga-trace-server-attestation-v1"
+        },
+        {
+          "name": "signature_algorithm",
+          "passed": true,
+          "detail": "Ed25519"
+        },
+        {
+          "name": "canonicalization",
+          "passed": true,
+          "detail": "tcga-trace-canonical-json-v1"
+        },
+        {
+          "name": "key_id",
+          "passed": true,
+          "detail": {
+            "receipt": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "key_document": "ed25519-sha256-5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "issuer",
+          "passed": true,
+          "detail": {
+            "receipt": "https://apps.cienciavida.org/tcga_explorer",
+            "key_document": "https://apps.cienciavida.org/tcga_explorer"
+          }
+        },
+        {
+          "name": "signed_payload_sha256",
+          "passed": true,
+          "detail": {
+            "observed": "dc8a4aeda7d5d91d1ef372c7daaf5d7fc96c006d2ba9502f9ee5a838fc08a776",
+            "expected": "dc8a4aeda7d5d91d1ef372c7daaf5d7fc96c006d2ba9502f9ee5a838fc08a776"
+          }
+        },
+        {
+          "name": "public_key_fingerprint",
+          "passed": true,
+          "detail": {
+            "observed": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643",
+            "expected": "5f6765ef7ec0845078c4344f2542c945492bea3f38427d6ab909def3e9c01643"
+          }
+        },
+        {
+          "name": "ed25519_signature",
+          "passed": false,
+          "detail": "invalid"
+        },
+        {
+          "name": "audit_report_bytes",
+          "passed": true,
+          "detail": {
+            "observed": 258318,
+            "expected": 258318
+          }
+        },
+        {
+          "name": "audit_report_sha256",
+          "passed": true,
+          "detail": {
+            "observed": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41",
+            "expected": "a64a28693e37cccddad8752c32888036e0a36e7451232e2467a38fb984ab3f41"
+          }
+        },
+        {
+          "name": "audit_report_json",
+          "passed": true,
+          "detail": "valid object"
+        },
+        {
+          "name": "audit_schema_version",
+          "passed": true,
+          "detail": {
+            "observed": "tcga-trace-analysis-audit-v4",
+            "expected": "tcga-trace-analysis-audit-v4"
+          }
+        },
+        {
+          "name": "audit_reproducibility_hash",
+          "passed": true,
+          "detail": {
+            "observed": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b",
+            "expected": "6df7bcf7cfd814d1100f1e9701571c2facf11ae7469d1234c7452f3479fc592b"
+          }
+        }
+      ]
+    }
+  }
+}
