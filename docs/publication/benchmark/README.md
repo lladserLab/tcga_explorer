@@ -158,6 +158,14 @@ scripts/publication/run_clean_reproduction_benchmark.py \
 scripts/publication/run_clean_reproduction_benchmark.py --check-only
 ```
 
+Existing checked-in capsules are immutable by default. Both commands validate
+each capsule against its own checksummed engine manifest and compare the
+reported R package versions semantically with that capsule's `renv.lock`;
+local analysis artifacts cannot silently replace frozen inputs or code.
+Maintainers may deliberately regenerate all three capsules from matching local
+artifacts and the current engine with `--refresh-capsules`, but that operation
+also requires review and refreezing of every derived benchmark artifact.
+
 The publication record additionally includes a locally emulated
 `linux/amd64` run. GitHub Actions repeats the native contract on an independent
 hosted Linux/amd64 runner.

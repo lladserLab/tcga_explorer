@@ -177,6 +177,12 @@ scripts/publication/run_clean_reproduction_benchmark.py \
   --platform native
 ```
 
+The checked-in capsules are immutable by default and are validated against
+their own engine manifests and `renv.lock` files. Presence of local TCGA-TRACE
+artifacts does not refresh or replace them. The maintainer-only
+`--refresh-capsules` option is therefore a deliberate benchmark update, not
+part of reviewer reproduction.
+
 Expected evidence:
 
 ```text
@@ -317,7 +323,7 @@ Current expected backend test result:
 Current expected publication-script test result:
 
 ```text
-125 passed
+129 passed
 ```
 
 Current expected standalone-script test result:

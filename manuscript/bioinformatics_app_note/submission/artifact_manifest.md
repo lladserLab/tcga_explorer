@@ -191,7 +191,7 @@ Validated on 2026-07-25:
   blockers and is intended to pass in strict mode after final metadata,
   complete license text, repository URL and archive DOI edits.
 - Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `125 passed`.
+- Publication-script tests pass: `129 passed`.
 - Standalone tests pass: `15 passed` (14 CLI plus one attestation verifier).
 - Frontend tests pass: `15 passed`; the production Docker build also passes.
 - Submission artifact checker reports `109/109` artifacts available.

@@ -46,7 +46,7 @@ Expected test results:
 ```text
 138 passed
 Publication script syntax OK: 25 files
-125 passed
+129 passed
 15 passed
 ```
 

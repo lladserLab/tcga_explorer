@@ -76,7 +76,7 @@ Validated on 2026-07-25:
   screenshot-capture, identity, runtime, OUP-preview, editorial-check and
   submission-archive scripts, plus the standalone public API CLI.
 - Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `125 passed`.
+- Publication-script tests pass: `129 passed`.
 - Standalone tests pass: `15 passed`: 14 CLI tests covering all six public
   compute families and negative integrity controls, plus one attestation
   verifier test.

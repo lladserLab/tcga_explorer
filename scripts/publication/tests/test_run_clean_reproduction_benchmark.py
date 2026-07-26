@@ -20,6 +20,58 @@ SPEC.loader.exec_module(benchmark)
 verifier = benchmark.verifier
 
 
+def write_test_capsule(
+    destination: Path,
+    *,
+    analysis_id: str,
+    omit: set[str] | None = None,
+    declare_omitted: bool = False,
+) -> None:
+    omit = omit or set()
+    destination.mkdir(parents=True, exist_ok=True)
+    for filename in benchmark.CURRENT_CAPSULE_FILENAMES:
+        if filename in omit or filename == "reproduction_manifest.json":
+            continue
+        payload = "{}\n"
+        if filename == "audit_report.json":
+            payload = json.dumps({"analysis_id": analysis_id}) + "\n"
+        elif filename == "renv.lock":
+            payload = json.dumps(
+                {"Packages": {"cmprsk": {"Version": "2.2-12"}}}
+            ) + "\n"
+        (destination / filename).write_text(payload, encoding="utf-8")
+
+    labels = {
+        "input": "input.json",
+        "reproduction_dockerfile": "Dockerfile.reproduce",
+        "reproduction_km_analysis": "km_analysis.R",
+        "reproduction_r_runner": "rerun_analysis.R",
+        "reproduction_renv_lock": "renv.lock",
+    }
+    manifest_files = {}
+    for label, filename in labels.items():
+        path = destination / filename
+        if path.is_file():
+            manifest_files[label] = {
+                "filename": filename,
+                "bytes": path.stat().st_size,
+                "sha256": benchmark.file_sha256(path),
+            }
+        elif declare_omitted:
+            manifest_files[label] = {
+                "filename": filename,
+                "bytes": 1,
+                "sha256": "0" * 64,
+            }
+    benchmark.write_json(
+        destination / "reproduction_manifest.json",
+        {
+            "schema_version": "tcga-trace-reproduction-capsule-v1",
+            "files": manifest_files,
+        },
+    )
+
+
 def test_docker_run_contract_disables_network_and_mounts_capsule_read_only(
     tmp_path,
 ) -> None:
@@ -87,6 +139,7 @@ def test_check_only_validates_manifest_and_negative_controls(
     monkeypatch,
 ) -> None:
     monkeypatch.setattr(benchmark, "OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr(benchmark, "verify_frozen_capsules", lambda: None)
     results = {
         "schema_version": "tcga-trace-clean-reproduction-benchmark-v1",
         "environments": [
@@ -118,6 +171,7 @@ def test_check_only_validates_manifest_and_negative_controls(
 
 def test_check_only_rejects_modified_file(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(benchmark, "OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr(benchmark, "verify_frozen_capsules", lambda: None)
     results = {
         "schema_version": "tcga-trace-clean-reproduction-benchmark-v1",
         "environments": [
@@ -164,33 +218,120 @@ def test_prepare_capsules_uses_verified_frozen_copy_without_runtime_artifacts(
         f"label,analysis_id\nSingle gene,{analysis_id}\n",
         encoding="utf-8",
     )
-    for filename in benchmark.CAPSULE_FILENAMES:
-        payload = "{}\n"
-        if filename == "metrics.json":
-            payload = json.dumps({"analysis_id": analysis_id}) + "\n"
-        elif filename == "audit_report.json":
-            payload = json.dumps({"analysis_id": analysis_id}) + "\n"
-        (destination / filename).write_text(payload, encoding="utf-8")
+    write_test_capsule(destination, analysis_id=analysis_id)
+    monkeypatch.setattr(benchmark, "ROOT", root)
+    monkeypatch.setattr(benchmark, "RECONSTRUCTION_SUMMARY", summary)
+    monkeypatch.setattr(benchmark, "CAPSULE_DIR", capsule_dir)
+    monkeypatch.setattr(
+        benchmark,
+        "FROZEN_CAPSULE_LABELS",
+        {"single_gene": "Single gene"},
+    )
 
-    manifest_files = {}
-    for filename in ("input.json", "rerun_analysis.R"):
-        path = destination / filename
-        manifest_files[filename] = {
-            "filename": filename,
-            "bytes": path.stat().st_size,
-            "sha256": benchmark.file_sha256(path),
-        }
-    benchmark.write_json(
-        destination / "reproduction_manifest.json",
-        {
-            "schema_version": "tcga-trace-reproduction-capsule-v1",
-            "files": manifest_files,
-        },
+    capsules = benchmark.prepare_capsules()
+
+    assert capsules == {"Single gene": destination}
+
+
+def test_refresh_capsules_requires_matching_source_artifact(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    root = tmp_path / "repo"
+    capsule_dir = root / "frozen"
+    analysis_id = "missing-analysis"
+    summary = root / "summary.csv"
+    summary.parent.mkdir(parents=True)
+    summary.write_text(
+        f"label,analysis_id\nSingle gene,{analysis_id}\n",
+        encoding="utf-8",
     )
     monkeypatch.setattr(benchmark, "ROOT", root)
     monkeypatch.setattr(benchmark, "RECONSTRUCTION_SUMMARY", summary)
     monkeypatch.setattr(benchmark, "CAPSULE_DIR", capsule_dir)
 
-    capsules = benchmark.prepare_capsules()
+    with pytest.raises(FileNotFoundError, match="source artifact"):
+        benchmark.prepare_capsules(refresh=True)
 
-    assert capsules == {"Single gene": destination}
+
+def test_check_only_rejects_manifest_recorded_missing_engine(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    root = tmp_path / "repo"
+    capsule_dir = root / "frozen"
+    destination = capsule_dir / "single_gene"
+    destination.mkdir(parents=True)
+    analysis_id = "analysis-123"
+    summary = root / "summary.csv"
+    summary.write_text(
+        f"label,analysis_id\nSingle gene,{analysis_id}\n",
+        encoding="utf-8",
+    )
+    write_test_capsule(
+        destination,
+        analysis_id=analysis_id,
+        omit={"km_analysis.R"},
+        declare_omitted=True,
+    )
+
+    monkeypatch.setattr(benchmark, "ROOT", root)
+    monkeypatch.setattr(benchmark, "RECONSTRUCTION_SUMMARY", summary)
+    monkeypatch.setattr(benchmark, "CAPSULE_DIR", capsule_dir)
+    monkeypatch.setattr(
+        benchmark,
+        "FROZEN_CAPSULE_LABELS",
+        {"single_gene": "Single gene"},
+    )
+
+    with pytest.raises(RuntimeError, match="integrity check failed"):
+        benchmark.verify_frozen_capsules()
+
+
+def test_package_versions_match_lock_normalizes_r_version_separator(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    capsule = tmp_path / "capsule"
+    capsule.mkdir()
+    benchmark.write_json(
+        capsule / "renv.lock",
+        {"Packages": {"cmprsk": {"Version": "2.2-12"}}},
+    )
+    monkeypatch.setattr(
+        benchmark,
+        "REQUIRED_RUNTIME_PACKAGES",
+        {"cmprsk"},
+    )
+
+    assert benchmark.package_versions_match_lock(
+        capsule=capsule,
+        observed={"cmprsk": "2.2.12"},
+    )
+
+
+def test_package_versions_match_lock_requires_runtime_package_set(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    capsule = tmp_path / "capsule"
+    capsule.mkdir()
+    benchmark.write_json(
+        capsule / "renv.lock",
+        {
+            "Packages": {
+                "survival": {"Version": "3.8-9"},
+                "jsonlite": {"Version": "2.0.0"},
+            }
+        },
+    )
+    monkeypatch.setattr(
+        benchmark,
+        "REQUIRED_RUNTIME_PACKAGES",
+        {"survival", "jsonlite"},
+    )
+
+    assert not benchmark.package_versions_match_lock(
+        capsule=capsule,
+        observed={"survival": "3.8.9"},
+    )

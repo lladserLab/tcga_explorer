@@ -536,3 +536,29 @@ useful context but do not override this ledger.
   history to
   `origin/feature/bioinformatics-readiness-20260721-210041`. This is a recovery
   checkpoint, not the final citable release or publication tag.
+- Audited GitHub Actions run `30186431670` after the checkpoint push rather
+  than treating local gates as sufficient. Both jobs failed in the clean
+  runner: frozen capsules could be silently refreshed from local artifacts,
+  while two public-contract tests depended on a locally installed immune-atlas
+  screen.
+- Made checked-in clean-reproduction capsules immutable by default. Validation
+  now follows each capsule's versioned manifest and `renv.lock`, compares R
+  package versions semantically, copies the manifest-defined inventory for
+  tamper controls and requires explicit `--refresh-capsules` for a maintainer
+  update. `--check-only` now validates capsule completeness as well as derived
+  evidence.
+- Replaced the immune-atlas test dependency with a synthetic temporary fixture
+  and recursively strips nested `path`, `paths` and `/app/...` values from the
+  public screen payload while preserving `/api/...` downloads. A clean
+  worktree with no ignored data or artifacts passes 138/138 backend tests,
+  129/129 publication tests and the exact independent capsule command.
+- Updated `actions/checkout` and `actions/upload-artifact` to their official
+  Node 24 `v7.0.1` commits
+  (`3d3c42e5aac5ba805825da76410c181273ba90b1` and
+  `043fb46d1a93c77aae656e7c1c64a875d1fc6a0a`) and revalidated both workflows
+  with Actionlint 1.7.7.
+- The complete local pre-submission gate passes after these corrections:
+  138 backend, 129 publication and 15 standalone tests; one main figure, no
+  main tables, eight supplementary tables, a 4/4-page OUP preview, 109/109
+  artifacts and the 480-entry archive. R2-24 remains owner-controlled with the
+  same 18 metadata and release placeholders.

@@ -2438,16 +2438,38 @@ def immune_atlas_bundle_path(
     return bundle_path
 
 
+_PRIVATE_IMMUNE_PATH = object()
+
+
 def public_immune_screen_payload(payload: dict) -> dict:
-    public_payload = dict(payload)
-    public_payload.pop("paths", None)
-    if isinstance(public_payload.get("audit"), dict):
-        public_payload["audit"] = {
-            key: value
-            for key, value in public_payload["audit"].items()
-            if key != "path"
-        }
+    public_payload = sanitize_immune_screen_paths(payload)
+    if not isinstance(public_payload, dict):
+        raise RuntimeError("Immune screen payload must be an object.")
     return publicize_download_links(public_payload)
+
+
+def sanitize_immune_screen_paths(value):
+    if isinstance(value, dict):
+        cleaned = {}
+        for key, item in value.items():
+            if key in {"path", "paths"}:
+                continue
+            public_item = sanitize_immune_screen_paths(item)
+            if public_item is not _PRIVATE_IMMUNE_PATH:
+                cleaned[key] = public_item
+        return cleaned
+    if isinstance(value, list):
+        cleaned = []
+        for item in value:
+            public_item = sanitize_immune_screen_paths(item)
+            if public_item is not _PRIVATE_IMMUNE_PATH:
+                cleaned.append(public_item)
+        return cleaned
+    if isinstance(value, str) and (
+        value == "/app" or value.startswith("/app/")
+    ):
+        return _PRIVATE_IMMUNE_PATH
+    return value
 
 
 def dataset_dates(db: Session, cache_manifest: dict | None) -> dict:

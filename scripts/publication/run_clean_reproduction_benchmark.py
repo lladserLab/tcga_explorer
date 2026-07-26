@@ -48,7 +48,12 @@ RECONSTRUCTION_SUMMARY = (
     / "reproducibility_benchmark"
     / "summary.csv"
 )
-CAPSULE_FILENAMES = (
+FROZEN_CAPSULE_LABELS = {
+    "single_gene": "Single gene",
+    "weighted_signature": "Weighted signature",
+    "two_signatures": "Two signatures",
+}
+CURRENT_CAPSULE_FILENAMES = (
     "input.json",
     "metrics.json",
     "audit_report.json",
@@ -62,16 +67,22 @@ CAPSULE_FILENAMES = (
     "REPRODUCE.md",
     "reproduction_manifest.json",
 )
-EXPECTED_PACKAGES = {
-    "jsonlite": "2.0.0",
-    "survival": "3.8.9",
-    "survminer": "0.5.2",
-    "ggplot2": "4.0.3",
-    "svglite": "2.2.2",
-    "survRM2": "1.0.4",
-    "cmprsk": "2.2-12",
-    "coxphf": "1.13.4",
-    "maxstat": "0.7.26",
+REQUIRED_MANIFEST_LABELS = {
+    "input",
+    "reproduction_dockerfile",
+    "reproduction_km_analysis",
+    "reproduction_r_runner",
+    "reproduction_renv_lock",
+}
+REQUIRED_RUNTIME_PACKAGES = {
+    "jsonlite",
+    "survival",
+    "survminer",
+    "ggplot2",
+    "svglite",
+    "survRM2",
+    "coxphf",
+    "maxstat",
 }
 
 
@@ -82,7 +93,7 @@ def main() -> int:
         print("Clean-container reproduction outputs verified.")
         return 0
 
-    capsules = prepare_capsules()
+    capsules = prepare_capsules(refresh=args.refresh_capsules)
     requested_platforms = args.platform or ["native"]
     environments = []
     rows = []
@@ -216,6 +227,15 @@ def parse_args() -> argparse.Namespace:
         default="tcga-trace-reproduction:2026-07-25",
     )
     parser.add_argument(
+        "--refresh-capsules",
+        action="store_true",
+        help=(
+            "Explicitly replace frozen capsules from matching local analysis "
+            "artifacts and the current engine. Existing capsules are immutable "
+            "by default."
+        ),
+    )
+    parser.add_argument(
         "--check-only",
         action="store_true",
         help="Verify frozen outputs and hashes without running Docker.",
@@ -223,7 +243,42 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def prepare_capsules() -> dict[str, Path]:
+def prepare_capsules(*, refresh: bool = False) -> dict[str, Path]:
+    if not refresh:
+        return frozen_capsules()
+
+    rows = reconstruction_rows()
+    capsules: dict[str, Path] = {}
+    for row in rows:
+        label = row["label"]
+        analysis_id = row["analysis_id"]
+        source = ROOT / "artifacts" / analysis_id
+        destination = CAPSULE_DIR / slugify(label)
+        if not (source / "input.json").is_file() or not (
+            source / "metrics.json"
+        ).is_file():
+            raise FileNotFoundError(
+                f"Cannot refresh {label}: source artifact {analysis_id} "
+                "is incomplete or unavailable."
+            )
+        write_reproduction_capsule(
+            source,
+            r_script_path=ROOT / "backend" / "scripts" / "km_analysis.R",
+            renv_lock_path=ROOT / "backend" / "renv.lock",
+        )
+        destination.mkdir(parents=True, exist_ok=True)
+        for filename in CURRENT_CAPSULE_FILENAMES:
+            source_path = source / filename
+            if not source_path.is_file():
+                raise FileNotFoundError(
+                    f"Capsule {analysis_id} is missing {filename}."
+                )
+            shutil.copyfile(source_path, destination / filename)
+        capsules[label] = destination
+    return capsules
+
+
+def reconstruction_rows() -> list[dict[str, str]]:
     if not RECONSTRUCTION_SUMMARY.is_file():
         raise FileNotFoundError(
             f"Missing reconstruction summary: {RECONSTRUCTION_SUMMARY}"
@@ -233,39 +288,48 @@ def prepare_capsules() -> dict[str, Path]:
     if not rows:
         raise RuntimeError("Reconstruction summary contains no representative analyses.")
 
-    capsules: dict[str, Path] = {}
+    normalized = []
     for row in rows:
         label = str(row.get("label") or "").strip()
         analysis_id = str(row.get("analysis_id") or "").strip()
         if not label or not analysis_id:
             raise RuntimeError("Reconstruction summary has an incomplete row.")
-        source = ROOT / "artifacts" / analysis_id
-        destination = CAPSULE_DIR / slugify(label)
-        if (source / "input.json").is_file() and (
-            source / "metrics.json"
-        ).is_file():
-            write_reproduction_capsule(
-                source,
-                r_script_path=ROOT / "backend" / "scripts" / "km_analysis.R",
-                renv_lock_path=ROOT / "backend" / "renv.lock",
+        normalized.append({"label": label, "analysis_id": analysis_id})
+    return normalized
+
+
+def verify_frozen_capsules() -> None:
+    frozen_capsules()
+
+
+def frozen_capsules() -> dict[str, Path]:
+    capsules: dict[str, Path] = {}
+    for slug, label in FROZEN_CAPSULE_LABELS.items():
+        path = CAPSULE_DIR / slug
+        audit_path = path / "audit_report.json"
+        if not audit_path.is_file():
+            raise FileNotFoundError(
+                f"Frozen capsule {path} is missing audit_report.json."
             )
-            destination.mkdir(parents=True, exist_ok=True)
-            for filename in CAPSULE_FILENAMES:
-                source_path = source / filename
-                if not source_path.is_file():
-                    raise FileNotFoundError(
-                        f"Capsule {analysis_id} is missing {filename}."
-                    )
-                shutil.copyfile(source_path, destination / filename)
-        else:
-            validate_frozen_capsule(destination, analysis_id=analysis_id)
-        capsules[label] = destination
+        analysis_id = str(read_json(audit_path).get("analysis_id") or "")
+        if not analysis_id:
+            raise RuntimeError(
+                f"Frozen capsule {path} has no recorded analysis identifier."
+            )
+        validate_frozen_capsule(path, analysis_id=analysis_id)
+        capsules[label] = path
     return capsules
 
 
 def validate_frozen_capsule(path: Path, *, analysis_id: str) -> None:
+    envelope_files = (
+        "input.json",
+        "metrics.json",
+        "audit_report.json",
+        "reproduction_manifest.json",
+    )
     missing = [
-        filename for filename in CAPSULE_FILENAMES if not (path / filename).is_file()
+        filename for filename in envelope_files if not (path / filename).is_file()
     ]
     if missing:
         raise FileNotFoundError(
@@ -274,11 +338,11 @@ def validate_frozen_capsule(path: Path, *, analysis_id: str) -> None:
         )
     metrics = read_json(path / "metrics.json")
     audit = read_json(path / "audit_report.json")
-    recorded_ids = {
-        str(metrics.get("analysis_id") or ""),
-        str(audit.get("analysis_id") or ""),
-    }
-    if recorded_ids != {analysis_id}:
+    audit_id = str(audit.get("analysis_id") or "")
+    metrics_id = str(metrics.get("analysis_id") or "")
+    if audit_id != analysis_id or (
+        metrics_id and metrics_id != analysis_id
+    ):
         raise RuntimeError(
             f"Frozen capsule {path} does not match analysis {analysis_id}."
         )
@@ -286,8 +350,19 @@ def validate_frozen_capsule(path: Path, *, analysis_id: str) -> None:
     manifest = read_json(path / "reproduction_manifest.json")
     if manifest.get("schema_version") != "tcga-trace-reproduction-capsule-v1":
         raise RuntimeError(f"Frozen capsule {path} has an unexpected schema.")
-    for record in (manifest.get("files") or {}).values():
+    manifest_files = manifest.get("files") or {}
+    missing_labels = sorted(REQUIRED_MANIFEST_LABELS - set(manifest_files))
+    if missing_labels:
+        raise RuntimeError(
+            f"Frozen capsule {path} manifest is missing required records: "
+            f"{', '.join(missing_labels)}."
+        )
+    for record in manifest_files.values():
         filename = str(record.get("filename") or "")
+        if not filename or Path(filename).name != filename:
+            raise RuntimeError(
+                f"Frozen capsule {path} contains an unsafe manifest filename."
+            )
         frozen_file = path / filename
         if (
             not frozen_file.is_file()
@@ -394,9 +469,9 @@ def run_capsule(
     metrics = read_json(capsule / "metrics.json")
     package_versions = reproduction.get("package_versions") or {}
     numeric_comparison = reproduction.get("numeric_comparison") or {}
-    package_match = all(
-        str(package_versions.get(package)) == version
-        for package, version in EXPECTED_PACKAGES.items()
+    package_match = package_versions_match_lock(
+        capsule=capsule,
+        observed=package_versions,
     )
     status = (
         "passed"
@@ -438,7 +513,7 @@ def run_input_tamper(
         output = temporary_path / "output"
         mutated_capsule.mkdir()
         output.mkdir()
-        for filename in CAPSULE_FILENAMES:
+        for filename in capsule_inventory(capsule):
             shutil.copyfile(capsule / filename, mutated_capsule / filename)
         payload = read_json(mutated_capsule / "input.json")
         records = payload.get("records") or []
@@ -522,6 +597,45 @@ def data_snapshot_tamper_detected(capsule: Path) -> bool:
         patient_digest=patient_digest,
     )
     return verifier.stable_hash(payload) != expected
+
+
+def capsule_inventory(capsule: Path) -> list[str]:
+    manifest = read_json(capsule / "reproduction_manifest.json")
+    filenames = {
+        "audit_report.json",
+        "metrics.json",
+        "reproduction_manifest.json",
+    }
+    for record in (manifest.get("files") or {}).values():
+        filename = str(record.get("filename") or "")
+        if not filename or Path(filename).name != filename:
+            raise RuntimeError(
+                f"Frozen capsule {capsule} contains an unsafe manifest filename."
+            )
+        filenames.add(filename)
+    return sorted(filenames)
+
+
+def package_versions_match_lock(
+    *,
+    capsule: Path,
+    observed: dict[str, Any],
+) -> bool:
+    if not REQUIRED_RUNTIME_PACKAGES.issubset(observed):
+        return False
+    lock = read_json(capsule / "renv.lock")
+    packages = lock.get("Packages") or {}
+    for package, observed_version in observed.items():
+        expected = (packages.get(package) or {}).get("Version")
+        if not expected or normalize_r_package_version(
+            observed_version
+        ) != normalize_r_package_version(expected):
+            return False
+    return True
+
+
+def normalize_r_package_version(value: Any) -> str:
+    return str(value or "").strip().replace("-", ".")
 
 
 def capsule_metadata(path: Path) -> dict[str, Any]:
@@ -637,6 +751,7 @@ def write_manifest() -> None:
 
 
 def verify_frozen_outputs() -> None:
+    verify_frozen_capsules()
     manifest_path = OUTPUT_DIR / "manifest.json"
     results_path = OUTPUT_DIR / "benchmark_results.raw.json"
     if not manifest_path.is_file() or not results_path.is_file():

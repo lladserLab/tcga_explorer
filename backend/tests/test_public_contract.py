@@ -7,6 +7,59 @@ from app.main import app, application_release_identity, settings
 from app.mcp_server import mcp, tcga_get_immune_screen
 
 
+IMMUNE_SCREEN_ID = "immune_contract_fixture"
+
+
+def write_immune_screen_fixture(artifact_dir):
+    screen_dir = artifact_dir / "immune_pancancer" / IMMUNE_SCREEN_ID
+    screen_dir.mkdir(parents=True)
+    summary = {
+        "screen_id": IMMUNE_SCREEN_ID,
+        "created_at": "2026-07-25T00:00:00Z",
+        "pipeline_version": "test",
+        "data_version": {"fixture": "contract"},
+        "headline": {"immune_genes": 7},
+        "clinical_sensitivity": {
+            "available": True,
+            "selection_hierarchy": ["stage_grade_adjusted"],
+            "summary": {"retained": 1},
+            "notes": [],
+        },
+        "model_views": {
+            "primary": {
+                "model": "primary",
+                "label": "Primary continuous expression",
+                "role": "primary_estimand",
+                "headline": {"completed_models": 1},
+                "direction_counts_global_fdr": {"harmful": 1},
+                "recurrence": {"summary": {"genes_ge5": 1}},
+                "top_genes": [
+                    {
+                        "gene_symbol": "BIRC5",
+                        "global_fdr_hits": 3,
+                        "meta_fdr": 0.01,
+                        "term_links": ["/app/private/terms.tsv"],
+                    }
+                ],
+            }
+        },
+        "audit": {
+            "path": "/app/private/audit_report.json",
+            "analysis_hash": "fixture-hash",
+        },
+        "paths": {"root": "/app/private"},
+        "method_notes": ["Synthetic contract fixture."],
+    }
+    (screen_dir / "screen_summary.json").write_text(
+        json.dumps(summary),
+        encoding="utf-8",
+    )
+    (screen_dir / "audit_report.json").write_text(
+        json.dumps({"analysis_hash": "fixture-hash"}),
+        encoding="utf-8",
+    )
+
+
 def test_application_release_identity_is_explicit_and_trimmed(monkeypatch):
     monkeypatch.setattr(settings, "app_release_commit", "  abc123  ")
     monkeypatch.setattr(settings, "app_release_ref", "  v1.2.3  ")
@@ -126,7 +179,10 @@ def test_streamable_http_mcp_initialize_handshake():
     assert payload["result"]["serverInfo"]["name"] == "TCGA-TRACE"
 
 
-def test_public_immune_atlas_hides_internal_paths():
+def test_public_immune_atlas_hides_internal_paths(tmp_path, monkeypatch):
+    write_immune_screen_fixture(tmp_path)
+    monkeypatch.setattr(settings, "artifact_dir", tmp_path)
+
     async def fetch_screen():
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(
@@ -135,7 +191,7 @@ def test_public_immune_atlas_hides_internal_paths():
         ) as client:
             return await client.get(
                 "/api/v1/pancancer/immune-screens/"
-                "immune_os_immport_all_v2_1"
+                f"{IMMUNE_SCREEN_ID}"
             )
 
     response = asyncio.run(fetch_screen())
@@ -150,13 +206,19 @@ def test_public_immune_atlas_hides_internal_paths():
     assert "/app/" not in response.text
 
 
-def test_mcp_immune_atlas_is_compact_and_keeps_decision_fields():
-    payload = tcga_get_immune_screen("immune_os_immport_all_v2_1")
+def test_mcp_immune_atlas_is_compact_and_keeps_decision_fields(
+    tmp_path,
+    monkeypatch,
+):
+    write_immune_screen_fixture(tmp_path)
+    monkeypatch.setattr(settings, "artifact_dir", tmp_path)
+
+    payload = tcga_get_immune_screen(IMMUNE_SCREEN_ID)
     encoded = json.dumps(payload)
     primary_gene = payload["model_views"]["primary"]["top_genes"][0]
 
     assert len(encoded) < 20_000
-    assert payload["headline"]["immune_genes"] == 3118
+    assert payload["headline"]["immune_genes"] == 7
     assert primary_gene["gene_symbol"]
     assert "global_fdr_hits" in primary_gene
     assert "meta_fdr" in primary_gene
