@@ -609,7 +609,10 @@ def build_manifest(root: Path, artifacts: list[Artifact] | None = None) -> dict[
     selected = artifacts or ARTIFACTS
     records = [artifact_record(root, artifact) for artifact in selected]
     missing = [record["path"] for record in records if record["required"] and record["status"] != "available"]
-    owner_blockers = load_metadata_checker().collect_blockers(root)
+    metadata_checker = load_metadata_checker()
+    owner_records = metadata_checker.collect_blocker_records(root)
+    owner_blockers = [record.detail for record in owner_records]
+    owner_decisions = metadata_checker.summarize_decisions(owner_records)
     return {
         "schema_version": "tcga-trace-submission-artifacts-v1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -617,6 +620,9 @@ def build_manifest(root: Path, artifacts: list[Artifact] | None = None) -> dict[
         "available_artifact_count": sum(1 for record in records if record["status"] == "available"),
         "missing_required_artifacts": missing,
         "owner_metadata_blockers": owner_blockers,
+        "owner_metadata_decision_count": len(owner_decisions),
+        "owner_metadata_occurrence_count": len(owner_records),
+        "owner_metadata_decisions": owner_decisions,
         "artifacts": records,
     }
 
@@ -661,7 +667,11 @@ def print_human_summary(manifest: dict[str, Any]) -> None:
 
     blockers = manifest["owner_metadata_blockers"]
     if blockers:
-        print(f"Owner metadata blockers still present: {len(blockers)}")
+        print(
+            "Owner metadata blockers still present: "
+            f"{manifest['owner_metadata_decision_count']} decision(s), "
+            f"{manifest['owner_metadata_occurrence_count']} occurrence(s)"
+        )
         print("Use scripts/publication/check_submission_metadata.py --strict for the detailed blocker list.")
     else:
         print("Owner metadata OK.")

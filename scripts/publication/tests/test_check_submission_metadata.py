@@ -45,6 +45,24 @@ def test_text_placeholder_blockers_preserves_final_browser_retest() -> None:
     ]
 
 
+def test_decision_summary_groups_duplicate_occurrences() -> None:
+    records = [
+        checker.MetadataBlocker("release_archive", "main.tex: DOI pending"),
+        checker.MetadataBlocker("release_archive", "cover.md: DOI pending"),
+        checker.MetadataBlocker("license", "LICENSE missing"),
+    ]
+
+    summary = checker.summarize_decisions(records)
+
+    assert len(summary) == 2
+    release = next(item for item in summary if item["decision"] == "release_archive")
+    assert release["occurrence_count"] == 2
+    assert release["occurrences"] == [
+        "main.tex: DOI pending",
+        "cover.md: DOI pending",
+    ]
+
+
 def test_availability_section_requires_external_reference() -> None:
     text = (
         "\\section*{Data and Software Availability}\n"
@@ -87,11 +105,30 @@ def test_collect_blockers_passes_complete_minimal_fixture(tmp_path: Path) -> Non
     (submission / "final_submission_decisions.md").write_text(
         "| Field | Current placeholder | Final value |\n"
         "| --- | --- | --- |\n"
-        "| Software license | Required | MIT |\n",
+        "| Author list | Required | Final authors |\n"
+        "| Affiliations | Required | Final affiliations |\n"
+        "| Corresponding author | Required | Ada Lovelace (ada@example.org) |\n"
+        "| Submitting author and ORCID | Required | Grace Hopper (0000-0002-1694-233X) |\n"
+        "| CRediT author contributions | Required | Final CRediT statement |\n"
+        "| Funding statement | Required | No external funding |\n"
+        "| Conflict of interest | Required | None declared |\n"
+        "| AI-use disclosure | Required | Final disclosure reviewed by the authors |\n"
+        "| Software license | Required | MIT |\n"
+        "| Public or reviewer-accessible repository URL | Required | https://example.org/source |\n"
+        "| Stable release DOI or archive URL | Required | https://doi.org/10.5281/zenodo.1 |\n"
+        "| Public demo URL or Docker-only access statement | Required | https://example.org/demo |\n"
+        "| Two-year software and web-service availability commitment | Required | Available for two years |\n"
+        "| Support owner and contact | Required | Grace Hopper (support@example.org) |\n"
+        "| Author-led scientific review and verification | Required | Grace Hopper reviewed and verified the submission on 2026-07-26 |\n"
+        "| Open-access APC or waiver route | Operational | TODO |\n",
         encoding="utf-8",
     )
     (submission / "cover_letter_draft.md").write_text(
         "Dear Editors,\n\nSincerely,\nFinal Author\n",
+        encoding="utf-8",
+    )
+    (submission / "data_availability_statement.md").write_text(
+        "Source and release are archived at https://example.org/release under MIT.\n",
         encoding="utf-8",
     )
     (tmp_path / "LICENSE").write_text(license_text(), encoding="utf-8")
@@ -123,6 +160,10 @@ def test_collect_blockers_reports_short_license_stub(tmp_path: Path) -> None:
     )
     (submission / "final_submission_decisions.md").write_text("No owner placeholders.\n", encoding="utf-8")
     (submission / "cover_letter_draft.md").write_text("Dear Editors.\n", encoding="utf-8")
+    (submission / "data_availability_statement.md").write_text(
+        "Available at https://example.org/release.\n",
+        encoding="utf-8",
+    )
     (tmp_path / "LICENSE").write_text("MIT\n", encoding="utf-8")
 
     blockers = checker.collect_blockers(tmp_path)
@@ -148,5 +189,9 @@ def test_collect_blockers_reports_missing_required_files(tmp_path: Path) -> None
     )
     assert (
         "manuscript/bioinformatics_app_note/submission/cover_letter_draft.md: missing required submission file"
+        in blockers
+    )
+    assert (
+        "manuscript/bioinformatics_app_note/submission/data_availability_statement.md: missing required submission file"
         in blockers
     )

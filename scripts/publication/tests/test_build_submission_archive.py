@@ -38,11 +38,28 @@ def test_write_archive_adds_manifest_under_prefix(tmp_path: Path) -> None:
     record = builder.file_record(root, Path("README.md"))
     manifest = builder.build_archive_manifest(
         [record],
-        {"owner_metadata_blockers": [], "artifact_count": 1, "available_artifact_count": 1},
+        {
+            "owner_metadata_blockers": ["release pending"],
+            "owner_metadata_decision_count": 1,
+            "owner_metadata_occurrence_count": 1,
+            "owner_metadata_decisions": [
+                {
+                    "decision": "release_archive",
+                    "label": "Version-specific archive DOI or URL",
+                    "occurrence_count": 1,
+                    "occurrences": ["release pending"],
+                }
+            ],
+            "artifact_count": 1,
+            "available_artifact_count": 1,
+        },
         "pkg",
         root / "out.tar.gz",
     )
     assert manifest["project_name"] == "TCGA-TRACE"
+    assert manifest["owner_metadata_decision_count"] == 1
+    assert manifest["owner_metadata_occurrence_count"] == 1
+    assert manifest["owner_metadata_decisions"][0]["decision"] == "release_archive"
 
     output = root / "out.tar.gz"
     builder.write_archive(root, output, "pkg", [record], manifest)

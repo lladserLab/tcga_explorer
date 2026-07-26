@@ -34,18 +34,22 @@ checks and reviewer reproduction instructions.
 Before submission, replace the following placeholders:
 
 - Corresponding author: `[CORRESPONDING AUTHOR NAME AND EMAIL]`
-- Submitting author ORCID: `[SUBMITTING AUTHOR ORCID]`
+- Submitting author and ORCID: `[SUBMITTING AUTHOR ORCID]`
 - Repository: `https://github.com/lladserLab/tcga_explorer`
 - Software license: `[SOFTWARE LICENSE]`
 - Release archive: `[ARCHIVAL DOI OR STABLE RELEASE URL]` (Zenodo)
 - Reviewer access: `https://apps.cienciavida.org/tcga_explorer/`
 - AI-use disclosure: `[FINAL PERMITTED AI-USE DISCLOSURE AFTER INDEPENDENT AUTHOR REVIEW]`
-- Maintenance commitment: `[THREE-YEAR WEB-SERVICE MAINTENANCE COMMITMENT]`
+- Maintenance commitment: `[TWO-YEAR WEB-SERVICE MAINTENANCE COMMITMENT]`
+- Support contact: `[SUPPORT OWNER AND CONTACT]`
+- Author review: `[AUTHOR REVIEW CONFIRMATION]`
 
-AI-assisted drafting is broader than the common acceptable uses enumerated in
-the current Bioinformatics policy. The corresponding author must independently
-rewrite and verify this letter and the manuscript, disclose the assistance, and
-confirm acceptability with the editorial office before submission.
+Bioinformatics requires AI used to generate content, write code or process data
+to be disclosed in the cover letter and in the Methods or Acknowledgements.
+The authors must independently review the code, analyses and prose and remain
+accountable for the submitted work. The editorial office should be contacted
+if the authors determine that any use falls outside the examples covered by
+the journal guidance.
 
 Sincerely,
 

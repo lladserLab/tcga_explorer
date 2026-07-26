@@ -12,10 +12,14 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
+METADATA_SCHEMA_VERSION = "tcga-trace-owner-metadata-v2"
 MAIN_TEX = Path("manuscript/bioinformatics_app_note/main.tex")
 SUPPLEMENT_TEX = Path("manuscript/bioinformatics_app_note/supplementary.tex")
 FINAL_DECISIONS = Path("manuscript/bioinformatics_app_note/submission/final_submission_decisions.md")
 COVER_LETTER = Path("manuscript/bioinformatics_app_note/submission/cover_letter_draft.md")
+DATA_AVAILABILITY = Path(
+    "manuscript/bioinformatics_app_note/submission/data_availability_statement.md"
+)
 
 REQUIRED_FIELDS = [
     "author_latex",
@@ -24,7 +28,8 @@ REQUIRED_FIELDS = [
     "affiliations_markdown",
     "corresponding_author_name",
     "corresponding_email",
-    "corresponding_author_orcid",
+    "submitting_author_name",
+    "submitting_author_orcid",
     "author_contributions_statement",
     "funding_statement",
     "conflict_of_interest_statement",
@@ -34,11 +39,16 @@ REQUIRED_FIELDS = [
     "release_url_or_doi",
     "demo_or_access_statement",
     "maintenance_commitment",
+    "support_owner_name",
+    "support_email",
+    "author_review_confirmation",
 ]
 
 OPTIONAL_ROW_FIELDS = {
     "data_availability_note": "Data availability note",
+    "apc_route": "Open-access APC or waiver route",
 }
+OPTIONAL_FIELDS = {*OPTIONAL_ROW_FIELDS, "corresponding_author_orcid"}
 
 PLACEHOLDER_MARKERS = [
     "REPLACE_WITH",
@@ -54,7 +64,8 @@ PLACEHOLDER_MARKERS = [
     "AI-use disclosure pending independent author review",
     "REPOSITORY-URL-PENDING",
     "ARCHIVE-DOI-PENDING",
-    "THREE-YEAR-MAINTENANCE-COMMITMENT-PENDING",
+    "TWO-YEAR-MAINTENANCE-COMMITMENT-PENDING",
+    "LICENSE-PENDING",
     "placeholder",
     "[CORRESPONDING AUTHOR NAME AND EMAIL]",
     "[FINAL PUBLIC REPOSITORY URL]",
@@ -64,7 +75,9 @@ PLACEHOLDER_MARKERS = [
     "[CORRESPONDING AUTHOR NAME]",
     "[SUBMITTING AUTHOR ORCID]",
     "[FINAL PERMITTED AI-USE DISCLOSURE AFTER INDEPENDENT AUTHOR REVIEW]",
-    "[THREE-YEAR WEB-SERVICE MAINTENANCE COMMITMENT]",
+    "[TWO-YEAR WEB-SERVICE MAINTENANCE COMMITMENT]",
+    "[SUPPORT OWNER AND CONTACT]",
+    "[AUTHOR REVIEW CONFIRMATION]",
 ]
 MIN_LICENSE_CHARS = 100
 LICENSE_PLACEHOLDER_MARKERS = PLACEHOLDER_MARKERS + [
@@ -103,10 +116,15 @@ SUPPLEMENT_AI_DISCLOSURE_RE = re.compile(
     r"(\\section\*\{AI Assistance Disclosure\}\n\n)(.*?)(\n\n\\clearpage)",
     re.DOTALL,
 )
+DATA_AVAILABILITY_STATEMENT_RE = re.compile(
+    r"(## Prepared Manuscript Wording\n\n)(.*?)(\n\n## Notes For Final Submission)",
+    re.DOTALL,
+)
 COVER_LETTER_SIGNATURE_RE = re.compile(r"(Sincerely,\n\n)(.*?)(\n?)\Z", re.DOTALL)
 EXTERNAL_REFERENCE_RE = re.compile(r"^https?://|^doi:|^10\.\d{4,9}/", re.IGNORECASE)
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 ORCID_RE = re.compile(r"^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$")
+DATE_RE = re.compile(r"\b20\d{2}-\d{2}-\d{2}\b")
 
 
 @dataclass(frozen=True)
@@ -198,15 +216,21 @@ def apply_metadata(
     supplement_path = root / SUPPLEMENT_TEX
     decisions_path = root / FINAL_DECISIONS
     cover_path = root / COVER_LETTER
+    data_availability_path = root / DATA_AVAILABILITY
     main_text = read_required_text(main_path)
     supplement_text = read_required_text(supplement_path)
     decisions_text = read_required_text(decisions_path)
     cover_text = read_required_text(cover_path)
+    data_availability_text = read_required_text(data_availability_path)
 
     updated_main = update_main_tex(main_text, validated)
     updated_supplement = update_supplement_tex(supplement_text, validated)
     updated_decisions = update_final_decisions(decisions_text, validated)
     updated_cover = update_cover_letter(cover_text, validated)
+    updated_data_availability = update_data_availability_statement(
+        data_availability_text,
+        validated,
+    )
 
     changed_paths: list[Path] = []
     writes = [
@@ -214,6 +238,7 @@ def apply_metadata(
         (supplement_path, updated_supplement),
         (decisions_path, updated_decisions),
         (cover_path, updated_cover),
+        (data_availability_path, updated_data_availability),
     ]
     for path, new_text in writes:
         old_text = path.read_text(encoding="utf-8")
@@ -226,6 +251,11 @@ def apply_metadata(
 
 
 def validate_metadata(metadata: dict[str, Any]) -> dict[str, str]:
+    if metadata.get("schema_version") != METADATA_SCHEMA_VERSION:
+        raise MetadataError(
+            "schema_version must be "
+            f"{METADATA_SCHEMA_VERSION}; refresh the owner metadata template"
+        )
     missing = [field for field in REQUIRED_FIELDS if field not in metadata]
     if missing:
         raise MetadataError("missing required field(s): " + ", ".join(missing))
@@ -243,7 +273,7 @@ def validate_metadata(metadata: dict[str, Any]) -> dict[str, str]:
                 raise MetadataError(f"{field} still looks like a placeholder: {marker}")
         validated[field] = cleaned
 
-    for field in OPTIONAL_ROW_FIELDS:
+    for field in OPTIONAL_FIELDS:
         value = metadata.get(field)
         if value is None:
             continue
@@ -258,18 +288,37 @@ def validate_metadata(metadata: dict[str, Any]) -> dict[str, str]:
 
     if not EMAIL_RE.match(validated["corresponding_email"]):
         raise MetadataError("corresponding_email must look like an email address")
-    if not valid_orcid(validated["corresponding_author_orcid"]):
-        raise MetadataError("corresponding_author_orcid must be a valid ORCID identifier")
+    if not valid_orcid(validated["submitting_author_orcid"]):
+        raise MetadataError("submitting_author_orcid must be a valid ORCID identifier")
+    corresponding_orcid = validated.get("corresponding_author_orcid")
+    if corresponding_orcid and not valid_orcid(corresponding_orcid):
+        raise MetadataError(
+            "corresponding_author_orcid must be empty or a valid ORCID identifier"
+        )
+    if not EMAIL_RE.match(validated["support_email"]):
+        raise MetadataError("support_email must look like an email address")
     if not validated["repository_url"].startswith(("http://", "https://")):
         raise MetadataError("repository_url must be an HTTP(S) URL visible to reviewers")
     if not EXTERNAL_REFERENCE_RE.search(validated["release_url_or_doi"]):
         raise MetadataError("release_url_or_doi must be an HTTP(S) URL or DOI")
     if not re.search(
-        r"(?:\b3\b|\bthree\b).{0,30}\byears?\b|\byears?\b.{0,30}(?:\b3\b|\bthree\b)",
+        r"(?:\b2\b|\btwo\b).{0,30}\byears?\b|\byears?\b.{0,30}(?:\b2\b|\btwo\b)",
         validated["maintenance_commitment"],
         re.IGNORECASE,
     ):
-        raise MetadataError("maintenance_commitment must explicitly state a three-year commitment")
+        raise MetadataError(
+            "maintenance_commitment must explicitly state availability for at least two years"
+        )
+    review_confirmation = validated["author_review_confirmation"]
+    if not DATE_RE.search(review_confirmation) or not re.search(
+        r"\b(reviewed|rewrote|verified)\b",
+        review_confirmation,
+        re.IGNORECASE,
+    ):
+        raise MetadataError(
+            "author_review_confirmation must name a completed review or rewrite "
+            "and include its YYYY-MM-DD date"
+        )
 
     return validated
 
@@ -379,13 +428,20 @@ def update_supplement_tex(text: str, metadata: dict[str, str]) -> str:
 def render_author_block(metadata: dict[str, str]) -> str:
     email = metadata["corresponding_email"]
     name = latex_escape(metadata["corresponding_author_name"])
-    orcid = metadata["corresponding_author_orcid"]
+    correspondence = (
+        f"  Correspondence: {name}, "
+        f"\\href{{mailto:{email}}}{{{email}}}"
+    )
+    orcid = metadata.get("corresponding_author_orcid")
+    if orcid:
+        correspondence += (
+            f"; ORCID: \\href{{https://orcid.org/{orcid}}}{{{orcid}}}"
+        )
     return (
         "\\author{\n"
         f"  {metadata['author_latex']}\\\\\n"
         f"  {metadata['affiliations_latex']}\\\\\n"
-        f"  Correspondence: {name}, \\href{{mailto:{email}}}{{{email}}}; "
-        f"ORCID: \\href{{https://orcid.org/{orcid}}}{{{orcid}}}\n"
+        f"{correspondence}\n"
         "}"
     )
 
@@ -418,7 +474,10 @@ def render_availability(metadata: dict[str, str]) -> str:
         "redistributed through GitHub or Zenodo; they are regenerated from public "
         "GDC/TCGA and TCGA-CDR inputs by the documented Docker and "
         "reproducibility-bundle workflows. "
-        f"{latex_sentence(metadata['maintenance_commitment'])}"
+        f"{latex_sentence(metadata['maintenance_commitment'])} "
+        f"Support is coordinated by {latex_escape(metadata['support_owner_name'])} "
+        f"(\\href{{mailto:{metadata['support_email']}}}"
+        f"{{{latex_escape(metadata['support_email'])}}})."
     )
 
 
@@ -426,8 +485,14 @@ def update_final_decisions(text: str, metadata: dict[str, str]) -> str:
     rows = {
         "Author list": metadata["author_markdown"],
         "Affiliations": metadata["affiliations_markdown"],
-        "Corresponding author": metadata["corresponding_email"],
-        "Submitting author ORCID": metadata["corresponding_author_orcid"],
+        "Corresponding author": (
+            f"{metadata['corresponding_author_name']} "
+            f"({metadata['corresponding_email']})"
+        ),
+        "Submitting author and ORCID": (
+            f"{metadata['submitting_author_name']} "
+            f"({metadata['submitting_author_orcid']})"
+        ),
         "CRediT author contributions": metadata["author_contributions_statement"],
         "Funding statement": metadata["funding_statement"],
         "Conflict of interest": metadata["conflict_of_interest_statement"],
@@ -436,7 +501,15 @@ def update_final_decisions(text: str, metadata: dict[str, str]) -> str:
         "Public or reviewer-accessible repository URL": metadata["repository_url"],
         "Stable release DOI or archive URL": metadata["release_url_or_doi"],
         "Public demo URL or Docker-only access statement": metadata["demo_or_access_statement"],
-        "Three-year web-service maintenance commitment": metadata["maintenance_commitment"],
+        "Two-year software and web-service availability commitment": metadata[
+            "maintenance_commitment"
+        ],
+        "Support owner and contact": (
+            f"{metadata['support_owner_name']} ({metadata['support_email']})"
+        ),
+        "Author-led scientific review and verification": metadata[
+            "author_review_confirmation"
+        ],
     }
     for field, row_name in OPTIONAL_ROW_FIELDS.items():
         if field in metadata:
@@ -450,17 +523,62 @@ def update_final_decisions(text: str, metadata: dict[str, str]) -> str:
 def update_cover_letter(text: str, metadata: dict[str, str]) -> str:
     rows = {
         "Corresponding author": f"{metadata['corresponding_author_name']} ({metadata['corresponding_email']})",
-        "Submitting author ORCID": metadata["corresponding_author_orcid"],
+        "Submitting author and ORCID": (
+            f"{metadata['submitting_author_name']} "
+            f"({metadata['submitting_author_orcid']})"
+        ),
         "Repository": metadata["repository_url"],
         "Software license": metadata["software_license"],
         "Release archive": metadata["release_url_or_doi"],
         "Reviewer access": metadata["demo_or_access_statement"],
         "AI-use disclosure": metadata["ai_use_disclosure"],
         "Maintenance commitment": metadata["maintenance_commitment"],
+        "Support contact": (
+            f"{metadata['support_owner_name']} ({metadata['support_email']})"
+        ),
+        "Author review": metadata["author_review_confirmation"],
     }
     for label, value in rows.items():
         text = replace_cover_letter_row(text, label, value)
     return replace_cover_letter_signature(text, metadata["corresponding_author_name"])
+
+
+def update_data_availability_statement(
+    text: str,
+    metadata: dict[str, str],
+) -> str:
+    return replace_section(
+        DATA_AVAILABILITY_STATEMENT_RE,
+        text,
+        render_data_availability_statement(metadata),
+        "prepared Data Availability wording",
+    )
+
+
+def render_data_availability_statement(metadata: dict[str, str]) -> str:
+    supplied = metadata.get("data_availability_note")
+    if supplied:
+        return supplied
+
+    release = normalize_reference(metadata["release_url_or_doi"])
+    return (
+        "A registration-free HTTPS TCGA-TRACE instance is available at "
+        f"`{metadata['demo_or_access_statement']}`. Source code is openly "
+        f"available at `{metadata['repository_url']}` under the "
+        f"{metadata['software_license']} license. The exact submitted source "
+        "release, Docker and test materials, documentation, compact benchmark "
+        "outputs, reconstruction bundles and "
+        "`docs/publication/benchmark/data_snapshot_manifest.json` are archived "
+        f"together at `{release}`. The manifest records the local TCGA/CDR/cache "
+        "snapshot used for the benchmark claims, including count-matrix hashes "
+        "for 33 cohorts and the TCGA-CDR checksum. Full TCGA expression matrices "
+        "and participant exports are not redistributed through GitHub or the "
+        "release archive; they are regenerated from public Genomic Data "
+        "Commons/TCGA and TCGA-CDR inputs by the documented Docker and "
+        "reproducibility-bundle workflows. "
+        f"{metadata['maintenance_commitment'].rstrip('.')}. Support is coordinated "
+        f"by {metadata['support_owner_name']} ({metadata['support_email']})."
+    )
 
 
 def replace_cover_letter_row(text: str, label: str, value: str) -> str:

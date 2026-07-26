@@ -72,7 +72,7 @@ make -C manuscript/bioinformatics_app_note clean compliance
 | Release-readiness workflow | `.github/workflows/release-readiness.yml` | Exact-tag gate that binds the deployed commit to browser evidence, owner metadata, manuscript compliance and the verified archive. |
 | Artifact manifest | `manuscript/bioinformatics_app_note/submission/artifact_manifest.md` | This file. |
 | Final decision tracker | `manuscript/bioinformatics_app_note/submission/final_submission_decisions.md` | Owner-provided metadata and availability decisions required before submission. |
-| Owner metadata template | `manuscript/bioinformatics_app_note/submission/owner_metadata.template.json` | Fillable JSON for final authorship, availability, funding and COI values. |
+| Owner metadata template | `manuscript/bioinformatics_app_note/submission/owner_metadata.template.json` | Schema-v2 JSON for final correspondence, submitting author/ORCID, CRediT, disclosure, availability and support decisions. |
 
 ## Benchmark Evidence
 
@@ -140,21 +140,25 @@ make -C manuscript/bioinformatics_app_note clean compliance
 
 ## Current Submission Blockers
 
-These items require project-owner decisions before journal submission:
+The strict metadata checker currently groups 30 unresolved appearances into 10
+unique decisions. These items require project-owner action before journal
+submission or exact-release validation:
 
-- Final author list, affiliations and corresponding-author email.
-- Submitting-author ORCID and CRediT contribution statement.
-- Funding statement.
-- Conflict-of-interest statement.
+- Corresponding-author name and institutional email.
+- Submitting-author name/ORCID and CRediT contribution statement.
 - Accurate AI-use disclosure after independent author rewrite and scientific
   verification of the assisted draft.
 - Complete final software license text as a top-level `LICENSE`/`COPYING` file;
   short stubs and placeholders fail the strict owner-metadata gate.
-- Reviewer-accessible or public repository URL.
 - Stable archive DOI or release URL.
-- Three-year web-service maintenance commitment, named support owner and
+- Two-year software and web-service availability commitment, named support owner and
   support contact.
-- Open-access APC, discount or waiver route.
+- Exact tagged HTTPS browser retest.
+
+The author list, affiliations, funding, conflict declaration, repository URL
+and demo URL are already supplied. The APC, discount or waiver route remains an
+owner operational follow-up but does not block construction of the reviewer
+package.
 
 After these owner-controlled blockers are resolved,
 `scripts/publication/finalize_submission_package.py` writes the final compact
@@ -191,7 +195,7 @@ Validated on 2026-07-25:
   blockers and is intended to pass in strict mode after final metadata,
   complete license text, repository URL and archive DOI edits.
 - Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `129 passed`.
+- Publication-script tests pass: `133 passed`.
 - Standalone tests pass: `15 passed` (14 CLI plus one attestation verifier).
 - Frontend tests pass: `15 passed`; the production Docker build also passes.
 - Submission artifact checker reports `109/109` artifacts available.

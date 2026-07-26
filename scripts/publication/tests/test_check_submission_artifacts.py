@@ -53,11 +53,29 @@ def write_owner_ready_fixture(root: Path) -> None:
     (submission / "final_submission_decisions.md").write_text(
         "| Field | Current placeholder | Final value |\n"
         "| --- | --- | --- |\n"
-        "| Software license | Required | MIT |\n",
+        "| Author list | Required | Final authors |\n"
+        "| Affiliations | Required | Final affiliations |\n"
+        "| Corresponding author | Required | Ada Lovelace (ada@example.org) |\n"
+        "| Submitting author and ORCID | Required | Grace Hopper (0000-0002-1694-233X) |\n"
+        "| CRediT author contributions | Required | Final CRediT statement |\n"
+        "| Funding statement | Required | No external funding |\n"
+        "| Conflict of interest | Required | None declared |\n"
+        "| AI-use disclosure | Required | Final disclosure reviewed by the authors |\n"
+        "| Software license | Required | MIT |\n"
+        "| Public or reviewer-accessible repository URL | Required | https://example.org/source |\n"
+        "| Stable release DOI or archive URL | Required | https://doi.org/10.5281/zenodo.1 |\n"
+        "| Public demo URL or Docker-only access statement | Required | https://example.org/demo |\n"
+        "| Two-year software and web-service availability commitment | Required | Available for two years |\n"
+        "| Support owner and contact | Required | Grace Hopper (support@example.org) |\n"
+        "| Author-led scientific review and verification | Required | Grace Hopper reviewed and verified the submission on 2026-07-26 |\n",
         encoding="utf-8",
     )
     (submission / "cover_letter_draft.md").write_text(
         "Dear Editors,\n\nSincerely,\nFinal Author\n",
+        encoding="utf-8",
+    )
+    (submission / "data_availability_statement.md").write_text(
+        "Source and release are archived at https://example.org/release under MIT.\n",
         encoding="utf-8",
     )
     (root / "LICENSE").write_text(license_text(), encoding="utf-8")
@@ -75,6 +93,9 @@ def test_build_manifest_records_available_artifact(tmp_path: Path) -> None:
 
     assert manifest["missing_required_artifacts"] == []
     assert manifest["owner_metadata_blockers"] == []
+    assert manifest["owner_metadata_decision_count"] == 0
+    assert manifest["owner_metadata_occurrence_count"] == 0
+    assert manifest["owner_metadata_decisions"] == []
     assert manifest["artifacts"][0]["status"] == "available"
     assert manifest["artifacts"][0]["sha256"]
 
@@ -99,3 +120,7 @@ def test_build_manifest_includes_owner_metadata_blockers(tmp_path: Path) -> None
 
     assert manifest["missing_required_artifacts"] == []
     assert manifest["owner_metadata_blockers"]
+    assert manifest["owner_metadata_decision_count"] > 0
+    assert manifest["owner_metadata_occurrence_count"] == len(
+        manifest["owner_metadata_blockers"]
+    )

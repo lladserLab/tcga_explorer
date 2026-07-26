@@ -88,16 +88,16 @@ change.
 Before submission, copy and fill
 `submission/owner_metadata.template.json`, then apply the final owner metadata
 with `../../scripts/publication/apply_submission_metadata.py`. This updates the
-manuscript, cover letter and decision tracker without direct LaTeX edits. The
-final author list, affiliation, corresponding email, ORCID, CRediT roles,
-funding, conflict statement, AI-use disclosure, software license,
-reviewer-accessible repository, release DOI/archive and three-year support
-commitment still require owner confirmation. Cross-browser smoke testing also
-remains to be recorded. Because manuscript drafting is not among the common
-acceptable uses listed in the current Bioinformatics AI policy, the author team
-must independently rewrite and verify all author-facing prose, disclose the
-assistance in the manuscript, supplement and cover letter, and confirm
-acceptability with the editorial office.
+manuscript, cover letter, Data Availability statement and decision tracker
+without direct LaTeX edits. Author order, affiliations, funding, conflict
+statement, repository and demo URL are already supplied. Corresponding and
+submitting-author details, CRediT roles, AI-use disclosure, software license,
+release DOI/archive and two-year support commitment still require owner
+confirmation. The exact tagged HTTPS cross-browser run also remains. The author
+team must independently review, rewrite
+where necessary and verify all author-facing prose, disclose AI assistance in
+the manuscript, supplement and cover letter, and contact the editorial office
+if any use falls outside the examples covered by the journal guidance.
 
 ## Submission Files
 
@@ -120,16 +120,17 @@ acceptability with the editorial office.
   WebKit smoke-test record for the tagged public release.
 - `submission/artifact_manifest.md`: map of manuscript, benchmark and
   submission support files.
-- `submission/final_submission_decisions.md`: final author, license,
-  repository, demo and DOI decisions that must be supplied before submission.
+- `submission/final_submission_decisions.md`: grouped owner decisions,
+  operational follow-ups and exact-release gates.
 - `submission/owner_metadata.template.json`: JSON template consumed by the
-  metadata application script.
+  metadata application script; schema v2 keeps corresponding and submitting
+  author identities distinct.
 - `../../docs/publication/application_note_writing_blueprint.md`: writing and
   structure model derived from the published GRNContext Application Note,
   current Bioinformatics rules, Nature readability guidance and REMARK.
 - `../../scripts/publication/apply_submission_metadata.py`: validates and
-  applies final owner metadata to `main.tex`, the cover letter and the decision
-  tracker.
+  applies final owner metadata to `main.tex`, the supplement, cover letter,
+  Data Availability statement and decision tracker.
 - `../../scripts/publication/build_submission_archive.py`: compact
   reviewer/source archive builder for the final release package.
 - `../../scripts/publication/build_oup_preview.py`: generates the synchronized

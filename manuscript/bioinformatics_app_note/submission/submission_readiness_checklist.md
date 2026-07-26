@@ -1,10 +1,10 @@
 # Bioinformatics Application Note Submission Checklist
 
-Status date: 2026-07-25.
+Status date: 2026-07-26.
 
 Target article type: Bioinformatics Application Note.
 
-Official sources last checked on 2026-07-24:
+Official sources last checked on 2026-07-26:
 
 - Author guidelines:
   https://academic.oup.com/bioinformatics/pages/author-guidelines
@@ -36,7 +36,7 @@ The current instructions do not state a separate numerical maximum for
 supplementary tables or figures. The supplement retains eight essential, cited
 tables, including the complete 11-scenario evidence matrix in Table S4. The
 main manuscript uses one integrated vector figure and no empirical tables
-while remaining within the four-page limit. The 11-page review PDF is not
+while remaining within the four-page limit. The 12-page review PDF is not
 the journal page-count metric: its length results from the required 12-point,
 double-spaced submission format. The synchronized OUP preview is the page-limit
 estimate and currently occupies four pages. OUP states that author templates
@@ -79,7 +79,7 @@ gate rather than a production-page guarantee.
   structure review; it is not a scientific comparator or manuscript citation.
 - `check_submission_artifacts.py` verifies the complete technical handoff.
 - Backend, publication-script, standalone-script and frontend tests pass:
-  `137 + 121 + 15 + 15`. The standalone suite comprises 14 CLI tests across
+  `138 + 133 + 15 + 15`. The standalone suite comprises 14 CLI tests across
   all six public compute families plus one server-attestation verifier test.
 - The artifact checker reports `109/109`; the compact review archive verifies
   480 entries.
@@ -92,23 +92,20 @@ gate rather than a production-page guarantee.
 The technical editorial gate passes, but journal submission must not proceed
 until every item below is resolved:
 
-- Final author names and order.
-- Final affiliations and corresponding-author email.
-- Submitting-author ORCID.
+- Corresponding-author name and institutional email.
+- Submitting-author name and ORCID.
 - CRediT contribution statement.
-- Funding statement.
-- Conflict-of-interest declaration.
 - Complete top-level software license.
 - Exact submitted code state tagged and pushed to the public GitHub repository.
 - Passing independent clean-reproduction CI run for that exact commit.
 - Tagged release archived on Zenodo with its stable version-specific DOI/URL.
-- Three-year public web-service maintenance commitment.
-- Named support owner and support contact for those three years.
+- Software and public web-service availability commitment for at least two
+  years after publication.
+- Named support owner and support contact for those two years.
 - Provisional automated smoke tests pass 24/24 checks across Chromium,
   Firefox/Gecko and WebKit. Regenerate the record against the exact tagged
   HTTPS release; add a short manual Safari-product check if deployment behavior
   depends on Safari-specific integration.
-- Institutional decision on the open-access APC, ISCB discount or waiver route.
 - Owner/legal approval of the Data Availability wording.
 - Final cover letter and submission-system metadata.
 - Independent author rewrite and scientific verification of all author-facing
@@ -117,13 +114,18 @@ until every item below is resolved:
   manuscript and detailed supplementary disclosure, following the current OUP
   AI policy.
 
-The last two points are submission blockers. The current Bioinformatics policy
-lists language correction, translation, research use and evaluation among
-common acceptable uses; manuscript drafting is not in that list. The current
-package is therefore an engineering and editorial working draft. The author
-team must independently rewrite and verify the final text, disclose the
-assistance and confirm acceptability with the editorial office rather than
-submit it unchanged.
+Author order, affiliations, funding, conflict declaration, public repository
+and public demo URL are already supplied. The APC, ISCB discount or waiver
+route remains an operational owner decision on the journal timeline, but it
+does not block construction of the reviewer package.
+
+The last two points are submission blockers. Bioinformatics requires AI used
+to generate content, write code or process data to be disclosed in both the
+cover letter and Methods or Acknowledgements. The current package remains an
+engineering and editorial working draft: the author team must independently
+review, rewrite where necessary and verify the final text, and contact the
+editorial office if any use falls outside the examples covered by the journal
+guidance.
 
 ## Finalization Workflow
 

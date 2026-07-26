@@ -1,6 +1,6 @@
 # Data Availability Statement
 
-Status date: 2026-07-24.
+Status date: 2026-07-26.
 
 Use this wording after the final license and version-specific Zenodo DOI are
 known. The public GitHub location is fixed. The wording avoids implying
@@ -21,7 +21,8 @@ hashes for 33 cohorts and the TCGA-CDR checksum. Full TCGA expression matrices
 and participant exports are not redistributed through GitHub or Zenodo; they
 are regenerated from public Genomic Data Commons/TCGA and TCGA-CDR inputs by
 the documented Docker and reproducibility-bundle workflows. The final
-statement will identify the named support contact and maintenance commitment.
+statement will identify the named support contact and the required two-year
+availability commitment.
 
 ## Notes For Final Submission
 
@@ -35,4 +36,5 @@ statement will identify the named support contact and maintenance commitment.
   upload.
 - Cite the archived software release and GDC dataset in the reference list,
   not only as bare URLs in this statement.
-- Confirm the named three-year support owner and contact.
+- Confirm the named support owner and contact for at least two years after
+  publication.

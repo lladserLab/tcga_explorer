@@ -44,7 +44,7 @@ useful context but do not override this ledger.
 | R2-21 | complete | Competing-risk interpretation contract | UI, methodology, JSON/HTML audit and manuscript distinguish KM/cause-specific Cox estimands from cumulative-incidence and Fine--Gray estimands, disclose endpoint-specific 0/1/2 event coding and preserve the non-informative censoring assumption where competing deaths are censored. |
 | R2-22 | complete | Runtime and concurrency evidence | A public-API benchmark reports uncached/cached single analysis, two-job overlap, 10-analysis batch, 72-cell multiverse and 33-cohort pan-cancer wall/queue/compute times, observed Docker cgroup memory, hardware and queue limits. Raw JSON, CSV, manifest and Table S8 pass the frozen-output gate. |
 | R2-23 | complete | Canonical project identity | UI, API/MCP metadata, manuscript outputs and review archive use TCGA-TRACE or `tcga-trace`; the archive manifest declares the project name. `/tcga_explorer`, the repository slug and historical internal identifiers are documented only as compatibility surfaces, with an automated identity gate. |
-| R2-24 | owner | Final owner and release handoff | Authorship, four affiliations, funding and the no-conflict declaration were supplied on 2026-07-25. CI now includes a manual exact-tag release gate that requires the HTTPS deployment to report the checked-out commit and tag before rerunning browsers, tests, metadata, manuscript and archive checks. Owners must still confirm corresponding author/email/ORCID, CRediT, AI disclosure, APC route and support ownership; approve a top-level OSI license; tag, push and deploy the exact release with its commit and ref identity; archive it under an immutable Zenodo DOI; and replace every remaining placeholder consistently. |
+| R2-24 | owner | Final owner and release handoff | Authorship, four affiliations, funding and the no-conflict declaration were supplied on 2026-07-25. CI now includes a manual exact-tag release gate that requires the HTTPS deployment to report the checked-out commit and tag before rerunning browsers, tests, metadata, manuscript and archive checks. Owners must still confirm corresponding author/email, submitting author/ORCID, CRediT, AI disclosure, APC route and support ownership; approve a top-level OSI license; commit to at least two years of software and service availability; tag, push and deploy the exact release with its commit and ref identity; archive it under an immutable Zenodo DOI; and replace every remaining placeholder consistently. |
 
 ## Long-Term Scientific and Product Backlog
 
@@ -572,3 +572,42 @@ useful context but do not override this ledger.
   reran all frozen capsules, verified checksummed results and uploaded the
   independent evidence
   (`https://github.com/lladserLab/tcga_explorer/actions/runs/30187314505/job/89754175720`).
+
+## 2026-07-26 Owner Handoff Contract
+
+- Rechecked the current official Bioinformatics author guidelines rather than
+  carrying forward the earlier handoff assumption. Application Note software
+  must remain available for a full two years after publication, not three.
+  The journal encourages an open-source license but does not state it as a
+  mandatory editorial condition; TCGA-TRACE retains a complete OSI-compatible
+  license as a stricter project release policy. APC handling remains an
+  operational journal-timeline decision rather than a reviewer-package gate.
+- Replaced every live three-year maintenance reference with the official
+  two-year software and service availability requirement. Updated the AI
+  wording to require disclosure in the cover letter and manuscript plus
+  independent author accountability, while reserving editorial-office contact
+  for uses outside the journal's stated examples.
+- Introduced owner metadata schema
+  `tcga-trace-owner-metadata-v2`. Corresponding and submitting authors are now
+  distinct; the submitting ORCID can no longer be attributed silently to the
+  corresponding author. The contract also requires a named support owner and
+  email, a dated author-review confirmation and the two-year commitment.
+- Extended the metadata applicator to update the manuscript, supplement, cover
+  letter, decision tracker and standalone Data Availability statement from one
+  validated JSON record. Optional corresponding-author ORCID and APC route are
+  represented without conflating them with required submission metadata.
+- Replaced the raw placeholder count with grouped owner decisions. The current
+  non-strict gate reports 10 unique decisions across 30 synchronized
+  occurrences: correspondence, submitting author/ORCID, CRediT, AI disclosure,
+  independent author review, license, archive DOI, two-year availability,
+  support contact and exact-tag browser retest. Author list, affiliations,
+  funding, conflict declaration, repository and demo URL remain confirmed.
+- Added regression coverage for stale metadata schemas, separate submitting
+  and corresponding identities, dated author review, Data Availability
+  synchronization, grouped blocker output and owner-decision records in the
+  review archive. Publication tests pass 133/133; the generated archive still
+  verifies 480 entries, 479 manifest files and 109/109 submission artifacts.
+- Rebuilt all manuscript targets after the policy correction. The review,
+  supplement and OUP preview remain 12, 17 and 4 pages; editorial compliance
+  still reports one main vector figure, no main tables, eight supplementary
+  tables, four declarative cases and a 4/4-page OUP preview.

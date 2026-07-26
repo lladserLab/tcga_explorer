@@ -323,7 +323,7 @@ Current expected backend test result:
 Current expected publication-script test result:
 
 ```text
-129 passed
+133 passed
 ```
 
 Current expected standalone-script test result:

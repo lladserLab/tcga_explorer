@@ -349,6 +349,18 @@ def build_archive_manifest(
         "file_count": len(records),
         "total_uncompressed_bytes": sum(record.bytes for record in records),
         "owner_metadata_blockers": artifact_manifest["owner_metadata_blockers"],
+        "owner_metadata_decision_count": artifact_manifest.get(
+            "owner_metadata_decision_count",
+            len(artifact_manifest["owner_metadata_blockers"]),
+        ),
+        "owner_metadata_occurrence_count": artifact_manifest.get(
+            "owner_metadata_occurrence_count",
+            len(artifact_manifest["owner_metadata_blockers"]),
+        ),
+        "owner_metadata_decisions": artifact_manifest.get(
+            "owner_metadata_decisions",
+            [],
+        ),
         "submission_artifact_count": artifact_manifest["artifact_count"],
         "submission_artifacts_available": artifact_manifest["available_artifact_count"],
         "excluded_runtime_data": [

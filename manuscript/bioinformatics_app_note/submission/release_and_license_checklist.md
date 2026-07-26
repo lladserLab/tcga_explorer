@@ -1,6 +1,6 @@
 # Release And License Checklist
 
-Status date: 2026-07-24.
+Status date: 2026-07-26.
 
 This checklist records the remaining project-owner release steps. GitHub and
 Zenodo are the selected source and archive locations; the checklist does not
@@ -12,25 +12,32 @@ Copy `owner_metadata.template.json` and supply:
 
 - final author names, order and affiliations;
 - corresponding-author name and email;
-- submitting-author ORCID;
+- submitting-author name and ORCID, independently of the corresponding author;
 - CRediT contribution statement;
 - funding and conflict-of-interest statements;
 - accurate disclosure of permitted AI assistance;
 - the prefilled public repository and application URLs;
 - the version-specific Zenodo DOI/archive URL;
 - license identifier;
-- explicit three-year service-maintenance commitment; and
+- explicit software and service availability commitment for at least two years;
 - named support owner/contact.
 
-The author team must independently rewrite and scientifically verify the final
-author-facing text. Manuscript drafting is not among the common acceptable uses
-listed in the current Bioinformatics AI policy, so the assistance must be
-disclosed and its acceptability confirmed with the editorial office.
+The author team must independently review, rewrite where necessary and
+scientifically verify the final author-facing text. Bioinformatics explicitly
+requires AI used to generate content, write code or process data to be
+disclosed in both the cover letter and Methods or Acknowledgements. Contact the
+editorial office if the authors determine that any use falls outside the
+journal's stated examples.
+
+Policy source rechecked 2026-07-26:
+`https://academic.oup.com/bioinformatics/pages/author-guidelines`.
 
 ## 2. Choose The Software License
 
-Bioinformatics requires software/data availability. The final repository must
-contain a complete top-level `LICENSE` or `COPYING` file before reviewer access.
+Bioinformatics requires free software/data availability to non-commercial
+users and encourages an open-source license. TCGA-TRACE adopts a complete
+top-level OSI-compatible `LICENSE` or `COPYING` file as a stronger project
+release requirement before reviewer access.
 
 Common choices for owner/institutional review:
 
@@ -73,7 +80,7 @@ Also confirm:
 - the HTTPS application works without an account;
 - the documented reviewer example can be executed;
 - Help/Methods and support contact are visible;
-- a named maintainer accepts responsibility for at least three years after
+- a named maintainer accepts responsibility for at least two years after
   publication; and
 - the Docker reproduction path remains available if the hosted service is
   temporarily unavailable.
@@ -150,7 +157,8 @@ must determine:
 - whether a waiver or discount request must be submitted.
 
 Record this decision in `final_submission_decisions.md`. Waiver handling should
-be addressed on the journal timeline, not after an invoice is issued.
+be addressed on the journal timeline, not after an invoice is issued. This
+operational item does not block creation of the reviewer package.
 
 ## 8. Final Upload Set
 

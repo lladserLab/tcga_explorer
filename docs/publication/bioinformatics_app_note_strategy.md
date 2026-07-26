@@ -220,11 +220,13 @@ Current external blockers before journal submission:
 - make the repository reviewer-accessible/public as appropriate;
 - archive a release and add a DOI or stable release URL;
 - finalize funding and conflict-of-interest statements;
-- name a support owner and commit to three years of web-service maintenance;
+- name a support owner and commit to at least two years of software and
+  web-service availability;
 - complete cross-browser smoke testing and preserve the results;
 - independently rewrite and scientifically verify all author-facing content;
 - provide a detailed AI-use declaration in the manuscript, supplement and cover
-  letter and confirm the planned handling with the editorial office; and
+  letter; contact the editorial office if any use falls outside the examples
+  covered by the journal guidance; and
 - confirm the open-access APC, institutional discount or waiver route.
 
 Template note: the current manuscript PDF is an initial-submission file, not an

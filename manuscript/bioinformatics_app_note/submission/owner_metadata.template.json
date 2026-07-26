@@ -1,11 +1,14 @@
 {
+  "schema_version": "tcga-trace-owner-metadata-v2",
   "author_latex": "Sergio Hernández-Galaz$^{1,2,3}$, Andrés Hernández-Oliveras$^{1,2}$, Ignacio Pezoa-Soto$^{1,3,4}$, Javiera Reyes-Alvarez$^{1}$, Vincenzo Benedetti$^{1}$, Alberto J. M. Martin$^{1,4}$, and Alvaro Lladser$^{1,3}$",
   "author_markdown": "Sergio Hernández-Galaz¹˒²˒³; Andrés Hernández-Oliveras¹˒²; Ignacio Pezoa-Soto¹˒³˒⁴; Javiera Reyes-Alvarez¹; Vincenzo Benedetti¹; Alberto J. M. Martin¹˒⁴; Alvaro Lladser¹˒³",
   "affiliations_latex": "$^{1}$Centro BASAL Ciencia \\& Vida, Fundación Ciencia \\& Vida, Santiago, Chile; $^{2}$Fundación Arturo López Pérez (FALP), OECI Cancer Center, Laboratorio de Medicina Traslacional, Centro de Investigación e Innovación en Cáncer, Santiago, Chile; $^{3}$Facultad de Medicina, Universidad San Sebastián, Santiago, Chile; $^{4}$Escuela de Ingeniería, Facultad de Ingeniería, Universidad San Sebastián, Santiago, Chile",
   "affiliations_markdown": "¹ Centro BASAL Ciencia & Vida, Fundación Ciencia & Vida, Santiago, Chile.\n² Fundación Arturo López Pérez (FALP), OECI Cancer Center, Laboratorio de Medicina Traslacional, Centro de Investigación e Innovación en Cáncer, Santiago, Chile.\n³ Facultad de Medicina, Universidad San Sebastián, Santiago, Chile.\n⁴ Escuela de Ingeniería, Facultad de Ingeniería, Universidad San Sebastián, Santiago, Chile.",
   "corresponding_author_name": "REPLACE_WITH_CORRESPONDING_AUTHOR_NAME",
   "corresponding_email": "REPLACE_WITH_EMAIL",
-  "corresponding_author_orcid": "REPLACE_WITH_ORCID_0000-0000-0000-0000",
+  "corresponding_author_orcid": null,
+  "submitting_author_name": "REPLACE_WITH_SUBMITTING_AUTHOR_NAME",
+  "submitting_author_orcid": "REPLACE_WITH_ORCID_0000-0000-0000-0000",
   "author_contributions_statement": "REPLACE_WITH_FINAL_CREDIT_AUTHOR_CONTRIBUTIONS",
   "funding_statement": "This work was funded by Centro Basal Ciencia & Vida, grant FB210008 from ANID—Agencia Nacional de Investigación y Desarrollo; ANID Fondecyt projects 1251312 to A.L. and 1231629 to A.J.M.M.; and ANID postdoctoral fellowship 3260791 to S.H.-G. Powered@NLHPC: this research was partially supported by the supercomputing infrastructure of the NLHPC (CCSS210001).",
   "conflict_of_interest_statement": "The authors declare no conflicts of interest.",
@@ -14,6 +17,10 @@
   "repository_url": "https://github.com/lladserLab/tcga_explorer",
   "release_url_or_doi": "REPLACE_WITH_ZENODO_VERSION_DOI_OR_RECORD_URL",
   "demo_or_access_statement": "https://apps.cienciavida.org/tcga_explorer/",
-  "maintenance_commitment": "REPLACE_WITH_THREE_YEAR_WEB_SERVICE_MAINTENANCE_COMMITMENT",
-  "data_availability_note": "REPLACE_WITH_FINAL_DATA_AVAILABILITY_NOTE_IF_DIFFERENT"
+  "maintenance_commitment": "REPLACE_WITH_AT_LEAST_TWO_YEAR_SOFTWARE_AND_WEB_SERVICE_AVAILABILITY_COMMITMENT",
+  "support_owner_name": "REPLACE_WITH_SUPPORT_OWNER_NAME",
+  "support_email": "REPLACE_WITH_SUPPORT_EMAIL",
+  "author_review_confirmation": "REPLACE_WITH_NAME_AND_YYYY-MM-DD_DATE_CONFIRMING_INDEPENDENT_AUTHOR_REVIEW_REWRITE_AND_SCIENTIFIC_VERIFICATION",
+  "apc_route": null,
+  "data_availability_note": null
 }

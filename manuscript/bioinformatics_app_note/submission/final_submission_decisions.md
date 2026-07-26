@@ -1,6 +1,6 @@
 # Final Submission Decisions
 
-Status date: 2026-07-25.
+Status date: 2026-07-26.
 
 This file collects the project-owner decisions that must be filled before
 TCGA-TRACE can be submitted as a Bioinformatics Application Note. The technical
@@ -14,7 +14,7 @@ these values to be inserted.
 | Author list | `Sergio Hernández-Galaz; Andrés Hernández-Oliveras; Ignacio Pezoa-Soto; Javiera Reyes-Alvarez; Vincenzo Benedetti; Alberto J. M. Martin; Alvaro Lladser` | Confirmed 2026-07-25 |
 | Affiliations | Four numbered affiliations supplied in `main.tex` and `owner_metadata.template.json` | Confirmed 2026-07-25 |
 | Corresponding author | `email@example.org` | TODO |
-| Submitting author ORCID | Required in the submission system | TODO |
+| Submitting author and ORCID | Required in the submission system | TODO |
 | CRediT author contributions | `CRediT contribution statement placeholder` | TODO |
 | Funding statement | Centro Basal Ciencia & Vida FB210008; ANID Fondecyt 1251312 to A.L. and 1231629 to A.J.M.M.; ANID postdoctoral fellowship 3260791 to S.H.-G.; NLHPC CCSS210001 | Confirmed 2026-07-25 |
 | Conflict of interest | `The authors declare no conflicts of interest.` | Confirmed 2026-07-25 |
@@ -24,11 +24,11 @@ these values to be inserted.
 
 | Field | Why it matters | Final value |
 | --- | --- | --- |
-| Software license | Bioinformatics requires software/data availability for non-commercial users. | TODO |
+| Software license | Bioinformatics requires free availability to non-commercial users and encourages an open-source license; TCGA-TRACE release policy requires complete OSI-compatible license text. | TODO |
 | Public or reviewer-accessible repository URL | Required for reviewer access and post-publication availability. | `https://github.com/lladserLab/tcga_explorer` |
 | Stable release DOI or archive URL | Needed for a citable submitted version. | Zenodo selected; version-specific DOI pending reservation/publication. |
 | Public demo URL or Docker-only access statement | Needed to tell reviewers how to evaluate the web application. | Public URL supplied: `https://apps.cienciavida.org/tcga_explorer/`; health endpoint verified `ok` on 2026-07-24. Docker instructions remain as a reproducibility fallback. |
-| Three-year web-service maintenance commitment | Bioinformatics requires web servers to receive support and maintenance for at least three years after publication. | TODO |
+| Two-year software and web-service availability commitment | Bioinformatics requires the software to remain available for a full two years after publication. | TODO |
 | Data availability note | Needed because full TCGA patient-level exports are generated locally and not tracked in git. | Prepared wording in `manuscript/bioinformatics_app_note/submission/data_availability_statement.md`; owner/legal review before upload. |
 | Final TCGA data manifest | Needed to pin the RNA/CDR snapshot used by benchmark claims. | `docs/publication/benchmark/data_snapshot_manifest.json`; stable manifest hash `f424cf0ce18199ca291b9a396dd89660c654d049cc9bdeff1bbdcf1b8a0ba094`. |
 | Reviewer concordance record | Needed to show at least one comparison against an established external tool. | `docs/publication/external_concordance_kmplotter_ca9_kirc.md`; KM Plotter direction concordant for TCGA-KIRC CA9 OS median split, nominal significance not concordant. |
@@ -37,10 +37,23 @@ these values to be inserted.
 
 | Field | Why it matters | Final value |
 | --- | --- | --- |
-| Open-access APC or waiver route | Bioinformatics is fully open access; the owner/institution must confirm payment, discount or waiver handling before acceptance. | TODO |
-| Author-led scientific rewrite and verification | AI-assisted drafting extends beyond the policy's listed common uses; authors must rewrite and verify all author-facing statements, disclose assistance and confirm acceptability with the editorial office. | TODO |
-| Three-year support owner and contact | A named maintainer and support contact are needed for the public web resource. | TODO |
+| Open-access APC or waiver route | Bioinformatics is fully open access; payment, institutional agreement, discount or waiver handling must be resolved on the journal timeline. This operational decision does not block assembly of the submission package. | TODO |
+| Author-led scientific review and verification | Authors must independently review the code, analyses and prose, remain accountable for the final work and disclose AI assistance in the cover letter and manuscript. Contact the editorial office if any use falls outside the journal's stated examples. | TODO |
+| Support owner and contact | A named maintainer and support contact are needed to uphold the two-year availability commitment. | TODO |
 | Cross-browser compatibility record | Bioinformatics states that web servers should not be browser-specific; complete `submission/browser_compatibility_record.md` for Chromium, Gecko and WebKit engines. | Provisional local build passed 24/24 automated checks on 2026-07-25; rerun the contract against the exact tagged HTTPS release. |
+
+## Policy Basis
+
+The Bioinformatics author guidelines were rechecked on 2026-07-26:
+`https://academic.oup.com/bioinformatics/pages/author-guidelines`. For an
+Application Note they specify up to four journal-template pages, approximately
+2,600 words or 2,000 words plus one figure; free availability to
+non-commercial users; a full two years of software availability; no mandatory
+registration; browser-independent web services; stable source and archived
+submitted-version URLs; reproduction information; and AI-use disclosure in
+the cover letter plus Methods or Acknowledgements. Open-source licensing is
+encouraged rather than stated as a journal requirement. TCGA-TRACE deliberately
+keeps a complete OSI-compatible license as a stricter project release gate.
 
 ## Recommended Defaults To Confirm
 
@@ -76,7 +89,7 @@ Validated on 2026-07-25:
   screenshot-capture, identity, runtime, OUP-preview, editorial-check and
   submission-archive scripts, plus the standalone public API CLI.
 - Backend tests pass in Docker: `138 passed`.
-- Publication-script tests pass: `129 passed`.
+- Publication-script tests pass: `133 passed`.
 - Standalone tests pass: `15 passed`: 14 CLI tests covering all six public
   compute families and negative integrity controls, plus one attestation
   verifier test.
@@ -117,7 +130,9 @@ Validated on 2026-07-25:
 
 ## Final Pre-Submission Command
 
-Run this after replacing the values above. The low-friction path is to copy
+Run this after replacing the submission-blocking values above. The APC route
+may remain operationally pending until the journal timeline requires it. The
+low-friction path is to copy
 `manuscript/bioinformatics_app_note/submission/owner_metadata.template.json`,
 fill it outside git if desired, choose or generate the final license text, then
 run the finalizer command below.
