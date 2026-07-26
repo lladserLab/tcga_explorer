@@ -562,3 +562,13 @@ useful context but do not override this ledger.
   main tables, eight supplementary tables, a 4/4-page OUP preview, 109/109
   artifacts and the 480-entry archive. R2-24 remains owner-controlled with the
   same 18 metadata and release placeholders.
+- Published the CI correction as commit
+  `ba50e507ac857c36c753bc712345c7c36f4846e8` without rewriting branch
+  history. GitHub Actions run `30187314505` completed successfully on the
+  hosted runner: `docker-checks` passed backend, publication, standalone,
+  identity, frontend-test and production-build gates
+  (`https://github.com/lladserLab/tcga_explorer/actions/runs/30187314505/job/89754175751`);
+  `Independent clean-capsule reproduction` rebuilt the pinned R environment,
+  reran all frozen capsules, verified checksummed results and uploaded the
+  independent evidence
+  (`https://github.com/lladserLab/tcga_explorer/actions/runs/30187314505/job/89754175720`).
