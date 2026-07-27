@@ -207,14 +207,24 @@
     {
       "code": "KICH",
       "status": "evidence_gap",
-      "review_note": "No independent public bulk RNA-seq cohort with patient-linked survival passes the repository minimums. The CPTAC-3 screen contains only two chromophobe expression files, while available GEO outcome cohorts use expression arrays.",
+      "review_note": "No independent public bulk RNA-seq cohort with patient-linked survival passes the repository minimums. CPTAC-3 has only two endpoint-complete chromophobe cases, and the newer mixed-RCC GEO cohort does not publish patient-level outcomes.",
       "reviewed_at": "2026-07-27",
       "candidates": [
         {
           "source": "NCI GDC / CPTAC-3",
           "accession": "CPTAC-3",
+          "expression_endpoint_patients": 2,
+          "events": 0,
+          "censored": 2,
           "review_status": "rejected_below_minimum_patients",
-          "review_note": "Only two chromophobe gene-expression files were exposed by the open GDC screen, below the 10-patient minimum."
+          "review_note": "Only two chromophobe cases have both RNA-seq and usable survival; neither has an observed death."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE312695",
+          "expression_samples": 10,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "The mixed-RCC series includes ten chromophobe tumors, but GEO publishes tissue subtype only. Patient-level treatment and outcome rows remain in the non-open publication record."
         },
         {
           "source": "NCBI GEO",
@@ -244,9 +254,25 @@
     {
       "code": "KIRP",
       "status": "evidence_gap",
-      "review_note": "Public papillary renal-cell RNA-seq cohorts were found, but none supplies enough patient-linked survival observations. Older outcome cohorts are expression arrays.",
+      "review_note": "Public papillary renal-cell RNA-seq cohorts were found, but none supplies enough patient-linked survival observations. CPTAC-3 has only one event among nine usable papillary cases, and newer GEO cohorts omit individual outcome rows.",
       "reviewed_at": "2026-07-27",
       "candidates": [
+        {
+          "source": "NCI GDC / CPTAC-3",
+          "accession": "CPTAC-3",
+          "expression_endpoint_patients": 9,
+          "events": 1,
+          "censored": 8,
+          "review_status": "rejected_below_minimum_patients",
+          "review_note": "Nine papillary cases have RNA-seq and usable survival, with only one event; both patient and event minimums fail."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE312695",
+          "expression_samples": 27,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "The mixed-RCC series includes 27 papillary tumors, but GEO does not expose patient-level survival time/status."
+        },
         {
           "source": "NCBI GEO",
           "accession": "GSE180777",
@@ -349,10 +375,19 @@
     },
     {
       "code": "MESO",
-      "status": "evidence_gap",
-      "review_note": "The large Bueno mesothelioma RNA-seq cohort is controlled-access in EGA, and the open RNA-seq cohorts found do not publish individual survival time/status with the expression matrix.",
-      "reviewed_at": "2026-07-27",
+      "status": "available",
       "candidates": [
+        {
+          "dataset_id": "pmc-meso-nci-2023",
+          "source": "Europe PMC / Nair et al.",
+          "accession": "PMC9975319",
+          "expression_endpoint_patients": 99,
+          "events": 56,
+          "censored": 43,
+          "endpoint": "OS from biopsy",
+          "expression_unit": "Published TMM-normalized log2 CPM",
+          "review_status": "promoted"
+        },
         {
           "source": "European Genome-phenome Archive",
           "accession": "EGAS00001001563",
@@ -366,6 +401,13 @@
           "expression_samples": 18,
           "review_status": "rejected_missing_endpoint",
           "review_note": "The public sample metadata contains treatment and SMRP covariates but no individual overall-survival time/status."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE327166",
+          "expression_samples": 89,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "The 40-patient series publishes bulk RNA-seq but no individual survival rows; the survival analyses use the controlled Bueno cohort."
         },
         {
           "source": "NCBI GEO",
@@ -529,7 +571,7 @@
     {
       "code": "THCA",
       "status": "evidence_gap",
-      "review_note": "Large public thyroid RNA-seq matrices exist, but the searched releases do not expose patient-level survival time/status. The publication reporting survival for GSE310793 does not place those endpoint rows in GEO.",
+      "review_note": "Large public thyroid RNA-seq matrices exist, but the searched releases do not expose patient-level survival time/status. Smaller recent cohorts provide binary recurrence labels or too few RNA-profiled patients.",
       "reviewed_at": "2026-07-27",
       "candidates": [
         {
@@ -538,6 +580,20 @@
           "expression_samples": 109,
           "review_status": "rejected_missing_endpoint",
           "review_note": "GEO provides TPM and raw-count matrices, while all 109 sample records contain only tissue type and no individual PFS, DSS or OS fields."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE288945",
+          "expression_samples": 16,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "Eight recurrent and eight non-recurrent tumors are labeled, but no recurrence time or censoring time is published."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE305211",
+          "expression_endpoint_patients": 8,
+          "review_status": "rejected_below_minimum_patients",
+          "review_note": "Only eight high-risk follicular-thyroid-cancer patients underwent bulk RNA-seq; the larger prognostic cohort was profiled by immunohistochemistry."
         },
         {
           "source": "NCI GDC",
@@ -551,9 +607,18 @@
     {
       "code": "THYM",
       "status": "evidence_gap",
-      "review_note": "No independent public bulk RNA-seq thymoma cohort with at least five events and five censored observations was identified. Available outcome cohorts are arrays, TCGA-derived or single-cell.",
+      "review_note": "No independent public bulk RNA-seq thymic-neoplasm cohort with at least ten endpoint-complete patients was identified. The closest immunotherapy series has nine expression profiles and no survival time.",
       "reviewed_at": "2026-07-27",
       "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE181815",
+          "expression_samples": 9,
+          "events": 5,
+          "censored": 4,
+          "review_status": "rejected_below_minimum_patients",
+          "review_note": "The pembrolizumab thymic-carcinoma study has ten clinical records but only nine RNA-seq profiles, and publishes vital status without individual survival time."
+        },
         {
           "source": "NCBI GEO",
           "accession": "GSE29695",
@@ -590,7 +655,7 @@
     {
       "code": "UCS",
       "status": "evidence_gap",
-      "review_note": "The principal public uterine/ovarian carcinosarcoma RNA-seq series lacks individual survival endpoints, and the submitters explicitly describe the public record as incomplete.",
+      "review_note": "The principal public uterine/ovarian carcinosarcoma RNA-seq series lacks individual survival endpoints. ICGC has a 20-donor uterine-carcinosarcoma project but publishes no RNA-seq expression object.",
       "reviewed_at": "2026-07-27",
       "candidates": [
         {
@@ -598,16 +663,38 @@
           "accession": "GSE128630",
           "expression_samples": 100,
           "review_status": "rejected_missing_endpoint",
-          "review_note": "Processed RNA-seq is public, but sample metadata includes only anatomical site, sex and age; no survival time/status is released."
+          "review_note": "Processed RNA-seq and supplementary subtype tables are public, but no individual survival time/status is released."
+        },
+        {
+          "source": "ICGC Release 28",
+          "accession": "UTCA-FR",
+          "expression_samples": 0,
+          "review_status": "rejected_missing_expression",
+          "review_note": "The project has 20 uterine-carcinosarcoma donors but no open exp_seq object in Release 28."
         }
       ]
     },
     {
       "code": "UVM",
       "status": "evidence_gap",
-      "review_note": "The established external uveal-melanoma survival cohorts are expression arrays. Public sequencing cohorts found were TCGA-derived, single-cell, cell-line-only or too small.",
+      "review_note": "The established external uveal-melanoma survival cohorts are expression arrays. Recent sequencing cohorts are too small or use a targeted panel below the repository's 10,000-gene threshold.",
       "reviewed_at": "2026-07-27",
       "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE317536",
+          "expression_endpoint_patients": 13,
+          "expression_features": 2570,
+          "review_status": "rejected_insufficient_gene_coverage",
+          "review_note": "The paired primary/metastatic cohort reports survival but uses the targeted HTG EdgeSeq panel with about 2,570 features, below the 10,000-gene minimum."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE202687",
+          "expression_samples": 9,
+          "review_status": "rejected_below_minimum_patients",
+          "review_note": "The metastatic uveal-melanoma immunotherapy trial enrolled nine RNA-profiled patients, below the patient minimum."
+        },
         {
           "source": "NCBI GEO",
           "accession": "GSE22138",

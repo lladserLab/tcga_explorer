@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import csv
+from datetime import date, datetime
 import gzip
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import shutil
@@ -12,11 +14,13 @@ import urllib.parse
 import zipfile
 import xml.etree.ElementTree as ET
 
+from openpyxl import load_workbook
+
 from app.repository.adapters.cbioportal import download, write_tsv
 from app.repository.storage import sha256_file
 
 
-EUROPE_PMC_ADAPTER_VERSION = "europe_pmc_publication_v2"
+EUROPE_PMC_ADAPTER_VERSION = "europe_pmc_publication_v3"
 DEFAULT_EUROPE_PMC_API = (
     "https://www.ebi.ac.uk/europepmc/webservices/rest"
 )
@@ -344,13 +348,15 @@ def detect_creative_commons_license(path: Path) -> str:
         if local_name(key) == "href"
     ]
     combined = " ".join([*licenses, *href_values])
+    if "creativecommons.org/licenses/by-nc-nd/4.0" in combined:
+        return "CC-BY-NC-ND-4.0"
     if "creativecommons.org/licenses/by-nc/4.0" in combined:
         return "CC-BY-NC-4.0"
     if "creativecommons.org/licenses/by/4.0" in combined:
         return "CC-BY-4.0"
     raise ValueError(
-        "Europe PMC article does not expose a supported CC BY or CC BY-NC "
-        "4.0 license."
+        "Europe PMC article does not expose a supported CC BY, CC BY-NC "
+        "or CC BY-NC-ND 4.0 license."
     )
 
 
@@ -614,6 +620,30 @@ def materialize_publication_expression(
                 expression_spec.get("symbol_column") or 3
             ),
         )
+    if layout == "xlsx_matrix":
+        return materialize_xlsx_expression_matrix(
+            source,
+            target,
+            sample_ids,
+            sheet_name=str(
+                expression_spec.get("sheet_name") or ""
+            ).strip(),
+            header_row=int(
+                expression_spec.get("header_row") or 1
+            ),
+            feature_column=str(
+                expression_spec.get("feature_column") or ""
+            ).strip(),
+            sample_start_column=int(
+                expression_spec.get("sample_start_column") or 2
+            ),
+            feature_replacements=(
+                expression_spec.get("feature_replacements") or {}
+            ),
+            case_insensitive_samples=bool(
+                expression_spec.get("case_insensitive_samples")
+            ),
+        )
     raise ValueError(
         f"Unsupported publication expression layout: {layout!r}"
     )
@@ -627,6 +657,29 @@ def publication_expression_sample_ids(
         expression_spec.get("layout") or "simple"
     ).strip()
     delimiter = str(expression_spec.get("delimiter") or "\t")
+    if layout == "xlsx_matrix":
+        header = read_xlsx_expression_header(
+            source,
+            sheet_name=str(
+                expression_spec.get("sheet_name") or ""
+            ).strip(),
+            header_row=int(
+                expression_spec.get("header_row") or 1
+            ),
+        )
+        sample_start_index = int(
+            expression_spec.get("sample_start_column") or 2
+        ) - 1
+        if sample_start_index < 0 or sample_start_index >= len(header):
+            raise ValueError(
+                "XLSX expression sample_start_column is outside the "
+                "header."
+            )
+        return [
+            value
+            for value in header[sample_start_index:]
+            if value
+        ]
     with open_text_source(source) as input_handle:
         reader = csv.reader(input_handle, delimiter=delimiter)
         header = next(reader)
@@ -649,6 +702,220 @@ def publication_expression_sample_ids(
     raise ValueError(
         f"Unsupported publication expression layout: {layout!r}"
     )
+
+
+def materialize_xlsx_expression_matrix(
+    source: Path,
+    target: Path,
+    sample_ids: list[str],
+    *,
+    sheet_name: str,
+    header_row: int,
+    feature_column: str,
+    sample_start_column: int,
+    feature_replacements: dict[str, Any],
+    case_insensitive_samples: bool,
+) -> dict[str, Any]:
+    if not sheet_name or not feature_column:
+        raise ValueError(
+            "xlsx_matrix requires sheet_name and feature_column."
+        )
+    if header_row < 1 or sample_start_column < 1:
+        raise ValueError(
+            "XLSX expression row and column indexes must be positive."
+        )
+    workbook = load_workbook(
+        source,
+        read_only=True,
+        data_only=True,
+    )
+    try:
+        if sheet_name not in workbook.sheetnames:
+            raise ValueError(
+                f"XLSX expression sheet {sheet_name!r} was not found."
+            )
+        worksheet = workbook[sheet_name]
+        header = read_xlsx_expression_header(
+            source,
+            sheet_name=sheet_name,
+            header_row=header_row,
+            workbook=workbook,
+        )
+        try:
+            feature_index = header.index(feature_column)
+        except ValueError as error:
+            raise ValueError(
+                f"XLSX expression feature column {feature_column!r} "
+                "was not found."
+            ) from error
+        sample_start_index = sample_start_column - 1
+        if (
+            sample_start_index <= feature_index
+            or sample_start_index >= len(header)
+        ):
+            raise ValueError(
+                "XLSX expression sample_start_column must follow the "
+                "feature column and fall inside the header."
+            )
+        indexes = selected_sample_indexes(
+            header,
+            sample_ids,
+            case_insensitive=case_insensitive_samples,
+        )
+        if any(index < sample_start_index for index in indexes):
+            raise ValueError(
+                "A requested XLSX expression sample resolved to a "
+                "metadata column."
+            )
+        replacements = {
+            str(source_value).strip(): str(target_value).strip()
+            for source_value, target_value in feature_replacements.items()
+        }
+        if any(
+            not source_value or not target_value
+            for source_value, target_value in replacements.items()
+        ):
+            raise ValueError(
+                "XLSX expression feature replacements must be non-empty."
+            )
+        source_gene_rows = 0
+        replaced_features = 0
+        with target.open(
+            "w", newline="", encoding="utf-8"
+        ) as output_handle:
+            writer = csv.writer(
+                output_handle,
+                delimiter="\t",
+                lineterminator="\n",
+            )
+            writer.writerow([feature_column, *sample_ids])
+            for row in worksheet.iter_rows(
+                min_row=header_row + 1,
+                max_col=len(header),
+                values_only=True,
+            ):
+                raw_feature = row[feature_index]
+                if raw_feature is None:
+                    continue
+                feature = xlsx_cell_text(raw_feature)
+                replacement = replacements.get(feature)
+                if replacement:
+                    feature = replacement
+                    replaced_features += 1
+                elif isinstance(raw_feature, (date, datetime)):
+                    raise ValueError(
+                        "XLSX expression contains a date-formatted feature "
+                        f"{feature!r} without an explicit replacement."
+                    )
+                if not feature:
+                    continue
+                values = [
+                    xlsx_cell_text(row[index])
+                    for index in indexes
+                ]
+                if any(not value for value in values):
+                    raise ValueError(
+                        "XLSX expression contains a missing value for a "
+                        f"selected sample at feature {feature!r}."
+                    )
+                try:
+                    numeric_values = [float(value) for value in values]
+                except ValueError as error:
+                    raise ValueError(
+                        "XLSX expression contains a non-numeric value for "
+                        f"feature {feature!r}."
+                    ) from error
+                if any(
+                    not math.isfinite(value)
+                    for value in numeric_values
+                ):
+                    raise ValueError(
+                        "XLSX expression contains a non-finite value for "
+                        f"feature {feature!r}."
+                    )
+                writer.writerow([feature, *values])
+                source_gene_rows += 1
+    finally:
+        workbook.close()
+    if source_gene_rows < 10_000:
+        raise ValueError(
+            "XLSX expression matrix has fewer than 10,000 gene rows."
+        )
+    return {
+        "source_expression_layout": "xlsx_matrix",
+        "source_expression_columns": (
+            len(header) - sample_start_index
+        ),
+        "selected_expression_columns": len(sample_ids),
+        "source_expression_gene_rows": source_gene_rows,
+        "source_expression_sheet": sheet_name,
+        "source_expression_header_row": header_row,
+        "source_expression_feature_column": feature_column,
+        "source_expression_feature_replacements": replaced_features,
+    }
+
+
+def read_xlsx_expression_header(
+    source: Path,
+    *,
+    sheet_name: str,
+    header_row: int,
+    workbook: Any | None = None,
+) -> list[str]:
+    if not sheet_name or header_row < 1:
+        raise ValueError(
+            "XLSX expression sheet_name and positive header_row are "
+            "required."
+        )
+    owned_workbook = workbook is None
+    active_workbook = workbook or load_workbook(
+        source,
+        read_only=True,
+        data_only=True,
+    )
+    try:
+        if sheet_name not in active_workbook.sheetnames:
+            raise ValueError(
+                f"XLSX expression sheet {sheet_name!r} was not found."
+            )
+        worksheet = active_workbook[sheet_name]
+        values = next(
+            worksheet.iter_rows(
+                min_row=header_row,
+                max_row=header_row,
+                values_only=True,
+            ),
+            None,
+        )
+        if values is None:
+            raise ValueError(
+                f"XLSX expression header row {header_row} was not found."
+            )
+        header = [xlsx_cell_text(value) for value in values]
+        while header and not header[-1]:
+            header.pop()
+        if (
+            not header
+            or any(not value for value in header)
+            or len(header) != len(set(header))
+        ):
+            raise ValueError(
+                "XLSX expression header is missing or duplicated."
+            )
+        return header
+    finally:
+        if owned_workbook:
+            active_workbook.close()
+
+
+def xlsx_cell_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, datetime):
+        return value.isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    return str(value).strip()
 
 
 def filter_expression_columns(

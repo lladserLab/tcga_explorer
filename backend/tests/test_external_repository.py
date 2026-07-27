@@ -48,6 +48,7 @@ from app.repository.adapters.icgc import (
 from app.repository.adapters.pmc import (
     detect_creative_commons_license,
     materialize_geo_rpkm_matrix,
+    materialize_xlsx_expression_matrix,
     normalize_curated_records,
     parse_gencode_gene_map,
     publication_expression_sample_ids,
@@ -1108,6 +1109,16 @@ def test_publication_adapter_preserves_curated_records_and_license(
         detect_creative_commons_license(full_text)
         == "CC-BY-NC-4.0"
     )
+    full_text.write_text(
+        '<article xmlns:xlink="http://www.w3.org/1999/xlink">'
+        '<license xlink:href="https://creativecommons.org/licenses/'
+        'by-nc-nd/4.0/">CC BY-NC-ND 4.0</license></article>',
+        encoding="utf-8",
+    )
+    assert (
+        detect_creative_commons_license(full_text)
+        == "CC-BY-NC-ND-4.0"
+    )
 
 
 def test_publication_expression_layouts_are_explicit_and_deterministic(
@@ -1195,6 +1206,59 @@ def test_publication_expression_layouts_are_explicit_and_deterministic(
             "2.0",
             "1.0",
         ]
+
+
+def test_publication_xlsx_expression_layout_repairs_declared_features(
+    tmp_path,
+):
+    from openpyxl import Workbook
+
+    source = tmp_path / "expression.xlsx"
+    workbook = Workbook(write_only=True)
+    worksheet = workbook.create_sheet("processed")
+    worksheet.append(["notes"])
+    worksheet.append([])
+    worksheet.append(["genes", "S1", "S2"])
+    worksheet.append([datetime(2020, 3, 1), 1.0, 2.0])
+    for index in range(9_999):
+        worksheet.append([f"GENE{index}", index, index + 1])
+    workbook.save(source)
+
+    expression_spec = {
+        "layout": "xlsx_matrix",
+        "sheet_name": "processed",
+        "header_row": 3,
+        "feature_column": "genes",
+        "sample_start_column": 2,
+        "feature_replacements": {
+            "2020-03-01T00:00:00": "MARCH1",
+        },
+    }
+    assert publication_expression_sample_ids(
+        source,
+        expression_spec,
+    ) == ["S1", "S2"]
+
+    target = tmp_path / "selected.tsv"
+    summary = materialize_xlsx_expression_matrix(
+        source,
+        target,
+        ["S2", "S1"],
+        sheet_name="processed",
+        header_row=3,
+        feature_column="genes",
+        sample_start_column=2,
+        feature_replacements={
+            "2020-03-01T00:00:00": "MARCH1",
+        },
+        case_insensitive_samples=False,
+    )
+    assert summary["source_expression_gene_rows"] == 10_000
+    assert summary["source_expression_feature_replacements"] == 1
+    with target.open(encoding="utf-8") as handle:
+        reader = csv.reader(handle, delimiter="\t")
+        assert next(reader) == ["genes", "S2", "S1"]
+        assert next(reader) == ["MARCH1", "2", "1"]
 
 
 def test_cbioportal_source_and_sample_rules_are_declarative():

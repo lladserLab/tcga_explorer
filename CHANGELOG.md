@@ -2,6 +2,27 @@
 
 This changelog tracks methodological behavior exposed to users. It is not a Git commit log. Update it when a change affects scoring, endpoint QC, patient selection, model outputs, robustness criteria, audit exports or manuscript-facing interpretation.
 
+## Curated External RNA-seq Repository v1.2 - 2026-07-27
+
+This release expands independent validation coverage without changing the
+eligibility thresholds or combining external cohorts with TCGA.
+
+- Added the Nair et al. pleural/peritoneal mesothelioma cohort from open
+  Europe PMC supplements: 99 expression-and-OS-complete patients, 56 events,
+  43 censored observations and 15,076 usable gene symbols.
+- Preserved the published TMM-normalized log2 CPM scale and anchored OS at the
+  study biopsy used for RNA profiling.
+- Added deterministic XLSX expression ingestion with declared worksheet,
+  header, sample columns and explicit repairs for gene symbols converted to
+  Excel dates. Unresolved date-like features fail the build.
+- Recorded the article's CC BY-NC-ND 4.0 license and disabled derived-matrix
+  downloads while retaining analysis and provenance support.
+- Increased complete external coverage from 25 to 26 of 33 TCGA cancer types.
+- Audited additional official candidates for KICH, KIRP, THCA, THYM, UCS and
+  UVM; exact exclusions for missing endpoints, insufficient events, small
+  cohorts, absent expression objects or targeted gene coverage are retained in
+  the machine-readable ledger.
+
 ## Optional Separate Cox Forests v1.0 - 2026-07-27
 
 This release changes plot output only; it does not change any fitted Cox

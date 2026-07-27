@@ -42,7 +42,7 @@ Candidate detection never changes a cancer type to `available`.
 
 ## Current coverage
 
-As of 27 July 2026, 25 of the 33 TCGA cancer types have at least one
+As of 27 July 2026, 26 of the 33 TCGA cancer types have at least one
 independent release that passes the complete policy. Counts below refer to the
 default usable endpoint; additional endpoints remain available where listed
 in each release manifest.
@@ -65,6 +65,7 @@ in each release manifest.
 | LIHC | `icgc-lihc-liri-jp-2019` | 231 | 42 OS | 13,405 | log2(FPKM + 1) |
 | LUAD | `cbioportal-luad-cas-2020` | 51 | 15 OS | 10,611 | log2(FPKM + 1) |
 | LUSC | `cbioportal-lusc-cptac-gdc-2025` | 103 | 32 OS | 40,636 | log2(TPM + 1) |
+| MESO | `pmc-meso-nci-2023` | 99 | 56 OS | 15,076 | supplied TMM log2 CPM |
 | OV | `cbioportal-ov-pog570-2020` | 12 | 6 OS | 38,168 | log2(RPKM + 1) |
 | PAAD | `cbioportal-paad-iatlas-prince-2022` | 63 | 15 OS | 38,355 | supplied log2 UQ counts |
 | PCPG | `cbioportal-pcpg-a5-2025` | 68 | 19 OS | 28,475 | supplied TMM log2 CPM |
@@ -83,20 +84,19 @@ when the release records redistribution as allowed.
 
 ## Documented evidence gaps
 
-Eight cancer types currently lack an eligible open cohort. These are
+Seven cancer types currently lack an eligible open cohort. These are
 evidence gaps under the stated policy, not claims that no relevant biological
 data exist.
 
 | Cancer | Best public lead reviewed | Why it is not a release |
 | --- | --- | --- |
-| KICH | CPTAC-3; GSE15641 | Too few chromophobe RNA-seq participants; the outcome cohort is an expression array. |
-| KIRP | GSE180777 | 53 paired tumors have RNA-seq, but no patient-level survival time/status is public. |
-| MESO | EGAS00001001563; GSE274983 | The large RNA-seq cohort is controlled-access; the open 18-sample series lacks individual survival endpoints. |
+| KICH | CPTAC-3; GSE312695 | Two endpoint-complete CPTAC-3 cases; the newer ten-tumor GEO subset omits patient-level outcomes. |
+| KIRP | CPTAC-3; GSE312695 | Nine usable CPTAC-3 cases with one event; the 27-tumor GEO subset omits patient-level outcomes. |
 | TGCT | GSE99420 | The relapse-linked cohort is an expression array, not RNA-seq. |
-| THCA | GSE310793; REBC-THYR | Large RNA-seq matrices are public, but patient-level survival time/status is not. |
-| THYM | GSE29695; GSE228033 | The follow-up cohort is an array; the sequencing cohort is single-cell and too small. |
-| UCS | GSE128630 | Processed RNA-seq is public, but individual survival endpoints are absent and GEO marks the record incomplete. |
-| UVM | GSE22138; GSE138433 | The established survival cohort is an array; the sequencing cohort is single-cell and below the patient minimum. |
+| THCA | GSE310793; GSE288945 | The large matrix lacks patient-level survival; the smaller cohort provides recurrence class without event time. |
+| THYM | GSE181815 | Nine RNA profiles are available and individual survival time is absent. |
+| UCS | GSE128630; UTCA-FR | The GEO matrix lacks individual survival; the ICGC project has no open RNA-seq expression object. |
+| UVM | GSE317536; GSE202687 | The former is a roughly 2,570-feature targeted panel; the latter has only nine patients. |
 
 The reviewed accessions, rejection reason and review date are machine-readable
 in `repository_registry/coverage.json`. A cancer can move from

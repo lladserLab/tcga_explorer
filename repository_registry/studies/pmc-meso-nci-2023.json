@@ -1,0 +1,116 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-meso-nci-2023",
+    "cancer_code": "MESO",
+    "name": "Pleural and peritoneal mesothelioma biopsy cohort (2023)",
+    "description": "Independent NCI mesothelioma cohort with bulk RNA-seq from pleural, peritoneal and tunica-vaginalis biopsies and individual overall-survival follow-up.",
+    "cohort_context": "Patients with mesothelioma profiled from a study biopsy. Overall survival is measured from that biopsy so the endpoint origin matches the RNA specimen.",
+    "source_provider": "europe_pmc_supplement",
+    "source_accession": "PMC9975319",
+    "source_url": "https://europepmc.org/article/PMC/9975319",
+    "publication_citation": "Nair et al. Cell Reports Medicine 2023",
+    "publication_id": "PMID:36773602; PMCID:PMC9975319; DOI:10.1016/j.xcrm.2023.100938",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "National Cancer Institute mesothelioma cohort",
+      "source_data_system": "Europe PMC open supplementary files",
+      "library_method": "Bulk tumor RNA sequencing; processed values supplied as TMM-normalized log2 CPM",
+      "curation_note": "Eligibility is outcome-independent and requires a published biopsy-survival value, vital status and a matching processed-expression column. One expression profile is published per retained patient. The unmatched NCI0246 expression column is excluded. Date-formatted MARCH gene symbols are repaired by an explicit versioned mapping; symbols duplicated after normalization are excluded rather than merged."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC9975319",
+    "publication_date": "2023-02-10",
+    "clinical_member": "mmc5.xlsx",
+    "expression_member": "mmc4.xlsx",
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "b_expr_processed",
+      "header_row": 4,
+      "feature_column": "genes",
+      "sample_start_column": 2,
+      "feature_replacements": {
+        "2020-03-01T00:00:00": "MARCH1",
+        "2020-03-02T00:00:00": "MARCH2",
+        "2020-03-03T00:00:00": "MARCH3",
+        "2020-03-05T00:00:00": "MARCH5",
+        "2020-03-06T00:00:00": "MARCH6",
+        "2020-03-07T00:00:00": "MARCH7",
+        "2020-03-08T00:00:00": "MARCH8",
+        "2020-03-09T00:00:00": "MARCH9"
+      }
+    },
+    "clinical": {
+      "sheet_name": "phenotypes",
+      "header_row": 3,
+      "sample_id_column": "Patient_ID",
+      "patient_id_column": "Patient_ID",
+      "sample_type": "Mesothelioma study biopsy",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "Biopsy survival",
+          "required": true
+        },
+        {
+          "column": "live/dead (1 = dead, 0 = alive at last contact)",
+          "required": true
+        }
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Mesothelioma study biopsy",
+    "sample_role": "Study biopsy used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Mesothelioma study biopsy"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "age_fields": [
+      "patient.Dx Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "published_tmm_log2_cpm",
+    "label": "Published TMM-normalized log2 CPM",
+    "source_unit": "Published TMM-normalized log2 CPM",
+    "transform": "identity",
+    "analysis_unit": "Published TMM-normalized log2 CPM",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Published Supplementary Table S3 processed-expression genes field with explicit MARCH date repair",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols duplicated in the source or after the explicit Excel-date repair are excluded rather than combined implicitly.",
+    "scale_note": "The publication states that raw counts were TMM normalized and transformed to log CPM with edgeR. TCGA-TRACE preserves the supplied processed matrix without another transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from biopsy",
+      "time_column": "Biopsy survival",
+      "event_column": "live/dead (1 = dead, 0 = alive at last contact)",
+      "time_unit": "days",
+      "time_origin": "Study biopsy used for RNA profiling",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

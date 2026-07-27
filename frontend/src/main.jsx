@@ -425,6 +425,17 @@ const HELP_GUIDE_SECTIONS = [
 
 const METHOD_HISTORY = [
   {
+    version: "curated-external-rnaseq-repository-v1.2",
+    title: "Independent mesothelioma cohort",
+    date: "2026-07",
+    items: [
+      "An independent NCI mesothelioma cohort adds 99 patients with biopsy-linked bulk RNA-seq and overall survival, including 56 events and 43 censored observations.",
+      "The published TMM-normalized log2 CPM scale is preserved; explicit Excel-date repairs recover MARCH symbols and duplicate symbols remain excluded.",
+      "The source license is retained as CC BY-NC-ND 4.0, so the cohort can be analyzed but its derived expression matrix is not offered for download.",
+      "Twenty-six of 33 TCGA cancer types now have at least one promoted external cohort. The seven remaining gaps keep accession-level exclusion evidence.",
+    ],
+  },
+  {
     version: "optional-split-cox-forest-v1.0",
     title: "Optional separate Cox model forests",
     date: "2026-07",

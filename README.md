@@ -95,8 +95,8 @@ TCGA independence, license, expression scale, patient linkage, endpoint event
 and censoring counts, gene coverage and immutable checksums pass curation and
 automated QC.
 
-The current registry covers 25 cancer types through reviewed cBioPortal, GDC,
-GEO, Europe PMC and ICGC releases. Eight types remain documented evidence gaps
+The current registry covers 26 cancer types through reviewed cBioPortal, GDC,
+GEO, Europe PMC and ICGC releases. Seven types remain documented evidence gaps
 because the best public leads are arrays, controlled-access, too small or lack
 patient-level survival fields. Survival, Compare and Multiverse can use the
 published releases; Pan-cancer remains TCGA-only and no cross-study pooling or
