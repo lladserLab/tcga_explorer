@@ -44,11 +44,23 @@ from app.external_covariates import prepare_external_covariates
 from app.gene_aliases import GENE_ALIASES, resolve_gene_symbol
 from app.importer import (
     COMPETING_ENDPOINT_COLUMNS,
+    TCGA_CDR_SOURCE_ID,
+    TCGA_RNA_SOURCE_ID,
     ensure_gene_index,
     import_cohorts_and_samples,
     import_tcga_cdr,
 )
-from app.models import AnalysisJob, ClinicalEndpoint, Cohort, DataManifest, DataSource, GeneIndex, Sample
+from app.models import (
+    AnalysisJob,
+    CancerType,
+    ClinicalEndpoint,
+    Cohort,
+    DataManifest,
+    DataSource,
+    GeneIndex,
+    RepositoryDataset,
+    Sample,
+)
 from app.multiverse import (
     expand_multiverse_request,
     summarize_multiverse,
@@ -85,6 +97,24 @@ from app.r_runner import (
     write_pancancer_artifacts,
 )
 from app.reproduction_capsule import write_reproduction_capsule
+from app.repository import sync_repository_catalog
+from app.repository.importer import load_manifest as load_repository_manifest
+from app.repository.service import (
+    RepositoryContext,
+    list_repository_datasets,
+    repository_data_provenance,
+    repository_dataset_detail,
+    repository_endpoint_options,
+    repository_endpoint_outcomes,
+    repository_expression_layers,
+    repository_filter_options,
+    repository_gene_expression,
+    repository_samples,
+    resolve_expression_layer,
+    resolve_repository_context,
+    search_repository_genes,
+)
+from app.repository.storage import safe_bundle_path
 from app.schemas import (
     AnalysisBatchItemOut,
     AnalysisBatchOut,
@@ -199,6 +229,9 @@ def startup() -> None:
         with SessionLocal() as db:
             import_cohorts_and_samples(db, settings.tcga_data_dir)
             import_tcga_cdr(db, settings.tcga_cdr_path)
+            sync_repository_catalog(
+                db, settings.cancer_repository_registry_dir
+            )
             if settings.preload_cache_on_startup:
                 warm_startup_cache(db, settings)
 
@@ -307,6 +340,7 @@ def _legacy_submit_and_wait(
 def health(db: SessionDep) -> dict:
     cohorts = db.scalar(select(func.count()).select_from(Cohort))
     cache_manifest = load_cache_manifest(settings.derived_expression_dir)
+    repository_coverage = build_repository_coverage(db)
     return {
         "status": "ok",
         "app_version": app.version,
@@ -320,6 +354,24 @@ def health(db: SessionDep) -> dict:
             "immune_atlas": IMMUNE_ATLAS_PIPELINE_VERSION,
         },
         "cohorts": cohorts,
+        "external_repository": {
+            "status": (
+                "ready"
+                if settings.cancer_repository_dir.is_dir()
+                else "storage_unavailable"
+            ),
+            "datasets": repository_coverage["datasets"],
+            "available_cancer_types": repository_coverage[
+                "available_cancer_types"
+            ],
+            "total_cancer_types": repository_coverage[
+                "total_cancer_types"
+            ],
+            "evidence_gaps": repository_coverage["evidence_gaps"],
+            "search_in_progress": repository_coverage[
+                "search_in_progress"
+            ],
+        },
         "cache": summarize_cache_manifest(cache_manifest),
         "data_dates": dataset_dates(db, cache_manifest),
     }
@@ -704,9 +756,384 @@ def selected_endpoint_outcomes(db: Session, cohort_id: str, endpoint: str) -> tu
     return None, option
 
 
+def repository_context_for_request(
+    db: Session,
+    request: AnalysisRequest | CombinedSignatureAnalysisRequest,
+) -> RepositoryContext | None:
+    if not request.dataset_id:
+        return None
+    context = resolve_repository_context(
+        db,
+        request.dataset_id,
+        request.dataset_release_id,
+    )
+    if context.cohort != request.cohort:
+        raise ValueError(
+            f"Dataset {context.dataset.id} belongs to {context.cohort}, "
+            f"not {request.cohort}."
+        )
+    return context
+
+
+def selected_analysis_inputs(
+    db: Session,
+    request: AnalysisRequest | CombinedSignatureAnalysisRequest,
+    context: RepositoryContext | None,
+) -> tuple[list, dict[str, ClinicalOutcome] | None, dict, dict]:
+    if context is None:
+        endpoint_by_patient, endpoint_option = selected_endpoint_outcomes(
+            db, request.cohort, request.endpoint
+        )
+        samples = list(
+            db.scalars(
+                select(Sample).where(Sample.cohort == request.cohort)
+            ).all()
+        )
+        selection = {
+            "selection_rule": "tcga",
+            "endpoint_source": endpoint_option["source"],
+        }
+        return samples, endpoint_by_patient, endpoint_option, selection
+    endpoint_by_patient, endpoint_option = repository_endpoint_outcomes(
+        db, context, request.endpoint
+    )
+    return (
+        repository_samples(db, context),
+        endpoint_by_patient,
+        endpoint_option,
+        {
+            "selection_rule": "external_curated",
+            "endpoint_source": endpoint_option["source"],
+        },
+    )
+
+
+def analysis_expression_metadata(
+    db: Session,
+    request: AnalysisRequest | CombinedSignatureAnalysisRequest,
+    context: RepositoryContext | None,
+) -> tuple[str, str]:
+    if context is None:
+        return (
+            request.expression_scale,
+            expression_scale_label(request.expression_scale),
+        )
+    layer = resolve_expression_layer(
+        db, context, request.expression_layer_id
+    )
+    return layer.layer_id, layer.label
+
+
+def analysis_dataset_dates(
+    db: Session, context: RepositoryContext | None
+) -> dict:
+    dates = dataset_dates(
+        db, load_cache_manifest(settings.derived_expression_dir)
+    )
+    if context is not None:
+        dates = {
+            **dates,
+            "external_dataset": {
+                "dataset_id": context.dataset.id,
+                "release_id": context.release.id,
+                "version": context.release.version,
+                "manifest_hash": context.release.manifest_hash,
+                "source_snapshot": context.release.source_snapshot,
+                "published_at": (
+                    context.release.published_at.isoformat()
+                    if context.release.published_at
+                    else None
+                ),
+            },
+        }
+    return dates
+
+
 @app.get("/api/expression-scales", response_model=list[ExpressionScaleOut])
 def list_expression_scales() -> list[dict[str, str]]:
     return expression_scale_options()
+
+
+def build_repository_coverage(db: Session) -> dict:
+    datasets = list_repository_datasets(db)
+    by_cancer: dict[str, list[dict]] = {}
+    for dataset in datasets:
+        by_cancer.setdefault(dataset["cancer_code"], []).append(dataset)
+    rows = []
+    for cancer in db.scalars(
+        select(CancerType).order_by(CancerType.sort_order)
+    ).all():
+        available = by_cancer.get(cancer.code, [])
+        rows.append(
+            {
+                "code": cancer.code,
+                "tcga_cohort": cancer.tcga_cohort,
+                "name": cancer.name,
+                "primary_site": cancer.primary_site,
+                "coverage_status": (
+                    "available" if available else cancer.coverage_status
+                ),
+                "dataset_count": len(available),
+                "datasets": [row["id"] for row in available],
+                "search": cancer.coverage_metadata or {},
+            }
+        )
+    return {
+        "schema_version": "tcga-trace-repository-coverage-v1",
+        "total_cancer_types": len(rows),
+        "available_cancer_types": sum(
+            row["coverage_status"] == "available" for row in rows
+        ),
+        "evidence_gaps": sum(
+            row["coverage_status"] == "evidence_gap" for row in rows
+        ),
+        "search_in_progress": sum(
+            row["coverage_status"] == "search_in_progress" for row in rows
+        ),
+        "datasets": len(datasets),
+        "cancers": rows,
+    }
+
+
+@app.get("/api/cancer-types")
+def list_cancer_types(db: SessionDep) -> dict:
+    return build_repository_coverage(db)
+
+
+@app.get("/api/datasets")
+def list_datasets(
+    db: SessionDep,
+    cancer_code: str | None = None,
+) -> dict:
+    return {
+        "datasets": list_repository_datasets(
+            db, cancer_code=cancer_code
+        )
+    }
+
+
+@app.get("/api/datasets/{dataset_id}")
+def get_dataset(dataset_id: str, db: SessionDep) -> dict:
+    try:
+        context = resolve_repository_context(db, dataset_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return repository_dataset_detail(db, context)
+
+
+@app.get("/api/datasets/{dataset_id}/endpoints")
+def get_dataset_endpoints(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> dict:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {
+        "dataset_id": dataset_id,
+        "release_id": context.release.id,
+        "endpoints": repository_endpoint_options(db, context),
+    }
+
+
+@app.get("/api/datasets/{dataset_id}/expression-layers")
+def get_dataset_expression_layers(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> dict:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {
+        "dataset_id": dataset_id,
+        "release_id": context.release.id,
+        "expression_layers": repository_expression_layers(db, context),
+    }
+
+
+@app.get("/api/datasets/{dataset_id}/filters", response_model=FilterOptions)
+def get_dataset_filters(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> FilterOptions:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return FilterOptions(**repository_filter_options(db, context))
+
+
+@app.get("/api/datasets/{dataset_id}/genes", response_model=GeneSearchOut)
+def search_dataset_genes(
+    dataset_id: str,
+    db: SessionDep,
+    query: str = "",
+    limit: int = 25,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> GeneSearchOut:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+        genes = search_repository_genes(
+            db,
+            context,
+            query,
+            layer_id=expression_layer_id,
+            limit=limit,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return GeneSearchOut(cohort=context.cohort, query=query, genes=genes)
+
+
+@app.get("/api/datasets/{dataset_id}/genes/resolve")
+def resolve_dataset_gene(
+    dataset_id: str,
+    db: SessionDep,
+    query: str,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> dict:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+        _, _, gene = repository_gene_expression(
+            db, context, query, expression_layer_id
+        )
+    except GeneNotFoundError as exc:
+        return {
+            "query": query.strip().upper(),
+            "resolved": None,
+            "status": "not_found",
+            "warnings": [str(exc)],
+        }
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    normalized = query.strip().upper()
+    return {
+        "query": normalized,
+        "resolved": gene.gene_symbol,
+        "status": (
+            "exact" if normalized == gene.gene_symbol else "alias"
+        ),
+        "warnings": (
+            []
+            if normalized == gene.gene_symbol
+            else [f"Gene alias {normalized} was resolved to {gene.gene_symbol}."]
+        ),
+    }
+
+
+@app.get("/api/datasets/{dataset_id}/download/{kind}")
+def download_dataset_resource(
+    dataset_id: str,
+    kind: str,
+    db: SessionDep,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> Response:
+    try:
+        context = resolve_repository_context(db, dataset_id, release_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    if kind == "manifest":
+        return FileResponse(
+            context.release.manifest_path,
+            filename=f"{dataset_id}-{context.release.version}-manifest.json",
+            media_type="application/json",
+        )
+    if kind == "qc":
+        return Response(
+            content=json.dumps(
+                context.release.qc_json or {},
+                indent=2,
+                sort_keys=True,
+            ),
+            media_type="application/json",
+            headers={
+                "Content-Disposition": (
+                    f'attachment; filename="{dataset_id}-{context.release.version}-qc.json"'
+                )
+            },
+        )
+    if kind in {"matrix", "matrix-metadata", "genes"}:
+        layer = resolve_expression_layer(
+            db, context, expression_layer_id
+        )
+        if not (
+            context.dataset.redistribution_allowed and layer.downloadable
+        ):
+            raise HTTPException(
+                status_code=403,
+                detail="The source terms do not allow matrix redistribution.",
+            )
+        manifest = load_repository_manifest(
+            Path(context.release.repository_path)
+        )
+        layer_manifest = next(
+            (
+                row
+                for row in manifest.get("expression_layers") or []
+                if row.get("layer_id") == layer.layer_id
+            ),
+            None,
+        )
+        if layer_manifest is None:
+            raise HTTPException(
+                status_code=500,
+                detail="Expression layer is absent from its release manifest.",
+            )
+        if kind == "matrix-metadata":
+            return FileResponse(
+                safe_bundle_path(
+                    Path(context.release.repository_path),
+                    str(layer_manifest["metadata_file"]),
+                ),
+                filename=(
+                    f"{dataset_id}-{context.release.version}-"
+                    f"{layer.layer_id}-metadata.json"
+                ),
+                media_type="application/json",
+            )
+        if kind == "genes":
+            return FileResponse(
+                safe_bundle_path(
+                    Path(context.release.repository_path),
+                    str(layer_manifest["genes_file"]),
+                ),
+                filename=(
+                    f"{dataset_id}-{context.release.version}-"
+                    f"{layer.layer_id}-genes.tsv"
+                ),
+                media_type="text/tab-separated-values",
+            )
+        return FileResponse(
+            layer.matrix_path,
+            filename=f"{dataset_id}-{context.release.version}-{layer.layer_id}.float32le.bin",
+            media_type="application/octet-stream",
+        )
+    if kind == "license":
+        manifest = load_repository_manifest(
+            Path(context.release.repository_path)
+        )
+        relative = (manifest.get("source_files") or {}).get("license")
+        if not relative:
+            raise HTTPException(
+                status_code=404,
+                detail="No license file is included in this release.",
+            )
+        return FileResponse(
+            safe_bundle_path(
+                Path(context.release.repository_path), str(relative)
+            ),
+            filename=f"{dataset_id}-{context.release.version}-LICENSE.txt",
+            media_type="text/plain",
+        )
+    raise HTTPException(status_code=404, detail="Unsupported dataset download.")
 
 
 @app.get("/api/cohorts", response_model=list[CohortOut])
@@ -815,9 +1242,16 @@ def _create_analysis(request: AnalysisRequest, db: Session) -> AnalysisOut:
 
 
 def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> AnalysisOut:
+    repository_context = repository_context_for_request(db, request)
     payload = request.model_dump(mode="json")
     payload["pipeline_version"] = ANALYSIS_PIPELINE_VERSION
     payload["data_version"] = current_data_version(db)
+    if repository_context is not None:
+        payload["external_data_version"] = {
+            "dataset_id": repository_context.dataset.id,
+            "release_id": repository_context.release.id,
+            "manifest_hash": repository_context.release.manifest_hash,
+        }
     params_hash = stable_hash(payload)
     existing = db.scalar(select(AnalysisJob).where(AnalysisJob.params_hash == params_hash))
     if existing and existing.status == "completed" and _artifacts_exist(existing):
@@ -826,7 +1260,7 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
         return analysis_out(existing)
 
     cohort = db.get(Cohort, request.cohort)
-    if cohort is None:
+    if repository_context is None and cohort is None:
         raise HTTPException(status_code=404, detail="Cohort not found.")
 
     if existing:
@@ -834,6 +1268,8 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
         job = existing
         job.status = "running"
         job.cohort = request.cohort
+        job.dataset_id = request.dataset_id
+        job.dataset_release_id = request.dataset_release_id
         job.gene_symbol = request.gene_symbol.strip().upper()
         job.cutpoint_method = request.cutpoint_method
         job.request_payload = payload
@@ -852,6 +1288,8 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
             params_hash=params_hash,
             status="running",
             cohort=request.cohort,
+            dataset_id=request.dataset_id,
+            dataset_release_id=request.dataset_release_id,
             gene_symbol=request.gene_symbol.strip().upper(),
             cutpoint_method=request.cutpoint_method,
             request_payload=payload,
@@ -861,20 +1299,26 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
     db.commit()
 
     try:
-        endpoint_by_patient, endpoint_option = selected_endpoint_outcomes(db, request.cohort, request.endpoint)
+        (
+            samples,
+            endpoint_by_patient,
+            endpoint_option,
+            selection_options,
+        ) = selected_analysis_inputs(db, request, repository_context)
         endpoint_label = endpoint_option["label"]
-        samples = list(db.scalars(select(Sample).where(Sample.cohort == request.cohort)).all())
         candidates, filter_warnings, sample_selection = filter_sample_candidates(
             samples,
             request.filters,
             endpoint_by_patient=endpoint_by_patient,
             endpoint=request.endpoint,
             endpoint_label=endpoint_label,
+            **selection_options,
         )
         candidate_expression, _, _, _ = expression_for_request(
             db,
             request,
             eligible_barcodes={sample.barcode for sample in candidates},
+            repository_context=repository_context,
         )
         filtered, selection_warnings, sample_selection = (
             select_expression_complete_samples(
@@ -888,6 +1332,7 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
             db,
             request,
             eligible_barcodes={sample.barcode for sample in filtered},
+            repository_context=repository_context,
         )
         job.gene_symbol = signature_info["label"]
         external_covariates = prepare_external_covariates(
@@ -935,13 +1380,28 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
             endpoint_by_patient=endpoint_by_patient,
             max_time_days=request.filters.max_time_days,
         )
-        data_provenance = analysis_data_provenance(
-            settings,
-            cohort=request.cohort,
-            expression_scale=request.expression_scale,
-            selected_barcodes=set(expression),
+        if repository_context is None:
+            data_provenance = analysis_data_provenance(
+                settings,
+                cohort=request.cohort,
+                expression_scale=request.expression_scale,
+                selected_barcodes=set(expression),
+            )
+        else:
+            layer = resolve_expression_layer(
+                db, repository_context, request.expression_layer_id
+            )
+            data_provenance = repository_data_provenance(
+                repository_context,
+                layer,
+                selected_sample_ids=set(expression),
+            )
+        analysis_data_dates = analysis_dataset_dates(
+            db, repository_context
         )
-        analysis_data_dates = dataset_dates(db, load_cache_manifest(settings.derived_expression_dir))
+        effective_expression_scale, effective_expression_label = (
+            analysis_expression_metadata(db, request, repository_context)
+        )
         metrics = run_r_km(
             settings=settings,
             analysis_id=analysis_id,
@@ -957,8 +1417,8 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
             show_confidence_interval=request.show_confidence_interval,
             show_risk_table=request.show_risk_table,
             plot_style=request.plot_style.model_dump(mode="json"),
-            expression_scale=request.expression_scale,
-            expression_scale_label=expression_scale_label(request.expression_scale),
+            expression_scale=effective_expression_scale,
+            expression_scale_label=effective_expression_label,
             time_unit=request.time_unit,
             request_payload=payload,
             analysis_warnings=warnings,
@@ -969,8 +1429,27 @@ def _create_analysis_unlocked(request: AnalysisRequest, db: Session) -> Analysis
         )
         metrics["endpoint"] = request.endpoint
         metrics["endpoint_label"] = endpoint_label
+        metrics["expression_scale"] = effective_expression_scale
+        metrics["expression_scale_label"] = effective_expression_label
         metrics["endpoint_source"] = endpoint_option["source"]
         metrics["endpoint_qc"] = endpoint_option
+        metrics["dataset"] = (
+            {
+                "kind": "external",
+                "dataset_id": repository_context.dataset.id,
+                "release_id": repository_context.release.id,
+                "name": repository_context.dataset.name,
+                "cancer_code": repository_context.cancer.code,
+                "manifest_hash": repository_context.release.manifest_hash,
+                "cohort_context": repository_context.dataset.cohort_context,
+            }
+            if repository_context is not None
+            else {
+                "kind": "tcga",
+                "dataset_id": request.cohort,
+                "release_id": None,
+            }
+        )
         metrics["signature"] = signature_info
         metrics["sample_selection"] = sample_selection
         metrics["expression_distribution"] = expression_distribution(filtered, expression)
@@ -1056,9 +1535,16 @@ def _create_combined_analysis_unlocked(
     request: CombinedSignatureAnalysisRequest,
     db: Session,
 ) -> AnalysisOut:
+    repository_context = repository_context_for_request(db, request)
     payload = request.model_dump(mode="json")
     payload["pipeline_version"] = COMBINED_SIGNATURE_PIPELINE_VERSION
     payload["data_version"] = current_data_version(db)
+    if repository_context is not None:
+        payload["external_data_version"] = {
+            "dataset_id": repository_context.dataset.id,
+            "release_id": repository_context.release.id,
+            "manifest_hash": repository_context.release.manifest_hash,
+        }
     params_hash = stable_hash(payload)
     existing = db.scalar(select(AnalysisJob).where(AnalysisJob.params_hash == params_hash))
     if existing and existing.status == "completed" and _artifacts_exist(existing):
@@ -1067,7 +1553,7 @@ def _create_combined_analysis_unlocked(
         return analysis_out(existing)
 
     cohort = db.get(Cohort, request.cohort)
-    if cohort is None:
+    if repository_context is None and cohort is None:
         raise HTTPException(status_code=404, detail="Cohort not found.")
 
     signature_a_name = normalized_signature_name(request.signature_a.name, "Signature A")
@@ -1080,6 +1566,8 @@ def _create_combined_analysis_unlocked(
         job = existing
         job.status = "running"
         job.cohort = request.cohort
+        job.dataset_id = request.dataset_id
+        job.dataset_release_id = request.dataset_release_id
         job.gene_symbol = combined_label
         job.cutpoint_method = cutpoint_method
         job.request_payload = payload
@@ -1098,6 +1586,8 @@ def _create_combined_analysis_unlocked(
             params_hash=params_hash,
             status="running",
             cohort=request.cohort,
+            dataset_id=request.dataset_id,
+            dataset_release_id=request.dataset_release_id,
             gene_symbol=combined_label,
             cutpoint_method=cutpoint_method,
             request_payload=payload,
@@ -1107,29 +1597,36 @@ def _create_combined_analysis_unlocked(
     db.commit()
 
     try:
-        endpoint_by_patient, endpoint_option = selected_endpoint_outcomes(db, request.cohort, request.endpoint)
+        (
+            samples,
+            endpoint_by_patient,
+            endpoint_option,
+            selection_options,
+        ) = selected_analysis_inputs(db, request, repository_context)
         endpoint_label = endpoint_option["label"]
         signature_request_a = analysis_request_for_signature_spec(request, request.signature_a)
         signature_request_b = analysis_request_for_signature_spec(request, request.signature_b)
 
-        samples = list(db.scalars(select(Sample).where(Sample.cohort == request.cohort)).all())
         candidates, filter_warnings, sample_selection = filter_sample_candidates(
             samples,
             request.filters,
             endpoint_by_patient=endpoint_by_patient,
             endpoint=request.endpoint,
             endpoint_label=endpoint_label,
+            **selection_options,
         )
         candidate_barcodes = {sample.barcode for sample in candidates}
         candidate_expression_a, _, _, _ = expression_for_request(
             db,
             signature_request_a,
             eligible_barcodes=candidate_barcodes,
+            repository_context=repository_context,
         )
         candidate_expression_b, _, _, _ = expression_for_request(
             db,
             signature_request_b,
             eligible_barcodes=candidate_barcodes,
+            repository_context=repository_context,
         )
         filtered, selection_warnings, sample_selection = (
             select_expression_complete_samples(
@@ -1144,11 +1641,13 @@ def _create_combined_analysis_unlocked(
             db,
             signature_request_a,
             eligible_barcodes=eligible_barcodes,
+            repository_context=repository_context,
         )
         expression_b, signature_info_b, warnings_b, scoring_provenance_b = expression_for_request(
             db,
             signature_request_b,
             eligible_barcodes=eligible_barcodes,
+            repository_context=repository_context,
         )
         signature_info_a = {**signature_info_a, "name": signature_a_name}
         signature_info_b = {**signature_info_b, "name": signature_b_name}
@@ -1185,13 +1684,29 @@ def _create_combined_analysis_unlocked(
             endpoint_by_patient=endpoint_by_patient,
             max_time_days=request.filters.max_time_days,
         )
-        data_provenance = analysis_data_provenance(
-            settings,
-            cohort=request.cohort,
-            expression_scale=request.expression_scale,
-            selected_barcodes=set(expression_a) & set(expression_b),
+        selected_expression_samples = set(expression_a) & set(expression_b)
+        if repository_context is None:
+            data_provenance = analysis_data_provenance(
+                settings,
+                cohort=request.cohort,
+                expression_scale=request.expression_scale,
+                selected_barcodes=selected_expression_samples,
+            )
+        else:
+            layer = resolve_expression_layer(
+                db, repository_context, request.expression_layer_id
+            )
+            data_provenance = repository_data_provenance(
+                repository_context,
+                layer,
+                selected_sample_ids=selected_expression_samples,
+            )
+        analysis_data_dates = analysis_dataset_dates(
+            db, repository_context
         )
-        analysis_data_dates = dataset_dates(db, load_cache_manifest(settings.derived_expression_dir))
+        effective_expression_scale, effective_expression_label = (
+            analysis_expression_metadata(db, request, repository_context)
+        )
         metrics = run_r_km(
             settings=settings,
             analysis_id=analysis_id,
@@ -1206,8 +1721,8 @@ def _create_combined_analysis_unlocked(
             show_confidence_interval=request.show_confidence_interval,
             show_risk_table=request.show_risk_table,
             plot_style=request.plot_style.model_dump(mode="json"),
-            expression_scale=request.expression_scale,
-            expression_scale_label=expression_scale_label(request.expression_scale),
+            expression_scale=effective_expression_scale,
+            expression_scale_label=effective_expression_label,
             time_unit=request.time_unit,
             request_payload=payload,
             analysis_warnings=warnings,
@@ -1218,8 +1733,27 @@ def _create_combined_analysis_unlocked(
         )
         metrics["endpoint"] = request.endpoint
         metrics["endpoint_label"] = endpoint_label
+        metrics["expression_scale"] = effective_expression_scale
+        metrics["expression_scale_label"] = effective_expression_label
         metrics["endpoint_source"] = endpoint_option["source"]
         metrics["endpoint_qc"] = endpoint_option
+        metrics["dataset"] = (
+            {
+                "kind": "external",
+                "dataset_id": repository_context.dataset.id,
+                "release_id": repository_context.release.id,
+                "name": repository_context.dataset.name,
+                "cancer_code": repository_context.cancer.code,
+                "manifest_hash": repository_context.release.manifest_hash,
+                "cohort_context": repository_context.dataset.cohort_context,
+            }
+            if repository_context is not None
+            else {
+                "kind": "tcga",
+                "dataset_id": request.cohort,
+                "release_id": None,
+            }
+        )
         metrics["signature"] = {
             "method": "combined",
             "label": combined_label,
@@ -1387,6 +1921,33 @@ def _create_multiverse_analysis(
             },
         )
     data_version = current_data_version(db)
+    if request.dataset_id:
+        try:
+            repository_context = resolve_repository_context(
+                db,
+                request.dataset_id,
+                request.dataset_release_id,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        if repository_context.cohort != request.cohort:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    f"Dataset {repository_context.dataset.id} belongs to "
+                    f"{repository_context.cohort}, not {request.cohort}."
+                ),
+            )
+        data_version = {
+            **data_version,
+            "external_repository": {
+                "dataset_id": repository_context.dataset.id,
+                "release_id": repository_context.release.id,
+                "version": repository_context.release.version,
+                "manifest_hash": repository_context.release.manifest_hash,
+                "source_snapshot": repository_context.release.source_snapshot,
+            },
+        }
     identity = {
         "kind": "multiverse",
         "pipeline_version": MULTIVERSE_PIPELINE_VERSION,
@@ -2491,7 +3052,16 @@ def dataset_dates(db: Session, cache_manifest: dict | None) -> dict:
 
 
 def latest_data_manifest(db: Session) -> DataManifest | None:
-    return db.scalar(select(DataManifest).order_by(desc(DataManifest.created_at)).limit(1))
+    return db.scalar(
+        select(DataManifest)
+        .where(
+            DataManifest.source_id.in_(
+                [TCGA_RNA_SOURCE_ID, TCGA_CDR_SOURCE_ID]
+            )
+        )
+        .order_by(desc(DataManifest.created_at))
+        .limit(1)
+    )
 
 
 def data_sync_summary(db: Session) -> dict:
@@ -2651,6 +3221,9 @@ def analysis_request_for_signature_spec(
 ) -> AnalysisRequest:
     return AnalysisRequest(
         cohort=request.cohort,
+        dataset_id=request.dataset_id,
+        dataset_release_id=request.dataset_release_id,
+        expression_layer_id=request.expression_layer_id,
         gene_symbol=signature.gene_symbol,
         signature_method=signature.signature_method,
         signature_genes=signature.signature_genes,
@@ -2680,21 +3253,66 @@ def expression_for_request(
     request: AnalysisRequest,
     *,
     eligible_barcodes: set[str] | None = None,
+    repository_context: RepositoryContext | None = None,
 ) -> tuple[dict[str, float], dict, list[str], dict]:
     entries = signature_entries(request)
     warnings: list[str] = []
-    resolved_entries = []
+    resolved_entries: list[dict] = []
     seen: set[str] = set()
-    for entry in entries:
-        resolved = resolve_gene_symbol(db, settings.tcga_data_dir, request.cohort, entry["gene_symbol"])
-        warnings.extend(resolved["warnings"])
-        if not resolved["resolved"]:
-            raise GeneNotFoundError(f"Gene {entry['gene_symbol']} was not found in {request.cohort}.")
-        if resolved["resolved"] in seen:
-            warnings.append(f"Duplicate gene {resolved['resolved']} was specified more than once and was collapsed.")
-            continue
-        seen.add(resolved["resolved"])
-        resolved_entries.append({**entry, "resolved_symbol": resolved["resolved"], "status": resolved["status"]})
+    if repository_context is None:
+        for entry in entries:
+            resolved = resolve_gene_symbol(
+                db,
+                settings.tcga_data_dir,
+                request.cohort,
+                entry["gene_symbol"],
+            )
+            warnings.extend(resolved["warnings"])
+            if not resolved["resolved"]:
+                raise GeneNotFoundError(
+                    f"Gene {entry['gene_symbol']} was not found in {request.cohort}."
+                )
+            if resolved["resolved"] in seen:
+                warnings.append(
+                    f"Duplicate gene {resolved['resolved']} was specified more than once and was collapsed."
+                )
+                continue
+            seen.add(resolved["resolved"])
+            resolved_entries.append(
+                {
+                    **entry,
+                    "resolved_symbol": resolved["resolved"],
+                    "status": resolved["status"],
+                }
+            )
+    else:
+        for entry in entries:
+            values, _, gene = repository_gene_expression(
+                db,
+                repository_context,
+                entry["gene_symbol"],
+                request.expression_layer_id,
+            )
+            query = entry["gene_symbol"].strip().upper()
+            resolved_symbol = gene.gene_symbol
+            if resolved_symbol in seen:
+                warnings.append(
+                    f"Duplicate gene {resolved_symbol} was specified more than once and was collapsed."
+                )
+                continue
+            if query != resolved_symbol:
+                warnings.append(
+                    f"Gene alias {query} was resolved to {resolved_symbol}."
+                )
+            seen.add(resolved_symbol)
+            resolved_entries.append(
+                {
+                    **entry,
+                    "resolved_symbol": resolved_symbol,
+                    "status": "exact" if query == resolved_symbol else "alias",
+                    "values": values,
+                }
+            )
 
     if request.signature_method == "single" and len(resolved_entries) > 1:
         resolved_entries = resolved_entries[:1]
@@ -2703,6 +3321,9 @@ def expression_for_request(
 
     values_by_gene = []
     for entry in resolved_entries:
+        if repository_context is not None:
+            values_by_gene.append(entry)
+            continue
         values_by_gene.append(
             {
                 **entry,
@@ -2848,11 +3469,15 @@ def build_scoring_provenance(
     ]
     return {
         "schema_version": "tcga-trace-scoring-provenance-v1",
+        "dataset_id": request.dataset_id or request.cohort,
+        "dataset_release_id": request.dataset_release_id,
+        "expression_layer_id": request.expression_layer_id,
         "method": "single" if len(values_by_gene) == 1 else request.signature_method,
         "population_rule": (
             "samples after user filters and endpoint completeness, followed by complete "
             "expression for the requested gene or every signature component, then "
-            "one-expression-complete-sample-per-participant biospecimen selection"
+            "one-expression-complete-sample-per-participant selection using the "
+            "dataset's prespecified sample-priority rule"
         ),
         "eligible_barcode_count": eligible_barcode_count,
         "complete_case_barcode_count": len(ordered_barcodes),
@@ -3161,13 +3786,30 @@ def analysis_out(job: AnalysisJob) -> AnalysisOut:
                 f"/api/analyses/{job.id}/download/cumulative_incidence_svg"
             )
     notices, diagnostics = build_analysis_diagnostics(job.warnings, job.metrics)
+    payload_scale = job.request_payload.get("expression_scale", "log2_tpm")
+    effective_scale = (
+        job.request_payload.get("expression_layer_id")
+        if job.dataset_id
+        else payload_scale
+    ) or payload_scale
+    effective_label = (
+        (job.metrics or {}).get("expression_scale_label")
+        or (
+            ((job.metrics or {}).get("data_provenance") or {})
+            .get("expression_layer", {})
+            .get("analysis_unit")
+        )
+        or expression_scale_label(payload_scale)
+    )
     return AnalysisOut(
         id=job.id,
         status=job.status,
         cohort=job.cohort,
+        dataset_id=job.dataset_id,
+        dataset_release_id=job.dataset_release_id,
         gene_symbol=job.gene_symbol,
-        expression_scale=job.request_payload.get("expression_scale", "log2_tpm"),
-        expression_scale_label=expression_scale_label(job.request_payload.get("expression_scale", "log2_tpm")),
+        expression_scale=effective_scale,
+        expression_scale_label=effective_label,
         cutpoint_method=job.cutpoint_method,
         metrics=job.metrics,
         warnings=job.warnings or [],
@@ -3380,6 +4022,8 @@ def public_api_index() -> PublicApiIndexOut:
         links={
             "web_application": f"{base_url}/",
             "health": f"{base_url}/api/v1/health",
+            "cancer_repository": f"{base_url}/api/v1/cancer-types",
+            "external_datasets": f"{base_url}/api/v1/datasets",
             "swagger_ui": f"{base_url}/api/docs",
             "redoc": f"{base_url}/api/redoc",
             "openapi": f"{base_url}/api/openapi.json",
@@ -3439,6 +4083,7 @@ def public_health(db: SessionDep) -> PublicHealthOut:
     cohort_count = int(db.scalar(select(func.count()).select_from(Cohort)) or 0)
     cache_manifest = load_cache_manifest(settings.derived_expression_dir)
     cache_summary = summarize_cache_manifest(cache_manifest)
+    repository_coverage = build_repository_coverage(db)
     return PublicHealthOut(
         status="ok" if cache_summary.get("status") == "ready" else "degraded",
         app_version=app.version,
@@ -3453,6 +4098,24 @@ def public_health(db: SessionDep) -> PublicHealthOut:
             "immune_atlas": IMMUNE_ATLAS_PIPELINE_VERSION,
         },
         cohorts=cohort_count,
+        external_repository={
+            "status": (
+                "ready"
+                if settings.cancer_repository_dir.is_dir()
+                else "storage_unavailable"
+            ),
+            "datasets": repository_coverage["datasets"],
+            "available_cancer_types": repository_coverage[
+                "available_cancer_types"
+            ],
+            "total_cancer_types": repository_coverage[
+                "total_cancer_types"
+            ],
+            "evidence_gaps": repository_coverage["evidence_gaps"],
+            "search_in_progress": repository_coverage[
+                "search_in_progress"
+            ],
+        },
         cache_status=str(cache_summary.get("status") or "unknown"),
         data_dates=dataset_dates(db, cache_manifest),
         queue=queue_summary(db, settings),
@@ -3503,6 +4166,150 @@ def public_data_sources(db: SessionDep) -> dict:
             }
         )
     return {"sources": sources}
+
+
+@public_router.get(
+    "/cancer-types",
+    tags=["External repository"],
+    operation_id="listRepositoryCancerTypes",
+)
+def public_cancer_types(db: SessionDep) -> dict:
+    return build_repository_coverage(db)
+
+
+@public_router.get(
+    "/datasets",
+    tags=["External repository"],
+    operation_id="listRepositoryDatasets",
+)
+def public_datasets(
+    db: SessionDep,
+    cancer_code: str | None = None,
+) -> dict:
+    return list_datasets(db, cancer_code)
+
+
+@public_router.get(
+    "/datasets/{dataset_id}",
+    tags=["External repository"],
+    operation_id="getRepositoryDataset",
+)
+def public_dataset(dataset_id: str, db: SessionDep) -> dict:
+    return get_dataset(dataset_id, db)
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/endpoints",
+    tags=["External repository"],
+    operation_id="getRepositoryDatasetEndpoints",
+)
+def public_dataset_endpoints(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> dict:
+    return get_dataset_endpoints(dataset_id, db, release_id)
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/expression-layers",
+    tags=["External repository"],
+    operation_id="getRepositoryExpressionLayers",
+)
+def public_dataset_expression_layers(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> dict:
+    return get_dataset_expression_layers(dataset_id, db, release_id)
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/filters",
+    response_model=FilterOptions,
+    tags=["External repository"],
+    operation_id="getRepositoryFilterOptions",
+)
+def public_dataset_filters(
+    dataset_id: str,
+    db: SessionDep,
+    release_id: str | None = None,
+) -> FilterOptions:
+    return get_dataset_filters(dataset_id, db, release_id)
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/genes",
+    response_model=GeneSearchOut,
+    tags=["External repository"],
+    operation_id="searchRepositoryGenes",
+)
+def public_dataset_genes(
+    dataset_id: str,
+    db: SessionDep,
+    query: str = "",
+    limit: int = 25,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> GeneSearchOut:
+    if limit < 1 or limit > 100:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": "INVALID_LIMIT",
+                "message": "limit must be between 1 and 100.",
+            },
+        )
+    return search_dataset_genes(
+        dataset_id,
+        db,
+        query,
+        limit,
+        release_id,
+        expression_layer_id,
+    )
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/genes/resolve",
+    tags=["External repository"],
+    operation_id="resolveRepositoryGene",
+)
+def public_resolve_dataset_gene(
+    dataset_id: str,
+    db: SessionDep,
+    query: str,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> dict:
+    return resolve_dataset_gene(
+        dataset_id,
+        db,
+        query,
+        release_id,
+        expression_layer_id,
+    )
+
+
+@public_router.get(
+    "/datasets/{dataset_id}/download/{kind}",
+    tags=["External repository"],
+    operation_id="downloadRepositoryResource",
+)
+def public_download_dataset_resource(
+    dataset_id: str,
+    kind: str,
+    db: SessionDep,
+    release_id: str | None = None,
+    expression_layer_id: str | None = None,
+) -> Response:
+    return download_dataset_resource(
+        dataset_id,
+        kind,
+        db,
+        release_id,
+        expression_layer_id,
+    )
 
 
 @public_router.get(

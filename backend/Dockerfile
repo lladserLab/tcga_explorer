@@ -37,6 +37,7 @@ COPY backend/renv.lock /app/renv.lock
 COPY backend/alembic.ini /app/alembic.ini
 COPY backend/alembic /app/alembic
 COPY backend/scripts /app/scripts
+COPY repository_registry /app/repository_registry
 COPY docs/API.md /app/docs/API.md
 COPY docs/API_ES.md /app/docs/API_ES.md
 COPY docs/publication/benchmark /app/publication/benchmark

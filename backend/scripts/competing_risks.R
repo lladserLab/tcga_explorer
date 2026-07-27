@@ -773,7 +773,7 @@ fit_competing_risks_analysis <- function(
     return(list(
       applicable = FALSE,
       status = "not_applicable",
-      reason = "The selected endpoint has no TCGA-CDR competing-risk status."
+      reason = "The selected endpoint has no linked competing-event status."
     ))
   }
   coding <- list(

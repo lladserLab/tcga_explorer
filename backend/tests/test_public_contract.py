@@ -74,7 +74,7 @@ def test_openapi_contains_only_stable_public_v1_routes():
     schema = app.openapi()
     paths = schema["paths"]
 
-    assert len(paths) == 36
+    assert len(paths) == 45
     assert all(path.startswith("/api/v1/") for path in paths)
     assert "/api/v1/" in paths
     assert "/api/v1/analyses" in paths
@@ -85,6 +85,15 @@ def test_openapi_contains_only_stable_public_v1_routes():
     assert "/api/v1/analyses/sessions/{report_id}" in paths
     assert "/api/v1/analyses/sessions/{report_id}/download/{kind}" in paths
     assert "/api/v1/examples/paper" in paths
+    assert "/api/v1/cancer-types" in paths
+    assert "/api/v1/datasets" in paths
+    assert "/api/v1/datasets/{dataset_id}" in paths
+    assert "/api/v1/datasets/{dataset_id}/endpoints" in paths
+    assert "/api/v1/datasets/{dataset_id}/expression-layers" in paths
+    assert "/api/v1/datasets/{dataset_id}/filters" in paths
+    assert "/api/v1/datasets/{dataset_id}/genes" in paths
+    assert "/api/v1/datasets/{dataset_id}/genes/resolve" in paths
+    assert "/api/v1/datasets/{dataset_id}/download/{kind}" in paths
     assert "/api/v1/examples/paper/figures/{analysis_id}/{kind}" in paths
     assert "/api/v1/pancancer/survival/{scan_id}/download/{kind}" in paths
     assert "/api/v1/attestation/keys" in paths
@@ -96,6 +105,7 @@ def test_openapi_contains_only_stable_public_v1_routes():
     assert schema["info"]["x-artifact-retention-days"] == 90
     public_health = schema["components"]["schemas"]["PublicHealthOut"]
     assert "release" in public_health["required"]
+    assert "external_repository" in public_health["required"]
     assert app.docs_url == "/api/docs"
     assert app.redoc_url == "/api/redoc"
     assert app.openapi_url == "/api/openapi.json"
@@ -118,6 +128,9 @@ def test_public_api_index_exposes_discovery_links():
     assert payload["api_version"] == "v1"
     assert payload["status"] == "available"
     assert payload["links"]["health"].endswith("/tcga_explorer/api/v1/health")
+    assert payload["links"]["cancer_repository"].endswith(
+        "/tcga_explorer/api/v1/cancer-types"
+    )
     assert payload["links"]["swagger_ui"].endswith("/tcga_explorer/api/docs")
     assert payload["links"]["attestation_keys"].endswith(
         "/tcga_explorer/api/v1/attestation/keys"

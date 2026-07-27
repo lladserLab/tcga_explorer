@@ -2,6 +2,34 @@
 
 This changelog tracks methodological behavior exposed to users. It is not a Git commit log. Update it when a change affects scoring, endpoint QC, patient selection, model outputs, robustness criteria, audit exports or manuscript-facing interpretation.
 
+## Curated External RNA-seq Repository v1.0 - 2026-07-26
+
+This release adds independently sourced bulk RNA-seq cohorts without combining
+their measurements or clinical definitions with TCGA.
+
+- Added an explicit 33-cancer coverage ledger that distinguishes published
+  releases, screening candidates, searches in progress and evidence gaps.
+- Added immutable dataset releases with source snapshots, SHA-256 file
+  checksums, license metadata, expression-layer semantics, patient/sample
+  linkage, endpoint definitions and automated QC.
+- Required at least 10 expression-and-endpoint-complete patients, 5 events and
+  10,000 unique mapped gene symbols before a release can be promoted.
+- Added repository-backed gene search, endpoint/filter discovery and
+  patient-level analysis to Survival, Compare and Multiverse. Pan-cancer
+  remains TCGA-only; cohorts are never pooled or silently harmonized.
+- Published an independent metastatic melanoma release with 40 patients, 27
+  OS events and 21,623 genes, and an IMvigor210 metastatic bladder-cancer
+  release with 347 patients, 231 OS events and 38,355 genes.
+- Preserved each release's documented expression scale. The IMvigor210 profile
+  is retained exactly as supplied because DataHub labels it TPM while the exact
+  upstream transform is not stated; TCGA-TRACE does not apply a second log
+  transform or describe it as unlogged TPM.
+- Added a reproducible cBioPortal discovery scan. Detection of RNA and survival
+  columns creates a screening candidate only; TCGA independence, event counts,
+  scale semantics, license and linkage still require review.
+- Kept external release hashes separate from the primary TCGA data-manifest
+  hash in health and dataset-summary responses.
+
 ## Release Identity and CI Contract v1.0 - 2026-07-25
 
 This release strengthens deployment verification without changing a scientific

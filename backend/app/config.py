@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer"
     tcga_data_dir: Path = Path("/data/tcga")
     tcga_cdr_path: Path = Path("/app/clinical/TCGA-CDR-SupplementalTableS1.xlsx")
+    cancer_repository_dir: Path = Path("/data/cancer_repository")
+    cancer_repository_registry_dir: Path = Path("/app/repository_registry")
     tcga_sync_state_dir: Path = Path("/data/tcga/.sync")
     clinical_sync_state_dir: Path = Path("/app/clinical/.sync")
     gdc_api_base_url: str = "https://api.gdc.cancer.gov"

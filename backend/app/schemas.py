@@ -416,10 +416,13 @@ def validate_external_adjustment_selection(
 
 class AnalysisRequest(BaseModel):
     cohort: str
+    dataset_id: str | None = Field(default=None, max_length=128)
+    dataset_release_id: str | None = Field(default=None, max_length=128)
+    expression_layer_id: str | None = Field(default=None, max_length=64)
     gene_symbol: str
     signature_method: SignatureMethod = "single"
     signature_genes: list[SignatureGene] = Field(default_factory=list)
-    endpoint: Endpoint = "OS"
+    endpoint: str = Field(default="OS", min_length=1, max_length=32, pattern=r"^[A-Za-z0-9_.-]+$")
     expression_scale: ExpressionScale = "log2_tpm"
     cutpoint_method: CutpointMethod = "median"
     custom_percentile: float | None = Field(default=None, ge=1, le=99)
@@ -448,6 +451,14 @@ class AnalysisRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_external_adjustment(self) -> "AnalysisRequest":
+        if bool(self.dataset_id) != bool(self.dataset_release_id):
+            raise ValueError(
+                "dataset_id and dataset_release_id must be supplied together."
+            )
+        if self.dataset_id and self.external_covariates is not None:
+            raise ValueError(
+                "Per-run uploaded covariates are not supported for curated external datasets."
+            )
         self.external_adjustment_covariates = validate_external_adjustment_selection(
             self.external_covariates,
             self.external_adjustment_covariates,
@@ -457,9 +468,12 @@ class AnalysisRequest(BaseModel):
 
 class CombinedSignatureAnalysisRequest(BaseModel):
     cohort: str
+    dataset_id: str | None = Field(default=None, max_length=128)
+    dataset_release_id: str | None = Field(default=None, max_length=128)
+    expression_layer_id: str | None = Field(default=None, max_length=64)
     signature_a: SignatureSpec
     signature_b: SignatureSpec
-    endpoint: Endpoint = "OS"
+    endpoint: str = Field(default="OS", min_length=1, max_length=32, pattern=r"^[A-Za-z0-9_.-]+$")
     expression_scale: ExpressionScale = "log2_tpm"
     combination_method: CombinedSignatureMethod = "median"
     filters: AnalysisFilters = Field(default_factory=AnalysisFilters)
@@ -487,6 +501,14 @@ class CombinedSignatureAnalysisRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_external_adjustment(self) -> "CombinedSignatureAnalysisRequest":
+        if bool(self.dataset_id) != bool(self.dataset_release_id):
+            raise ValueError(
+                "dataset_id and dataset_release_id must be supplied together."
+            )
+        if self.dataset_id and self.external_covariates is not None:
+            raise ValueError(
+                "Per-run uploaded covariates are not supported for curated external datasets."
+            )
         self.external_adjustment_covariates = validate_external_adjustment_selection(
             self.external_covariates,
             self.external_adjustment_covariates,
@@ -522,6 +544,8 @@ class AnalysisOut(BaseModel):
     id: str
     status: str
     cohort: str
+    dataset_id: str | None = None
+    dataset_release_id: str | None = None
     gene_symbol: str
     expression_scale: str = "log2_tpm"
     expression_scale_label: str = "log2(TPM + 1)"
@@ -673,12 +697,15 @@ class AnalysisBatchOut(BaseModel):
 
 class MultiverseAnalysisRequest(BaseModel):
     cohort: str
+    dataset_id: str | None = Field(default=None, max_length=128)
+    dataset_release_id: str | None = Field(default=None, max_length=128)
+    expression_layer_id: str | None = Field(default=None, max_length=64)
     genes: list[SignatureGene] = Field(min_length=1, max_length=50)
     signature_name: str = Field(default="", max_length=80)
-    endpoints: list[Endpoint] = Field(
+    endpoints: list[str] = Field(
         default_factory=lambda: ["OS", "DSS", "PFI", "DFI"],
         min_length=1,
-        max_length=4,
+        max_length=8,
     )
     scoring_methods: list[SignatureMethod] = Field(
         default_factory=lambda: ["single"],
@@ -740,6 +767,14 @@ class MultiverseAnalysisRequest(BaseModel):
 
     @model_validator(mode="after")
     def validate_multiverse_design(self) -> "MultiverseAnalysisRequest":
+        if bool(self.dataset_id) != bool(self.dataset_release_id):
+            raise ValueError(
+                "dataset_id and dataset_release_id must be supplied together."
+            )
+        if self.dataset_id and self.external_covariates is not None:
+            raise ValueError(
+                "Per-run uploaded covariates are not supported for curated external datasets."
+            )
         self.external_adjustment_covariates = validate_external_adjustment_selection(
             self.external_covariates,
             self.external_adjustment_covariates,
@@ -766,6 +801,9 @@ class MultiverseAnalysisRequest(BaseModel):
 
 class MultiverseAnalysisOut(BaseModel):
     session_id: str
+    dataset_id: str | None = None
+    dataset_release_id: str | None = None
+    expression_layer_id: str | None = None
     status: Literal["completed", "completed_with_failures"]
     pipeline_version: str
     generated_at: str
@@ -913,6 +951,7 @@ class PublicHealthOut(BaseModel):
     release: dict[str, str]
     pipeline_versions: dict[str, str]
     cohorts: int
+    external_repository: dict[str, Any]
     cache_status: str
     data_dates: dict[str, Any]
     queue: dict[str, Any]

@@ -156,6 +156,8 @@ def filter_sample_candidates(
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
     endpoint: str = "OS",
     endpoint_label: str = "overall survival",
+    selection_rule: str = "tcga",
+    endpoint_source: str | None = None,
 ) -> tuple[list[Sample], list[str], dict]:
     """Apply user and endpoint eligibility without choosing a biospecimen."""
 
@@ -191,19 +193,35 @@ def filter_sample_candidates(
     if dropped:
         warnings.append(f"{dropped} samples were excluded because {endpoint_label} was not usable.")
 
+    is_tcga = selection_rule == "tcga"
     summary = {
-        "rule": "tcga_expression_complete_biospecimen_priority_one_sample_per_patient",
-        "rule_description": SAMPLE_SELECTION_RULE,
+        "rule": (
+            "tcga_expression_complete_biospecimen_priority_one_sample_per_patient"
+            if is_tcga
+            else "curated_external_expression_complete_selection_rank_one_sample_per_patient"
+        ),
+        "rule_description": (
+            SAMPLE_SELECTION_RULE
+            if is_tcga
+            else (
+                "After user filters and endpoint completeness, require the requested "
+                "expression and retain one sample per patient using the release's "
+                "prespecified selection_rank followed by sample identifier."
+            )
+        ),
         "selection_order": [
             "user_filters",
             "endpoint_completeness",
             "requested_expression_or_score_completeness",
-            "biospecimen_priority",
+            "biospecimen_priority" if is_tcga else "curated_selection_rank",
         ],
-        "priority_order": SAMPLE_SELECTION_PRIORITY_ORDER,
+        "priority_order": SAMPLE_SELECTION_PRIORITY_ORDER if is_tcga else ["selection_rank", "sample_id"],
+        "selection_rule_kind": selection_rule,
         "endpoint": endpoint,
         "endpoint_label": endpoint_label,
-        "endpoint_source": "tcga_cdr" if endpoint_by_patient is not None else "derived_sample_metadata",
+        "endpoint_source": endpoint_source or (
+            "tcga_cdr" if endpoint_by_patient is not None else "derived_sample_metadata"
+        ),
         "input_samples": len(samples),
         "after_user_filters": len(selected),
         "complete_endpoint_samples": len(with_endpoint),
@@ -269,25 +287,44 @@ def select_expression_complete_samples(
         for patient_id, sample in deduplicated.items()
         if candidate_priority[patient_id].barcode != sample.barcode
     ]
+    is_tcga = summary.get("selection_rule_kind", "tcga") == "tcga"
     if expression_priority_fallbacks:
-        warnings.append(
-            f"{len(expression_priority_fallbacks)} participants used a lower-priority "
-            "biospecimen because a higher-priority eligible candidate lacked complete "
-            "required expression."
-        )
+        if is_tcga:
+            warnings.append(
+                f"{len(expression_priority_fallbacks)} participants used a lower-priority "
+                "biospecimen because a higher-priority eligible candidate lacked complete "
+                "required expression."
+            )
+        else:
+            warnings.append(
+                f"{len(expression_priority_fallbacks)} participants used a lower-priority "
+                "sample because a higher-priority eligible candidate lacked complete "
+                "required expression."
+            )
     if removed_duplicates:
-        warnings.append(
-            f"{len(removed_duplicates)} extra expression-complete sample records from "
-            "patients with multiple eligible barcodes were removed; one sample per "
-            "patient was retained using TCGA biospecimen priority."
-        )
+        if is_tcga:
+            warnings.append(
+                f"{len(removed_duplicates)} extra expression-complete sample records from "
+                "patients with multiple eligible barcodes were removed; one sample per "
+                "patient was retained using TCGA biospecimen priority."
+            )
+        else:
+            warnings.append(
+                f"{len(removed_duplicates)} extra expression-complete sample records from "
+                "patients with multiple eligible sample identifiers were removed; one sample "
+                "per patient was retained using the release selection rule."
+            )
 
     retained_non_tumor = [
         sample
         for sample in retained
         if sample_priority(sample) >= 80
     ]
-    if retained_non_tumor and not summary.get("sample_type_filter_applied", False):
+    if (
+        is_tcga
+        and retained_non_tumor
+        and not summary.get("sample_type_filter_applied", False)
+    ):
         sample_word = "sample is" if len(retained_non_tumor) == 1 else "samples are"
         warnings.append(
             f"{len(retained_non_tumor)} retained patient-level {sample_word} normal/control/unknown sample type because no "
@@ -338,6 +375,14 @@ def filter_samples(
 
 
 def sample_selection_key(sample: Sample) -> tuple[int, int, int, str]:
+    external_rank = getattr(sample, "selection_rank", None)
+    if external_rank is not None:
+        return (
+            int(external_rank),
+            0,
+            0,
+            sample.barcode or "",
+        )
     return (
         sample_priority(sample),
         analyte_priority(sample.barcode),

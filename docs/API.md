@@ -30,6 +30,8 @@ client identity derived from the proxy-verified IP address or MCP session.
 The API exposes the same public-data capabilities as the web application:
 
 - TCGA cohort, sample, patient, gene, endpoint, and data-source summaries.
+- Curated independent bulk RNA-seq releases with source-specific expression
+  layers, endpoint definitions, license metadata and immutable manifests.
 - OS, PFI, DFI, and DSS endpoint availability and cohort-level QC.
 - Single-gene, mean, z-score, and weighted RNA signature survival analyses.
 - Cutpoint-independent continuous Cox models, restricted cubic-spline effect
@@ -46,9 +48,11 @@ The API exposes the same public-data capabilities as the web application:
 - Continuous pan-cancer Cox scans, BH-FDR, concordance, and meta-analysis.
 - Precomputed immune pan-cancer screens.
 
-Only open TCGA/GDC and TCGA-CDR-derived data are in public scope. Internal
-filesystem paths, cache manifests, synchronization controls, expression
-matrices, and database operations are not part of API v1.
+Public scope contains open TCGA/GDC, TCGA-CDR-derived data and explicitly
+licensed external releases. Internal filesystem paths, cache manifests,
+synchronization controls and database operations are not part of API v1.
+External matrices are downloadable only when the release records redistribution
+as allowed.
 
 Patient-level audit artifacts retain exact TCGA participant and sample barcodes
 for scientific traceability. These are public research identifiers, but users
@@ -155,6 +159,40 @@ cannot reuse a completed artifact from an older one.
 | `GET` | `/cohorts/{cohort_id}/filters` | Available clinical filters |
 | `GET` | `/cohorts/{cohort_id}/genes` | Search valid genes |
 | `GET` | `/cohorts/{cohort_id}/genes/resolve` | Resolve a symbol or supported alias |
+
+### Curated external RNA-seq repository
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/cancer-types` | Coverage ledger for all 33 TCGA cancer types |
+| `GET` | `/datasets` | Published independent bulk RNA-seq releases |
+| `GET` | `/datasets/{dataset_id}` | Release, source, license, QC, endpoint and expression-layer detail |
+| `GET` | `/datasets/{dataset_id}/endpoints` | Release-specific endpoint definitions and QC |
+| `GET` | `/datasets/{dataset_id}/expression-layers` | Source units, transforms and scale caveats |
+| `GET` | `/datasets/{dataset_id}/filters` | Available curated clinical filters |
+| `GET` | `/datasets/{dataset_id}/genes` | Search genes in one pinned expression layer |
+| `GET` | `/datasets/{dataset_id}/genes/resolve` | Resolve a gene against one pinned layer |
+| `GET` | `/datasets/{dataset_id}/download/{kind}` | Download manifest, QC, license, or licensed matrix/metadata/gene index |
+
+To analyze an external release, retain the matching TCGA code as cancer
+taxonomy and pin the dataset, release and expression layer:
+
+```json
+{
+  "cohort": "TCGA-BLCA",
+  "dataset_id": "cbioportal-blca-iatlas-imvigor210-2017",
+  "dataset_release_id": "cbioportal-blca-iatlas-imvigor210-2017-1da5c747e4fd",
+  "expression_layer_id": "provided_tpm_profile",
+  "gene_symbol": "MKI67",
+  "endpoint": "OS",
+  "cutpoint_method": "median",
+  "adjustment_covariates": []
+}
+```
+
+The analysis uses no TCGA patients or expression values when `dataset_id` is
+present. External releases are supported by Survival, Compare and Multiverse;
+Pan-cancer remains TCGA-only.
 
 ### Reproducible paper examples
 

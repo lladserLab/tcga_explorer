@@ -1,0 +1,76 @@
+{
+  "schema_version": "tcga-trace-external-coverage-v1",
+  "updated_at": "2026-07-26",
+  "policy": {
+    "assay": "bulk_rna_seq",
+    "minimum_expression_endpoint_patients": 10,
+    "minimum_events": 5,
+    "minimum_unique_gene_symbols": 10000,
+    "tcga_derived_studies_count_as_external": false
+  },
+  "cancers": [
+    {"code": "ACC", "status": "search_in_progress", "candidates": []},
+    {
+      "code": "BLCA",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-blca-iatlas-imvigor210-2017",
+          "source": "cBioPortal DataHub / CRI iAtlas",
+          "accession": "blca_iatlas_imvigor210_2017",
+          "expression_endpoint_patients": 347,
+          "events": 231,
+          "endpoint": "OS",
+          "expression_unit": "iAtlas TPM profile (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {"code": "BRCA", "status": "search_in_progress", "candidates": []},
+    {"code": "CESC", "status": "search_in_progress", "candidates": []},
+    {"code": "CHOL", "status": "search_in_progress", "candidates": []},
+    {"code": "COAD", "status": "search_in_progress", "candidates": []},
+    {"code": "DLBC", "status": "search_in_progress", "candidates": []},
+    {"code": "ESCA", "status": "search_in_progress", "candidates": []},
+    {"code": "GBM", "status": "search_in_progress", "candidates": []},
+    {"code": "HNSC", "status": "search_in_progress", "candidates": []},
+    {"code": "KICH", "status": "search_in_progress", "candidates": []},
+    {"code": "KIRC", "status": "search_in_progress", "candidates": []},
+    {"code": "KIRP", "status": "search_in_progress", "candidates": []},
+    {"code": "LAML", "status": "search_in_progress", "candidates": []},
+    {"code": "LGG", "status": "search_in_progress", "candidates": []},
+    {"code": "LIHC", "status": "search_in_progress", "candidates": []},
+    {"code": "LUAD", "status": "search_in_progress", "candidates": []},
+    {"code": "LUSC", "status": "search_in_progress", "candidates": []},
+    {"code": "MESO", "status": "search_in_progress", "candidates": []},
+    {"code": "OV", "status": "search_in_progress", "candidates": []},
+    {"code": "PAAD", "status": "search_in_progress", "candidates": []},
+    {"code": "PCPG", "status": "search_in_progress", "candidates": []},
+    {"code": "PRAD", "status": "search_in_progress", "candidates": []},
+    {"code": "READ", "status": "search_in_progress", "candidates": []},
+    {"code": "SARC", "status": "search_in_progress", "candidates": []},
+    {
+      "code": "SKCM",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-skcm-dfci-2015",
+          "source": "cBioPortal DataHub",
+          "accession": "skcm_dfci_2015",
+          "expression_endpoint_patients": 40,
+          "events": 27,
+          "endpoint": "OS",
+          "expression_unit": "RPKM",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {"code": "STAD", "status": "search_in_progress", "candidates": []},
+    {"code": "TGCT", "status": "search_in_progress", "candidates": []},
+    {"code": "THCA", "status": "search_in_progress", "candidates": []},
+    {"code": "THYM", "status": "search_in_progress", "candidates": []},
+    {"code": "UCEC", "status": "search_in_progress", "candidates": []},
+    {"code": "UCS", "status": "search_in_progress", "candidates": []},
+    {"code": "UVM", "status": "search_in_progress", "candidates": []}
+  ]
+}

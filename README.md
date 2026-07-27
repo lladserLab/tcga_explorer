@@ -25,8 +25,17 @@ The archived trust anchor and rotation/revocation rules are documented in the
 - Plotting/statistics: R `survival` + `survminer`
 - TCGA data snapshot mount: host `../TCGA` mounted into containers as `/data/tcga`
 - Optional TCGA-CDR clinical endpoint file: `./clinical/TCGA-CDR-SupplementalTableS1.xlsx`
+- Curated external RNA-seq repository: host
+  `${CANCER_REPOSITORY_HOST_DIR:-./external_repository}` mounted read-only as
+  `/data/cancer_repository`
 
-The analysis surface uses TCGA RNA expression. TCGA-CDR can enable OS, PFI, DFI and DSS per cohort when a configured CDR file is mounted and the endpoint passes basic patient/event QC. For DSS, DFI and PFI, TCGA-TRACE also retains TCGA-CDR competing-death coding to report cumulative incidence, Gray's test and grouped/continuous Fine-Gray models beside the cause-specific Kaplan-Meier and Cox outputs.
+The analysis surface uses TCGA RNA expression or one exact release of a
+curated independent bulk RNA-seq cohort. TCGA-CDR can enable OS, PFI, DFI and
+DSS per TCGA cohort when a configured CDR file is mounted and the endpoint
+passes patient/event QC. For DSS, DFI and PFI, TCGA-TRACE also retains
+TCGA-CDR competing-death coding to report cumulative incidence, Gray's test and
+grouped/continuous Fine-Gray models beside the cause-specific Kaplan-Meier and
+Cox outputs.
 
 Methodological versions and user-facing analysis behavior are tracked in [CHANGELOG.md](CHANGELOG.md). The same information is exposed in the app under `Help & Methods`.
 
@@ -77,6 +86,19 @@ python3 scripts/tcga_trace_cli.py run analysis request.json --verify
 
 See the [English CLI guide](docs/CLI.md) or the
 [Spanish CLI guide](docs/CLI_ES.md).
+
+## Curated External Cohorts
+
+The **Repository** module tracks independent public bulk RNA-seq cohorts
+against all 33 TCGA cancer types. A screening hit is not analyzable until its
+TCGA independence, license, expression scale, patient linkage, endpoint event
+count and immutable checksums pass curation and automated QC.
+
+The initial published releases cover metastatic melanoma and metastatic
+bladder cancer. Survival, Compare and Multiverse can use those releases;
+Pan-cancer remains TCGA-only and no cross-study pooling or silent expression
+harmonization is performed. See the
+[repository curation and deployment guide](docs/EXTERNAL_RNASEQ_REPOSITORY.md).
 
 The web application's **Run history** module is opt-in and browser-local until
 export. It can combine selected terminal jobs into one signed post hoc record

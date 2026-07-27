@@ -225,6 +225,6 @@ def test_overall_survival_does_not_claim_a_competing_risk_estimand(
     assert result == {
         "applicable": False,
         "status": "not_applicable",
-        "reason": "The selected endpoint has no TCGA-CDR competing-risk status.",
+        "reason": "The selected endpoint has no linked competing-event status.",
     }
     assert not plot_path.exists()

@@ -180,6 +180,48 @@ export function getCohorts() {
   return request(`${PUBLIC_API_PREFIX}/cohorts`);
 }
 
+export function getCancerRepositoryCoverage() {
+  return request(`${PUBLIC_API_PREFIX}/cancer-types`);
+}
+
+export function getRepositoryDatasets(cancerCode = "") {
+  const params = cancerCode
+    ? `?${new URLSearchParams({ cancer_code: cancerCode }).toString()}`
+    : "";
+  return request(`${PUBLIC_API_PREFIX}/datasets${params}`);
+}
+
+export function getRepositoryDataset(datasetId) {
+  return request(`${PUBLIC_API_PREFIX}/datasets/${encodeURIComponent(datasetId)}`);
+}
+
+export function getRepositoryDatasetEndpoints(datasetId, releaseId = "") {
+  const params = releaseId
+    ? `?${new URLSearchParams({ release_id: releaseId }).toString()}`
+    : "";
+  return request(
+    `${PUBLIC_API_PREFIX}/datasets/${encodeURIComponent(datasetId)}/endpoints${params}`,
+  );
+}
+
+export function getRepositoryExpressionLayers(datasetId, releaseId = "") {
+  const params = releaseId
+    ? `?${new URLSearchParams({ release_id: releaseId }).toString()}`
+    : "";
+  return request(
+    `${PUBLIC_API_PREFIX}/datasets/${encodeURIComponent(datasetId)}/expression-layers${params}`,
+  );
+}
+
+export function getRepositoryFilterOptions(datasetId, releaseId = "") {
+  const params = releaseId
+    ? `?${new URLSearchParams({ release_id: releaseId }).toString()}`
+    : "";
+  return request(
+    `${PUBLIC_API_PREFIX}/datasets/${encodeURIComponent(datasetId)}/filters${params}`,
+  );
+}
+
 export function getDatasetSummary(cohort = "") {
   const params = cohort ? `?${new URLSearchParams({ cohort }).toString()}` : "";
   return request(`${PUBLIC_API_PREFIX}/dataset/summary${params}`);
@@ -208,6 +250,20 @@ export function getFilterOptions(cohort) {
 export function searchGenes(cohort, query) {
   const params = new URLSearchParams({ query, limit: "20" });
   return request(`${PUBLIC_API_PREFIX}/cohorts/${cohort}/genes?${params.toString()}`);
+}
+
+export function searchRepositoryGenes(
+  datasetId,
+  query,
+  releaseId = "",
+  expressionLayerId = "",
+) {
+  const params = new URLSearchParams({ query, limit: "20" });
+  if (releaseId) params.set("release_id", releaseId);
+  if (expressionLayerId) params.set("expression_layer_id", expressionLayerId);
+  return request(
+    `${PUBLIC_API_PREFIX}/datasets/${encodeURIComponent(datasetId)}/genes?${params.toString()}`,
+  );
 }
 
 export function resolveGene(cohort, query) {

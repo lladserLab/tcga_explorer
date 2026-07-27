@@ -41,6 +41,9 @@ def expand_multiverse_request(
     ):
         analysis_request = AnalysisRequest(
             cohort=request.cohort,
+            dataset_id=request.dataset_id,
+            dataset_release_id=request.dataset_release_id,
+            expression_layer_id=request.expression_layer_id,
             gene_symbol=gene_label,
             signature_method=scoring_method,
             signature_genes=[] if scoring_method == "single" else request.genes,
@@ -408,6 +411,9 @@ def summarize_multiverse(
     }
     return {
         "session_id": session_id,
+        "dataset_id": request.dataset_id,
+        "dataset_release_id": request.dataset_release_id,
+        "expression_layer_id": request.expression_layer_id,
         "status": "completed" if failed_count == 0 else "completed_with_failures",
         "pipeline_version": pipeline_version,
         "generated_at": generated_at,

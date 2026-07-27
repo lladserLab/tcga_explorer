@@ -30,6 +30,10 @@ clinical/*
 !clinical/.gitkeep
 jcga/*
 !jcga/.gitkeep
+external_repository/*
+!external_repository/.gitkeep
+external_repository_staging/*
+!external_repository_staging/.gitkeep
 
 # Generated manuscript outputs
 manuscript/bioinformatics_app_note/build/

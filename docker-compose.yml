@@ -26,6 +26,8 @@ services:
       DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
       TCGA_DATA_DIR: /data/tcga
       TCGA_CDR_PATH: /app/clinical/TCGA-CDR-SupplementalTableS1.xlsx
+      CANCER_REPOSITORY_DIR: /data/cancer_repository
+      CANCER_REPOSITORY_REGISTRY_DIR: /app/repository_registry
       JCGA_DATA_DIR: /app/jcga
       TCGA_SYNC_STATE_DIR: /data/tcga/.sync
       CLINICAL_SYNC_STATE_DIR: /app/clinical/.sync
@@ -70,6 +72,7 @@ services:
       start_period: 60m
     volumes:
       - ../TCGA:/data/tcga:ro
+      - ${CANCER_REPOSITORY_HOST_DIR:-./external_repository}:/data/cancer_repository:ro
       - ./artifacts:/app/artifacts
       - ./derived:/app/derived
       - ./clinical:/app/clinical:ro
@@ -85,6 +88,8 @@ services:
       DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
       TCGA_DATA_DIR: /data/tcga
       TCGA_CDR_PATH: /app/clinical/TCGA-CDR-SupplementalTableS1.xlsx
+      CANCER_REPOSITORY_DIR: /data/cancer_repository
+      CANCER_REPOSITORY_REGISTRY_DIR: /app/repository_registry
       JCGA_DATA_DIR: /app/jcga
       TCGA_SYNC_STATE_DIR: /data/tcga/.sync
       CLINICAL_SYNC_STATE_DIR: /app/clinical/.sync
@@ -122,6 +127,7 @@ services:
     restart: unless-stopped
     volumes:
       - ../TCGA:/data/tcga:ro
+      - ${CANCER_REPOSITORY_HOST_DIR:-./external_repository}:/data/cancer_repository:ro
       - ./artifacts:/app/artifacts
       - ./derived:/app/derived
       - ./clinical:/app/clinical:ro
@@ -163,6 +169,8 @@ services:
       DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
       TCGA_DATA_DIR: /data/tcga
       TCGA_CDR_PATH: /app/clinical/TCGA-CDR-SupplementalTableS1.xlsx
+      CANCER_REPOSITORY_DIR: /data/cancer_repository
+      CANCER_REPOSITORY_REGISTRY_DIR: /app/repository_registry
       JCGA_DATA_DIR: /app/jcga
       TCGA_SYNC_STATE_DIR: /data/tcga/.sync
       CLINICAL_SYNC_STATE_DIR: /app/clinical/.sync
@@ -178,12 +186,37 @@ services:
         condition: service_healthy
     volumes:
       - ../TCGA:/data/tcga
+      - ${CANCER_REPOSITORY_HOST_DIR:-./external_repository}:/data/cancer_repository
       - ./artifacts:/app/artifacts
       - ./derived:/app/derived
       - ./clinical:/app/clinical
       - ./jcga:/app/jcga:ro
     entrypoint: ["python3", "-m", "app.data_sync.cli"]
     command: ["check", "--source", "all"]
+
+  repository-admin:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    profiles:
+      - tools
+    environment:
+      DATABASE_URL: postgresql+psycopg://tcga:tcga@postgres:5432/tcga_explorer
+      CANCER_REPOSITORY_DIR: /data/cancer_repository
+      CANCER_REPOSITORY_REGISTRY_DIR: /app/repository_registry
+      BOOTSTRAP_ON_STARTUP: "false"
+      PRELOAD_CACHE_ON_STARTUP: "false"
+      PRELOAD_CACHE_STRICT: "false"
+      PRELOAD_GDC_EXPRESSION_MATRICES_ON_STARTUP: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ${CANCER_REPOSITORY_HOST_DIR:-./external_repository}:/data/cancer_repository
+      - ${CANCER_REPOSITORY_STAGING_HOST_DIR:-./external_repository_staging}:/data/cancer_repository_staging
+      - ./repository_registry:/app/repository_registry:ro
+    entrypoint: ["python3", "-m", "app.repository.cli"]
+    command: ["coverage-report"]
 
 volumes:
   postgres_data:

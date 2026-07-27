@@ -15,6 +15,7 @@ import {
   createExploratorySession,
   createMultiverseAnalysis,
   createPanCancerSurvival,
+  getCancerRepositoryCoverage,
   getCohortEndpoints,
   getCohorts,
   getDataSources,
@@ -24,7 +25,12 @@ import {
   getHealth,
   getImmunePanCancerScreen,
   getPaperExamples,
+  getRepositoryDatasetEndpoints,
+  getRepositoryDatasets,
+  getRepositoryExpressionLayers,
+  getRepositoryFilterOptions,
   searchGenes,
+  searchRepositoryGenes,
 } from "./api";
 import {
   MAX_EXTERNAL_COVARIATE_FILE_BYTES,
@@ -285,17 +291,19 @@ const COMPETING_RISK_HELP =
 
 const HELP_CONTENT = {
   dataset:
-    "All analyses use one selected TCGA cancer cohort. After clinical and endpoint eligibility, the app requires the requested gene or complete signature score and then keeps the highest-priority expression-complete biospecimen per patient.",
+    "An analysis uses either one TCGA cohort or one exact release of a curated independent cohort. After clinical and endpoint eligibility, the app requires the requested gene or complete signature score and then retains one expression-complete sample per patient using the source-specific selection rule.",
+  repository:
+    "The repository contains public independent bulk RNA-seq cohorts with linked survival metadata. A detected candidate is not analyzable until its TCGA independence, license, expression scale, patient linkage, endpoint events and immutable checksums pass manual curation and automated QC. Releases are never pooled with TCGA or with each other.",
   defaultAnalysis:
     "The default Survival path uses one gene, OS, log2(TPM + 1), no clinical filters, age adjustment and a median split. It reports the cutpoint-independent continuous Cox model first, adds the spline when at least 30 events are available, and treats Kaplan-Meier, grouped Cox and RMST as median-split sensitivities. Every completed run creates audit and reconstruction downloads plus a signed server receipt; a declared multiverse remains an explicit separate action.",
   analysisDesign:
     "One signature runs standard single-gene or multi-gene survival analysis. Two signatures calculates two independent scores, stratifies each score and crosses the labels into combined groups.",
   survivalEndpoint:
-    `Endpoints come from TCGA-CDR when available: OS, DSS, PFI and DFI. A cohort endpoint is enabled only after patient and event count QC. ${COMPETING_RISK_HELP}`,
+    `TCGA endpoints come from TCGA-CDR when available: OS, DSS, PFI and DFI. External endpoints retain the release-specific time origin and event definition. Every endpoint is enabled only after patient and event count QC. ${COMPETING_RISK_HELP}`,
   geneMode:
     "Single genes are analyzed independently. Multi-gene modes collapse several genes into one signature score per patient before stratification.",
   expressionScale:
-    "Expression values are log-scale normalized RNA-seq quantities. log2(TPM + 1) is the default because TPM is comparable across genes within a sample after library-size normalization.",
+    "TCGA analyses offer the documented GDC-derived log-scale quantities and default to log2(TPM + 1). An external release exposes only its curated expression layer: its source unit, any applied transform and scale caveat are fixed in the manifest, shown in the interface and retained in the audit.",
   stratification:
     "Stratification converts a continuous expression or signature score into survival groups for secondary Kaplan-Meier, grouped Cox and RMST sensitivity analyses. Median is reproducible and balanced; maxstat is exploratory because it optimizes against survival.",
   clinicalFilters:
@@ -362,6 +370,7 @@ const HELP_GUIDE_SECTIONS = [
     items: [
       ["Default analysis path", HELP_CONTENT.defaultAnalysis],
       ["Cancer cohort", HELP_CONTENT.dataset],
+      ["Independent cohort repository", HELP_CONTENT.repository],
       ["Survival endpoint", HELP_CONTENT.survivalEndpoint],
       ["Expression scale", HELP_CONTENT.expressionScale],
       ["Clinical filters", HELP_CONTENT.clinicalFilters],
@@ -412,6 +421,17 @@ const HELP_GUIDE_SECTIONS = [
 ];
 
 const METHOD_HISTORY = [
+  {
+    version: "curated-external-rnaseq-repository-v1.0",
+    title: "Curated independent RNA-seq cohorts",
+    date: "2026-07",
+    items: [
+      "Survival, Compare and Multiverse can use one immutable external bulk RNA-seq release with linked clinical outcomes; Pan-cancer remains TCGA-only.",
+      "Every promoted release passes explicit minimum patient, event and gene thresholds plus checksum, linkage, license and TCGA-independence review.",
+      "Source units and transformations are dataset-specific and remain visible in the interface, provenance record and downloadable manifest.",
+      "A 33-cancer coverage ledger separates published releases, screening candidates, ongoing searches and evidence gaps.",
+    ],
+  },
   {
     version: "spline-temporal-information-contract-v6.2",
     title: "Information-aware nonlinear and temporal diagnostics",
@@ -795,6 +815,12 @@ const APP_NAV = [
     iconRole: "navigation.examples",
   },
   {
+    id: "repository",
+    label: "Repository",
+    kicker: "Independent cohorts",
+    iconRole: "module.cohortResults",
+  },
+  {
     id: "summary",
     label: "Dataset",
     kicker: "Inventory",
@@ -842,6 +868,10 @@ const PAGE_META = {
   examples: {
     title: "Paper examples",
     summary: "Literature-guided examples, unsupported results and diagnostic cases.",
+  },
+  repository: {
+    title: "External RNA-seq repository",
+    summary: "Curated independent cancer cohorts with survival-ready clinical data.",
   },
   summary: {
     title: "TCGA data",
@@ -936,6 +966,9 @@ function buildCombinedAnalysisPayload(form, signatureAInput, signatureBInput) {
   const groupingMethod = form.combined_signature.grouping_method;
   return {
     cohort: form.cohort,
+    dataset_id: form.dataset_id || null,
+    dataset_release_id: form.dataset_release_id || null,
+    expression_layer_id: form.expression_layer_id || null,
     signature_a: buildSignatureSpec(form.combined_signature.signature_a, signatureAInput, "Signature A"),
     signature_b: buildSignatureSpec(form.combined_signature.signature_b, signatureBInput, "Signature B"),
     endpoint: form.endpoint,
@@ -1048,7 +1081,13 @@ function removeGeneToken(value, symbol) {
     .join(", ");
 }
 
-function useGeneSuggestions(cohort, draft) {
+function useGeneSuggestions(
+  cohort,
+  draft,
+  datasetId = "",
+  datasetReleaseId = "",
+  expressionLayerId = "",
+) {
   const searchTerm = currentGeneSearchTerm(draft);
   const [state, setState] = useState({
     genes: [],
@@ -1065,7 +1104,15 @@ function useGeneSuggestions(cohort, draft) {
     let cancelled = false;
     setState({ genes: [], loading: true, error: "" });
     const handle = window.setTimeout(() => {
-      searchGenes(cohort, searchTerm)
+      const lookup = datasetId
+        ? searchRepositoryGenes(
+            datasetId,
+            searchTerm,
+            datasetReleaseId,
+            expressionLayerId,
+          )
+        : searchGenes(cohort, searchTerm);
+      lookup
         .then((payload) => {
           if (!cancelled) {
             setState({ genes: payload.genes || [], loading: false, error: "" });
@@ -1086,7 +1133,13 @@ function useGeneSuggestions(cohort, draft) {
       cancelled = true;
       window.clearTimeout(handle);
     };
-  }, [cohort, searchTerm]);
+  }, [
+    cohort,
+    datasetId,
+    datasetReleaseId,
+    expressionLayerId,
+    searchTerm,
+  ]);
 
   return state;
 }
@@ -1097,6 +1150,9 @@ function App() {
   const hasNavigatedRef = useRef(false);
   const [health, setHealth] = useState(null);
   const [cohorts, setCohorts] = useState([]);
+  const [repositoryCoverage, setRepositoryCoverage] = useState(null);
+  const [repositoryDatasets, setRepositoryDatasets] = useState([]);
+  const [repositoryLayers, setRepositoryLayers] = useState([]);
   const [datasetSummary, setDatasetSummary] = useState(null);
   const [dataSources, setDataSources] = useState([]);
   const [endpointOptions, setEndpointOptions] = useState(ENDPOINT_FALLBACK);
@@ -1170,6 +1226,9 @@ function App() {
 
   const [form, setForm] = useState({
     cohort: "",
+    dataset_id: null,
+    dataset_release_id: null,
+    expression_layer_id: null,
     gene_symbol: "",
     analysis_kind: "single_signature",
     endpoint: "OS",
@@ -1202,14 +1261,26 @@ function App() {
   });
 
   const geneSuggestionCohort = form.cohort || cohorts[0]?.id || "";
-  const geneSuggestionState = useGeneSuggestions(geneSuggestionCohort, geneQuery);
+  const geneSuggestionState = useGeneSuggestions(
+    geneSuggestionCohort,
+    geneQuery,
+    form.dataset_id,
+    form.dataset_release_id,
+    form.expression_layer_id,
+  );
   const combinedSuggestionA = useGeneSuggestions(
     geneSuggestionCohort,
     combinedGeneQueries.a,
+    form.dataset_id,
+    form.dataset_release_id,
+    form.expression_layer_id,
   );
   const combinedSuggestionB = useGeneSuggestions(
     geneSuggestionCohort,
     combinedGeneQueries.b,
+    form.dataset_id,
+    form.dataset_release_id,
+    form.expression_layer_id,
   );
   const genes = geneSuggestionState.genes;
   const combinedGeneSuggestions = {
@@ -1222,10 +1293,28 @@ function App() {
   };
 
   useEffect(() => {
-    Promise.all([getHealth(), getCohorts(), getExpressionScales(), getDatasetSummary(), getDataSources()])
-      .then(([healthPayload, cohortPayload, scalePayload, summaryPayload, sourcePayload]) => {
+    Promise.all([
+      getHealth(),
+      getCohorts(),
+      getExpressionScales(),
+      getDatasetSummary(),
+      getDataSources(),
+      getCancerRepositoryCoverage().catch(() => null),
+      getRepositoryDatasets().catch(() => ({ datasets: [] })),
+    ])
+      .then(([
+        healthPayload,
+        cohortPayload,
+        scalePayload,
+        summaryPayload,
+        sourcePayload,
+        repositoryCoveragePayload,
+        repositoryDatasetPayload,
+      ]) => {
         setHealth(healthPayload);
         setCohorts(cohortPayload);
+        setRepositoryCoverage(repositoryCoveragePayload);
+        setRepositoryDatasets(repositoryDatasetPayload?.datasets || []);
         setDatasetSummary(summaryPayload);
         setDataSources(sourcePayload?.sources || summaryPayload?.data_sources || []);
         if (scalePayload?.length) {
@@ -1261,11 +1350,50 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!form.cohort) return;
-    Promise.all([getFilterOptions(form.cohort), getCohortEndpoints(form.cohort)])
-      .then(([payload, endpointPayload]) => {
+    if (!form.cohort) return undefined;
+    let cancelled = false;
+    const inputPromise = form.dataset_id
+      ? Promise.all([
+          getRepositoryFilterOptions(
+            form.dataset_id,
+            form.dataset_release_id,
+          ),
+          getRepositoryDatasetEndpoints(
+            form.dataset_id,
+            form.dataset_release_id,
+          ),
+          getRepositoryExpressionLayers(
+            form.dataset_id,
+            form.dataset_release_id,
+          ),
+        ])
+      : Promise.all([
+          getFilterOptions(form.cohort),
+          getCohortEndpoints(form.cohort),
+          Promise.resolve({ expression_layers: [] }),
+        ]);
+    inputPromise
+      .then(([payload, endpointPayload, layerPayload]) => {
+        if (cancelled) return;
         setFilters(payload);
-        const options = endpointPayload?.endpoints?.length ? endpointPayload.endpoints : ENDPOINT_FALLBACK;
+        const options = endpointPayload?.endpoints?.length
+          ? endpointPayload.endpoints.map((item) => ({
+              ...item,
+              patients: item.patients ?? item.patient_count,
+              events: item.events ?? item.event_count,
+            }))
+          : ENDPOINT_FALLBACK;
+        const layers = layerPayload?.expression_layers || [];
+        const availableAdjustmentCovariates = new Set([
+          ...(payload?.age_min != null || payload?.age_max != null
+            ? ["age_at_index"]
+            : []),
+          ...(payload?.stages?.length ? ["stage"] : []),
+          ...(payload?.grades?.length ? ["grade"] : []),
+          ...(payload?.genders?.length ? ["gender"] : []),
+          ...(payload?.races?.length ? ["race"] : []),
+        ]);
+        setRepositoryLayers(layers);
         setEndpointOptions(options);
         const fallbackEndpoint = options.find((item) => item.available) || options[0] || ENDPOINT_FALLBACK[0];
         const availableEndpoints = options
@@ -1284,11 +1412,28 @@ function App() {
           endpoint: options.find((item) => item.value === current.endpoint && item.available)
             ? current.endpoint
             : fallbackEndpoint.value,
+          expression_layer_id: form.dataset_id
+            ? (
+                layers.find((item) => item.value === current.expression_layer_id)
+                  ?.value
+                || layers.find((item) => item.is_default)?.value
+                || layers[0]?.value
+                || null
+              )
+            : null,
+          adjustment_covariates: (
+            current.adjustment_covariates || []
+          ).filter((value) => availableAdjustmentCovariates.has(value)),
           filters: { ...EMPTY_FILTERS },
         }));
       })
-      .catch((err) => setError(err.message));
-  }, [form.cohort]);
+      .catch((err) => {
+        if (!cancelled) setError(err.message);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [form.cohort, form.dataset_id, form.dataset_release_id]);
 
   useEffect(() => {
     getDatasetSummary(summaryCohort)
@@ -1337,6 +1482,16 @@ function App() {
     () => cohorts.find((cohort) => cohort.id === form.cohort),
     [cohorts, form.cohort],
   );
+  const selectedRepositoryDataset = useMemo(
+    () => repositoryDatasets.find((dataset) => dataset.id === form.dataset_id),
+    [form.dataset_id, repositoryDatasets],
+  );
+  const cohortRepositoryDatasets = useMemo(
+    () => repositoryDatasets.filter(
+      (dataset) => dataset.tcga_cohort === form.cohort,
+    ),
+    [form.cohort, repositoryDatasets],
+  );
 
   const visibleCohorts = useMemo(() => {
     const query = cohortQuery.trim().toLowerCase();
@@ -1365,8 +1520,25 @@ function App() {
     form.external_adjustment_covariates || [];
 
   const selectedCutpoint = CUTPOINTS.find((item) => item.value === form.cutpoint_method);
+  const analysisExpressionScales = form.dataset_id
+    ? repositoryLayers.map((layer) => ({
+        ...layer,
+        note: layer.scale_note
+          || `${layer.source_unit} source values; ${layer.transform} transformation recorded in the release manifest.`,
+      }))
+    : expressionScales;
   const selectedExpressionScale =
-    expressionScales.find((item) => item.value === form.expression_scale) || EXPRESSION_SCALE_FALLBACK[0];
+    (
+      form.dataset_id
+        ? analysisExpressionScales.find(
+            (item) => item.value === form.expression_layer_id,
+          )
+        : analysisExpressionScales.find(
+            (item) => item.value === form.expression_scale,
+          )
+    )
+    || analysisExpressionScales[0]
+    || EXPRESSION_SCALE_FALLBACK[0];
   const selectedEndpoint =
     endpointOptions.find((item) => item.value === form.endpoint) || ENDPOINT_FALLBACK[0];
   const effectiveGeneInput = geneQuery.trim() ? addGeneToken(form.gene_symbol, geneQuery) : form.gene_symbol;
@@ -1431,7 +1603,9 @@ function App() {
       ? `${selectedGenes.slice(0, 3).join(", ")}${selectedGenes.length > 3 ? ` +${selectedGenes.length - 3}` : ""}`
       : "Gene pending";
   const analysisSetupSummary = [
-    form.cohort || "Cohort pending",
+    selectedRepositoryDataset?.source_accession
+      || form.cohort
+      || "Cohort pending",
     analysisGeneSummary,
     selectedEndpoint?.value || "Endpoint pending",
     previewCutpoint?.label || "Groups pending",
@@ -1445,6 +1619,13 @@ function App() {
 
   function updateForm(key, value) {
     setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  function selectExpressionScale(value) {
+    updateForm(
+      form.dataset_id ? "expression_layer_id" : "expression_scale",
+      value,
+    );
   }
 
   function navigateAnalysisStep(nextStep) {
@@ -1558,13 +1739,47 @@ function App() {
   }
 
   function selectCohort(value) {
-    updateForm("cohort", value);
+    setForm((current) => ({
+      ...current,
+      cohort: value,
+      dataset_id: null,
+      dataset_release_id: null,
+      expression_layer_id: null,
+      filters: { ...EMPTY_FILTERS },
+      external_covariates: null,
+      external_adjustment_covariates: [],
+    }));
+    setRepositoryLayers([]);
     setCohortPickerOpen(false);
     setCohortQuery("");
     setAnalysisResults([]);
     setCompare((current) => ({ ...current, results: [], error: "" }));
     setMultiverse((current) => ({ ...current, result: null, error: "" }));
     setError("");
+  }
+
+  function selectRepositoryDataset(datasetId) {
+    const dataset = repositoryDatasets.find((item) => item.id === datasetId);
+    setForm((current) => ({
+      ...current,
+      cohort: dataset?.tcga_cohort || current.cohort,
+      dataset_id: dataset?.id || null,
+      dataset_release_id: dataset?.active_release_id || null,
+      expression_layer_id: null,
+      filters: { ...EMPTY_FILTERS },
+      external_covariates: null,
+      external_adjustment_covariates: [],
+    }));
+    setAnalysisResults([]);
+    setCompare((current) => ({ ...current, results: [], error: "" }));
+    setMultiverse((current) => ({ ...current, result: null, error: "" }));
+    setError("");
+  }
+
+  function analyzeRepositoryDataset(datasetId) {
+    selectRepositoryDataset(datasetId);
+    navigateToPage("analysis");
+    setAnalysisStep(0);
   }
 
   function toggleFilterValue(key, value) {
@@ -1847,6 +2062,7 @@ function App() {
           <HomePage
             health={health}
             summary={datasetSummary}
+            repositoryCoverage={repositoryCoverage}
             onNavigate={navigateToPage}
           />
         ) : activePage === "analysis" ? (
@@ -1882,16 +2098,49 @@ function App() {
                         setOpen={setCohortPickerOpen}
                         onSelect={selectCohort}
                       />
+                      <RepositorySourceSelector
+                        selectedCohort={selectedCohort}
+                        datasets={cohortRepositoryDatasets}
+                        selectedDataset={selectedRepositoryDataset}
+                        onSelect={selectRepositoryDataset}
+                      />
                       {selectedCohort && (
                         <div className="cohort-summary">
                           <div className="cohort-title">
-                            <strong>{getCohortName(selectedCohort.id)}</strong>
-                            <span>{selectedCohort.id}</span>
+                            <strong>
+                              {selectedRepositoryDataset?.name
+                                || getCohortName(selectedCohort.id)}
+                            </strong>
+                            <span>
+                              {selectedRepositoryDataset?.source_accession
+                                || selectedCohort.id}
+                            </span>
                           </div>
-                          <SummaryStat label="RNA samples" value={selectedCohort.n_samples_paired} />
-                          <SummaryStat label="Patients" value={selectedCohort.n_patients_paired} />
-                          <SummaryStat label="Tumors" value={selectedCohort.n_primary_tumor} />
-                          <p>{selectedCohort.primary_site}</p>
+                          <SummaryStat
+                            label="RNA samples"
+                            value={
+                              selectedRepositoryDataset?.sample_count
+                                ?? selectedCohort.n_samples_paired
+                            }
+                          />
+                          <SummaryStat
+                            label="Patients"
+                            value={
+                              selectedRepositoryDataset?.patient_count
+                                ?? selectedCohort.n_patients_paired
+                            }
+                          />
+                          <SummaryStat
+                            label={selectedRepositoryDataset ? "Genes" : "Tumors"}
+                            value={
+                              selectedRepositoryDataset?.gene_count
+                                ?? selectedCohort.n_primary_tumor
+                            }
+                          />
+                          <p>
+                            {selectedRepositoryDataset?.cohort_context
+                              || selectedCohort.primary_site}
+                          </p>
                         </div>
                       )}
                     </>
@@ -1999,12 +2248,20 @@ function App() {
                       <div className="analysis-step-subsection">
                         <LabelWithHelp label="RNA expression scale" help={HELP_CONTENT.expressionScale} />
                         <div className="scale-grid" aria-label="RNA expression scale">
-                          {expressionScales.map((item) => (
+                          {analysisExpressionScales.map((item) => (
                             <button
                               key={item.value}
                               type="button"
-                              className={form.expression_scale === item.value ? "selected" : ""}
-                              onClick={() => updateForm("expression_scale", item.value)}
+                              className={
+                                (
+                                  form.dataset_id
+                                    ? form.expression_layer_id
+                                    : form.expression_scale
+                                ) === item.value
+                                  ? "selected"
+                                  : ""
+                              }
+                              onClick={() => selectExpressionScale(item.value)}
                             >
                               <strong>{item.label}</strong>
                             </button>
@@ -2224,6 +2481,7 @@ function App() {
                     activeStep={analysisStep}
                     step={activeAnalysisStep}
                     cohort={selectedCohort}
+                    repositoryDataset={selectedRepositoryDataset}
                     form={form}
                     isCombinedMode={isCombinedMode}
                     selectedGenes={selectedGenes}
@@ -2266,6 +2524,9 @@ function App() {
             cohortPickerOpen={cohortPickerOpen}
             setCohortPickerOpen={setCohortPickerOpen}
             onSelectCohort={selectCohort}
+            repositoryDatasets={cohortRepositoryDatasets}
+            selectedRepositoryDataset={selectedRepositoryDataset}
+            onSelectRepositoryDataset={selectRepositoryDataset}
             endpointOptions={endpointOptions}
             selectedEndpoint={selectedEndpoint}
             onSelectEndpoint={(value) => updateForm("endpoint", value)}
@@ -2275,7 +2536,13 @@ function App() {
             updatePaletteColor={updatePaletteColor}
             plotEditorTarget={plotEditorTarget}
             onPlotEditorTargetChange={setPlotEditorTarget}
-            expressionScales={expressionScales}
+            expressionScales={analysisExpressionScales}
+            expressionScaleValue={
+              form.dataset_id
+                ? form.expression_layer_id
+                : form.expression_scale
+            }
+            onSelectExpressionScale={selectExpressionScale}
             filters={filters}
             activeFilterCount={activeFilterCount}
             updateFilters={updateFilters}
@@ -2302,8 +2569,17 @@ function App() {
             cohortPickerOpen={cohortPickerOpen}
             setCohortPickerOpen={setCohortPickerOpen}
             onSelectCohort={selectCohort}
+            repositoryDatasets={cohortRepositoryDatasets}
+            selectedRepositoryDataset={selectedRepositoryDataset}
+            onSelectRepositoryDataset={selectRepositoryDataset}
             endpointOptions={endpointOptions}
-            expressionScales={expressionScales}
+            expressionScales={analysisExpressionScales}
+            expressionScaleValue={
+              form.dataset_id
+                ? form.expression_layer_id
+                : form.expression_scale
+            }
+            onSelectExpressionScale={selectExpressionScale}
             filters={filters}
             activeFilterCount={activeFilterCount}
             updateForm={updateForm}
@@ -2341,6 +2617,13 @@ function App() {
             error={paperExamples.error}
             onRetry={() => setPaperExamples({ data: null, loading: false, error: "" })}
           />
+        ) : activePage === "repository" ? (
+          <RepositoryCatalog
+            coverage={repositoryCoverage}
+            datasets={repositoryDatasets}
+            onAnalyze={analyzeRepositoryDataset}
+            onDownload={startDownload}
+          />
         ) : activePage === "summary" ? (
           <DatasetSummary
             summary={datasetSummary}
@@ -2362,7 +2645,7 @@ function App() {
   );
 }
 
-function HomePage({ health, summary, onNavigate }) {
+function HomePage({ health, summary, repositoryCoverage, onNavigate }) {
   const totals = summary?.totals || {};
   const assetBase = import.meta.env.BASE_URL;
   const workspaceModules = [
@@ -2383,6 +2666,12 @@ function HomePage({ health, summary, onNavigate }) {
       iconRole: "navigation.panCancer",
       title: "Look across cancer types",
       description: "Estimate the effect in each cohort and review FDR, heterogeneity and clinical adjustment.",
+    },
+    {
+      page: "repository",
+      iconRole: "module.cohortResults",
+      title: "Validate in an independent cohort",
+      description: `${formatInteger(repositoryCoverage?.datasets || 0)} curated bulk RNA-seq ${repositoryCoverage?.datasets === 1 ? "study" : "studies"} currently pass expression and survival QC.`,
     },
     {
       page: "methods",
@@ -2522,6 +2811,252 @@ function HomePage({ health, summary, onNavigate }) {
             </div>
           </div>
         </div>
+      </section>
+    </div>
+  );
+}
+
+function RepositoryCatalog({ coverage, datasets, onAnalyze, onDownload }) {
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const cancers = coverage?.cancers || [];
+  const normalizedQuery = query.trim().toLowerCase();
+  const visibleCancers = cancers.filter((cancer) => {
+    const matchesStatus = statusFilter === "all"
+      || cancer.coverage_status === statusFilter;
+    const matchesQuery = !normalizedQuery
+      || [
+        cancer.code,
+        cancer.tcga_cohort,
+        cancer.name,
+        cancer.primary_site,
+      ].some((value) => String(value || "").toLowerCase().includes(normalizedQuery));
+    return matchesStatus && matchesQuery;
+  });
+  const datasetById = new Map(datasets.map((dataset) => [dataset.id, dataset]));
+
+  return (
+    <div className="repository-page">
+      <section className="repository-overview" aria-labelledby="repository-overview-title">
+        <div>
+          <p className="eyebrow">Curated evidence</p>
+          <h2 id="repository-overview-title">Independent bulk RNA-seq cohorts</h2>
+          <p>
+            Each published release fixes its expression matrix, endpoint definition,
+            sample mapping, license and QC result.
+          </p>
+        </div>
+        <dl className="repository-kpis">
+          <div>
+            <dt>Cancer types</dt>
+            <dd>{formatInteger(coverage?.total_cancer_types || 33)}</dd>
+          </div>
+          <div>
+            <dt>Available</dt>
+            <dd>{formatInteger(coverage?.available_cancer_types || 0)}</dd>
+          </div>
+          <div>
+            <dt>Studies</dt>
+            <dd>{formatInteger(coverage?.datasets || 0)}</dd>
+          </div>
+          <div>
+            <dt>Under review</dt>
+            <dd>{formatInteger(coverage?.search_in_progress || 0)}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className="repository-releases" aria-labelledby="repository-releases-title">
+        <header className="repository-section-heading">
+          <div>
+            <p className="eyebrow">Published releases</p>
+            <h2 id="repository-releases-title">Survival-ready datasets</h2>
+          </div>
+        </header>
+        <div className="repository-release-list">
+          {datasets.map((dataset) => (
+            <article key={dataset.id} className="repository-release">
+              <header>
+                <div>
+                  <span>{dataset.cancer_code} · {dataset.source_accession}</span>
+                  <h3>{dataset.name}</h3>
+                </div>
+                <span className="repository-qc-status">QC passed</span>
+              </header>
+              <p>{dataset.cohort_context || dataset.description}</p>
+              <div className="repository-expression-note">
+                <strong>
+                  Expression: {dataset.expression_layer?.label || "Release-defined layer"}
+                </strong>
+                {dataset.expression_layer?.scale_note && (
+                  <p>{dataset.expression_layer.scale_note}</p>
+                )}
+              </div>
+              <dl>
+                <div>
+                  <dt>Patients</dt>
+                  <dd>{formatInteger(dataset.patient_count)}</dd>
+                </div>
+                <div>
+                  <dt>RNA samples</dt>
+                  <dd>{formatInteger(dataset.sample_count)}</dd>
+                </div>
+                <div>
+                  <dt>Genes</dt>
+                  <dd>{formatInteger(dataset.gene_count)}</dd>
+                </div>
+                <div>
+                  <dt>License</dt>
+                  <dd>{dataset.license_id}</dd>
+                </div>
+              </dl>
+              <div className="repository-release-meta">
+                <span>{dataset.publication_citation}</span>
+                <code title={dataset.manifest_hash}>
+                  {dataset.manifest_hash?.slice(0, 14)}…
+                </code>
+              </div>
+              <footer>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => onAnalyze(dataset.id)}
+                >
+                  <TraceIcon role="action.run" size="sm" />
+                  Analyze
+                </button>
+                <details className="repository-download-menu">
+                  <summary className="secondary-button">
+                    <TraceIcon role="action.download" size="sm" />
+                    Release files
+                  </summary>
+                  <div>
+                    {[
+                      ["manifest", "Manifest", "file.audit"],
+                      ["qc", "QC report", "status.success"],
+                      ["license", "License", "file.text"],
+                      ...(dataset.redistribution_allowed
+                        ? [
+                            ["matrix", "Expression matrix", "data.expression"],
+                            ["matrix-metadata", "Matrix metadata", "file.audit"],
+                            ["genes", "Gene index", "data.table"],
+                          ]
+                        : []),
+                    ].map(([kind, label, iconRole]) => (
+                      <button
+                        key={kind}
+                        type="button"
+                        onClick={(event) => {
+                          event.currentTarget.closest("details")?.removeAttribute("open");
+                          onDownload(
+                            `/api/v1/datasets/${encodeURIComponent(dataset.id)}/download/${kind}?expression_layer_id=${encodeURIComponent(dataset.expression_layer?.layer_id || "")}`,
+                            `${dataset.id} ${label}`,
+                          );
+                        }}
+                      >
+                        <TraceIcon role={iconRole} size="sm" />
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </details>
+                <a
+                  className="repository-source-link"
+                  href={dataset.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Source
+                  <TraceIcon role="action.next" size="sm" />
+                </a>
+              </footer>
+            </article>
+          ))}
+          {!datasets.length && (
+            <div className="empty-inline">No external release currently passes repository QC.</div>
+          )}
+        </div>
+      </section>
+
+      <section className="repository-coverage" aria-labelledby="repository-coverage-title">
+        <header className="repository-section-heading">
+          <div>
+            <p className="eyebrow">Coverage ledger</p>
+            <h2 id="repository-coverage-title">All 33 TCGA cancer types</h2>
+          </div>
+          <div className="repository-catalog-controls">
+            <label className="search-field">
+              <TraceIcon role="action.search" size="sm" />
+              <span className="sr-only">Search cancer types</span>
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Cancer, site or TCGA code"
+              />
+            </label>
+            <div className="repository-status-filter" aria-label="Coverage status">
+              {[
+                ["all", "All"],
+                ["available", "Available"],
+                ["search_in_progress", "Reviewing"],
+                ["evidence_gap", "Evidence gaps"],
+              ].map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={statusFilter === value}
+                  className={statusFilter === value ? "selected" : ""}
+                  onClick={() => setStatusFilter(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </header>
+        <div className="repository-cancer-grid">
+          {visibleCancers.map((cancer) => {
+            const availableDatasets = (cancer.datasets || [])
+              .map((id) => datasetById.get(id))
+              .filter(Boolean);
+            const status = cancer.coverage_status;
+            const screenedCandidates = Number(
+              cancer.search?.discovery?.candidate_count || 0,
+            );
+            return (
+              <article key={cancer.code} data-status={status}>
+                <header>
+                  <span>{cancer.code}</span>
+                  <strong>{cancer.name}</strong>
+                </header>
+                <p>{cancer.primary_site}</p>
+                <footer>
+                  <span className={`repository-coverage-status ${status}`}>
+                    {status === "available"
+                      ? `${availableDatasets.length} available`
+                      : status === "evidence_gap"
+                        ? "Evidence gap"
+                        : screenedCandidates
+                          ? `${screenedCandidates} screened`
+                          : "Search in progress"}
+                  </span>
+                  {availableDatasets[0] && (
+                    <button
+                      type="button"
+                      onClick={() => onAnalyze(availableDatasets[0].id)}
+                    >
+                      Analyze
+                      <TraceIcon role="action.next" size="sm" />
+                    </button>
+                  )}
+                </footer>
+              </article>
+            );
+          })}
+        </div>
+        {!visibleCancers.length && (
+          <div className="empty-inline">No cancer types match the selected filter.</div>
+        )}
       </section>
     </div>
   );
@@ -2782,6 +3317,66 @@ function CohortPicker({
           </div>
       </div>
     </div>
+  );
+}
+
+function RepositorySourceSelector({
+  selectedCohort,
+  datasets,
+  selectedDataset,
+  onSelect,
+}) {
+  if (!selectedCohort) return null;
+  return (
+    <section className="repository-source-selector" aria-labelledby="analysis-source-label">
+      <div className="repository-source-heading">
+        <span id="analysis-source-label">Analysis source</span>
+        <strong>
+          {selectedDataset ? "Independent cohort" : "TCGA"}
+        </strong>
+      </div>
+      <div className="repository-source-options" role="radiogroup" aria-label="Analysis dataset">
+        <button
+          type="button"
+          role="radio"
+          aria-checked={!selectedDataset}
+          className={!selectedDataset ? "selected" : ""}
+          onClick={() => onSelect(null)}
+        >
+          <span className="repository-source-code">TCGA</span>
+          <strong>{getCohortName(selectedCohort.id)}</strong>
+          <small>
+            {formatInteger(selectedCohort.n_patients_paired)} linked patients
+          </small>
+        </button>
+        {datasets.map((dataset) => (
+          <button
+            key={dataset.id}
+            type="button"
+            role="radio"
+            aria-checked={selectedDataset?.id === dataset.id}
+            className={selectedDataset?.id === dataset.id ? "selected" : ""}
+            onClick={() => onSelect(dataset.id)}
+          >
+            <span className="repository-source-code">
+              {dataset.source_accession}
+            </span>
+            <strong>{dataset.name}</strong>
+            <small>
+              {formatInteger(dataset.patient_count)} patients · {dataset.release_version}
+            </small>
+            <small>
+              {dataset.expression_layer?.label || "Release-defined expression"}
+            </small>
+          </button>
+        ))}
+      </div>
+      {!datasets.length && (
+        <p className="repository-source-gap">
+          No curated independent RNA-seq cohort is available for this cancer yet.
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -3766,6 +4361,9 @@ function CompareAnalyses({
   cohortPickerOpen,
   setCohortPickerOpen,
   onSelectCohort,
+  repositoryDatasets,
+  selectedRepositoryDataset,
+  onSelectRepositoryDataset,
   endpointOptions,
   selectedEndpoint,
   onSelectEndpoint,
@@ -3776,6 +4374,8 @@ function CompareAnalyses({
   plotEditorTarget,
   onPlotEditorTargetChange,
   expressionScales,
+  expressionScaleValue,
+  onSelectExpressionScale,
   filters,
   activeFilterCount,
   updateFilters,
@@ -3795,6 +4395,9 @@ function CompareAnalyses({
   const compareGeneSuggestionState = useGeneSuggestions(
     suggestionCohort,
     compareGeneQuery,
+    form.dataset_id,
+    form.dataset_release_id,
+    form.expression_layer_id,
   );
   const compareGeneSuggestions = compareGeneSuggestionState.genes;
   const compareStepPanelRef = useRef(null);
@@ -3833,7 +4436,9 @@ function CompareAnalyses({
   ];
   const activeCompareStep = COMPARE_WORKFLOW_STEPS[compareStep] || COMPARE_WORKFLOW_STEPS[0];
   const compareSetupSummary = [
-    form.cohort || "Cohort pending",
+    selectedRepositoryDataset?.source_accession
+      || form.cohort
+      || "Cohort pending",
     genes.length ? `${genes.length} marker${genes.length === 1 ? "" : "s"}` : "Markers pending",
     selectedMethods.length ? `${selectedMethods.length} method${selectedMethods.length === 1 ? "" : "s"}` : "Methods pending",
     activeFilterCount ? `${activeFilterCount} filter${activeFilterCount === 1 ? "" : "s"}` : "No filters",
@@ -3972,6 +4577,12 @@ function CompareAnalyses({
                   setOpen={setCohortPickerOpen}
                   onSelect={onSelectCohort}
                 />
+                <RepositorySourceSelector
+                  selectedCohort={selectedCohort}
+                  datasets={repositoryDatasets}
+                  selectedDataset={selectedRepositoryDataset}
+                  onSelect={onSelectRepositoryDataset}
+                />
               </div>
               <div className="compare-control-block">
                 <div className="compare-control-label">
@@ -3994,8 +4605,8 @@ function CompareAnalyses({
                     <button
                       key={item.value}
                       type="button"
-                      className={form.expression_scale === item.value ? "selected" : ""}
-                      onClick={() => updateForm("expression_scale", item.value)}
+                      className={expressionScaleValue === item.value ? "selected" : ""}
+                      onClick={() => onSelectExpressionScale(item.value)}
                     >
                       <strong>{item.label}</strong>
                     </button>
@@ -4218,6 +4829,7 @@ function CompareAnalyses({
             activeStep={compareStep}
             step={activeCompareStep}
             cohort={selectedCohort}
+            repositoryDataset={selectedRepositoryDataset}
             endpoint={selectedEndpoint}
             expressionScale={expressionScale}
             genes={genes}
@@ -4316,6 +4928,7 @@ function CompareSetupPreview({
   activeStep,
   step,
   cohort,
+  repositoryDataset,
   endpoint,
   expressionScale,
   genes,
@@ -4374,9 +4987,13 @@ function CompareSetupPreview({
         cohort ? (
           <div className="analysis-context-preview compare-dataset-preview">
             <div className="analysis-preview-lead">
-              <span>{cohort.id}</span>
-              <h3>{getCohortName(cohort.id)}</h3>
-              <p>{cohort.primary_site || "Primary site not reported"}</p>
+              <span>{repositoryDataset?.source_accession || cohort.id}</span>
+              <h3>{repositoryDataset?.name || getCohortName(cohort.id)}</h3>
+              <p>
+                {repositoryDataset?.cohort_context
+                  || cohort.primary_site
+                  || "Primary site not reported"}
+              </p>
             </div>
             <div className="analysis-preview-metrics">
               <PreviewItem label="Endpoint" value={endpoint?.label || "Pending"} />
@@ -4853,8 +5470,13 @@ function MultiverseAnalysis({
   cohortPickerOpen,
   setCohortPickerOpen,
   onSelectCohort,
+  repositoryDatasets,
+  selectedRepositoryDataset,
+  onSelectRepositoryDataset,
   endpointOptions,
   expressionScales,
+  expressionScaleValue,
+  onSelectExpressionScale,
   filters,
   activeFilterCount,
   updateForm,
@@ -4866,7 +5488,13 @@ function MultiverseAnalysis({
 }) {
   const [step, setStep] = useState(0);
   const [geneQuery, setGeneQuery] = useState("");
-  const geneSuggestionState = useGeneSuggestions(suggestionCohort, geneQuery);
+  const geneSuggestionState = useGeneSuggestions(
+    suggestionCohort,
+    geneQuery,
+    form.dataset_id,
+    form.dataset_release_id,
+    form.expression_layer_id,
+  );
   const geneSuggestions = geneSuggestionState.genes;
   const stepPanelRef = useRef(null);
   const effectiveGeneInput = geneQuery.trim()
@@ -4980,6 +5608,9 @@ function MultiverseAnalysis({
     const base = buildAnalysisPayload({ ...form, gene_symbol: normalizedInput });
     const payload = {
       cohort: form.cohort,
+      dataset_id: form.dataset_id || null,
+      dataset_release_id: form.dataset_release_id || null,
+      expression_layer_id: form.expression_layer_id || null,
       genes: parseSignatureGenes(normalizedInput),
       signature_name: genes.length > 1 ? state.session_label.trim() : "",
       endpoints: selectedEndpoints,
@@ -5058,6 +5689,12 @@ function MultiverseAnalysis({
                       open={cohortPickerOpen}
                       setOpen={setCohortPickerOpen}
                       onSelect={onSelectCohort}
+                    />
+                    <RepositorySourceSelector
+                      selectedCohort={selectedCohort}
+                      datasets={repositoryDatasets}
+                      selectedDataset={selectedRepositoryDataset}
+                      onSelect={onSelectRepositoryDataset}
                     />
                   </div>
                   <div className="compare-control-block wide">
@@ -5194,16 +5831,16 @@ function MultiverseAnalysis({
                   <div className="compare-control-block wide">
                     <div className="compare-control-label">
                       <LabelWithHelp label="RNA expression scale" help={HELP_CONTENT.expressionScale} />
-                      <strong>{expressionScales.find((item) => item.value === form.expression_scale)?.label}</strong>
+                      <strong>{expressionScales.find((item) => item.value === expressionScaleValue)?.label}</strong>
                     </div>
                     <div className="scale-grid" aria-label="RNA expression scale">
                       {expressionScales.map((item) => (
                         <button
                           key={item.value}
                           type="button"
-                          aria-pressed={form.expression_scale === item.value}
-                          className={form.expression_scale === item.value ? "selected" : ""}
-                          onClick={() => updateForm("expression_scale", item.value)}
+                          aria-pressed={expressionScaleValue === item.value}
+                          className={expressionScaleValue === item.value ? "selected" : ""}
+                          onClick={() => onSelectExpressionScale(item.value)}
                         >
                           <strong>{item.label}</strong>
                         </button>
@@ -5342,6 +5979,7 @@ function MultiverseAnalysis({
           <MultiverseSetupPreview
             step={activeStep}
             cohort={selectedCohort}
+            repositoryDataset={selectedRepositoryDataset}
             genes={genes}
             endpoints={selectedEndpoints}
             scoring={selectedScoring}
@@ -5405,6 +6043,7 @@ function MultiverseStepActions({
 function MultiverseSetupPreview({
   step,
   cohort,
+  repositoryDataset,
   genes,
   endpoints,
   scoring,
@@ -5421,7 +6060,11 @@ function MultiverseSetupPreview({
         <ModuleIcon role="module.specificationCurve" />
         <div>
           <span>{running ? "Executing frozen family" : "Declared analysis family"}</span>
-          <h2>{cohort ? `${cohort.id} specification curve` : "Build a prespecified family"}</h2>
+          <h2>
+            {cohort
+              ? `${repositoryDataset?.source_accession || cohort.id} specification curve`
+              : "Build a prespecified family"}
+          </h2>
         </div>
         {running && <TraceIcon role="status.loading" size="lg" className="spin" label="Running multiverse" />}
       </header>
@@ -9050,6 +9693,7 @@ function AnalysisSetupPreview({
   activeStep,
   step,
   cohort,
+  repositoryDataset,
   form,
   isCombinedMode,
   selectedGenes,
@@ -9086,14 +9730,33 @@ function AnalysisSetupPreview({
         cohort ? (
           <div className="analysis-context-preview">
             <div className="analysis-preview-lead">
-              <span>{cohort.id}</span>
-              <h3>{getCohortName(cohort.id)}</h3>
-              <p>{cohort.primary_site || "Primary site not reported"}</p>
+              <span>{repositoryDataset?.source_accession || cohort.id}</span>
+              <h3>{repositoryDataset?.name || getCohortName(cohort.id)}</h3>
+              <p>
+                {repositoryDataset?.cohort_context
+                  || cohort.primary_site
+                  || "Primary site not reported"}
+              </p>
             </div>
             <div className="analysis-preview-metrics">
-              <PreviewItem label="RNA samples" value={formatInteger(cohort.n_samples_paired)} />
-              <PreviewItem label="Patients" value={formatInteger(cohort.n_patients_paired)} />
-              <PreviewItem label="Tumors" value={formatInteger(cohort.n_primary_tumor)} />
+              <PreviewItem
+                label="RNA samples"
+                value={formatInteger(
+                  repositoryDataset?.sample_count ?? cohort.n_samples_paired,
+                )}
+              />
+              <PreviewItem
+                label="Patients"
+                value={formatInteger(
+                  repositoryDataset?.patient_count ?? cohort.n_patients_paired,
+                )}
+              />
+              <PreviewItem
+                label={repositoryDataset ? "Genes" : "Tumors"}
+                value={formatInteger(
+                  repositoryDataset?.gene_count ?? cohort.n_primary_tumor,
+                )}
+              />
             </div>
           </div>
         ) : (

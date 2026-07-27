@@ -1,0 +1,79 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-blca-iatlas-imvigor210-2017",
+    "cancer_code": "BLCA",
+    "name": "Metastatic bladder cancer (IMvigor210)",
+    "description": "Independent phase II atezolizumab cohort with harmonized bulk RNA-seq and overall survival data.",
+    "cohort_context": "Metastatic urothelial carcinoma; pretreatment biopsies from an immune-checkpoint inhibitor trial and therefore not interchangeable with an unselected primary-tumor cohort.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "blca_iatlas_imvigor210_2017",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/blca_iatlas_imvigor210_2017",
+    "publication_citation": "Rosenberg et al. ESMO Open 2024; original IMvigor210 report, Lancet 2016",
+    "publication_id": "PMID:39642637; PMID:27939400",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "treatment_context": "Atezolizumab monotherapy",
+      "study_design": "Phase II clinical trial",
+      "curation_note": "The source cohort is independent of TCGA. It is retained as a context-specific validation cohort rather than a population-matched BLCA replication set."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/blca_iatlas_imvigor210_2017",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Metastatic tumor",
+    "sample_role": "Pretreatment metastatic tumor biopsy",
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.CLINICAL_STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [],
+    "age_fields": []
+  },
+  "expression": {
+    "layer_id": "provided_tpm_profile",
+    "label": "iAtlas TPM profile (provided scale)",
+    "source_unit": "iAtlas TPM profile (provided values)",
+    "transform": "identity",
+    "analysis_unit": "iAtlas TPM profile (no additional transform)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied gene symbol are averaged sample-wise. Distinct source identifiers are never merged implicitly.",
+    "scale_note": "DataHub labels the matrix as TPM, but the supplied values are bounded near 22 and the exact upstream transform is not stated in the profile metadata. TCGA-TRACE preserves those values without applying a second transform and does not claim an unlogged TPM scale."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Atezolizumab treatment start",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

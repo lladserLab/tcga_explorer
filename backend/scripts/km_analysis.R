@@ -192,7 +192,7 @@ rmst <- list(status = "skipped", reason = "RMST is reported only for two express
 competing_risks <- list(
   applicable = FALSE,
   status = "not_applicable",
-  reason = "The selected endpoint has no TCGA-CDR competing-risk status."
+  reason = "The selected endpoint has no linked competing-event status."
 )
 cox_warning_messages <- c()
 
