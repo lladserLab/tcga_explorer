@@ -1,0 +1,107 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-pcpg-a5-2025",
+    "cancer_code": "PCPG",
+    "name": "SDHB-mutant pheochromocytoma and paraganglioma (A5, 2025)",
+    "description": "Independent international cohort of hereditary SDHB-mutant pheochromocytomas and paragangliomas with whole-transcriptome sequencing and linked overall survival.",
+    "cohort_context": "Hereditary SDHB-mutant disease; this molecularly selected cohort is not population-matched to an unselected TCGA-PCPG cohort.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "hnsc_a5consortium_2025",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/hnsc_a5consortium_2025",
+    "publication_citation": "Flynn et al. Nature Communications 2025",
+    "publication_id": "PMID:40097403",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "International multi-omic cohort",
+      "source_label_note": "The cBioPortal accession retains a legacy HNSC prefix, but every included sample is annotated as paraganglioma (OncoTree PGNG).",
+      "curation_note": "Whole-transcriptome-sequenced tumors are selected one per patient, prioritizing a primary tumor over a recurrence or metastasis."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/hnsc_a5consortium_2025",
+    "files": {
+      "expression": "data_mrna_seq_cpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_cpm.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "PCPG tumor",
+    "sample_role": "Whole-transcriptome-sequenced tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.CANCER_TYPE_DETAILED",
+        "include": ["Paraganglioma"],
+        "required": true
+      },
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["PGNG"],
+        "required": true
+      },
+      {
+        "field": "sample.WTS",
+        "include": ["Yes"],
+        "required": true
+      }
+    ],
+    "selection_rank_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "order": [
+          "Non-Metastatic Primary",
+          "Primary (Short Follow Up)",
+          "Primary (Metastasis Reported)",
+          "Metastatic Primary",
+          "Local Recurrence (Metastasis Reported)",
+          "Metastatic Local Recurrence",
+          "Metastasis"
+        ],
+        "default_rank": 20
+      }
+    ],
+    "gender_fields": ["patient.SEX"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_cpm",
+    "label": "TMM-normalized log2 CPM",
+    "source_unit": "TMM-normalized log2 CPM",
+    "transform": "identity",
+    "analysis_unit": "Provided TMM-normalized log2 CPM",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different source identifiers are never merged implicitly.",
+    "scale_note": "The cBioPortal profile label abbreviates the matrix as CPM, but the published analysis code computes TMM-normalized log2 CPM with edgeR::cpm(log=TRUE), and the supplied matrix contains signed log-scale values. TCGA-TRACE therefore preserves the provided values without a second logarithm."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "icgc-lihc-liri-jp-2019",
+    "cancer_code": "LIHC",
+    "name": "Japanese primary liver cancer (ICGC LIRI-JP)",
+    "description": "Independent Japanese liver-cancer cohort with open ICGC Release 28 bulk RNA-seq expression and linked overall-survival follow-up.",
+    "cohort_context": "Predominantly primary hepatocellular carcinoma from Japanese patients, many with hepatitis B or C infection. The cohort is retained as a distinct external context rather than pooled with TCGA-LIHC.",
+    "source_provider": "icgc_release28",
+    "source_accession": "ICGC25K:R28:LIRI-JP",
+    "source_url": "https://docs.icgc-argo.org/docs/data-access/icgc-25k-data",
+    "publication_citation": "Fujimoto et al. Nature Genetics 2016",
+    "publication_id": "PMID:27064257; DOI:10.1038/ng.3547",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-ICGC-Data-Access-and-Publication-Policy",
+    "license_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "International Cancer Genome Consortium 25K",
+      "source_project": "Liver Cancer - RIKEN, Japan",
+      "source_release": "Release 28 (2019-11-26)",
+      "redistribution_note": "The open cohort is analyzable in TCGA-TRACE, while direct matrix download remains disabled pending a dedicated ICGC redistribution review.",
+      "curation_note": "TCGA-TRACE uses only endpoint-complete donors with an open RefSeq/FKPM RNA-seq analysis linked to a primary solid-tumor specimen. One analysis is selected deterministically per donor."
+    }
+  },
+  "source": {
+    "provider": "icgc_release28",
+    "object_endpoint": "https://object.genomeinformatics.org",
+    "bucket": "icgc25k-open",
+    "release_prefix": "release_28",
+    "release_date": "2019-11-26",
+    "project_code": "LIRI-JP",
+    "release_readme_key": "release_28/projects_files/README.txt",
+    "license_evidence_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "download_workers": 12,
+    "specimen_type_priority": [
+      "Primary tumour - solid tissue"
+    ],
+    "required_gene_model": "RefSeq",
+    "required_normalization_algorithm": "FKPM http://dx.doi.org/10.1371/journal.pone.0114263"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary tumour - solid tissue",
+    "sample_role": "Primary tumor RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary tumour - solid tissue"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm",
+    "label": "log2(FPKM + 1)",
+    "source_unit": "FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "ICGC Release 28 exp_seq RefSeq gene_id field",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The adapter requires one unique gene symbol per selected analysis and retains only genes complete across all selected donors.",
+    "stream_source_order": true,
+    "scale_note": "ICGC labels the normalized_read_count algorithm as FKPM; this is treated as the source FPKM scale and transformed once as log2(value + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "ICGC_OS_DAYS",
+      "event_column": "ICGC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Primary diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

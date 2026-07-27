@@ -9,7 +9,11 @@ from app.database import SessionLocal, init_db
 from app.repository.adapters.cbioportal import build_cbioportal_bundle
 from app.repository.catalog import sync_repository_catalog
 from app.repository.discovery import discover_cbioportal_candidates
-from app.repository.importer import promote_bundle, validate_bundle
+from app.repository.importer import (
+    promote_bundle,
+    revalidate_active_releases,
+    validate_bundle,
+)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -19,11 +23,13 @@ def parser() -> argparse.ArgumentParser:
     subcommands = command.add_subparsers(dest="command", required=True)
 
     subcommands.add_parser("sync-catalog")
+    subcommands.add_parser("revalidate-active")
 
-    build = subcommands.add_parser("build-cbioportal")
-    build.add_argument("--spec", type=Path, required=True)
-    build.add_argument("--output", type=Path, required=True)
-    build.add_argument("--force", action="store_true")
+    for name in ("build-study", "build-cbioportal"):
+        build = subcommands.add_parser(name)
+        build.add_argument("--spec", type=Path, required=True)
+        build.add_argument("--output", type=Path, required=True)
+        build.add_argument("--force", action="store_true")
 
     validate = subcommands.add_parser("validate")
     validate.add_argument("--bundle", type=Path, required=True)
@@ -44,7 +50,7 @@ def parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = parser().parse_args()
     settings = get_settings()
-    if args.command == "build-cbioportal":
+    if args.command in {"build-study", "build-cbioportal"}:
         result = build_cbioportal_bundle(
             args.spec, args.output, force=args.force
         )
@@ -93,6 +99,11 @@ def main() -> None:
             result = sync_repository_catalog(
                 db, settings.cancer_repository_registry_dir
             )
+        elif args.command == "revalidate-active":
+            sync_repository_catalog(
+                db, settings.cancer_repository_registry_dir
+            )
+            result = revalidate_active_releases(db)
         elif args.command == "promote":
             sync_repository_catalog(
                 db, settings.cancer_repository_registry_dir

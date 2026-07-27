@@ -68,8 +68,11 @@ def test_analysis_request_preserves_artifact_specific_plot_styles() -> None:
                 "lower_hazard_color": "#1B9E77",
                 "higher_hazard_color": "#D95F02",
                 "reference_color": "#7570B3",
+                "model_layout": "separate",
                 "show_title": False,
                 "plot_title": "   ",
+                "univariable_plot_title": "  Univariable only  ",
+                "multivariable_plot_title": "  Adjusted models only  ",
                 "x_axis_title": "  Adjusted hazard ratio  ",
             },
         },
@@ -88,10 +91,22 @@ def test_analysis_request_preserves_artifact_specific_plot_styles() -> None:
         "lower_hazard_color": "#1B9E77",
         "higher_hazard_color": "#D95F02",
         "reference_color": "#7570B3",
+        "model_layout": "separate",
         "show_title": False,
         "plot_title": None,
+        "univariable_plot_title": "Univariable only",
+        "multivariable_plot_title": "Adjusted models only",
         "x_axis_title": "Adjusted hazard ratio",
     }
+
+
+def test_analysis_request_defaults_to_combined_cox_forest() -> None:
+    request = AnalysisRequest(
+        cohort="TCGA-LIHC",
+        gene_symbol="CDC20",
+    )
+
+    assert request.plot_style.cox_forest.model_layout == "combined"
 
 
 @pytest.mark.parametrize(
@@ -120,6 +135,8 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
     survival_svg_path = tmp_path / "survival.svg"
     continuous_svg_path = tmp_path / "continuous.svg"
     cox_svg_path = tmp_path / "cox.svg"
+    cox_univariable_svg_path = tmp_path / "cox_univariable.svg"
+    cox_multivariable_svg_path = tmp_path / "cox_multivariable.svg"
     records = []
     for index in range(60):
         group = "Low" if index < 30 else "High"
@@ -159,6 +176,8 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
         "svg_path": str(survival_svg_path),
         "continuous_effect_svg_path": str(continuous_svg_path),
         "cox_forest_svg_path": str(cox_svg_path),
+        "cox_univariable_svg_path": str(cox_univariable_svg_path),
+        "cox_multivariable_svg_path": str(cox_multivariable_svg_path),
         "plot_style": {
             "show_grid": False,
             "continuous": {
@@ -172,7 +191,10 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
                 "lower_hazard_color": "#1B9E77",
                 "higher_hazard_color": "#D95F02",
                 "reference_color": "#7570B3",
+                "model_layout": "separate",
                 "plot_title": "Custom Cox models",
+                "univariable_plot_title": "Custom univariable Cox",
+                "multivariable_plot_title": "Custom multivariable Cox",
                 "x_axis_title": "Custom hazard ratio axis",
             },
         },
@@ -234,8 +256,16 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
     assert survival_svg_path.exists()
     assert continuous_svg_path.exists()
     assert cox_svg_path.exists()
+    assert cox_univariable_svg_path.exists()
+    assert cox_multivariable_svg_path.exists()
     continuous_svg = continuous_svg_path.read_text(encoding="utf-8").lower()
     cox_svg = cox_svg_path.read_text(encoding="utf-8").lower()
+    cox_univariable_svg = cox_univariable_svg_path.read_text(
+        encoding="utf-8"
+    ).lower()
+    cox_multivariable_svg = cox_multivariable_svg_path.read_text(
+        encoding="utf-8"
+    ).lower()
     assert "custom continuous cox" in continuous_svg
     assert "custom expression axis" in continuous_svg
     assert "custom relative hazard" in continuous_svg
@@ -243,6 +273,19 @@ def test_km_analysis_fits_exact_user_selected_covariates(tmp_path: Path) -> None
     assert "#ff7f00" in continuous_svg
     assert "custom cox models" in cox_svg
     assert "custom hazard ratio axis" in cox_svg
+    assert "custom univariable cox" in cox_univariable_svg
+    assert "custom multivariable cox" in cox_multivariable_svg
+    assert "user-adjusted" not in cox_univariable_svg
+    assert "user-adjusted" in cox_multivariable_svg
+    assert metrics["cox_forest_output"]["model_layout"] == "separate"
+    assert (
+        metrics["cox_forest_output"]["completed_univariable_model_count"]
+        == 1
+    )
+    assert (
+        metrics["cox_forest_output"]["completed_multivariable_model_count"]
+        >= 1
+    )
     completed_grouped_models = [
         model for model in metrics["cox_models"] if model["status"] == "completed"
     ]

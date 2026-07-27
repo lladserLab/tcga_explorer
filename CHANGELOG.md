@@ -2,7 +2,22 @@
 
 This changelog tracks methodological behavior exposed to users. It is not a Git commit log. Update it when a change affects scoring, endpoint QC, patient selection, model outputs, robustness criteria, audit exports or manuscript-facing interpretation.
 
-## Curated External RNA-seq Repository v1.0 - 2026-07-26
+## Optional Separate Cox Forests v1.0 - 2026-07-27
+
+This release changes plot output only; it does not change any fitted Cox
+model or estimate.
+
+- Kept the existing combined grouped-Cox forest as the default.
+- Added an optional layout with one forest for the univariable model and one
+  for all evaluable adjusted multivariable models.
+- Added independent titles, live previews, PNG/SVG downloads and ZIP entries
+  for both model families.
+- Omitted a separate figure when its model family is not estimable rather than
+  rendering an empty panel.
+- Recorded the requested layout and completed model-family counts in metrics,
+  methodology, audit and reconstruction exports.
+
+## Curated External RNA-seq Repository v1.1 - 2026-07-27
 
 This release adds independently sourced bulk RNA-seq cohorts without combining
 their measurements or clinical definitions with TCGA.
@@ -12,14 +27,18 @@ their measurements or clinical definitions with TCGA.
 - Added immutable dataset releases with source snapshots, SHA-256 file
   checksums, license metadata, expression-layer semantics, patient/sample
   linkage, endpoint definitions and automated QC.
-- Required at least 10 expression-and-endpoint-complete patients, 5 events and
-  10,000 unique mapped gene symbols before a release can be promoted.
+- Required at least 10 expression-and-endpoint-complete patients, 5 events, 5
+  censored observations and 10,000 unique mapped gene symbols before a release
+  can be promoted.
 - Added repository-backed gene search, endpoint/filter discovery and
   patient-level analysis to Survival, Compare and Multiverse. Pan-cancer
   remains TCGA-only; cohorts are never pooled or silently harmonized.
-- Published an independent metastatic melanoma release with 40 patients, 27
-  OS events and 21,623 genes, and an IMvigor210 metastatic bladder-cancer
-  release with 347 patients, 231 OS events and 38,355 genes.
+- Published 25 independent, survival-ready cohorts covering 25 of the 33 TCGA
+  cancer types through reviewed cBioPortal, GDC, GEO, Europe PMC and ICGC
+  sources.
+- Recorded KICH, KIRP, MESO, TGCT, THCA, THYM, UCS and UVM as evidence gaps,
+  with the best public lead and its exact rejection reason retained in the
+  machine-readable coverage ledger and shown in the interface.
 - Preserved each release's documented expression scale. The IMvigor210 profile
   is retained exactly as supplied because DataHub labels it TPM while the exact
   upstream transform is not stated; TCGA-TRACE does not apply a second log
@@ -27,6 +46,10 @@ their measurements or clinical definitions with TCGA.
 - Added a reproducible cBioPortal discovery scan. Detection of RNA and survival
   columns creates a screening candidate only; TCGA independence, event counts,
   scale semantics, license and linkage still require review.
+- Added deterministic adapters for non-TCGA GDC projects, GEO matrices,
+  publication/clinical supplements and open ICGC Release 28 objects.
+- Rebuilt the 3,273-patient SCAN-B release without download-time metadata in
+  its source snapshot so identical source responses reproduce the same recipe.
 - Kept external release hashes separate from the primary TCGA data-manifest
   hash in health and dataset-summary responses.
 

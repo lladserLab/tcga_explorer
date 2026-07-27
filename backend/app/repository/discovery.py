@@ -14,6 +14,7 @@ CBIOPORTAL_CANCER_TO_TCGA = {
     "aml": "LAML",
     "blca": "BLCA",
     "brca": "BRCA",
+    "breast": "BRCA",
     "ccrcc": "KIRC",
     "cesc": "CESC",
     "chol": "CHOL",
@@ -25,6 +26,8 @@ CBIOPORTAL_CANCER_TO_TCGA = {
     "esca": "ESCA",
     "gbm": "GBM",
     "hnsc": "HNSC",
+    "hcc": "LIHC",
+    "hgsoc": "OV",
     "kich": "KICH",
     "kirc": "KIRC",
     "kirp": "KIRP",
@@ -36,7 +39,10 @@ CBIOPORTAL_CANCER_TO_TCGA = {
     "mel": "SKCM",
     "meso": "MESO",
     "ov": "OV",
+    "ovary": "OV",
+    "ohnca": "HNSC",
     "paad": "PAAD",
+    "pancreas": "PAAD",
     "pcpg": "PCPG",
     "prad": "PRAD",
     "read": "READ",
@@ -47,14 +53,30 @@ CBIOPORTAL_CANCER_TO_TCGA = {
     "thca": "THCA",
     "thym": "THYM",
     "ucec": "UCEC",
+    "uec": "UCEC",
     "ucs": "UCS",
     "uvm": "UVM",
 }
 
 CBIOPORTAL_STUDY_PREFIX_TO_TCGA = {
     **CBIOPORTAL_CANCER_TO_TCGA,
+    "angs": "SARC",
+    "chrcc": "KICH",
     "gbm": "GBM",
     "mel": "SKCM",
+    "mpm": "MESO",
+    "nsgct": "TGCT",
+    "plmeso": "MESO",
+    "prcc": "KIRP",
+    "rectal": "READ",
+    "thpa": "THCA",
+    "um": "UVM",
+}
+
+CBIOPORTAL_STUDY_TO_TCGA = {
+    # This public study retains a legacy HNSC identifier in cBioPortal, but
+    # contains hereditary SDHB-mutant pheochromocytomas/paragangliomas.
+    "hnsc_a5consortium_2025": "PCPG",
 }
 
 ENDPOINT_COLUMN_PAIRS = {
@@ -123,26 +145,64 @@ def discover_cbioportal_candidates(
     candidates_by_cancer: dict[str, list[dict[str, Any]]] = {
         code: [] for code in cancer_types
     }
+    rejections_by_cancer: dict[str, list[dict[str, Any]]] = {
+        code: [] for code in cancer_types
+    }
     screened_studies = 0
     endpoint_queries = 0
+    sample_list_queries = 0
+    mapped_studies = 0
+    unmapped_studies = 0
     for study in studies:
         study_id = str(study.get("studyId") or "")
         study_prefix = study_id.lower().split("_", 1)[0]
         cancer_code = (
-            CBIOPORTAL_STUDY_PREFIX_TO_TCGA.get(study_prefix)
+            CBIOPORTAL_STUDY_TO_TCGA.get(study_id.lower())
+            or CBIOPORTAL_STUDY_PREFIX_TO_TCGA.get(study_prefix)
             or CBIOPORTAL_CANCER_TO_TCGA.get(
                 str(study.get("cancerTypeId") or "").lower()
             )
         )
         if cancer_code not in candidates_by_cancer:
+            unmapped_studies += 1
             continue
+        mapped_studies += 1
         if _is_disallowed_study(study):
+            rejections_by_cancer[cancer_code].append(
+                _rejection_record(study, "disallowed_accession")
+            )
             continue
         study_profiles = profiles_by_study.get(study_id) or []
         if not study_profiles:
+            rejections_by_cancer[cancer_code].append(
+                _rejection_record(study, "no_eligible_bulk_rna_profile")
+            )
             continue
         rna_samples = int(study.get("mrnaRnaSeqSampleCount") or 0)
+        rna_sample_count_source = "study.mrnaRnaSeqSampleCount"
         if rna_samples < 10:
+            sample_lists = requester(
+                f"{CBIOPORTAL_API}/studies/"
+                f"{urllib.parse.quote(study_id, safe='')}/sample-lists"
+                "?projection=DETAILED"
+            )
+            sample_list_queries += 1
+            listed_rna_samples = _rna_seq_sample_count(sample_lists)
+            if listed_rna_samples > rna_samples:
+                rna_samples = listed_rna_samples
+                rna_sample_count_source = (
+                    "study sample list: "
+                    "all_cases_with_mrna_rnaseq_data"
+                )
+        if rna_samples < 10:
+            rejections_by_cancer[cancer_code].append(
+                _rejection_record(
+                    study,
+                    "fewer_than_10_rna_samples",
+                    rna_seq_sample_count=rna_samples,
+                    rna_sample_count_source=rna_sample_count_source,
+                )
+            )
             continue
         screened_studies += 1
         attributes = requester(
@@ -152,6 +212,13 @@ def discover_cbioportal_candidates(
         endpoint_queries += 1
         endpoint_pairs = _available_endpoint_pairs(attributes)
         if not endpoint_pairs:
+            rejections_by_cancer[cancer_code].append(
+                _rejection_record(
+                    study,
+                    "no_recognized_survival_endpoint_pair",
+                    rna_seq_sample_count=rna_samples,
+                )
+            )
             continue
         registry_entry = registered.get(study_id)
         coverage_candidates = {
@@ -168,6 +235,7 @@ def discover_cbioportal_candidates(
                 "cancer_type_id": study.get("cancerTypeId"),
                 "sample_count": int(study.get("allSampleCount") or 0),
                 "rna_seq_sample_count": rna_samples,
+                "rna_sample_count_source": rna_sample_count_source,
                 "reference_genome": study.get("referenceGenome"),
                 "pmid": study.get("pmid"),
                 "citation": study.get("citation"),
@@ -224,6 +292,16 @@ def discover_cbioportal_candidates(
                 row["study_id"],
             ),
         )
+        rejections = sorted(
+            rejections_by_cancer[code],
+            key=lambda row: (row["reason"], row["study_id"]),
+        )
+        rejection_reasons: dict[str, int] = {}
+        for rejection in rejections:
+            reason = str(rejection["reason"])
+            rejection_reasons[reason] = (
+                rejection_reasons.get(reason, 0) + 1
+            )
         cancers.append(
             {
                 "code": code,
@@ -234,17 +312,30 @@ def discover_cbioportal_candidates(
                 ).get("status", "unsearched"),
                 "candidate_count": len(candidates),
                 "candidates": candidates,
+                "rejection_count": len(rejections),
+                "rejection_reasons": rejection_reasons,
+                "rejections": rejections,
             }
         )
+    rejection_reason_counts: dict[str, int] = {}
+    for rows in rejections_by_cancer.values():
+        for rejection in rows:
+            reason = str(rejection["reason"])
+            rejection_reason_counts[reason] = (
+                rejection_reason_counts.get(reason, 0) + 1
+            )
     return {
-        "schema_version": "tcga-trace-cbioportal-discovery-v1",
+        "schema_version": "tcga-trace-cbioportal-discovery-v2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source": {
             "provider": "cBioPortal public API",
             "base_url": CBIOPORTAL_API,
             "study_count": len(studies),
             "molecular_profile_count": len(profiles),
+            "mapped_studies": mapped_studies,
+            "unmapped_studies": unmapped_studies,
             "screened_rna_studies": screened_studies,
+            "sample_list_queries": sample_list_queries,
             "clinical_attribute_queries": endpoint_queries,
         },
         "screening_policy": {
@@ -274,6 +365,10 @@ def discover_cbioportal_candidates(
                 for row in cancers
                 for candidate in row["candidates"]
             ),
+            "rejected_mapped_studies": sum(
+                int(row["rejection_count"]) for row in cancers
+            ),
+            "rejection_reason_counts": rejection_reason_counts,
         },
         "cancers": cancers,
     }
@@ -281,6 +376,43 @@ def discover_cbioportal_candidates(
 
 def _api_url(path: str, **query: Any) -> str:
     return f"{CBIOPORTAL_API}{path}?{urllib.parse.urlencode(query)}"
+
+
+def _rejection_record(
+    study: dict[str, Any],
+    reason: str,
+    *,
+    rna_seq_sample_count: int | None = None,
+    rna_sample_count_source: str | None = None,
+) -> dict[str, Any]:
+    record = {
+        "study_id": str(study.get("studyId") or ""),
+        "study_name": study.get("name"),
+        "cancer_type_id": study.get("cancerTypeId"),
+        "reason": reason,
+        "sample_count": int(study.get("allSampleCount") or 0),
+    }
+    if rna_seq_sample_count is not None:
+        record["rna_seq_sample_count"] = rna_seq_sample_count
+    if rna_sample_count_source is not None:
+        record["rna_sample_count_source"] = rna_sample_count_source
+    return record
+
+
+def _rna_seq_sample_count(sample_lists: list[dict[str, Any]]) -> int:
+    sample_ids: set[str] = set()
+    for sample_list in sample_lists:
+        if (
+            str(sample_list.get("category") or "")
+            != "all_cases_with_mrna_rnaseq_data"
+        ):
+            continue
+        sample_ids.update(
+            str(sample_id)
+            for sample_id in sample_list.get("sampleIds") or []
+            if str(sample_id)
+        )
+    return len(sample_ids)
 
 
 def _is_bulk_rna_profile(profile: dict[str, Any]) -> bool:
@@ -296,11 +428,23 @@ def _is_bulk_rna_profile(profile: dict[str, Any]) -> bool:
             "description",
         )
     )
-    if "z-score" in searchable or "zscore" in searchable:
+    if (
+        "z-score" in searchable
+        or "zscore" in searchable
+        or "mirna" in searchable
+        or "micro rna" in searchable
+    ):
         return False
     return any(
         token in searchable
-        for token in ("rna_seq", "rna seq", "rpkm", "fpkm", "tpm")
+        for token in (
+            "rna_seq",
+            "rna seq",
+            "rpkm",
+            "fpkm",
+            "tpm",
+            "rsem",
+        )
     )
 
 

@@ -1,15 +1,32 @@
 {
   "schema_version": "tcga-trace-external-coverage-v1",
-  "updated_at": "2026-07-26",
+  "updated_at": "2026-07-27",
   "policy": {
     "assay": "bulk_rna_seq",
     "minimum_expression_endpoint_patients": 10,
     "minimum_events": 5,
+    "minimum_censored": 5,
     "minimum_unique_gene_symbols": 10000,
     "tcga_derived_studies_count_as_external": false
   },
   "cancers": [
-    {"code": "ACC", "status": "search_in_progress", "candidates": []},
+    {
+      "code": "ACC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "pmc-acc-jouinot-2022",
+          "source": "Europe PMC / Jouinot et al.",
+          "accession": "PMC9066577",
+          "expression_endpoint_patients": 85,
+          "events": 33,
+          "censored": 52,
+          "endpoint": "OS",
+          "expression_unit": "log2(count + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
     {
       "code": "BLCA",
       "status": "available",
@@ -20,35 +37,446 @@
           "accession": "blca_iatlas_imvigor210_2017",
           "expression_endpoint_patients": 347,
           "events": 231,
+          "censored": 116,
           "endpoint": "OS",
           "expression_unit": "iAtlas TPM profile (provided scale)",
           "review_status": "promoted"
         }
       ]
     },
-    {"code": "BRCA", "status": "search_in_progress", "candidates": []},
-    {"code": "CESC", "status": "search_in_progress", "candidates": []},
-    {"code": "CHOL", "status": "search_in_progress", "candidates": []},
-    {"code": "COAD", "status": "search_in_progress", "candidates": []},
-    {"code": "DLBC", "status": "search_in_progress", "candidates": []},
-    {"code": "ESCA", "status": "search_in_progress", "candidates": []},
-    {"code": "GBM", "status": "search_in_progress", "candidates": []},
-    {"code": "HNSC", "status": "search_in_progress", "candidates": []},
-    {"code": "KICH", "status": "search_in_progress", "candidates": []},
-    {"code": "KIRC", "status": "search_in_progress", "candidates": []},
-    {"code": "KIRP", "status": "search_in_progress", "candidates": []},
-    {"code": "LAML", "status": "search_in_progress", "candidates": []},
-    {"code": "LGG", "status": "search_in_progress", "candidates": []},
-    {"code": "LIHC", "status": "search_in_progress", "candidates": []},
-    {"code": "LUAD", "status": "search_in_progress", "candidates": []},
-    {"code": "LUSC", "status": "search_in_progress", "candidates": []},
-    {"code": "MESO", "status": "search_in_progress", "candidates": []},
-    {"code": "OV", "status": "search_in_progress", "candidates": []},
-    {"code": "PAAD", "status": "search_in_progress", "candidates": []},
-    {"code": "PCPG", "status": "search_in_progress", "candidates": []},
-    {"code": "PRAD", "status": "search_in_progress", "candidates": []},
-    {"code": "READ", "status": "search_in_progress", "candidates": []},
-    {"code": "SARC", "status": "search_in_progress", "candidates": []},
+    {
+      "code": "BRCA",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "geo-brca-scanb-gse96058-2018",
+          "source": "NCBI GEO / SCAN-B",
+          "accession": "GSE96058",
+          "expression_endpoint_patients": 3273,
+          "events": 336,
+          "censored": 2937,
+          "endpoint": "OS",
+          "expression_unit": "log2(FPKM + 0.1) (provided scale)",
+          "review_status": "promoted"
+        },
+        {
+          "dataset_id": "cbioportal-brca-iatlas-anders-2022",
+          "source": "cBioPortal DataHub / CRI iAtlas",
+          "accession": "brca_iatlas_anders_2022",
+          "expression_endpoint_patients": 31,
+          "events": 27,
+          "censored": 4,
+          "endpoint": "OS",
+          "expression_unit": "iAtlas log TPM (provided scale)",
+          "review_status": "qc_failed_current_policy",
+          "review_note": "The historical release has only 4 censored OS observations; a replacement cohort is required under the current endpoint QC policy."
+        }
+      ]
+    },
+    {
+      "code": "CESC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "gdc-cesc-htmcp-cc-2020",
+          "source": "NCI GDC / CGCI HTMCP",
+          "accession": "CGCI-HTMCP-CC",
+          "expression_endpoint_patients": 118,
+          "events": 74,
+          "censored": 44,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "CHOL",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "pmc-chol-ahn-2019",
+          "source": "NCBI GEO / Europe PMC",
+          "accession": "GSE107943; PMC6444048",
+          "expression_endpoint_patients": 22,
+          "events": 13,
+          "censored": 9,
+          "endpoint": "OS",
+          "expression_unit": "log2(RPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "COAD",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-coad-cptac-2019",
+          "source": "cBioPortal DataHub / CPTAC",
+          "accession": "coad_cptac_2019",
+          "expression_endpoint_patients": 100,
+          "events": 8,
+          "censored": 92,
+          "endpoint": "OS",
+          "expression_unit": "RSEM UQ log2(n + 1) (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "DLBC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "gdc-dlbc-nciccr-2018",
+          "source": "NCI GDC / NCI CCR",
+          "accession": "NCICCR-DLBCL",
+          "expression_endpoint_patients": 234,
+          "events": 98,
+          "censored": 136,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "ESCA",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "pmc-esca-vanderzalm-2024",
+          "source": "NCBI GEO / Europe PMC",
+          "accession": "GSE254942; PMC11101480",
+          "expression_endpoint_patients": 85,
+          "events": 43,
+          "censored": 42,
+          "endpoint": "OS",
+          "expression_unit": "Published DESeq2 VST / RUVg scale",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "GBM",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "gdc-gbm-cptac-2021",
+          "source": "NCI GDC / CPTAC",
+          "accession": "CPTAC-3:Brain:Glioblastoma",
+          "expression_endpoint_patients": 188,
+          "events": 141,
+          "censored": 47,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        },
+        {
+          "dataset_id": "cbioportal-gbm-iatlas-prins-2019",
+          "source": "cBioPortal DataHub / CRI iAtlas",
+          "accession": "gbm_iatlas_prins_2019",
+          "expression_endpoint_patients": 15,
+          "events": 12,
+          "censored": 3,
+          "endpoint": "OS",
+          "expression_unit": "log2 upper-quartile normalized counts (provided scale)",
+          "review_status": "qc_failed_current_policy",
+          "review_note": "The historical release has only 3 censored OS observations; a replacement cohort is required under the current endpoint QC policy."
+        }
+      ]
+    },
+    {
+      "code": "HNSC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-hnsc-cptac-gdc-2025",
+          "source": "cBioPortal expression / GDC survival",
+          "accession": "ohnca_cptac_gdc",
+          "expression_endpoint_patients": 104,
+          "events": 39,
+          "censored": 65,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "KICH",
+      "status": "evidence_gap",
+      "review_note": "No independent public bulk RNA-seq cohort with patient-linked survival passes the repository minimums. The CPTAC-3 screen contains only two chromophobe expression files, while available GEO outcome cohorts use expression arrays.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCI GDC / CPTAC-3",
+          "accession": "CPTAC-3",
+          "review_status": "rejected_below_minimum_patients",
+          "review_note": "Only two chromophobe gene-expression files were exposed by the open GDC screen, below the 10-patient minimum."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE15641",
+          "review_status": "rejected_assay",
+          "review_note": "The external chromophobe cohort is expression profiling by array and contains only six chromophobe tumors."
+        }
+      ]
+    },
+    {
+      "code": "KIRC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-kirc-iatlas-choueiri-2016",
+          "source": "cBioPortal DataHub / CRI iAtlas",
+          "accession": "ccrcc_iatlas_choueiri_2016",
+          "expression_endpoint_patients": 16,
+          "events": 5,
+          "censored": 11,
+          "endpoint": "OS",
+          "expression_unit": "log2 upper-quartile normalized counts (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "KIRP",
+      "status": "evidence_gap",
+      "review_note": "Public papillary renal-cell RNA-seq cohorts were found, but none supplies enough patient-linked survival observations. Older outcome cohorts are expression arrays.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE180777",
+          "expression_samples": 53,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "The study provides 53 paired papillary renal-cell tumors and normal tissues by RNA-seq, but no individual survival time/status fields."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE2748",
+          "review_status": "rejected_assay",
+          "review_note": "The survival-oriented papillary renal-cell cohort uses an Affymetrix expression array rather than RNA-seq."
+        }
+      ]
+    },
+    {
+      "code": "LAML",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-laml-ohsu-2022",
+          "source": "cBioPortal DataHub / OHSU",
+          "accession": "aml_ohsu_2022",
+          "expression_endpoint_patients": 440,
+          "events": 243,
+          "censored": 197,
+          "endpoint": "OS",
+          "expression_unit": "log2-normalized RPKM (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "LGG",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-lgg-glass-2022",
+          "source": "cBioPortal DataHub / GLASS",
+          "accession": "difg_glass",
+          "expression_endpoint_patients": 23,
+          "events": 14,
+          "censored": 9,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "LIHC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "icgc-lihc-liri-jp-2019",
+          "source": "ICGC 25K Release 28",
+          "accession": "LIRI-JP",
+          "expression_endpoint_patients": 231,
+          "events": 42,
+          "censored": 189,
+          "endpoint": "OS",
+          "expression_unit": "log2(FPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "LUAD",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-luad-cas-2020",
+          "source": "cBioPortal DataHub / Chinese Academy of Sciences",
+          "accession": "luad_cas_2020",
+          "expression_endpoint_patients": 51,
+          "events": 15,
+          "censored": 36,
+          "endpoint": "OS",
+          "expression_unit": "log2(FPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "LUSC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-lusc-cptac-gdc-2025",
+          "source": "cBioPortal expression / GDC survival",
+          "accession": "lusc_cptac_gdc",
+          "expression_endpoint_patients": 103,
+          "events": 32,
+          "censored": 71,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "MESO",
+      "status": "evidence_gap",
+      "review_note": "The large Bueno mesothelioma RNA-seq cohort is controlled-access in EGA, and the open RNA-seq cohorts found do not publish individual survival time/status with the expression matrix.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "European Genome-phenome Archive",
+          "accession": "EGAS00001001563",
+          "expression_samples": 211,
+          "review_status": "rejected_controlled_access",
+          "review_note": "The RNA-seq reads are controlled-access; no openly redistributable processed patient matrix with linked endpoints was identified."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE274983",
+          "expression_samples": 18,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "The public sample metadata contains treatment and SMRP covariates but no individual overall-survival time/status."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE163720",
+          "review_status": "rejected_assay",
+          "review_note": "The survival-linked mesothelioma cohort is an Affymetrix expression-array study."
+        }
+      ]
+    },
+    {
+      "code": "OV",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-ov-pog570-2020",
+          "source": "cBioPortal / POG570",
+          "accession": "pog570_bcgsc_2020:HGSOC",
+          "expression_endpoint_patients": 12,
+          "events": 6,
+          "censored": 6,
+          "endpoint": "OS",
+          "expression_unit": "log2(RPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "PAAD",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-paad-iatlas-prince-2022",
+          "source": "cBioPortal DataHub / CRI iAtlas",
+          "accession": "paad_iatlas_prince_2022",
+          "expression_endpoint_patients": 63,
+          "events": 15,
+          "censored": 48,
+          "endpoint": "OS",
+          "expression_unit": "log2 upper-quartile normalized counts (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "PCPG",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-pcpg-a5-2025",
+          "source": "cBioPortal DataHub / A5 Consortium",
+          "accession": "hnsc_a5consortium_2025",
+          "expression_endpoint_patients": 68,
+          "events": 19,
+          "censored": 49,
+          "endpoint": "OS",
+          "expression_unit": "TMM-normalized log2 CPM (provided scale)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "PRAD",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-prad-su2c-2019",
+          "source": "cBioPortal DataHub / SU2C-PCF",
+          "accession": "prad_su2c_2019",
+          "expression_endpoint_patients": 65,
+          "events": 39,
+          "censored": 26,
+          "endpoint": "OS",
+          "expression_unit": "log2(capture FPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "READ",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-read-msk-2022",
+          "source": "cBioPortal DataHub / MSK",
+          "accession": "rectal_msk_2022",
+          "expression_endpoint_patients": 97,
+          "events": 13,
+          "censored": 84,
+          "endpoint": "OS",
+          "expression_unit": "Provided RNA-seq expression scale",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "SARC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-sarc-pog570-2020",
+          "source": "cBioPortal / POG570",
+          "accession": "pog570_bcgsc_2020:Soft Tissue Sarcoma",
+          "expression_endpoint_patients": 31,
+          "events": 23,
+          "censored": 8,
+          "endpoint": "OS",
+          "expression_unit": "log2(RPKM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
     {
       "code": "SKCM",
       "status": "available",
@@ -59,18 +487,142 @@
           "accession": "skcm_dfci_2015",
           "expression_endpoint_patients": 40,
           "events": 27,
+          "censored": 13,
           "endpoint": "OS",
           "expression_unit": "RPKM",
           "review_status": "promoted"
         }
       ]
     },
-    {"code": "STAD", "status": "search_in_progress", "candidates": []},
-    {"code": "TGCT", "status": "search_in_progress", "candidates": []},
-    {"code": "THCA", "status": "search_in_progress", "candidates": []},
-    {"code": "THYM", "status": "search_in_progress", "candidates": []},
-    {"code": "UCEC", "status": "search_in_progress", "candidates": []},
-    {"code": "UCS", "status": "search_in_progress", "candidates": []},
-    {"code": "UVM", "status": "search_in_progress", "candidates": []}
+    {
+      "code": "STAD",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "gdc-stad-cptac-2026",
+          "source": "NCI GDC / CPTAC",
+          "accession": "CPTAC-3:Stomach:Adenocarcinoma",
+          "expression_endpoint_patients": 138,
+          "events": 18,
+          "censored": 120,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "TGCT",
+      "status": "evidence_gap",
+      "review_note": "No independent public bulk RNA-seq cohort with linked time-to-event data and enough events was identified. The main public relapse cohort is a microarray study.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE99420",
+          "expression_samples": 57,
+          "review_status": "rejected_assay",
+          "review_note": "Relapse labels are available, but expression was measured on an Illumina HumanHT-12 array rather than by RNA-seq."
+        }
+      ]
+    },
+    {
+      "code": "THCA",
+      "status": "evidence_gap",
+      "review_note": "Large public thyroid RNA-seq matrices exist, but the searched releases do not expose patient-level survival time/status. The publication reporting survival for GSE310793 does not place those endpoint rows in GEO.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE310793",
+          "expression_samples": 109,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "GEO provides TPM and raw-count matrices, while all 109 sample records contain only tissue type and no individual PFS, DSS or OS fields."
+        },
+        {
+          "source": "NCI GDC",
+          "accession": "REBC-THYR",
+          "expression_samples": 437,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "Open STAR-count expression is available, but the project does not provide usable individual survival status/time."
+        }
+      ]
+    },
+    {
+      "code": "THYM",
+      "status": "evidence_gap",
+      "review_note": "No independent public bulk RNA-seq thymoma cohort with at least five events and five censored observations was identified. Available outcome cohorts are arrays, TCGA-derived or single-cell.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE29695",
+          "expression_samples": 37,
+          "review_status": "rejected_assay",
+          "review_note": "The thymic-neoplasm cohort has follow-up but uses an Illumina whole-genome expression array."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE228033",
+          "expression_samples": 10,
+          "review_status": "rejected_assay",
+          "review_note": "This is a single-cell atlas with only six thymoma/thymic-carcinoma samples, not a bulk survival cohort."
+        }
+      ]
+    },
+    {
+      "code": "UCEC",
+      "status": "available",
+      "candidates": [
+        {
+          "dataset_id": "cbioportal-ucec-cptac-gdc-2025",
+          "source": "cBioPortal expression / GDC survival",
+          "accession": "uec_cptac_gdc",
+          "expression_endpoint_patients": 225,
+          "events": 34,
+          "censored": 191,
+          "endpoint": "OS",
+          "expression_unit": "log2(TPM + 1)",
+          "review_status": "promoted"
+        }
+      ]
+    },
+    {
+      "code": "UCS",
+      "status": "evidence_gap",
+      "review_note": "The principal public uterine/ovarian carcinosarcoma RNA-seq series lacks individual survival endpoints, and the submitters explicitly describe the public record as incomplete.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE128630",
+          "expression_samples": 100,
+          "review_status": "rejected_missing_endpoint",
+          "review_note": "Processed RNA-seq is public, but sample metadata includes only anatomical site, sex and age; no survival time/status is released."
+        }
+      ]
+    },
+    {
+      "code": "UVM",
+      "status": "evidence_gap",
+      "review_note": "The established external uveal-melanoma survival cohorts are expression arrays. Public sequencing cohorts found were TCGA-derived, single-cell, cell-line-only or too small.",
+      "reviewed_at": "2026-07-27",
+      "candidates": [
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE22138",
+          "expression_samples": 63,
+          "review_status": "rejected_assay",
+          "review_note": "Metastasis-free survival is linked, but the assay is an Affymetrix U133 Plus 2.0 expression array."
+        },
+        {
+          "source": "NCBI GEO",
+          "accession": "GSE138433",
+          "expression_samples": 6,
+          "review_status": "rejected_assay",
+          "review_note": "The cohort is single-cell RNA-seq from six primary tumors, below the patient minimum and outside the bulk-RNA policy."
+        }
+      ]
+    }
   ]
 }

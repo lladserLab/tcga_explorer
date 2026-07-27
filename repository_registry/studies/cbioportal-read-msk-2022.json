@@ -1,0 +1,92 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-read-msk-2022",
+    "cancer_code": "READ",
+    "name": "Locally advanced rectal cancer (MSK, 2022)",
+    "description": "Independent primary rectal-cancer cohort with bulk RNA-seq and linked overall- and disease-free-survival follow-up after neoadjuvant therapy.",
+    "cohort_context": "Untreated primary rectal tumors from a clinically assembled cohort used to study response to neoadjuvant therapy. Endpoint time origins and treatment context differ from TCGA-READ and are retained explicitly.",
+    "source_provider": "cbioportal_api",
+    "source_accession": "rectal_msk_2022",
+    "source_url": "https://www.cbioportal.org/study/summary?id=rectal_msk_2022",
+    "publication_citation": "Chatila et al. Nature Medicine 2022",
+    "publication_id": "PMID:35970919; DOI:10.1038/s41591-022-01930-z",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Memorial Sloan Kettering Cancer Center",
+      "source_data_system": "cBioPortal DataHub",
+      "curation_note": "The public RNA expression sample list is joined to patient-level OS and DFS fields. Samples without a positive endpoint time and recognized event status are excluded deterministically.",
+      "scale_caveat": "The cBioPortal profile describes RNA-seq expression but does not name its numerical unit or transformation. Negative supplied values rule out untransformed counts, TPM, FPKM or RPKM. TCGA-TRACE therefore preserves the supplied scale with identity transformation and makes no cross-study unit claim."
+    }
+  },
+  "source": {
+    "provider": "cbioportal_api",
+    "study_id": "rectal_msk_2022",
+    "molecular_profile_id": "rectal_msk_2022_rna_seq_mrna",
+    "sample_list_id": "rectal_msk_2022_mrna",
+    "gene_batch_size": 500,
+    "license_evidence_url": "https://raw.githubusercontent.com/cBioPortal/datahub/master/public/rectal_msk_2022/LICENSE"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary rectal tumor",
+    "sample_role": "Pretreatment primary rectal tumor",
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.PRECRT_AJCC_CLASSIFICATION",
+      "patient.POSTCRT_TNM_STAGE_YPTNM"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "provided_rna_seq_expression",
+    "label": "Provided RNA-seq expression",
+    "source_unit": "Provided RNA-seq expression scale",
+    "transform": "identity",
+    "analysis_unit": "Provided RNA-seq expression scale",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "Repeated rows with the same Entrez identifier are averaged sample-wise; distinct source identifiers are never merged implicitly.",
+    "scale_note": "Values are preserved exactly as supplied by the cBioPortal continuous RNA-seq profile because the source metadata does not identify the numerical transform."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from neoadjuvant therapy",
+      "time_column": "OS_NEO_MONTHS",
+      "event_column": "OS_NEO_STATUS",
+      "time_unit": "months",
+      "time_origin": "Start of neoadjuvant therapy",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival from neoadjuvant therapy",
+      "time_column": "DFS_FROM_NEO_MONTHS",
+      "event_column": "DFS_FROM_NEO_STATUS",
+      "time_unit": "months",
+      "time_origin": "Start of neoadjuvant therapy",
+      "event_definition": "Recurrence or progression",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

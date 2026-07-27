@@ -480,10 +480,29 @@
   line-height: 1.35;
 }
 
-.repository-cancer-grid article > p {
+.repository-cancer-context {
+  align-content: start;
+  display: grid;
+  gap: 6px;
+}
+
+.repository-cancer-context p {
   margin: 0;
   color: var(--muted);
   font-size: 11px;
+}
+
+.repository-cancer-context small {
+  color: var(--muted-strong);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.repository-gap-leads {
+  color: var(--page-accent);
+  font-size: 9px;
+  font-weight: 720;
+  line-height: 1.4;
 }
 
 .repository-cancer-grid article > footer {
@@ -8604,6 +8623,25 @@ textarea {
   width: 100%;
 }
 
+.cox-preview-split {
+  display: grid;
+  gap: 14px;
+}
+
+.cox-preview-split > div {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.cox-preview-family-label {
+  color: var(--muted-strong);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .plot-style-preview-toolbar,
 .plot-style-preview-facts {
   display: flex;
@@ -9930,6 +9968,20 @@ dd {
   max-height: 560px;
 }
 
+.cox-split-plot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  align-items: start;
+  gap: 18px;
+}
+
+.cox-split-figure {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
 .warning-list {
   display: grid;
   gap: 8px;
@@ -10630,6 +10682,10 @@ dd {
 }
 
 @media (max-width: 720px) {
+  .cox-split-plot-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .forest-scale-toolbar {
     align-items: stretch;
     flex-direction: column;

@@ -1744,6 +1744,25 @@ cox_plot_title <- plot_label_or(
   cox_forest_style$plot_title,
   "Cox proportional hazards models"
 )
+cox_model_layout_values <- as.character(
+  cox_forest_style$model_layout %||% "combined"
+)
+cox_model_layout <- if (length(cox_model_layout_values)) {
+  trimws(tolower(cox_model_layout_values[[1]]))
+} else {
+  "combined"
+}
+if (!cox_model_layout %in% c("combined", "separate")) {
+  cox_model_layout <- "combined"
+}
+cox_univariable_plot_title <- plot_label_or(
+  cox_forest_style$univariable_plot_title,
+  "Univariable Cox model"
+)
+cox_multivariable_plot_title <- plot_label_or(
+  cox_forest_style$multivariable_plot_title,
+  "Multivariable Cox models"
+)
 cox_x_axis_title <- plot_label_or(
   cox_forest_style$x_axis_title,
   "Hazard ratio (log scale)"
@@ -1912,10 +1931,12 @@ completed_cox_models <- Filter(function(model) {
   !is.null(model$status) && identical(model$status, "completed")
 }, cox_models)
 
-cox_forest_plot <- NULL
-if (length(completed_cox_models) > 0) {
-  cox_plot_data <- do.call(rbind, lapply(seq_along(completed_cox_models), function(index) {
-    model <- completed_cox_models[[index]]
+build_cox_forest_plot <- function(models, plot_title) {
+  if (length(models) == 0) {
+    return(NULL)
+  }
+  cox_plot_data <- do.call(rbind, lapply(seq_along(models), function(index) {
+    model <- models[[index]]
     data.frame(
       order = index,
       label = model$label,
@@ -1928,8 +1949,15 @@ if (length(completed_cox_models) > 0) {
       stringsAsFactors = FALSE
     )
   }))
-  cox_plot_data$label <- factor(cox_plot_data$label, levels = rev(cox_plot_data$label))
-  cox_plot_data$direction <- ifelse(cox_plot_data$hazard_ratio >= 1, "Higher hazard", "Lower hazard")
+  cox_plot_data$label <- factor(
+    cox_plot_data$label,
+    levels = rev(cox_plot_data$label)
+  )
+  cox_plot_data$direction <- ifelse(
+    cox_plot_data$hazard_ratio >= 1,
+    "Higher hazard",
+    "Lower hazard"
+  )
   cox_plot_data$estimate_label <- paste0(
     sprintf("%.2f", cox_plot_data$hazard_ratio),
     " (",
@@ -1938,14 +1966,40 @@ if (length(completed_cox_models) > 0) {
     sprintf("%.2f", cox_plot_data$hr_conf_high),
     ")"
   )
-  cox_plot_data$p_label <- vapply(cox_plot_data$p_value, format_p_value, character(1))
-  cox_x_values <- c(cox_plot_data$hr_conf_low, cox_plot_data$hazard_ratio, cox_plot_data$hr_conf_high)
-  cox_x_values <- cox_x_values[is.finite(cox_x_values) & cox_x_values > 0]
+  cox_plot_data$p_label <- vapply(
+    cox_plot_data$p_value,
+    format_p_value,
+    character(1)
+  )
+  cox_x_values <- c(
+    cox_plot_data$hr_conf_low,
+    cox_plot_data$hazard_ratio,
+    cox_plot_data$hr_conf_high
+  )
+  cox_x_values <- cox_x_values[
+    is.finite(cox_x_values) & cox_x_values > 0
+  ]
   cox_x_min <- min(0.25, min(cox_x_values, na.rm = TRUE) * 0.82)
   cox_x_max <- max(4, max(cox_x_values, na.rm = TRUE) * 1.18)
-  cox_forest_panel <- ggplot(cox_plot_data, aes(x = hazard_ratio, y = label)) +
-    geom_vline(xintercept = 1, color = cox_reference_color, linewidth = 0.45, linetype = "dashed") +
-    geom_segment(aes(x = hr_conf_low, xend = hr_conf_high, yend = label, color = direction), linewidth = 1.0) +
+  cox_forest_panel <- ggplot(
+    cox_plot_data,
+    aes(x = hazard_ratio, y = label)
+  ) +
+    geom_vline(
+      xintercept = 1,
+      color = cox_reference_color,
+      linewidth = 0.45,
+      linetype = "dashed"
+    ) +
+    geom_segment(
+      aes(
+        x = hr_conf_low,
+        xend = hr_conf_high,
+        yend = label,
+        color = direction
+      ),
+      linewidth = 1.0
+    ) +
     geom_point(aes(color = direction), size = 3.4) +
     scale_x_log10(limits = c(cox_x_min, cox_x_max)) +
     scale_color_manual(
@@ -1978,7 +2032,10 @@ if (length(completed_cox_models) > 0) {
       family = font_family,
       color = "#18221f"
     ) +
-    scale_x_continuous(limits = c(0, 1), expand = expansion(mult = c(0, 0))) +
+    scale_x_continuous(
+      limits = c(0, 1),
+      expand = expansion(mult = c(0, 0))
+    ) +
     scale_y_discrete(drop = FALSE) +
     labs(x = NULL, y = NULL) +
     theme_void(base_size = base_font_size, base_family = font_family) +
@@ -2033,10 +2090,10 @@ if (length(completed_cox_models) > 0) {
   )
   cox_body_height <- if (cox_show_title) 0.82 else 0.88
   cox_subtitle_y <- if (cox_show_title) 0.90 else 0.97
-  cox_forest_plot <- cowplot::ggdraw()
+  forest_plot <- cowplot::ggdraw()
   if (cox_show_title) {
-    cox_forest_plot <- cox_forest_plot + cowplot::draw_label(
-      cox_plot_title,
+    forest_plot <- forest_plot + cowplot::draw_label(
+      plot_title,
       x = 0.03,
       y = 0.98,
       hjust = 0,
@@ -2046,9 +2103,14 @@ if (length(completed_cox_models) > 0) {
       fontface = "bold"
     )
   }
-  cox_forest_plot <- cox_forest_plot +
+  forest_plot +
     cowplot::draw_label(
-      paste(group_levels[[2]], "vs", group_levels[[1]], "expression group"),
+      paste(
+        group_levels[[2]],
+        "vs",
+        group_levels[[1]],
+        "expression group"
+      ),
       x = 0.03,
       y = cox_subtitle_y,
       hjust = 0,
@@ -2057,7 +2119,37 @@ if (length(completed_cox_models) > 0) {
       fontfamily = font_family,
       color = "#586864"
     ) +
-    cowplot::draw_plot(cox_body, x = 0, y = 0, width = 1, height = cox_body_height)
+    cowplot::draw_plot(
+      cox_body,
+      x = 0,
+      y = 0,
+      width = 1,
+      height = cox_body_height
+    )
+}
+
+univariable_cox_models <- Filter(function(model) {
+  identical(model$model, "univariable")
+}, completed_cox_models)
+multivariable_cox_models <- Filter(function(model) {
+  !identical(model$model, "univariable")
+}, completed_cox_models)
+
+cox_forest_plot <- build_cox_forest_plot(
+  completed_cox_models,
+  cox_plot_title
+)
+cox_univariable_plot <- NULL
+cox_multivariable_plot <- NULL
+if (identical(cox_model_layout, "separate")) {
+  cox_univariable_plot <- build_cox_forest_plot(
+    univariable_cox_models,
+    cox_univariable_plot_title
+  )
+  cox_multivariable_plot <- build_cox_forest_plot(
+    multivariable_cox_models,
+    cox_multivariable_plot_title
+  )
 }
 
 render_png <- isTRUE(payload$render_png %||% TRUE)
@@ -2088,6 +2180,16 @@ if (render_png) {
     print(cox_forest_plot)
     dev.off()
   }
+  if (!is.null(cox_univariable_plot) && !is.null(payload$cox_univariable_png_path)) {
+    png(payload$cox_univariable_png_path, width = 1500, height = max(620, 260 + length(univariable_cox_models) * 90), res = 180)
+    print(cox_univariable_plot)
+    dev.off()
+  }
+  if (!is.null(cox_multivariable_plot) && !is.null(payload$cox_multivariable_png_path)) {
+    png(payload$cox_multivariable_png_path, width = 1500, height = max(620, 260 + length(multivariable_cox_models) * 90), res = 180)
+    print(cox_multivariable_plot)
+    dev.off()
+  }
   if (!is.null(continuous_effect_plot) && !is.null(payload$continuous_effect_png_path)) {
     continuous_png_height <- if (plot_aspect == "square") 1500 else 900
     png(payload$continuous_effect_png_path, width = 1500, height = continuous_png_height, res = 180)
@@ -2103,6 +2205,16 @@ if (render_svg) {
   if (!is.null(cox_forest_plot) && !is.null(payload$cox_forest_svg_path)) {
     svglite(payload$cox_forest_svg_path, width = 9.5, height = max(3.8, 1.8 + length(completed_cox_models) * 0.55))
     print(cox_forest_plot)
+    dev.off()
+  }
+  if (!is.null(cox_univariable_plot) && !is.null(payload$cox_univariable_svg_path)) {
+    svglite(payload$cox_univariable_svg_path, width = 9.5, height = max(3.8, 1.8 + length(univariable_cox_models) * 0.55))
+    print(cox_univariable_plot)
+    dev.off()
+  }
+  if (!is.null(cox_multivariable_plot) && !is.null(payload$cox_multivariable_svg_path)) {
+    svglite(payload$cox_multivariable_svg_path, width = 9.5, height = max(3.8, 1.8 + length(multivariable_cox_models) * 0.55))
+    print(cox_multivariable_plot)
     dev.off()
   }
   if (!is.null(continuous_effect_plot) && !is.null(payload$continuous_effect_svg_path)) {
@@ -2174,6 +2286,12 @@ metrics <- c(
     clinical_adjustment = clinical_adjustment_output,
     continuous_analysis = continuous_analysis,
     cox_models = cox_models,
+    cox_forest_output = list(
+      model_layout = cox_model_layout,
+      completed_model_count = length(completed_cox_models),
+      completed_univariable_model_count = length(univariable_cox_models),
+      completed_multivariable_model_count = length(multivariable_cox_models)
+    ),
     signature_interaction_cox_models = signature_interaction_cox_models,
     cutpoint_details = payload$cutpoint_details,
     warnings = warnings,

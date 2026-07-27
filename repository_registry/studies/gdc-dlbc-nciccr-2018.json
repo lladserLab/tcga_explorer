@@ -1,0 +1,93 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "gdc-dlbc-nciccr-2018",
+    "cancer_code": "DLBC",
+    "name": "Diffuse large B-cell lymphoma (NCI CCR, 2018)",
+    "description": "Independent diffuse large B-cell lymphoma cohort with open GDC-harmonized bulk RNA-seq STAR-counts and linked overall-survival follow-up.",
+    "cohort_context": "NCI Center for Cancer Research DLBCL tumor biopsies from the Schmitz et al. genomic classification study; NCICCR-DLBCL is retained separately from TCGA-DLBC.",
+    "source_provider": "gdc_api",
+    "source_accession": "NCICCR-DLBCL",
+    "source_url": "https://portal.gdc.cancer.gov/projects/NCICCR-DLBCL",
+    "publication_citation": "Schmitz et al. New England Journal of Medicine 2018",
+    "publication_id": "PMID:29641966; DOI:10.1056/NEJMoa1801445",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NIH-GDS-Open-Data",
+    "license_url": "https://gdc.cancer.gov/about-gdc/gdc-policies",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "National Cancer Institute Center for Cancer Research",
+      "source_data_system": "NCI Genomic Data Commons",
+      "redistribution_note": "The open cohort is analyzable in TCGA-TRACE, but matrix downloads remain disabled pending a dedicated redistribution review.",
+      "curation_note": "One tumor STAR-counts file is selected per endpoint-complete participant by sample submitter ID, aliquot submitter ID and file UUID. GDC TPM is transformed once as log2(TPM + 1)."
+    }
+  },
+  "source": {
+    "provider": "gdc_api",
+    "project_id": "NCICCR-DLBCL",
+    "sample_type_priority": [
+      "Tumor"
+    ],
+    "download_workers": 4,
+    "matrix_shard_size": 32,
+    "license_evidence_url": "https://gdc.cancer.gov/about-gdc/gdc-policies"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Tumor",
+    "sample_role": "Tumor biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GDC STAR-counts GENCODE v36 gene_id and gene_name fields",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Distinct Ensembl gene identifiers sharing one supplied symbol are excluded rather than merged implicitly.",
+    "scale_note": "The GDC STAR-counts files supply non-negative tpm_unstranded values. TCGA-TRACE applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as implemented by the GDC survival endpoint",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -226,8 +226,19 @@ including the BIRC5 and CA9 primary-versus-ordinal-sensitivity pan-cancer cases.
 
 Analysis download kinds are `zip`, `continuous_png`, `continuous_svg`,
 `continuous_csv`, `png`, `svg`, `cox_png`, `cox_svg`,
+`cox_univariable_png`, `cox_univariable_svg`, `cox_multivariable_png`,
+`cox_multivariable_svg`,
 `cumulative_incidence_png`, `cumulative_incidence_svg`, `csv`, `json`,
 `audit_json`, `audit_html`, `attestation`, `txt`, and `methodology`.
+
+Analysis pipeline v6.15 adds
+`plot_style.cox_forest.model_layout: "combined" | "separate"`. `combined`
+remains the default. `separate` creates an extra univariable forest and an
+extra forest containing every completed adjusted multivariable model; a file
+is omitted when its model family is not evaluable. Optional
+`univariable_plot_title` and `multivariable_plot_title` fields customize those
+titles. The original `cox_png` and `cox_svg` remain available for backward
+compatibility.
 
 Starting with analysis pipeline v6.0, every single-gene or single-signature
 analysis first fits one Cox model per +1 within-analysis expression-score

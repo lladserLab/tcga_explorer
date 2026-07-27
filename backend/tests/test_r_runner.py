@@ -131,6 +131,12 @@ def test_write_audit_report_creates_json_html_and_not_reached_status(tmp_path) -
                 ],
             },
             "cox_models": [],
+            "cox_forest_output": {
+                "model_layout": "separate",
+                "completed_model_count": 1,
+                "completed_univariable_model_count": 1,
+                "completed_multivariable_model_count": 0,
+            },
             "sample_selection": {"retained_patients": 1},
             "warnings": [],
         },
@@ -165,6 +171,7 @@ def test_write_audit_report_creates_json_html_and_not_reached_status(tmp_path) -
     assert "tcga-trace-data-provenance-v1" in report_text
     assert "rmst" in report_text
     assert "continuous_analysis" in report_text
+    assert report["results"]["cox_forest_output"]["model_layout"] == "separate"
     assert "continuous_patient_records" in report["cohort_selection"]
     assert (tmp_path / "analysis-1" / "audit_report.json").exists()
     assert (tmp_path / "analysis-1" / "audit_report.html").exists()

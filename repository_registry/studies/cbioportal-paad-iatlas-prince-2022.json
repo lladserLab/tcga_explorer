@@ -1,0 +1,94 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-paad-iatlas-prince-2022",
+    "cancer_code": "PAAD",
+    "name": "Metastatic pancreatic cancer PRINCE trial (2022)",
+    "description": "Independent metastatic pancreatic adenocarcinoma trial restricted to pretreatment bulk RNA-seq biopsies.",
+    "cohort_context": "Metastatic pancreatic adenocarcinoma treated in the PRINCE trial; only source-labelled pretreatment biopsies are retained.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "paad_iatlas_prince_2022",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/paad_iatlas_prince_2022",
+    "publication_citation": "Padron et al. Nat Med 2022",
+    "publication_id": "PMID:35662283",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Randomized phase II clinical trial",
+      "treatment_context": "Chemotherapy with or without immunotherapy",
+      "curation_note": "On-treatment biopsies are excluded."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/paad_iatlas_prince_2022",
+    "files": {
+      "expression": "data_mrna_seq_expression.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_expression.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment metastatic biopsy",
+    "sample_role": "Pretreatment metastatic pancreatic adenocarcinoma biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TREATMENT",
+        "include": ["Pre"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.CLINICAL_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_uq_counts",
+    "label": "iAtlas log2 upper-quartile normalized counts",
+    "source_unit": "log2 upper-quartile normalized counts",
+    "transform": "identity",
+    "analysis_unit": "Provided log2 upper-quartile normalized counts",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The iAtlas profile is already log2 upper-quartile normalized. TCGA-TRACE preserves the supplied scale."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Treatment start",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Treatment start",
+      "event_definition": "Progression or death as encoded by the source PFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

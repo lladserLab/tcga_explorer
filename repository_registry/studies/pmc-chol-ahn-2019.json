@@ -1,0 +1,132 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-chol-ahn-2019",
+    "cancer_code": "CHOL",
+    "name": "Resected intrahepatic cholangiocarcinoma cohort (2019)",
+    "description": "Independent Korean resected intrahepatic-cholangiocarcinoma bulk RNA-seq cohort with individual OS and DFS follow-up.",
+    "cohort_context": "Twenty-two surgically resected intrahepatic cholangiocarcinomas with public tumor RPKM profiles and individual follow-up in Supplementary Table 1.",
+    "source_provider": "europe_pmc_geo_supplement",
+    "source_accession": "GSE107943; PMC6444048",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107943",
+    "publication_citation": "Ahn et al. Annals of Surgical Treatment and Research 2019",
+    "publication_id": "PMID:30941318; PMCID:PMC6444048; DOI:10.4174/astr.2019.96.4.153",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-NC-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Keimyung University Dongsan Medical Center",
+      "source_data_system": "NCBI GEO expression matrix and Europe PMC clinical supplement",
+      "library_method": "Tumor bulk RNA-seq reported as gene-level RPKM",
+      "curation_note": "The 22 clinical rows are transcribed verbatim from public Supplementary Table 1 and frozen in this specification; the source PDF is retained and checksummed in every release. Redistribution is limited to non-commercial use under CC BY-NC 4.0."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_geo_supplement",
+    "pmcid": "PMC6444048",
+    "publication_date": "2019-03-28",
+    "clinical_member": "astr-96-153-s001.pdf",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107943/suppl/GSE107943_RPKM.txt.gz",
+    "expression": {
+      "layout": "geo_rpkm_two_row_header",
+      "delimiter": "\t",
+      "metadata_columns": 7,
+      "ensembl_column": 2,
+      "symbol_column": 3
+    },
+    "clinical": {
+      "sample_id_column": "ID",
+      "patient_id_column": "ID",
+      "sample_type": "Resected primary intrahepatic cholangiocarcinoma",
+      "records": [
+        {"ID": "1T", "Sex": "Male", "Age": "54", "Recurrence": "No", "DFS_MONTHS": "112.6", "Death": "No", "OS_MONTHS": "112.6", "Stage": "I"},
+        {"ID": "2T", "Sex": "Male", "Age": "49", "Recurrence": "Yes", "DFS_MONTHS": "3.9", "Death": "Yes", "OS_MONTHS": "14.3", "Stage": "I"},
+        {"ID": "4T", "Sex": "Male", "Age": "55", "Recurrence": "Yes", "DFS_MONTHS": "1.7", "Death": "Yes", "OS_MONTHS": "18.1", "Stage": "II"},
+        {"ID": "5T", "Sex": "Male", "Age": "61", "Recurrence": "Yes", "DFS_MONTHS": "9.6", "Death": "Yes", "OS_MONTHS": "24.3", "Stage": "I"},
+        {"ID": "6T", "Sex": "Male", "Age": "65", "Recurrence": "Yes", "DFS_MONTHS": "57.3", "Death": "No", "OS_MONTHS": "99.0", "Stage": "I"},
+        {"ID": "7T", "Sex": "Male", "Age": "53", "Recurrence": "Yes", "DFS_MONTHS": "3.3", "Death": "Yes", "OS_MONTHS": "18.9", "Stage": "IVB"},
+        {"ID": "11T", "Sex": "Male", "Age": "79", "Recurrence": "No", "DFS_MONTHS": "17.3", "Death": "No", "OS_MONTHS": "17.3", "Stage": "II"},
+        {"ID": "13T", "Sex": "Male", "Age": "63", "Recurrence": "Yes", "DFS_MONTHS": "9.2", "Death": "Yes", "OS_MONTHS": "38.2", "Stage": "I"},
+        {"ID": "15T", "Sex": "Male", "Age": "60", "Recurrence": "Yes", "DFS_MONTHS": "21.8", "Death": "Yes", "OS_MONTHS": "25.6", "Stage": "IVA"},
+        {"ID": "16T", "Sex": "Male", "Age": "67", "Recurrence": "No", "DFS_MONTHS": "65.2", "Death": "Yes", "OS_MONTHS": "68.2", "Stage": "II"},
+        {"ID": "17T", "Sex": "Male", "Age": "69", "Recurrence": "Yes", "DFS_MONTHS": "6.9", "Death": "Yes", "OS_MONTHS": "28.3", "Stage": "II"},
+        {"ID": "18T", "Sex": "Male", "Age": "75", "Recurrence": "Yes", "DFS_MONTHS": "6.1", "Death": "Yes", "OS_MONTHS": "26.3", "Stage": "IVA"},
+        {"ID": "19T", "Sex": "Male", "Age": "76", "Recurrence": "Yes", "DFS_MONTHS": "16.6", "Death": "Yes", "OS_MONTHS": "30.3", "Stage": "I"},
+        {"ID": "20T", "Sex": "Female", "Age": "76", "Recurrence": "Yes", "DFS_MONTHS": "6.0", "Death": "Yes", "OS_MONTHS": "6.7", "Stage": "IVA"},
+        {"ID": "21T", "Sex": "Male", "Age": "75", "Recurrence": "No", "DFS_MONTHS": "41.7", "Death": "No", "OS_MONTHS": "41.7", "Stage": "I"},
+        {"ID": "22T", "Sex": "Female", "Age": "67", "Recurrence": "No", "DFS_MONTHS": "54.1", "Death": "No", "OS_MONTHS": "54.1", "Stage": "I"},
+        {"ID": "23T", "Sex": "Male", "Age": "73", "Recurrence": "Yes", "DFS_MONTHS": "40.0", "Death": "No", "OS_MONTHS": "46.6", "Stage": "I"},
+        {"ID": "24T", "Sex": "Female", "Age": "63", "Recurrence": "No", "DFS_MONTHS": "49.7", "Death": "No", "OS_MONTHS": "49.7", "Stage": "I"},
+        {"ID": "25T", "Sex": "Male", "Age": "58", "Recurrence": "Yes", "DFS_MONTHS": "17.3", "Death": "Yes", "OS_MONTHS": "35.5", "Stage": "IVA"},
+        {"ID": "26T", "Sex": "Male", "Age": "51", "Recurrence": "Yes", "DFS_MONTHS": "25.7", "Death": "Yes", "OS_MONTHS": "29.4", "Stage": "I"},
+        {"ID": "27T", "Sex": "Female", "Age": "74", "Recurrence": "Yes", "DFS_MONTHS": "26.7", "Death": "No", "OS_MONTHS": "23.1", "Stage": "III"},
+        {"ID": "29T", "Sex": "Female", "Age": "59", "Recurrence": "No", "DFS_MONTHS": "40.2", "Death": "No", "OS_MONTHS": "40.2", "Stage": "I"}
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Resected primary intrahepatic cholangiocarcinoma",
+    "sample_role": "Resected primary tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Resected primary intrahepatic cholangiocarcinoma"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.Stage"
+    ],
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_rpkm",
+    "label": "log2(RPKM + 1)",
+    "source_unit": "RPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(RPKM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Published GSE107943 Ensenble and Genesymbol columns",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Canonical symbols represented by multiple Ensembl identifiers are excluded rather than combined implicitly.",
+    "scale_note": "The public RPKM values are non-negative. TCGA-TRACE applies log2(RPKM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "Death",
+      "time_unit": "months",
+      "time_origin": "Primary tumor resection",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "No",
+      "event_prefix": "Yes"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "Recurrence",
+      "time_unit": "months",
+      "time_origin": "Primary tumor resection",
+      "event_definition": "Tumor recurrence",
+      "censor_prefix": "No",
+      "event_prefix": "Yes"
+    }
+  ]
+}

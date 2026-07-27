@@ -2355,6 +2355,18 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
             raise analysis_http_error(500, "R_FAILED", str(exc)) from exc
     cox_forest_png_path = settings.artifact_dir / analysis_id / "cox_forest.png"
     cox_forest_svg_path = settings.artifact_dir / analysis_id / "cox_forest.svg"
+    cox_univariable_png_path = (
+        settings.artifact_dir / analysis_id / "cox_univariable.png"
+    )
+    cox_univariable_svg_path = (
+        settings.artifact_dir / analysis_id / "cox_univariable.svg"
+    )
+    cox_multivariable_png_path = (
+        settings.artifact_dir / analysis_id / "cox_multivariable.png"
+    )
+    cox_multivariable_svg_path = (
+        settings.artifact_dir / analysis_id / "cox_multivariable.svg"
+    )
     continuous_effect_png_path = settings.artifact_dir / analysis_id / "continuous_effect.png"
     continuous_effect_svg_path = settings.artifact_dir / analysis_id / "continuous_effect.svg"
     cumulative_incidence_png_path = (
@@ -2367,6 +2379,10 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
     needs_svg_render = job.svg_path is None or not Path(job.svg_path).exists()
     if kind == "cox_svg" and not cox_forest_svg_path.exists():
         needs_svg_render = True
+    if kind == "cox_univariable_svg" and not cox_univariable_svg_path.exists():
+        needs_svg_render = True
+    if kind == "cox_multivariable_svg" and not cox_multivariable_svg_path.exists():
+        needs_svg_render = True
     if kind == "continuous_svg" and not continuous_effect_svg_path.exists():
         needs_svg_render = True
     if kind == "cumulative_incidence_svg" and not cumulative_incidence_svg_path.exists():
@@ -2374,6 +2390,8 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
     if kind in {
         "svg",
         "cox_svg",
+        "cox_univariable_svg",
+        "cox_multivariable_svg",
         "continuous_svg",
         "cumulative_incidence_svg",
     } and needs_svg_render:
@@ -2387,6 +2405,10 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "svg": job.svg_path,
         "cox_png": str(cox_forest_png_path),
         "cox_svg": str(cox_forest_svg_path),
+        "cox_univariable_png": str(cox_univariable_png_path),
+        "cox_univariable_svg": str(cox_univariable_svg_path),
+        "cox_multivariable_png": str(cox_multivariable_png_path),
+        "cox_multivariable_svg": str(cox_multivariable_svg_path),
         "continuous_png": str(continuous_effect_png_path),
         "continuous_svg": str(continuous_effect_svg_path),
         "cumulative_incidence_png": str(cumulative_incidence_png_path),
@@ -2414,6 +2436,10 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "svg": "image/svg+xml",
         "cox_png": "image/png",
         "cox_svg": "image/svg+xml",
+        "cox_univariable_png": "image/png",
+        "cox_univariable_svg": "image/svg+xml",
+        "cox_multivariable_png": "image/png",
+        "cox_multivariable_svg": "image/svg+xml",
         "continuous_png": "image/png",
         "continuous_svg": "image/svg+xml",
         "cumulative_incidence_png": "image/png",
@@ -2433,6 +2459,10 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
         "methodology": f"{analysis_id}.methodology.txt",
         "cox_png": f"{analysis_id}.cox_forest.png",
         "cox_svg": f"{analysis_id}.cox_forest.svg",
+        "cox_univariable_png": f"{analysis_id}.cox_univariable.png",
+        "cox_univariable_svg": f"{analysis_id}.cox_univariable.svg",
+        "cox_multivariable_png": f"{analysis_id}.cox_multivariable.png",
+        "cox_multivariable_svg": f"{analysis_id}.cox_multivariable.svg",
         "continuous_png": f"{analysis_id}.continuous_effect.png",
         "continuous_svg": f"{analysis_id}.continuous_effect.svg",
         "cumulative_incidence_png": f"{analysis_id}.cumulative_incidence.png",
@@ -2450,8 +2480,9 @@ def download_analysis(analysis_id: str, kind: str, db: SessionDep) -> Response:
 def analysis_zip_response(job: AnalysisJob, db: Session) -> Response:
     if job.status != "completed":
         raise HTTPException(status_code=404, detail="Analysis is not completed.")
-    if job.svg_path is None or not Path(job.svg_path).exists():
-        job.svg_path = str(ensure_svg_artifact(settings, job.id))
+    ensured_svg_path = str(ensure_svg_artifact(settings, job.id))
+    if job.svg_path != ensured_svg_path:
+        job.svg_path = ensured_svg_path
         db.commit()
 
     files = [
@@ -2492,6 +2523,10 @@ def analysis_zip_response(job: AnalysisJob, db: Session) -> Response:
     optional_files = [
         ("cox_forest.png", str(settings.artifact_dir / job.id / "cox_forest.png")),
         ("cox_forest.svg", str(settings.artifact_dir / job.id / "cox_forest.svg")),
+        ("cox_univariable.png", str(settings.artifact_dir / job.id / "cox_univariable.png")),
+        ("cox_univariable.svg", str(settings.artifact_dir / job.id / "cox_univariable.svg")),
+        ("cox_multivariable.png", str(settings.artifact_dir / job.id / "cox_multivariable.png")),
+        ("cox_multivariable.svg", str(settings.artifact_dir / job.id / "cox_multivariable.svg")),
         ("continuous_effect.png", str(settings.artifact_dir / job.id / "continuous_effect.png")),
         ("continuous_effect.svg", str(settings.artifact_dir / job.id / "continuous_effect.svg")),
         ("cumulative_incidence.png", str(settings.artifact_dir / job.id / "cumulative_incidence.png")),
@@ -3773,6 +3808,20 @@ def analysis_out(job: AnalysisJob) -> AnalysisOut:
         if (settings.artifact_dir / job.id / "cox_forest.png").exists():
             downloads["cox_png"] = f"/api/analyses/{job.id}/download/cox_png"
             downloads["cox_svg"] = f"/api/analyses/{job.id}/download/cox_svg"
+        if (settings.artifact_dir / job.id / "cox_univariable.png").exists():
+            downloads["cox_univariable_png"] = (
+                f"/api/analyses/{job.id}/download/cox_univariable_png"
+            )
+            downloads["cox_univariable_svg"] = (
+                f"/api/analyses/{job.id}/download/cox_univariable_svg"
+            )
+        if (settings.artifact_dir / job.id / "cox_multivariable.png").exists():
+            downloads["cox_multivariable_png"] = (
+                f"/api/analyses/{job.id}/download/cox_multivariable_png"
+            )
+            downloads["cox_multivariable_svg"] = (
+                f"/api/analyses/{job.id}/download/cox_multivariable_svg"
+            )
         if (settings.artifact_dir / job.id / "continuous_effect.png").exists():
             downloads["continuous_png"] = f"/api/analyses/{job.id}/download/continuous_png"
             downloads["continuous_svg"] = f"/api/analyses/{job.id}/download/continuous_svg"

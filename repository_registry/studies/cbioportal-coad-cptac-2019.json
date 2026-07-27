@@ -1,0 +1,89 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-coad-cptac-2019",
+    "cancer_code": "COAD",
+    "name": "Prospective colon cancer cohort (CPTAC, 2019)",
+    "description": "Independent prospective CPTAC colon cancer cohort with primary-tumor RNA-seq and survival outcomes.",
+    "cohort_context": "Prospectively collected primary colon cancers; independent of TCGA and retained as a disease-matched external cohort.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "coad_cptac_2019",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/coad_cptac_2019",
+    "publication_citation": "Vasaikar et al. Cell 2019",
+    "publication_id": "PMID:31031003",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "CPTAC prospective cohort",
+      "curation_note": "The HTAN pseudobulk candidate was not used because repository version 1 is restricted to bulk RNA-seq."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/coad_cptac_2019",
+    "files": {
+      "expression": "data_mrna_seq_v2_rsem.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_v2_rsem.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary colon tumor",
+    "sample_role": "Primary colon tumor",
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_rsem_uq",
+    "label": "log2 RSEM upper-quartile normalized expression",
+    "source_unit": "RSEM upper-quartile normalized counts, log2(n + 1)",
+    "transform": "identity",
+    "analysis_unit": "Provided log2 RSEM upper-quartile expression",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; the secondary Entrez annotation column is retained only in the immutable source file.",
+    "scale_note": "The DataHub profile documents RNA Seq V2 RSEM upper-quartile values on a log2(n + 1) scale. Values are preserved without a second transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined overall-survival origin",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined disease-free origin after treatment",
+      "event_definition": "Disease recurrence or death as encoded by the source DFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

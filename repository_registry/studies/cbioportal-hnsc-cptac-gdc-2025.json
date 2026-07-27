@@ -1,0 +1,82 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-hnsc-cptac-gdc-2025",
+    "cancer_code": "HNSC",
+    "name": "HPV-negative head and neck carcinoma (CPTAC-GDC, 2025)",
+    "description": "Independent CPTAC head and neck cancer cohort with GDC-derived bulk RNA-seq TPM and GDC survival follow-up.",
+    "cohort_context": "CPTAC primary HPV-negative head and neck carcinoma; context-specific and not population-matched to the full TCGA-HNSC cohort.",
+    "source_provider": "cbioportal_gdc_api",
+    "source_accession": "ohnca_cptac_gdc",
+    "source_url": "https://www.cbioportal.org/study/summary?id=ohnca_cptac_gdc",
+    "publication_citation": "Huang et al. Cancer Cell 2021",
+    "publication_id": "PMID:33417831",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NIH-GDS-Open-Data",
+    "license_url": "https://gdc.cancer.gov/about-gdc/gdc-policies",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Clinical Proteomic Tumor Analysis Consortium (CPTAC)",
+      "source_data_system": "NCI GDC via the cBioPortal public API and GDC survival API",
+      "redistribution_note": "The cohort is analyzable in TCGA-TRACE, but raw matrix downloads remain disabled pending a dedicated redistribution review.",
+      "curation_note": "TPM expression and survival are joined by patient submitter ID. GDC supplies censoring follow-up that is absent from most living-patient rows in the cBioPortal clinical table."
+    }
+  },
+  "source": {
+    "provider": "cbioportal_api",
+    "study_id": "ohnca_cptac_gdc",
+    "molecular_profile_id": "ohnca_cptac_gdc_mrna_seq_tpm",
+    "sample_list_id": "ohnca_cptac_gdc_tpm",
+    "gene_batch_size": 500,
+    "gdc_survival": {
+      "project_id": "CPTAC-3",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS"
+    },
+    "license_evidence_url": "https://gdc.cancer.gov/about-gdc/gdc-policies"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary solid tumor",
+    "sample_role": "Primary tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["OHNCA"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "Repeated rows with the same Entrez identifier are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The cBioPortal GDC profile supplies non-negative TPM values. TCGA-TRACE applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Initial diagnosis as implemented by the GDC survival endpoint",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

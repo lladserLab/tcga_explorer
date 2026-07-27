@@ -1,0 +1,111 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-esca-vanderzalm-2024",
+    "cancer_code": "ESCA",
+    "name": "Pretreatment esophageal cancer biopsy cohort (2024)",
+    "description": "Independent Dutch pretreatment esophageal-cancer bulk RNA-seq cohort with individual overall-survival follow-up.",
+    "cohort_context": "Pretreatment diagnostic biopsies from patients with esophageal adenocarcinoma or esophageal squamous-cell carcinoma. Gastric adenocarcinomas and rows without an esophageal histology label are excluded before analysis.",
+    "source_provider": "europe_pmc_geo_supplement",
+    "source_accession": "GSE254942; PMC11101480",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE254942",
+    "publication_citation": "van der Zalm et al. Communications Medicine 2024",
+    "publication_id": "PMID:38760583; PMCID:PMC11101480; DOI:10.1038/s43856-024-00512-z",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Amsterdam UMC esophageal cancer cohort",
+      "source_data_system": "NCBI GEO expression matrix and Europe PMC clinical supplement",
+      "library_method": "RiboErase total RNA libraries sequenced on Illumina HiSeq 4000",
+      "curation_note": "Eligibility is outcome-independent and fixed to Tumor_Type EAC or ESC. The supplied DESeq2 VST, log2-transformed, RUVg batch-corrected matrix is retained on its published scale. Versioned Ensembl identifiers are mapped using the pinned GENCODE v32 GRCh37 annotation."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_geo_supplement",
+    "pmcid": "PMC11101480",
+    "publication_date": "2024-05-17",
+    "clinical_member": "43856_2024_512_MOESM3_ESM.xlsx",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE254nnn/GSE254942/suppl/GSE254942_matrix_DESeq2_vst_mdgd_BC_v1.txt.gz",
+    "expression_reference_url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/GRCh37_mapping/gencode.v32lift37.annotation.gtf.gz",
+    "expression": {
+      "layout": "gencode_ensembl_matrix",
+      "delimiter": "\t",
+      "case_insensitive_samples": true
+    },
+    "clinical": {
+      "sheet_name": "Patient characteristics",
+      "header_row": 1,
+      "sample_id_column": "samplenameR2",
+      "patient_id_column": "labid1R2",
+      "sample_type": "Pretreatment esophageal tumor biopsy",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "Tumor_Type",
+          "include": [
+            "EAC",
+            "ESC"
+          ],
+          "required": true
+        }
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment esophageal tumor biopsy",
+    "sample_role": "Pretreatment diagnostic tumor biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment esophageal tumor biopsy"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.Differentiation_grade"
+    ],
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "race_fields": [
+      "patient.Ethnicity"
+    ],
+    "age_fields": [
+      "patient.Age_at_diagnosis"
+    ]
+  },
+  "expression": {
+    "layer_id": "published_vst_ruvg",
+    "label": "Published DESeq2 VST / RUVg scale",
+    "source_unit": "Published DESeq2 VST / RUVg values",
+    "transform": "identity",
+    "analysis_unit": "Published DESeq2 VST / RUVg value",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GENCODE v32lift37 annotation pinned in the release",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Canonical symbols represented by multiple Ensembl identifiers are excluded rather than combined implicitly.",
+    "scale_note": "The publication describes DESeq2 variance stabilization, log2 transformation and RUVg batch correction. TCGA-TRACE preserves the supplied matrix without applying another transform."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS(days)",
+      "event_column": "Alive_death_nr",
+      "time_unit": "days",
+      "time_origin": "Cancer diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

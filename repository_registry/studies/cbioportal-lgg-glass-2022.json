@@ -1,0 +1,86 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-lgg-glass-2022",
+    "cancer_code": "LGG",
+    "name": "Primary lower-grade diffuse glioma (GLASS, 2022)",
+    "description": "GLASS diffuse-glioma cohort restricted to non-TCGA primary grade II-III tumors with bulk RNA-seq and overall survival.",
+    "cohort_context": "Primary grade II-III diffuse gliomas only. Recurrent tumors, grade IV tumors and patient identifiers beginning TCGA- are excluded before sample selection.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "difg_glass",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/difg_glass",
+    "publication_citation": "Varn et al. Cell 2022; Malta et al. Cancer Res 2023",
+    "publication_id": "PMID:35649412; PMID:38117484",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Longitudinal diffuse-glioma consortium",
+      "curation_note": "This derived release is not the complete GLASS study. Explicit TCGA identifiers, recurrent samples and grade IV tumors are excluded to create a disease-matched non-TCGA LGG cohort."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/difg_glass",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary grade II-III diffuse glioma",
+    "sample_role": "Primary grade II-III diffuse glioma",
+    "exclude_patient_id_patterns": ["^TCGA-"],
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Tumor Primary"],
+        "required": true
+      },
+      {
+        "field": "sample.TUMOR_GRADE",
+        "include": ["II", "III"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": ["sample.TUMOR_GRADE"],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "Kallisto TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(TPM + 1); different identifiers are never merged implicitly.",
+    "scale_note": "DataHub describes Kallisto TPM values. TCGA-TRACE applies the declared log2(TPM + 1) transform after cohort filtering."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "First diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

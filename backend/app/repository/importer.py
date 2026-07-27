@@ -9,7 +9,7 @@ import shutil
 from typing import Any
 import uuid
 
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.models import (
@@ -36,6 +36,7 @@ from app.repository.storage import (
 BUNDLE_SCHEMA_VERSION = "tcga-trace-external-rnaseq-bundle-v1"
 MIN_PATIENTS = 10
 MIN_EVENTS = 5
+MIN_CENSORED = 5
 MIN_GENES = 10_000
 
 
@@ -81,6 +82,8 @@ def validate_bundle(bundle_dir: Path) -> dict[str, Any]:
         "source_accession",
         "source_url",
         "independence_status",
+        "license_id",
+        "license_url",
     ):
         if not dataset.get(field):
             errors.append(f"Dataset field {field!r} is required.")
@@ -91,6 +94,9 @@ def validate_bundle(bundle_dir: Path) -> dict[str, Any]:
         errors.append("Only bulk_rna_seq datasets can be promoted.")
     if dataset.get("independence_status") != "verified_external":
         errors.append("Dataset independence from TCGA is not verified.")
+    source_files = manifest.get("source_files") or {}
+    if not source_files.get("license"):
+        errors.append("An immutable source license record is required.")
 
     layers = manifest.get("expression_layers") or []
     if not layers:
@@ -159,21 +165,42 @@ def validate_bundle(bundle_dir: Path) -> dict[str, Any]:
             complete_patients.add(patient_id)
             event_count += int(event == 1)
         available = (
-            len(complete_patients) >= MIN_PATIENTS and event_count >= MIN_EVENTS
+            len(complete_patients) >= MIN_PATIENTS
+            and event_count >= MIN_EVENTS
+            and len(complete_patients) - event_count >= MIN_CENSORED
         )
+        censored_count = len(complete_patients) - event_count
         endpoint_qc[endpoint_id] = {
             "patients": len(complete_patients),
             "events": event_count,
+            "censored": censored_count,
             "available": available,
         }
     if not any(row["available"] for row in endpoint_qc.values()):
         errors.append(
-            f"No endpoint reaches {MIN_PATIENTS} patients and {MIN_EVENTS} events."
+            f"No endpoint reaches {MIN_PATIENTS} patients, {MIN_EVENTS} events, "
+            f"and {MIN_CENSORED} censored observations."
         )
 
     layer_qc: dict[str, dict[str, int | bool]] = {}
     for layer in layers:
         layer_id = str(layer.get("layer_id") or "")
+        for field, maximum in (
+            ("layer_id", 64),
+            ("source_unit", 64),
+            ("analysis_unit", 128),
+            ("transform", 64),
+        ):
+            value = str(layer.get(field) or "")
+            if not value:
+                errors.append(
+                    f"Layer {layer_id or '<unnamed>'} requires {field}."
+                )
+            elif len(value) > maximum:
+                errors.append(
+                    f"Layer {layer_id or '<unnamed>'} field {field} "
+                    f"exceeds {maximum} characters."
+                )
         metadata_path = safe_bundle_path(bundle_dir, str(layer["metadata_file"]))
         matrix_path = safe_bundle_path(bundle_dir, str(layer["matrix_file"]))
         genes_path = safe_bundle_path(bundle_dir, str(layer["genes_file"]))
@@ -217,6 +244,7 @@ def validate_bundle(bundle_dir: Path) -> dict[str, Any]:
         "thresholds": {
             "minimum_patients": MIN_PATIENTS,
             "minimum_events": MIN_EVENTS,
+            "minimum_censored": MIN_CENSORED,
             "minimum_genes": MIN_GENES,
         },
     }
@@ -313,6 +341,90 @@ def promote_bundle(
     _register_data_source(db, dataset, release)
     db.commit()
     return _promotion_summary(dataset, release)
+
+
+def revalidate_active_releases(db: Session) -> dict[str, Any]:
+    results: list[dict[str, Any]] = []
+    datasets = db.scalars(
+        select(RepositoryDataset)
+        .where(RepositoryDataset.active_release_id.is_not(None))
+        .order_by(RepositoryDataset.id)
+    ).all()
+    for dataset in datasets:
+        release = db.get(RepositoryRelease, dataset.active_release_id)
+        if release is None:
+            dataset.status = "qc_failed"
+            results.append(
+                {
+                    "dataset_id": dataset.id,
+                    "release_id": dataset.active_release_id,
+                    "status": "failed",
+                    "errors": ["Active release record is missing."],
+                }
+            )
+            continue
+        validation = validate_bundle(Path(release.repository_path))
+        qc = validation["qc"]
+        release.patient_count = int(qc["patients"])
+        release.sample_count = int(qc["samples"])
+        release.gene_count = max(
+            (int(layer["genes"]) for layer in qc["layers"].values()),
+            default=0,
+        )
+        release.qc_status = str(qc["status"])
+        release.qc_json = qc
+        definitions = db.scalars(
+            select(RepositoryEndpointDefinition).where(
+                RepositoryEndpointDefinition.release_id == release.id
+            )
+        ).all()
+        for definition in definitions:
+            endpoint_qc = qc["endpoints"].get(definition.endpoint_id)
+            if endpoint_qc is None:
+                definition.available = False
+                definition.reason = (
+                    "Endpoint is absent from the current bundle validation."
+                )
+                continue
+            definition.patient_count = int(endpoint_qc["patients"])
+            definition.event_count = int(endpoint_qc["events"])
+            definition.available = bool(endpoint_qc["available"])
+            definition.reason = (
+                None
+                if definition.available
+                else endpoint_qc_failure_reason(endpoint_qc)
+            )
+        dataset.status = (
+            "available" if qc["status"] == "passed" else "qc_failed"
+        )
+        results.append(
+            {
+                "dataset_id": dataset.id,
+                "release_id": release.id,
+                "status": qc["status"],
+                "endpoints": qc["endpoints"],
+                "errors": qc["errors"],
+            }
+        )
+    db.commit()
+    return {
+        "datasets": results,
+        "available": sum(row["status"] == "passed" for row in results),
+        "qc_failed": sum(row["status"] != "passed" for row in results),
+    }
+
+
+def endpoint_qc_failure_reason(endpoint_qc: dict[str, Any]) -> str:
+    requirements: list[str] = []
+    if int(endpoint_qc.get("patients") or 0) < MIN_PATIENTS:
+        requirements.append(f"{MIN_PATIENTS} patients")
+    if int(endpoint_qc.get("events") or 0) < MIN_EVENTS:
+        requirements.append(f"{MIN_EVENTS} events")
+    if int(endpoint_qc.get("censored") or 0) < MIN_CENSORED:
+        requirements.append(f"{MIN_CENSORED} censored observations")
+    if not requirements:
+        return "Endpoint failed the current repository QC policy."
+    return "Requires at least " + ", ".join(requirements) + "."
 
 
 def _assign_dataset(dataset: RepositoryDataset, payload: dict[str, Any]) -> None:
@@ -512,7 +624,14 @@ def _clean(value: Any) -> str | None:
     if value is None:
         return None
     text = str(value).strip()
-    return text if text and text.upper() not in {"NA", "N/A", "NULL"} else None
+    missing_values = {
+        "NA",
+        "N/A",
+        "NULL",
+        "[NOT AVAILABLE]",
+        "[NOT APPLICABLE]",
+    }
+    return text if text and text.upper() not in missing_values else None
 
 
 def _optional_float(value: Any) -> float | None:

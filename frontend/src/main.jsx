@@ -151,8 +151,11 @@ const DEFAULT_PLOT_STYLE = {
     lower_hazard_color: "#1f6f8b",
     higher_hazard_color: "#b94d48",
     reference_color: "#7b8582",
+    model_layout: "combined",
     show_title: true,
     plot_title: "",
+    univariable_plot_title: "",
+    multivariable_plot_title: "",
     x_axis_title: "",
   },
 };
@@ -315,7 +318,7 @@ const HELP_CONTENT = {
   maxFollowup:
     "Maximum follow-up days censors records after the selected time horizon. Leave it empty to use the full endpoint follow-up.",
   plotOutput:
-    "Choose Survival, Continuous Cox or Cox models to edit each exported PNG and SVG independently. Typography and grid are shared; colors, titles and applicable axes are artifact-specific. Scientific subtitles, model contrasts and estimates remain data-derived.",
+    "Choose Survival, Continuous Cox or Cox models to edit each exported PNG and SVG independently. The grouped Cox forest can remain combined or export univariable and multivariable model families as separate figures. Typography and grid are shared; colors, titles and applicable axes are artifact-specific. Scientific subtitles, model contrasts and estimates remain data-derived.",
   compare:
     "Compare analyses runs the same cohort, endpoint and expression scale across many gene by cutpoint combinations, then applies BH and Bonferroni correction across completed cells.",
   compareRobustness:
@@ -422,14 +425,26 @@ const HELP_GUIDE_SECTIONS = [
 
 const METHOD_HISTORY = [
   {
-    version: "curated-external-rnaseq-repository-v1.0",
+    version: "optional-split-cox-forest-v1.0",
+    title: "Optional separate Cox model forests",
+    date: "2026-07",
+    items: [
+      "The grouped Cox forest remains combined by default, preserving existing request semantics and combined download names.",
+      "Separate mode adds one figure for the completed univariable model and one for all completed adjusted multivariable models; an empty model family is not rendered.",
+      "Colors, axes and typography remain shared while combined, univariable and multivariable titles can be edited independently.",
+      "The selected arrangement, completed model-family counts and generated files are retained in metrics, methods, audit artifacts and reconstruction exports without changing any Cox fit.",
+    ],
+  },
+  {
+    version: "curated-external-rnaseq-repository-v1.1",
     title: "Curated independent RNA-seq cohorts",
     date: "2026-07",
     items: [
       "Survival, Compare and Multiverse can use one immutable external bulk RNA-seq release with linked clinical outcomes; Pan-cancer remains TCGA-only.",
-      "Every promoted release passes explicit minimum patient, event and gene thresholds plus checksum, linkage, license and TCGA-independence review.",
+      "Twenty-five of 33 TCGA cancer types now have at least one promoted independent cohort from cBioPortal, GDC, GEO, Europe PMC or ICGC.",
+      "Every promoted release passes explicit minimum patient, event, censored-observation and gene thresholds plus checksum, linkage, license and TCGA-independence review.",
       "Source units and transformations are dataset-specific and remain visible in the interface, provenance record and downloadable manifest.",
-      "A 33-cancer coverage ledger separates published releases, screening candidates, ongoing searches and evidence gaps.",
+      "The coverage ledger records why KICH, KIRP, MESO, TGCT, THCA, THYM, UCS and UVM currently remain evidence gaps instead of silently counting ineligible arrays, controlled data or endpoint-free matrices.",
     ],
   },
   {
@@ -930,9 +945,16 @@ function buildPlotStylePayload(plotStyle, paletteOverride = null) {
     },
     cox_forest: {
       ...coxForest,
+      model_layout: coxForest.model_layout === "separate" ? "separate" : "combined",
       show_title: Boolean(coxForest.show_title),
       plot_title: coxForest.show_title
         ? normalizeOptionalPlotLabel(coxForest.plot_title)
+        : null,
+      univariable_plot_title: coxForest.show_title
+        ? normalizeOptionalPlotLabel(coxForest.univariable_plot_title)
+        : null,
+      multivariable_plot_title: coxForest.show_title
+        ? normalizeOptionalPlotLabel(coxForest.multivariable_plot_title)
         : null,
       x_axis_title: normalizeOptionalPlotLabel(coxForest.x_axis_title),
     },
@@ -2830,6 +2852,11 @@ function RepositoryCatalog({ coverage, datasets, onAnalyze, onDownload }) {
         cancer.tcga_cohort,
         cancer.name,
         cancer.primary_site,
+        cancer.search?.review_note,
+        ...(cancer.search?.candidates || []).flatMap((candidate) => [
+          candidate.accession,
+          candidate.review_note,
+        ]),
       ].some((value) => String(value || "").toLowerCase().includes(normalizedQuery));
     return matchesStatus && matchesQuery;
   });
@@ -2860,8 +2887,8 @@ function RepositoryCatalog({ coverage, datasets, onAnalyze, onDownload }) {
             <dd>{formatInteger(coverage?.datasets || 0)}</dd>
           </div>
           <div>
-            <dt>Under review</dt>
-            <dd>{formatInteger(coverage?.search_in_progress || 0)}</dd>
+            <dt>Evidence gaps</dt>
+            <dd>{formatInteger(coverage?.evidence_gaps || 0)}</dd>
           </div>
         </dl>
       </section>
@@ -3023,13 +3050,29 @@ function RepositoryCatalog({ coverage, datasets, onAnalyze, onDownload }) {
             const screenedCandidates = Number(
               cancer.search?.discovery?.candidate_count || 0,
             );
+            const gapReason = status === "evidence_gap"
+              ? cancer.search?.review_note
+              : null;
+            const gapLeads = status === "evidence_gap"
+              ? (cancer.search?.candidates || [])
+                .map((candidate) => candidate.accession)
+                .filter(Boolean)
+              : [];
             return (
               <article key={cancer.code} data-status={status}>
                 <header>
                   <span>{cancer.code}</span>
                   <strong>{cancer.name}</strong>
                 </header>
-                <p>{cancer.primary_site}</p>
+                <div className="repository-cancer-context">
+                  <p>{cancer.primary_site}</p>
+                  {gapReason && <small>{gapReason}</small>}
+                  {gapLeads.length > 0 && (
+                    <span className="repository-gap-leads">
+                      Reviewed: {gapLeads.join(" · ")}
+                    </span>
+                  )}
+                </div>
                 <footer>
                   <span className={`repository-coverage-status ${status}`}>
                     {status === "available"
@@ -4049,7 +4092,7 @@ function PlotOutputControls({
   const artifactDescription = {
     survival: "Kaplan-Meier curves, confidence bands and risk table.",
     continuous: "Restricted cubic spline effect profile and confidence ribbon.",
-    cox_forest: "Grouped Cox model estimates, confidence intervals and reference line.",
+    cox_forest: "Grouped Cox estimates in one forest or separate univariable and multivariable figures.",
   }[activeArtifact];
 
   return (
@@ -4213,6 +4256,25 @@ function PlotOutputControls({
 
         {activeArtifact === "cox_forest" && (
           <>
+            <div className="axis-control two-options">
+              <span>Figure arrangement</span>
+              <div>
+                {[
+                  ["combined", "Combined"],
+                  ["separate", "Separate"],
+                ].map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={coxForestStyle.model_layout === value ? "selected" : ""}
+                    aria-pressed={coxForestStyle.model_layout === value}
+                    onClick={() => updateArtifactPlotStyle("cox_forest", "model_layout", value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="color-grid">
               <ColorField
                 label="Lower hazard"
@@ -4236,7 +4298,7 @@ function PlotOutputControls({
               onChange={(checked) => updateArtifactPlotStyle("cox_forest", "show_title", checked)}
             />
             <div className="range-grid">
-              {coxForestStyle.show_title && (
+              {coxForestStyle.show_title && coxForestStyle.model_layout !== "separate" && (
                 <label className="field wide">
                   <span>Plot title</span>
                   <input
@@ -4246,6 +4308,36 @@ function PlotOutputControls({
                     placeholder="Cox proportional hazards models"
                   />
                 </label>
+              )}
+              {coxForestStyle.show_title && coxForestStyle.model_layout === "separate" && (
+                <>
+                  <label className="field">
+                    <span>Univariable title</span>
+                    <input
+                      value={coxForestStyle.univariable_plot_title || ""}
+                      maxLength={140}
+                      onChange={(event) => updateArtifactPlotStyle(
+                        "cox_forest",
+                        "univariable_plot_title",
+                        event.target.value,
+                      )}
+                      placeholder="Univariable Cox model"
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Multivariable title</span>
+                    <input
+                      value={coxForestStyle.multivariable_plot_title || ""}
+                      maxLength={140}
+                      onChange={(event) => updateArtifactPlotStyle(
+                        "cox_forest",
+                        "multivariable_plot_title",
+                        event.target.value,
+                      )}
+                      placeholder="Multivariable Cox models"
+                    />
+                  </label>
+                </>
               )}
               <label className="field wide">
                 <span>X-axis title</span>
@@ -4258,7 +4350,9 @@ function PlotOutputControls({
               </label>
             </div>
             <p className="plot-control-note">
-              Point and interval colors follow the estimated direction. Model names, group contrast, estimates, confidence intervals and p-values remain data-derived.
+              {coxForestStyle.model_layout === "separate"
+                ? "Separate mode creates one univariable figure and one figure containing every completed adjusted model. The combined file remains in the reproducibility bundle for compatibility."
+                : "Point and interval colors follow the estimated direction. Model names, group contrast, estimates, confidence intervals and p-values remain data-derived."}
             </p>
           </>
         )}
@@ -9091,8 +9185,8 @@ function HelpMethodsPage({ health }) {
   const pipelineVersions = health?.pipeline_versions || {};
   const versionItems = [
     ["App", health?.app_version || "0.1.0"],
-    ["Survival analysis", pipelineVersions.analysis || "server-attested-competing-risk-contract-v6.13"],
-    ["Two signatures", pipelineVersions.combined_signatures || "server-attested-competing-risk-contract-v4.5"],
+    ["Survival analysis", pipelineVersions.analysis || "server-attested-competing-risk-split-cox-contract-v6.15"],
+    ["Two signatures", pipelineVersions.combined_signatures || "server-attested-competing-risk-split-cox-contract-v4.7"],
     ["Pan-cancer", pipelineVersions.pancancer || "server-attested-common-scale-reml-hksj-contract-v3.2"],
     ["Immune atlas", pipelineVersions.immune_atlas || "immune-pancancer-primary-plus-ordinal-sensitivity-cox-audit-v2.1"],
     ["Data loaded", formatDate(health?.data_dates?.database_imported_at)],
@@ -10023,7 +10117,7 @@ function PlotStylePreview({
       formatLabel(plotStyle.plot_aspect),
     ],
     cox_forest: [
-      "Directional color",
+      coxForestStyle.model_layout === "separate" ? "Separate forests" : "Combined forest",
       "Reference at HR 1",
       "Contrast automatic",
       "Height by model count",
@@ -10307,21 +10401,84 @@ function CoxForestPlotPreview({
   axisTextSize,
   axisTitleSize,
 }) {
-  const title = coxForestStyle.plot_title?.trim() || "Cox proportional hazards models";
-  const xAxisTitle = coxForestStyle.x_axis_title?.trim() || "Hazard ratio (log scale)";
   const rows = [
     { label: "Univariable", low: 286, point: 326, high: 361, estimate: "0.74 (0.52–1.06)", p: "p = 0.10", direction: "lower" },
     { label: "User-selected", low: 366, point: 405, high: 452, estimate: "1.38 (0.96–1.98)", p: "p = 0.08", direction: "higher" },
     { label: "Stage + grade", low: 348, point: 387, high: 430, estimate: "1.16 (0.84–1.61)", p: "p = 0.37", direction: "higher" },
   ];
+  const commonProps = {
+    plotStyle,
+    coxForestStyle,
+    isCombinedMode,
+    fontFamily,
+    baseFontSize,
+    axisTextSize,
+    axisTitleSize,
+  };
+  if (coxForestStyle.model_layout === "separate") {
+    return (
+      <div
+        className="cox-preview-split"
+        role="group"
+        aria-label="Illustrative separate Cox forest plot previews"
+      >
+        <div>
+          <span className="cox-preview-family-label">Univariable output</span>
+          <CoxForestPreviewFigure
+            {...commonProps}
+            title={coxForestStyle.univariable_plot_title?.trim() || "Univariable Cox model"}
+            rows={rows.slice(0, 1)}
+            ariaLabel="Illustrative univariable Cox forest plot style preview"
+          />
+        </div>
+        <div>
+          <span className="cox-preview-family-label">Multivariable output</span>
+          <CoxForestPreviewFigure
+            {...commonProps}
+            title={coxForestStyle.multivariable_plot_title?.trim() || "Multivariable Cox models"}
+            rows={rows.slice(1)}
+            ariaLabel="Illustrative multivariable Cox forest plot style preview"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <CoxForestPreviewFigure
+      {...commonProps}
+      title={coxForestStyle.plot_title?.trim() || "Cox proportional hazards models"}
+      rows={rows}
+      ariaLabel="Illustrative combined Cox proportional hazards forest plot style preview"
+    />
+  );
+}
+
+function CoxForestPreviewFigure({
+  plotStyle,
+  coxForestStyle,
+  isCombinedMode,
+  fontFamily,
+  baseFontSize,
+  axisTextSize,
+  axisTitleSize,
+  title,
+  rows,
+  ariaLabel,
+}) {
+  const xAxisTitle = coxForestStyle.x_axis_title?.trim() || "Hazard ratio (log scale)";
+  const rowStart = 150;
+  const rowGap = 58;
+  const axisY = rowStart + Math.max(0, rows.length - 1) * rowGap + 38;
+  const svgHeight = axisY + 106;
   return (
     <svg
-      viewBox="0 0 720 410"
+      viewBox={`0 0 720 ${svgHeight}`}
       role="img"
-      aria-label="Illustrative Cox proportional hazards forest plot style preview"
+      aria-label={ariaLabel}
       style={{ fontFamily }}
     >
-      <rect className="plot-preview-paper" x="1" y="1" width="718" height="408" rx="4" />
+      <rect className="plot-preview-paper" x="1" y="1" width="718" height={svgHeight - 2} rx="4" />
       {coxForestStyle.show_title && (
         <text className="plot-preview-title" x="40" y="32" fontSize={baseFontSize + 4}>{title}</text>
       )}
@@ -10341,8 +10498,13 @@ function CoxForestPlotPreview({
       </g>
       {plotStyle.show_grid && (
         <g className="plot-preview-grid">
-          {[260, 316, 372, 428, 484].map((x) => <line key={x} x1={x} x2={x} y1="122" y2="302" />)}
-          {[145, 205, 265].map((y) => <line key={y} x1="40" x2="680" y1={y} y2={y} />)}
+          {[260, 316, 372, 428, 484].map((x) => (
+            <line key={x} x1={x} x2={x} y1="122" y2={axisY} />
+          ))}
+          {rows.map((row, index) => {
+            const y = rowStart + index * rowGap;
+            return <line key={row.label} x1="40" x2="680" y1={y} y2={y} />;
+          })}
         </g>
       )}
       <line
@@ -10350,12 +10512,12 @@ function CoxForestPlotPreview({
         x1="372"
         x2="372"
         y1="122"
-        y2="302"
+        y2={axisY}
         stroke={coxForestStyle.reference_color}
       />
       <g className="plot-preview-forest-rows" fontSize={axisTextSize}>
         {rows.map((row, index) => {
-          const y = 150 + index * 60;
+          const y = rowStart + index * rowGap;
           const color = row.direction === "lower"
             ? coxForestStyle.lower_hazard_color
             : coxForestStyle.higher_hazard_color;
@@ -10371,14 +10533,14 @@ function CoxForestPlotPreview({
         })}
       </g>
       <g className="plot-preview-axes">
-        <line x1="260" x2="484" y1="302" y2="302" />
+        <line x1="260" x2="484" y1={axisY} y2={axisY} />
       </g>
       <g className="plot-preview-x-labels" fontSize={axisTextSize}>
         {["0.25", "0.5", "1", "2", "4"].map((label, index) => (
-          <text key={label} x={260 + index * 56} y="324" textAnchor="middle">{label}</text>
+          <text key={label} x={260 + index * 56} y={axisY + 22} textAnchor="middle">{label}</text>
         ))}
       </g>
-      <text className="plot-preview-axis-title" x="372" y="354" textAnchor="middle" fontSize={axisTitleSize}>
+      <text className="plot-preview-axis-title" x="372" y={axisY + 52} textAnchor="middle" fontSize={axisTitleSize}>
         {xAxisTitle}
       </text>
     </svg>
@@ -10516,6 +10678,23 @@ function AnalysisResult({ analysis, onDownload }) {
   const continuousPrimary = findCoxModel(continuous.linear_models, "continuous_univariable");
   const spline = continuous.spline || {};
   const hasContinuous = !combinedSignature && continuous.status === "completed";
+  const separateCoxPlots = [
+    {
+      key: "univariable",
+      label: "Univariable Cox model",
+      png: downloads.cox_univariable_png,
+      svg: downloads.cox_univariable_svg,
+      alt: "Univariable grouped Cox model forest plot",
+    },
+    {
+      key: "multivariable",
+      label: "Multivariable Cox models",
+      png: downloads.cox_multivariable_png,
+      svg: downloads.cox_multivariable_svg,
+      alt: "Adjusted multivariable grouped Cox model forest plot",
+    },
+  ].filter((plot) => plot.png);
+  const hasSeparateCoxPlots = separateCoxPlots.length > 0;
   return (
     <div className="analysis-result">
       <div className="result-header">
@@ -10576,7 +10755,22 @@ function AnalysisResult({ analysis, onDownload }) {
         <RmstTable rmst={metrics.rmst} />
 
         <img className="km-plot" src={apiUrl(downloads.png)} alt="Kaplan-Meier cutpoint sensitivity plot" />
-        {downloads.cox_png && (
+        {hasSeparateCoxPlots ? (
+          <div className="cox-split-plot-grid">
+            {separateCoxPlots.map((plot) => (
+              <figure className="cox-split-figure" key={plot.key}>
+                <figcaption className="plot-download-row">
+                  <span>{plot.label}</span>
+                  <div className="download-row">
+                    <DownloadLink href={plot.png} iconRole="file.image" label="PNG" onDownload={onDownload} />
+                    <DownloadLink href={plot.svg} iconRole="action.download" label="SVG" onDownload={onDownload} />
+                  </div>
+                </figcaption>
+                <img className="cox-forest-plot" src={apiUrl(plot.png)} alt={plot.alt} />
+              </figure>
+            ))}
+          </div>
+        ) : downloads.cox_png ? (
           <>
             <div className="plot-download-row">
               <span>Grouped Cox forest plot</span>
@@ -10587,7 +10781,7 @@ function AnalysisResult({ analysis, onDownload }) {
             </div>
             <img className="cox-forest-plot" src={apiUrl(downloads.cox_png)} alt="Grouped Cox model forest plot" />
           </>
-        )}
+        ) : null}
       </section>
 
       <CompetingRiskPanel
@@ -12226,11 +12420,21 @@ function QualitySummary({ quality }) {
 }
 
 function ResultDownloads({ downloads = {}, onDownload }) {
+  const hasSeparateCoxDownloads = Boolean(
+    downloads.cox_univariable_png || downloads.cox_multivariable_png,
+  );
+  const coxDownloadUrls = hasSeparateCoxDownloads
+    ? [
+        downloads.cox_univariable_png,
+        downloads.cox_univariable_svg,
+        downloads.cox_multivariable_png,
+        downloads.cox_multivariable_svg,
+      ]
+    : [downloads.cox_png, downloads.cox_svg];
   const downloadCount = [
     downloads.png,
     downloads.svg,
-    downloads.cox_png,
-    downloads.cox_svg,
+    ...coxDownloadUrls,
     downloads.continuous_png,
     downloads.continuous_svg,
     downloads.cumulative_incidence_png,
@@ -12262,8 +12466,19 @@ function ResultDownloads({ downloads = {}, onDownload }) {
           <div className="download-row">
             <DownloadLink href={downloads.png} iconRole="file.image" label="KM PNG" onDownload={onDownload} />
             <DownloadLink href={downloads.svg} iconRole="action.download" label="KM SVG" onDownload={onDownload} />
-            <DownloadLink href={downloads.cox_png} iconRole="data.expression" label="Cox PNG" onDownload={onDownload} />
-            <DownloadLink href={downloads.cox_svg} iconRole="action.download" label="Cox SVG" onDownload={onDownload} />
+            {hasSeparateCoxDownloads ? (
+              <>
+                <DownloadLink href={downloads.cox_univariable_png} iconRole="data.expression" label="Univariable Cox PNG" onDownload={onDownload} />
+                <DownloadLink href={downloads.cox_univariable_svg} iconRole="action.download" label="Univariable Cox SVG" onDownload={onDownload} />
+                <DownloadLink href={downloads.cox_multivariable_png} iconRole="data.expression" label="Multivariable Cox PNG" onDownload={onDownload} />
+                <DownloadLink href={downloads.cox_multivariable_svg} iconRole="action.download" label="Multivariable Cox SVG" onDownload={onDownload} />
+              </>
+            ) : (
+              <>
+                <DownloadLink href={downloads.cox_png} iconRole="data.expression" label="Cox PNG" onDownload={onDownload} />
+                <DownloadLink href={downloads.cox_svg} iconRole="action.download" label="Cox SVG" onDownload={onDownload} />
+              </>
+            )}
             <DownloadLink href={downloads.continuous_png} iconRole="data.expression" label="Continuous PNG" onDownload={onDownload} />
             <DownloadLink href={downloads.continuous_svg} iconRole="action.download" label="Continuous SVG" onDownload={onDownload} />
             <DownloadLink href={downloads.cumulative_incidence_png} iconRole="file.image" label="CIF PNG" onDownload={onDownload} />

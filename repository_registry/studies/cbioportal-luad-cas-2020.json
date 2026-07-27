@@ -1,0 +1,88 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-luad-cas-2020",
+    "cancer_code": "LUAD",
+    "name": "Lung adenocarcinoma cohort (CAS, 2020)",
+    "description": "Independent lung adenocarcinoma cohort with primary-tumor bulk RNA-seq, overall survival and disease-free survival.",
+    "cohort_context": "Resected lung adenocarcinoma from the Chinese Academy of Sciences proteogenomic study; independent of TCGA.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "luad_cas_2020",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/luad_cas_2020",
+    "publication_citation": "Xu et al. Cell 2020",
+    "publication_id": "PMID:32649877",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Proteogenomic resection cohort"
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/luad_cas_2020",
+    "files": {
+      "expression": "data_mrna_seq_fpkm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_fpkm.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary lung adenocarcinoma",
+    "sample_role": "Primary lung adenocarcinoma resection",
+    "selection_rank": 0,
+    "stage_fields": ["sample.TUMOR_STAGE", "sample.TNM_TUMOR_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm",
+    "label": "log2(FPKM + 1)",
+    "source_unit": "FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(FPKM + 1); different identifiers are never merged implicitly.",
+    "scale_note": "TCGA-TRACE applies log2(FPKM + 1) to finite non-negative source FPKM values. Genes incomplete across the frozen release population are excluded by the current bundle contract."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial treatment",
+      "event_definition": "Disease recurrence or death as encoded by the source DFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

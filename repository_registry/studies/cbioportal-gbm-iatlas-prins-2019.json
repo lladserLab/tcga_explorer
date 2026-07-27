@@ -1,0 +1,92 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-gbm-iatlas-prins-2019",
+    "cancer_code": "GBM",
+    "name": "Glioblastoma immunotherapy trial (Prins, 2019)",
+    "description": "Independent randomized glioblastoma trial with pretreatment bulk RNA-seq and treatment-anchored outcomes.",
+    "cohort_context": "Recurrent glioblastoma treated in a randomized neoadjuvant anti-PD-1 trial; only pretreatment samples are included.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "gbm_iatlas_prins_2019",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/gbm_iatlas_prins_2019",
+    "publication_citation": "Cloughesy et al. Nat Med 2019",
+    "publication_id": "PMID:30742122",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "treatment_context": "Neoadjuvant anti-PD-1 trial",
+      "study_design": "Randomized clinical trial",
+      "curation_note": "The Mayo PDX candidate was excluded because it is not a direct patient-tumor expression cohort."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/gbm_iatlas_prins_2019",
+    "files": {
+      "expression": "data_mrna_seq_expression.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_expression.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment glioblastoma",
+    "sample_role": "Pretreatment glioblastoma biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TREATMENT",
+        "include": ["Pre"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_uq_counts",
+    "label": "iAtlas log2 upper-quartile normalized counts",
+    "source_unit": "log2 upper-quartile normalized counts",
+    "transform": "identity",
+    "analysis_unit": "Provided log2 upper-quartile normalized counts",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The iAtlas profile is already log2 upper-quartile normalized. TCGA-TRACE preserves the supplied scale."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Treatment start",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Treatment start",
+      "event_definition": "Progression or death as encoded by the source PFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -321,6 +321,10 @@ def run_r_km(
     svg_path = analysis_dir / "plot.svg"
     cox_forest_png_path = analysis_dir / "cox_forest.png"
     cox_forest_svg_path = analysis_dir / "cox_forest.svg"
+    cox_univariable_png_path = analysis_dir / "cox_univariable.png"
+    cox_univariable_svg_path = analysis_dir / "cox_univariable.svg"
+    cox_multivariable_png_path = analysis_dir / "cox_multivariable.png"
+    cox_multivariable_svg_path = analysis_dir / "cox_multivariable.svg"
     continuous_effect_png_path = analysis_dir / "continuous_effect.png"
     continuous_effect_svg_path = analysis_dir / "continuous_effect.svg"
     cumulative_incidence_png_path = analysis_dir / "cumulative_incidence.png"
@@ -335,6 +339,10 @@ def run_r_km(
             svg_path,
             cox_forest_png_path,
             cox_forest_svg_path,
+            cox_univariable_png_path,
+            cox_univariable_svg_path,
+            cox_multivariable_png_path,
+            cox_multivariable_svg_path,
             continuous_effect_png_path,
             continuous_effect_svg_path,
             cumulative_incidence_png_path,
@@ -397,6 +405,10 @@ def run_r_km(
         "svg_path": str(svg_path),
         "cox_forest_png_path": str(cox_forest_png_path),
         "cox_forest_svg_path": str(cox_forest_svg_path),
+        "cox_univariable_png_path": str(cox_univariable_png_path),
+        "cox_univariable_svg_path": str(cox_univariable_svg_path),
+        "cox_multivariable_png_path": str(cox_multivariable_png_path),
+        "cox_multivariable_svg_path": str(cox_multivariable_svg_path),
         "continuous_effect_png_path": str(continuous_effect_png_path),
         "continuous_effect_svg_path": str(continuous_effect_svg_path),
         "cumulative_incidence_png_path": str(cumulative_incidence_png_path),
@@ -453,6 +465,26 @@ def run_r_km(
         "svg": str(svg_path),
         "cox_forest_png": str(cox_forest_png_path) if cox_forest_png_path.exists() else None,
         "cox_forest_svg": str(cox_forest_svg_path),
+        "cox_univariable_png": (
+            str(cox_univariable_png_path)
+            if cox_univariable_png_path.exists()
+            else None
+        ),
+        "cox_univariable_svg": (
+            str(cox_univariable_svg_path)
+            if cox_univariable_svg_path.exists()
+            else None
+        ),
+        "cox_multivariable_png": (
+            str(cox_multivariable_png_path)
+            if cox_multivariable_png_path.exists()
+            else None
+        ),
+        "cox_multivariable_svg": (
+            str(cox_multivariable_svg_path)
+            if cox_multivariable_svg_path.exists()
+            else None
+        ),
         "continuous_effect_png": str(continuous_effect_png_path) if continuous_effect_png_path.exists() else None,
         "continuous_effect_svg": str(continuous_effect_svg_path),
         "cumulative_incidence_png": str(cumulative_incidence_png_path) if cumulative_incidence_png_path.exists() else None,
@@ -661,6 +693,7 @@ def audit_core_results(metrics: dict, median_status: dict) -> dict:
         "hr_conf_high": metrics.get("hr_conf_high"),
         "hr_p_value": metrics.get("hr_p_value"),
         "cox_models": metrics.get("cox_models") or [],
+        "cox_forest_output": metrics.get("cox_forest_output") or {},
         "signature_interaction_cox_models": metrics.get("signature_interaction_cox_models") or [],
         "expression_distribution": metrics.get("expression_distribution"),
         "expression_distribution_a": metrics.get("expression_distribution_a"),
@@ -1600,9 +1633,17 @@ def ensure_svg_artifact(settings: Settings, analysis_id: str) -> Path:
     input_path = analysis_dir / "input.json"
     svg_path = analysis_dir / "plot.svg"
     cox_svg_path = analysis_dir / "cox_forest.svg"
+    cox_univariable_svg_path = analysis_dir / "cox_univariable.svg"
+    cox_multivariable_svg_path = analysis_dir / "cox_multivariable.svg"
     continuous_svg_path = analysis_dir / "continuous_effect.svg"
     cumulative_incidence_svg_path = analysis_dir / "cumulative_incidence.svg"
     cox_svg_required = (analysis_dir / "cox_forest.png").exists()
+    cox_univariable_svg_required = (
+        analysis_dir / "cox_univariable.png"
+    ).exists()
+    cox_multivariable_svg_required = (
+        analysis_dir / "cox_multivariable.png"
+    ).exists()
     continuous_svg_required = (analysis_dir / "continuous_effect.png").exists()
     cumulative_incidence_svg_required = (
         analysis_dir / "cumulative_incidence.png"
@@ -1610,6 +1651,14 @@ def ensure_svg_artifact(settings: Settings, analysis_id: str) -> Path:
     if (
         svg_path.exists()
         and (not cox_svg_required or cox_svg_path.exists())
+        and (
+            not cox_univariable_svg_required
+            or cox_univariable_svg_path.exists()
+        )
+        and (
+            not cox_multivariable_svg_required
+            or cox_multivariable_svg_path.exists()
+        )
         and (not continuous_svg_required or continuous_svg_path.exists())
         and (
             not cumulative_incidence_svg_required
@@ -1625,6 +1674,8 @@ def ensure_svg_artifact(settings: Settings, analysis_id: str) -> Path:
     payload["render_svg"] = True
     payload["svg_path"] = str(svg_path)
     payload["cox_forest_svg_path"] = str(cox_svg_path)
+    payload["cox_univariable_svg_path"] = str(cox_univariable_svg_path)
+    payload["cox_multivariable_svg_path"] = str(cox_multivariable_svg_path)
     payload["continuous_effect_svg_path"] = str(continuous_svg_path)
     payload["cumulative_incidence_svg_path"] = str(
         cumulative_incidence_svg_path
@@ -1673,6 +1724,7 @@ def write_methodology_txt(
     sample_selection = metrics.get("sample_selection") or {}
     continuous_plot_style = plot_style.get("continuous") or {}
     cox_forest_style = plot_style.get("cox_forest") or {}
+    cox_model_layout = cox_forest_style.get("model_layout") or "combined"
     interpretation_lines = interpretation_limitations(
         request_payload=request_payload,
         metrics=metrics,
@@ -1803,8 +1855,11 @@ def write_methodology_txt(
         f"- Cox forest lower-hazard color: {cox_forest_style.get('lower_hazard_color') or '#1f6f8b'}",
         f"- Cox forest higher-hazard color: {cox_forest_style.get('higher_hazard_color') or '#b94d48'}",
         f"- Cox forest reference color: {cox_forest_style.get('reference_color') or '#7b8582'}",
+        f"- Cox forest arrangement: {cox_model_layout}.",
         f"- Cox forest title shown: {'yes' if cox_forest_style.get('show_title', True) else 'no'}",
         f"- Cox forest title text: {cox_forest_style.get('plot_title') or 'Cox proportional hazards models'}",
+        f"- Univariable Cox forest title text: {cox_forest_style.get('univariable_plot_title') or 'Univariable Cox model'}",
+        f"- Multivariable Cox forest title text: {cox_forest_style.get('multivariable_plot_title') or 'Multivariable Cox models'}",
         f"- Cox forest X-axis title: {cox_forest_style.get('x_axis_title') or 'Hazard ratio (log scale)'}",
         f"- Font family: {plot_style.get('font_family') or 'sans'}",
         f"- Plot aspect: {plot_style.get('plot_aspect') or 'rectangular'}",
@@ -1817,6 +1872,13 @@ def write_methodology_txt(
         "- PNG contains the rendered Kaplan-Meier plot generated at analysis time.",
         "- SVG contains the rendered Kaplan-Meier plot and is generated on demand when requested for download.",
         "- Cox PNG/SVG contains the grouped proportional-hazards model forest plot when at least one model is evaluable.",
+        (
+            "- Separate Cox PNG/SVG files contain the univariable model and all "
+            "evaluable adjusted (multivariable) grouped models as distinct "
+            "figures; a family is omitted when none of its models is evaluable."
+            if cox_model_layout == "separate"
+            else "- Separate Cox forest files were not requested."
+        ),
         "- Continuous PNG/SVG contains the restricted cubic spline effect profile when the spline model is evaluable.",
         csv_methodology_text(request_payload),
         "- This TXT file contains the parameter-specific methods text.",

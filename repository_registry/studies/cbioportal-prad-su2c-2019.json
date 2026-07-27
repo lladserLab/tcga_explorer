@@ -1,0 +1,85 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-prad-su2c-2019",
+    "cancer_code": "PRAD",
+    "name": "Metastatic prostate adenocarcinoma (SU2C/PCF, 2019)",
+    "description": "Independent metastatic castration-resistant prostate cancer cohort with capture RNA-seq and overall survival.",
+    "cohort_context": "Metastatic castration-resistant prostate cancer; context-specific and not population-matched to primary TCGA-PRAD.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "prad_su2c_2019",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/prad_su2c_2019",
+    "publication_citation": "Abida et al. Proc Natl Acad Sci USA 2019",
+    "publication_id": "PMID:31061129",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "disease_context": "Metastatic castration-resistant prostate cancer",
+      "study_design": "SU2C/PCF Dream Team advanced prostate cancer cohort",
+      "curation_note": "The capture RNA-seq profile is used; polyA and capture profiles are not combined."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/prad_su2c_2019",
+    "files": {
+      "expression": "data_mrna_seq_fpkm_capture.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_fpkm_capture.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "TISSUE_SITE",
+    "sample_type_default": "Metastatic tumor",
+    "sample_role": "Metastatic tumor biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.UNIQUE_PAPER_SAMPLES",
+        "include": ["YES"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": ["sample.GLEASON_SCORE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": [
+      "sample.AGE_AT_PROCUREMENT",
+      "patient.AGE_AT_DIAGNOSIS"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm_capture",
+    "label": "log2(capture FPKM + 1)",
+    "source_unit": "FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The source provides non-negative capture RNA-seq FPKM values. TCGA-TRACE applies log2(FPKM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

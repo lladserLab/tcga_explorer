@@ -1,0 +1,119 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-acc-jouinot-2022",
+    "cancer_code": "ACC",
+    "name": "Primary adrenocortical carcinoma QuantSeq cohort (2022)",
+    "description": "Independent French and German primary adrenocortical-carcinoma cohort with FFPE QuantSeq 3' bulk RNA-seq and individual OS and DFS follow-up.",
+    "cohort_context": "Operated primary adrenocortical carcinomas from Cochin Hospital and University Hospital Wuerzburg. Adenomas, tumors of uncertain malignant potential and duplicate intratumor regions are excluded before analysis.",
+    "source_provider": "europe_pmc_supplement",
+    "source_accession": "PMC9066577",
+    "source_url": "https://europepmc.org/article/PMC/9066577",
+    "publication_citation": "Jouinot et al. European Journal of Endocrinology 2022",
+    "publication_id": "PMID:35266879; PMCID:PMC9066577; DOI:10.1530/EJE-21-1228",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Cochin Hospital and University Hospital Wuerzburg",
+      "source_data_system": "Europe PMC open supplementary files",
+      "library_method": "Lexogen QuantSeq 3' mRNA-Seq from FFPE tissue",
+      "curation_note": "Eligibility is fixed before outcome analysis: Diagnosis must equal ACC and Cohort must be training or validation. Rows labeled intratumor_heterogeneity are secondary regions and are excluded, leaving one primary-tumor profile per patient."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC9066577",
+    "publication_date": "2022-03-10",
+    "clinical_member": "supplementary_table_1.xlsx",
+    "expression_member": "supplementary_table_2.csv",
+    "expression_delimiter": ";",
+    "clinical": {
+      "sample_id_column": "Sample_ID",
+      "patient_id_column": "Sample_ID",
+      "sample_type": "Primary adrenal tumor, FFPE",
+      "eligibility_rules": [
+        {
+          "column": "Diagnosis",
+          "include": [
+            "ACC"
+          ],
+          "required": true
+        },
+        {
+          "column": "Cohort",
+          "include": [
+            "training",
+            "validation"
+          ],
+          "required": true
+        }
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary adrenal tumor, FFPE",
+    "sample_role": "Operated primary adrenocortical carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary adrenal tumor, FFPE"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.ENSAT_Stage"
+    ],
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_quantseq_counts",
+    "label": "log2(QuantSeq counts + 1)",
+    "source_unit": "HTSeq raw counts",
+    "transform": "log2p",
+    "analysis_unit": "log2(count + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Published Supplementary Table S2 Transcript_ID field",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols duplicated after case normalization are excluded rather than combined implicitly.",
+    "scale_note": "Published HTSeq count values are non-negative. TCGA-TRACE applies log2(count + 1) once; it does not reproduce the paper's DESeq2 normalization for cross-sample differential-expression testing."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS",
+      "event_column": "OS_event",
+      "time_unit": "months",
+      "time_origin": "Primary tumor surgery",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS",
+      "event_column": "DFS_event",
+      "time_unit": "months",
+      "time_origin": "Primary tumor surgery",
+      "event_definition": "Disease recurrence",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

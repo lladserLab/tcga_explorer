@@ -227,8 +227,19 @@ sensibilidad ordinal.
 
 Tipos de descarga de análisis: `zip`, `continuous_png`, `continuous_svg`,
 `continuous_csv`, `png`, `svg`, `cox_png`, `cox_svg`,
+`cox_univariable_png`, `cox_univariable_svg`, `cox_multivariable_png`,
+`cox_multivariable_svg`,
 `cumulative_incidence_png`, `cumulative_incidence_svg`, `csv`, `json`,
 `audit_json`, `audit_html`, `attestation`, `txt` y `methodology`.
+
+El pipeline v6.15 agrega
+`plot_style.cox_forest.model_layout: "combined" | "separate"`. `combined`
+continúa siendo el valor por defecto. `separate` crea un forest univariado
+adicional y otro con todos los modelos multivariables ajustados que hayan
+podido estimarse; cada archivo se omite si su familia no es evaluable. Los
+campos opcionales `univariable_plot_title` y `multivariable_plot_title`
+personalizan esos títulos. `cox_png` y `cox_svg` se conservan para
+compatibilidad retroactiva.
 
 Desde la versión v6.0, cada análisis de un gen o de una firma calcula primero
 un Cox por +1 desviación estándar intranálisis del score, usando toda la

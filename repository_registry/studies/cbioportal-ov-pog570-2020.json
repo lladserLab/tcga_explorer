@@ -1,0 +1,81 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-ov-pog570-2020",
+    "cancer_code": "OV",
+    "name": "Advanced high-grade serous ovarian cancer (POG570, 2020)",
+    "description": "Histology-specific subset of the independent POG570 pan-cancer cohort with whole-transcriptome sequencing and linked overall survival.",
+    "cohort_context": "Advanced or metastatic high-grade serous ovarian cancer; this treatment-exposed cohort is not population-matched to primary TCGA-OV tumors.",
+    "source_provider": "cbioportal_api",
+    "source_accession": "pog570_bcgsc_2020:HGSOC",
+    "source_url": "https://www.cbioportal.org/study/summary?id=pog570_bcgsc_2020",
+    "publication_citation": "Pleasance et al. Nature Cancer 2020",
+    "publication_id": "PMID:35121966",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Prospective precision-oncology cohort",
+      "source_program": "BC Cancer Personalized OncoGenomics",
+      "curation_note": "Only samples annotated with the HGSOC OncoTree code are requested from the public molecular profile. The complete source clinical payload remains in the audit bundle."
+    }
+  },
+  "source": {
+    "provider": "cbioportal_api",
+    "study_id": "pog570_bcgsc_2020",
+    "molecular_profile_id": "pog570_bcgsc_2020_rna_seq_mrna",
+    "sample_list_id": "pog570_bcgsc_2020_rna_seq_mrna",
+    "gene_batch_size": 500,
+    "sample_eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["HGSOC"],
+        "required": true
+      }
+    ],
+    "license_evidence_url": "https://raw.githubusercontent.com/cBioPortal/datahub/master/README.md"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Advanced tumor biopsy",
+    "sample_role": "Advanced or metastatic HGSOC biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["HGSOC"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": ["patient.GENDER"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "log2_rpkm",
+    "label": "log2(RPKM + 1)",
+    "source_unit": "RPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(RPKM + 1)",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "Repeated rows with the same Entrez identifier are averaged sample-wise before transformation; different identifiers are never merged implicitly."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial diagnosis as represented in the source cohort",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

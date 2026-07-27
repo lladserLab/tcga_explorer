@@ -3,8 +3,9 @@ import json
 
 import httpx
 
-from app.main import app, application_release_identity, settings
+from app.main import analysis_out, app, application_release_identity, settings
 from app.mcp_server import mcp, tcga_get_immune_screen
+from app.models import AnalysisJob
 
 
 IMMUNE_SCREEN_ID = "immune_contract_fixture"
@@ -68,6 +69,52 @@ def test_application_release_identity_is_explicit_and_trimmed(monkeypatch):
         "commit": "abc123",
         "ref": "v1.2.3",
     }
+
+
+def test_analysis_result_exposes_separate_cox_downloads(
+    monkeypatch,
+    tmp_path,
+):
+    analysis_id = "split-cox-fixture"
+    analysis_dir = tmp_path / analysis_id
+    analysis_dir.mkdir()
+    (analysis_dir / "cox_univariable.png").write_bytes(b"png")
+    (analysis_dir / "cox_multivariable.png").write_bytes(b"png")
+    monkeypatch.setattr(settings, "artifact_dir", tmp_path)
+    job = AnalysisJob(
+        id=analysis_id,
+        params_hash="split-cox-hash",
+        status="completed",
+        cohort="TCGA-LIHC",
+        dataset_id=None,
+        dataset_release_id=None,
+        gene_symbol="CDC20",
+        cutpoint_method="median",
+        request_payload={"expression_scale": "log2_tpm"},
+        metrics={},
+        warnings=[],
+        png_path=str(analysis_dir / "plot.png"),
+        svg_path=None,
+        csv_path=str(analysis_dir / "raw_data.csv"),
+        json_path=str(analysis_dir / "metrics.json"),
+        error=None,
+        cached=False,
+    )
+
+    downloads = analysis_out(job).downloads
+
+    assert downloads["cox_univariable_png"].endswith(
+        "/download/cox_univariable_png"
+    )
+    assert downloads["cox_univariable_svg"].endswith(
+        "/download/cox_univariable_svg"
+    )
+    assert downloads["cox_multivariable_png"].endswith(
+        "/download/cox_multivariable_png"
+    )
+    assert downloads["cox_multivariable_svg"].endswith(
+        "/download/cox_multivariable_svg"
+    )
 
 
 def test_openapi_contains_only_stable_public_v1_routes():

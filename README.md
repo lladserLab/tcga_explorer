@@ -92,12 +92,15 @@ See the [English CLI guide](docs/CLI.md) or the
 The **Repository** module tracks independent public bulk RNA-seq cohorts
 against all 33 TCGA cancer types. A screening hit is not analyzable until its
 TCGA independence, license, expression scale, patient linkage, endpoint event
-count and immutable checksums pass curation and automated QC.
+and censoring counts, gene coverage and immutable checksums pass curation and
+automated QC.
 
-The initial published releases cover metastatic melanoma and metastatic
-bladder cancer. Survival, Compare and Multiverse can use those releases;
-Pan-cancer remains TCGA-only and no cross-study pooling or silent expression
-harmonization is performed. See the
+The current registry covers 25 cancer types through reviewed cBioPortal, GDC,
+GEO, Europe PMC and ICGC releases. Eight types remain documented evidence gaps
+because the best public leads are arrays, controlled-access, too small or lack
+patient-level survival fields. Survival, Compare and Multiverse can use the
+published releases; Pan-cancer remains TCGA-only and no cross-study pooling or
+silent expression harmonization is performed. See the
 [repository curation and deployment guide](docs/EXTERNAL_RNASEQ_REPOSITORY.md).
 
 The web application's **Run history** module is opt-in and browser-local until

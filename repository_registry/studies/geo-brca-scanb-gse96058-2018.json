@@ -1,0 +1,100 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-scanb-gse96058-2018",
+    "cancer_code": "BRCA",
+    "name": "Population-based breast cancer (SCAN-B)",
+    "description": "Independent population-based primary breast cancer RNA-seq cohort with GEO-published gene expression and overall-survival follow-up.",
+    "cohort_context": "Prospective SCAN-B validation cohort of nonmetastatic primary unilateral breast cancers from Sweden. Technical replicates are excluded and the cohort remains separate from TCGA-BRCA.",
+    "source_provider": "geo",
+    "source_accession": "GSE96058",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE96058",
+    "publication_citation": "Brueffer et al. JCO Precision Oncology 2018",
+    "publication_id": "PMID:32913985; DOI:10.1200/PO.17.00135",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Sweden Cancerome Analysis Network - Breast",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "redistribution_note": "The processed public matrix is analyzable in TCGA-TRACE, but matrix downloads remain disabled because GEO access does not by itself establish redistribution rights.",
+      "curation_note": "Only titles matching F followed by an integer are retained; the 136 technical-replicate columns are excluded. GEO states that gene-level FPKM was collapsed to unique symbols, offset by 0.1 and log2-transformed."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE96058",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE96nnn/GSE96058/suppl/GSE96058_gene_expression_3273_samples_and_136_replicates_transformed.csv.gz",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE96nnn/GSE96058/soft/GSE96058_family.soft.gz",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "F[0-9]+",
+    "expected_primary_samples": 3273,
+    "expected_expression_columns": 3409,
+    "time_characteristic": "overall survival days",
+    "event_characteristic": "overall survival event",
+    "age_characteristic": "age at diagnosis",
+    "grade_characteristic": "nhg",
+    "sex_default": "female",
+    "sample_type": "Primary Tumor"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm_offset_0_1",
+    "label": "log2(FPKM + 0.1)",
+    "source_unit": "FPKM",
+    "transform": "identity",
+    "analysis_unit": "log2(FPKM + 0.1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GEO GSE96058 supplied unique gene symbols",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The publication states that transcript FPKM values were collapsed to 30,865 exact gene-symbol strings. Two capitalization-only symbol pairs remain in the file; all rows for those ambiguous canonical symbols are excluded rather than merged implicitly.",
+    "stream_source_order": true,
+    "scale_note": "Values are retained exactly at the GEO-supplied log2(FPKM + 0.1) scale; TCGA-TRACE applies no second transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Breast cancer diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -16,6 +16,7 @@ A published release must satisfy all of the following:
 - deterministic sample-to-patient linkage;
 - at least 10 patients with both expression and one usable endpoint;
 - at least 5 events for one endpoint;
+- at least 5 censored observations for the same endpoint;
 - at least 10,000 unique mapped gene symbols;
 - immutable source snapshot, file checksums and derived-matrix checksum;
 - one prespecified sample-selection rank per source sample.
@@ -39,20 +40,68 @@ The 33-cancer ledger uses distinct states:
 
 Candidate detection never changes a cancer type to `available`.
 
-## Current releases
+## Current coverage
 
-| Cancer | Dataset | Release | Patients | Events | Genes | Expression |
-| --- | --- | --- | ---: | ---: | ---: | --- |
-| SKCM | DFCI metastatic melanoma 2015 | `cbioportal-skcm-dfci-2015-86690e1ed975` | 40 | 27 OS | 21,623 | log2(RPKM + 1), transformed by TCGA-TRACE from source RPKM |
-| BLCA | IMvigor210 metastatic bladder cancer | `cbioportal-blca-iatlas-imvigor210-2017-1da5c747e4fd` | 347 | 231 OS | 38,355 | iAtlas TPM profile preserved at the supplied scale |
+As of 27 July 2026, 25 of the 33 TCGA cancer types have at least one
+independent release that passes the complete policy. Counts below refer to the
+default usable endpoint; additional endpoints remain available where listed
+in each release manifest.
 
-The BLCA DataHub profile is named TPM, but its supplied values are bounded
-near 22 and the exact upstream transform is not stated in the profile
-metadata. The release therefore records `identity`, exposes a scale caveat and
-does not claim that the analysis values are unlogged TPM.
+| Cancer | Dataset ID | Patients | Endpoint events | Genes | Expression |
+| --- | --- | ---: | ---: | ---: | --- |
+| ACC | `pmc-acc-jouinot-2022` | 85 | 33 OS | 39,736 | log2(count + 1) |
+| BLCA | `cbioportal-blca-iatlas-imvigor210-2017` | 347 | 231 OS | 38,355 | supplied iAtlas TPM profile |
+| BRCA | `geo-brca-scanb-gse96058-2018` | 3,273 | 336 OS | 30,861 | log2(FPKM + 0.1) |
+| CESC | `gdc-cesc-htmcp-cc-2020` | 118 | 74 OS | 59,317 | log2(TPM + 1) |
+| CHOL | `pmc-chol-ahn-2019` | 22 | 13 OS | 55,531 | log2(RPKM + 1) |
+| COAD | `cbioportal-coad-cptac-2019` | 100 | 8 OS | 12,720 | supplied log2 RSEM-UQ |
+| DLBC | `gdc-dlbc-nciccr-2018` | 234 | 98 OS | 59,317 | log2(TPM + 1) |
+| ESCA | `pmc-esca-vanderzalm-2024` | 85 | 43 OS | 52,031 | supplied DESeq2 VST / RUVg |
+| GBM | `gdc-gbm-cptac-2021` | 188 | 141 OS | 59,317 | log2(TPM + 1) |
+| HNSC | `cbioportal-hnsc-cptac-gdc-2025` | 104 | 39 OS | 40,636 | log2(TPM + 1) |
+| KIRC | `cbioportal-kirc-iatlas-choueiri-2016` | 16 | 5 OS | 38,355 | supplied log2 UQ counts |
+| LAML | `cbioportal-laml-ohsu-2022` | 440 | 243 OS | 16,823 | supplied log2 RPKM |
+| LGG | `cbioportal-lgg-glass-2022` | 23 | 14 OS | 24,617 | log2(TPM + 1) |
+| LIHC | `icgc-lihc-liri-jp-2019` | 231 | 42 OS | 13,405 | log2(FPKM + 1) |
+| LUAD | `cbioportal-luad-cas-2020` | 51 | 15 OS | 10,611 | log2(FPKM + 1) |
+| LUSC | `cbioportal-lusc-cptac-gdc-2025` | 103 | 32 OS | 40,636 | log2(TPM + 1) |
+| OV | `cbioportal-ov-pog570-2020` | 12 | 6 OS | 38,168 | log2(RPKM + 1) |
+| PAAD | `cbioportal-paad-iatlas-prince-2022` | 63 | 15 OS | 38,355 | supplied log2 UQ counts |
+| PCPG | `cbioportal-pcpg-a5-2025` | 68 | 19 OS | 28,475 | supplied TMM log2 CPM |
+| PRAD | `cbioportal-prad-su2c-2019` | 65 | 39 OS | 18,374 | log2(FPKM + 1) |
+| READ | `cbioportal-read-msk-2022` | 97 | 13 OS | 19,100 | supplied RNA-seq scale |
+| SARC | `cbioportal-sarc-pog570-2020` | 31 | 23 OS | 38,168 | log2(RPKM + 1) |
+| SKCM | `cbioportal-skcm-dfci-2015` | 40 | 27 OS | 21,623 | log2(RPKM + 1) |
+| STAD | `gdc-stad-cptac-2026` | 138 | 18 OS | 59,317 | log2(TPM + 1) |
+| UCEC | `cbioportal-ucec-cptac-gdc-2025` | 225 | 34 OS | 40,636 | log2(TPM + 1) |
 
-Both current DataHub study directories include an ODbL 1.0 license. Matrix
-downloads are exposed only when the release records redistribution as allowed.
+The precise release ID, source snapshot, checksums, endpoint definitions,
+scale caveat and license are authoritative in each manifest and API response.
+A profile name such as TPM is not interpreted as an untransformed unit when
+the source does not document that property. Matrix downloads are exposed only
+when the release records redistribution as allowed.
+
+## Documented evidence gaps
+
+Eight cancer types currently lack an eligible open cohort. These are
+evidence gaps under the stated policy, not claims that no relevant biological
+data exist.
+
+| Cancer | Best public lead reviewed | Why it is not a release |
+| --- | --- | --- |
+| KICH | CPTAC-3; GSE15641 | Too few chromophobe RNA-seq participants; the outcome cohort is an expression array. |
+| KIRP | GSE180777 | 53 paired tumors have RNA-seq, but no patient-level survival time/status is public. |
+| MESO | EGAS00001001563; GSE274983 | The large RNA-seq cohort is controlled-access; the open 18-sample series lacks individual survival endpoints. |
+| TGCT | GSE99420 | The relapse-linked cohort is an expression array, not RNA-seq. |
+| THCA | GSE310793; REBC-THYR | Large RNA-seq matrices are public, but patient-level survival time/status is not. |
+| THYM | GSE29695; GSE228033 | The follow-up cohort is an array; the sequencing cohort is single-cell and too small. |
+| UCS | GSE128630 | Processed RNA-seq is public, but individual survival endpoints are absent and GEO marks the record incomplete. |
+| UVM | GSE22138; GSE138433 | The established survival cohort is an array; the sequencing cohort is single-cell and below the patient minimum. |
+
+The reviewed accessions, rejection reason and review date are machine-readable
+in `repository_registry/coverage.json`. A cancer can move from
+`evidence_gap` to `available` without changing the policy when a suitable
+public release appears.
 
 ## Tracked registry and untracked data
 
@@ -105,12 +154,12 @@ This screen excludes obvious TCGA, TARGET, PCAWG and cell-line accessions,
 requires at least 10 reported RNA-seq samples, and looks for paired patient
 survival status/time fields. Every hit still requires manual review.
 
-Build a reviewed DataHub study specification:
+Build any reviewed study specification using its declared adapter:
 
 ```bash
 docker compose run --rm \
   -v "$PWD/external_repository_staging:/staging" \
-  backend python3 -m app.repository.cli build-cbioportal \
+  backend python3 -m app.repository.cli build-study \
   --spec /app/repository_registry/studies/STUDY.json \
   --output /staging/DATASET_ID
 ```
@@ -211,12 +260,19 @@ GET /datasets/{dataset_id}/download/{manifest|qc|license|matrix|matrix-metadata|
 Every dataset response exposes the active release, QC counts, license,
 publication, context and default expression-layer semantics.
 
-## Adding other sources
+## Source adapters
 
-The bundle schema is source-independent. A new source adapter must produce the
+The current adapters ingest reviewed releases from:
+
+- cBioPortal API and DataHub snapshots;
+- NCI GDC projects independent of TCGA;
+- NCBI GEO family metadata and supplementary matrices;
+- Europe PMC clinical supplements paired with publication or GEO expression;
+- open ICGC 25K Release 28 objects.
+
+The bundle schema remains source-independent. A new adapter must produce the
 same canonical bundle and pass `validate_bundle`; it must not write directly
-to repository database tables. GEO, ArrayExpress or recount-derived adapters
-can therefore be added later without changing the analysis contract.
+to repository database tables.
 
 Counts may be retained only when the adapter declares and implements the exact
 analysis transform. Normalized matrices are retained at their documented

@@ -3,8 +3,12 @@ from __future__ import annotations
 from typing import Any
 
 
-ANALYSIS_PIPELINE_VERSION = "server-attested-competing-risk-contract-v6.14"
-COMBINED_SIGNATURE_PIPELINE_VERSION = "server-attested-competing-risk-contract-v4.6"
+ANALYSIS_PIPELINE_VERSION = (
+    "server-attested-competing-risk-split-cox-contract-v6.15"
+)
+COMBINED_SIGNATURE_PIPELINE_VERSION = (
+    "server-attested-competing-risk-split-cox-contract-v4.7"
+)
 MULTIVERSE_PIPELINE_VERSION = "server-attested-prespecified-multiverse-contract-v2.3"
 PANCANCER_PIPELINE_VERSION = "server-attested-common-scale-reml-hksj-contract-v3.2"
 SESSION_HISTORY_PIPELINE_VERSION = (

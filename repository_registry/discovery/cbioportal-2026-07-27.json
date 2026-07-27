@@ -1,0 +1,3566 @@
+{
+  "cancers": [
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "ACC",
+      "coverage_status": "search_in_progress",
+      "name": "Adrenocortical carcinoma",
+      "rejection_count": 4,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "acc",
+          "reason": "disallowed_accession",
+          "sample_count": 92,
+          "study_id": "acc_tcga",
+          "study_name": "Adrenocortical Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "acc",
+          "reason": "disallowed_accession",
+          "sample_count": 92,
+          "study_id": "acc_tcga_gdc",
+          "study_name": "Adrenocortical Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "acc",
+          "reason": "disallowed_accession",
+          "sample_count": 92,
+          "study_id": "acc_tcga_pan_can_atlas_2018",
+          "study_name": "Adrenocortical Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "acyc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1049,
+          "study_id": "acc_2019",
+          "study_name": "Adenoid Cystic Carcinoma Project (J Clin Invest 2019)"
+        }
+      ],
+      "tcga_cohort": "TCGA-ACC"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "blca",
+          "citation": "Rosenberg et al. ESMO Open 2024",
+          "dataset_id": "cbioportal-blca-iatlas-imvigor210-2017",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-11 00:57:09",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "39642637,27939400",
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "blca_iatlas_imvigor210_2017_rna_seq_mrna",
+              "name": "mRNA expression (TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 347,
+          "sample_count": 347,
+          "source_url": "https://www.cbioportal.org/study/summary?id=blca_iatlas_imvigor210_2017",
+          "study_id": "blca_iatlas_imvigor210_2017",
+          "study_name": "Metastatic Bladder Urothelial Carcinoma (IMvigor210 Phase II Trial, ESMO Open. 2024) - iAtlas Harmonized"
+        }
+      ],
+      "code": "BLCA",
+      "coverage_status": "available",
+      "name": "Bladder urothelial carcinoma",
+      "rejection_count": 17,
+      "rejection_reasons": {
+        "disallowed_accession": 6,
+        "fewer_than_10_rna_samples": 1,
+        "no_eligible_bulk_rna_profile": 10
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 476,
+          "study_id": "blca_msk_tcga_2020",
+          "study_name": "Bladder Cancer (MSK/TCGA, Eur Urol 2020)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 413,
+          "study_id": "blca_tcga",
+          "study_name": "Bladder Urothelial Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 413,
+          "study_id": "blca_tcga_gdc",
+          "study_name": "Bladder Urothelial Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 411,
+          "study_id": "blca_tcga_pan_can_atlas_2018",
+          "study_name": "Bladder Urothelial Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 131,
+          "study_id": "blca_tcga_pub",
+          "study_name": "Bladder Urothelial Carcinoma (TCGA, Nature 2014)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "disallowed_accession",
+          "sample_count": 413,
+          "study_id": "blca_tcga_pub_2017",
+          "study_name": "Bladder Cancer (TCGA, Cell 2017)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 5,
+          "sample_count": 90,
+          "study_id": "blca_pdx_msk_2025",
+          "study_name": "Urothelial Cancer Patient Derived Organoids (MSK, 2025)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 192,
+          "study_id": "blca_bcan_hcrn_2022",
+          "study_name": "Urothelial Carcinoma (BCAN/HCRN, Nat Commun 2022)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 99,
+          "study_id": "blca_bgi",
+          "study_name": "Bladder Urothelial Carcinoma (BGI, Nat Genet 2013)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 72,
+          "study_id": "blca_cornell_2016",
+          "study_name": "Urothelial Carcinoma (Cornell/Trento, Nat Gen 2016)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 50,
+          "study_id": "blca_dfarber_mskcc_2014",
+          "study_name": "Bladder Urothelial Carcinoma (DFCI/MSK, Cancer Discov 2014)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 184,
+          "study_id": "blca_msk_2024",
+          "study_name": "Bladder Urothelial Carcinoma SWOG S1314 Trial (MSK, JCO Precis Oncol 2024)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 308,
+          "study_id": "blca_msk_2025",
+          "study_name": "Bladder Cancer (MSK, Eur Urol Open Sci 2025)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 97,
+          "study_id": "blca_mskcc_solit_2012",
+          "study_name": "Bladder Cancer (MSK, J Clin Onco 2013)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 109,
+          "study_id": "blca_mskcc_solit_2014",
+          "study_name": "Bladder Cancer (MSK, Eur Urol 2014)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 105,
+          "study_id": "blca_nmibc_2017",
+          "study_name": "Nonmuscle Invasive Bladder Cancer (MSK Eur Urol 2017)"
+        },
+        {
+          "cancer_type_id": "blca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 34,
+          "study_id": "blca_plasmacytoid_mskcc_2016",
+          "study_name": "Bladder Cancer (MSK, Nat Genet 2016)"
+        }
+      ],
+      "tcga_cohort": "TCGA-BLCA"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "brca",
+          "citation": "Anders et al. J Immunother Cancer 2022",
+          "dataset_id": "cbioportal-brca-iatlas-anders-2022",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-11 00:54:57",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "35121644",
+          "reference_genome": "hg38",
+          "review_status": "registered_spec",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (log TPM)",
+              "id": "brca_iatlas_anders_2022_rna_seq_mrna",
+              "name": "mRNA expression (log TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 31,
+          "sample_count": 31,
+          "source_url": "https://www.cbioportal.org/study/summary?id=brca_iatlas_anders_2022",
+          "study_id": "brca_iatlas_anders_2022",
+          "study_name": "Metastatic Triple Negative Breast Cancer (UNC Phase II Trial, J Immunother Cancer 2022) - iAtlas Harmonized"
+        }
+      ],
+      "code": "BRCA",
+      "coverage_status": "search_in_progress",
+      "name": "Breast invasive carcinoma",
+      "rejection_count": 32,
+      "rejection_reasons": {
+        "disallowed_accession": 5,
+        "fewer_than_10_rna_samples": 1,
+        "no_eligible_bulk_rna_profile": 21,
+        "no_recognized_survival_endpoint_pair": 5
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "brca",
+          "reason": "disallowed_accession",
+          "sample_count": 1108,
+          "study_id": "brca_tcga",
+          "study_name": "Breast Invasive Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "disallowed_accession",
+          "sample_count": 1102,
+          "study_id": "brca_tcga_gdc",
+          "study_name": "Invasive Breast Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "disallowed_accession",
+          "sample_count": 1084,
+          "study_id": "brca_tcga_pan_can_atlas_2018",
+          "study_name": "Breast Invasive Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "disallowed_accession",
+          "sample_count": 825,
+          "study_id": "brca_tcga_pub",
+          "study_name": "Breast Invasive Carcinoma (TCGA, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "disallowed_accession",
+          "sample_count": 818,
+          "study_id": "brca_tcga_pub2015",
+          "study_name": "Breast Invasive Carcinoma (TCGA, Cell 2015)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 75,
+          "study_id": "brca_dldccc_2022",
+          "study_name": "Triple Negative Breast Cancer (DLDCCC, Cancer Discov 2022)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 155,
+          "study_id": "brca_aurora_2023",
+          "study_name": "Metastatic Breast Cancer (AURORA US Network, Nat Cancer 2023)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 65,
+          "study_id": "brca_bccrc",
+          "study_name": "Breast Invasive Carcinoma (British Columbia, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 117,
+          "study_id": "brca_bccrc_xenograft_2014",
+          "study_name": "Breast Cancer Xenografts (British Columbia, Nature 2015)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 103,
+          "study_id": "brca_broad",
+          "study_name": "Breast Invasive Carcinoma (Broad, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 59,
+          "study_id": "brca_dfci_2020",
+          "study_name": "Metastatic Breast Cancer (DFCI, Cancer Discov 2020)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 69,
+          "study_id": "brca_fuscc_2020",
+          "study_name": "Triple-Negative Breast Cancer (FUSCC, Cell Research 2020)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 5,
+          "study_id": "brca_hta9_htan_2022",
+          "study_name": "Breast Cancer (HTAN, 2022)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 216,
+          "study_id": "brca_igr_2015",
+          "study_name": "Metastatic Breast Cancer (INSERM, PLoS Med 2016)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 5,
+          "study_id": "brca_jup_msk_2020",
+          "study_name": "Juvenile Papillomatosis and Breast Cancer (MSK,J Pathol. 2015)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 145,
+          "study_id": "brca_mapk_hp_msk_2021",
+          "study_name": "MAPK on resistance to anti-HER2 therapy for breast cancer (MSK, Nat Commun. 2022)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 2509,
+          "study_id": "brca_metabric",
+          "study_name": "Breast Cancer (METABRIC, Nature 2012 & Nat Commun 2016)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 527,
+          "study_id": "brca_msk_2025",
+          "study_name": "Breast Carcinoma (MSK, NPJ Precis Oncol 2025)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 70,
+          "study_id": "brca_mskcc_2019",
+          "study_name": "Breast Cancer (MSK, NPJ Breast Cancer 2019)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 60,
+          "study_id": "brca_pareja_msk_2020",
+          "study_name": "Breast Cancer (MSK, Clinical Cancer Res 2020)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 100,
+          "study_id": "brca_sanger",
+          "study_name": "Breast Invasive Carcinoma (Sanger, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 141,
+          "study_id": "breast_alpelisib_2020",
+          "study_name": "Breast Cancer (MSK, Nature Cancer 2020)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1365,
+          "study_id": "breast_ink4_msk_2021",
+          "study_name": "Metastatic Breast Cancer (MSK, Cancer Discovery 2022)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1918,
+          "study_id": "breast_msk_2018",
+          "study_name": "Breast Cancer (MSK, Cancer Cell 2018)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 3879,
+          "study_id": "breast_msk_2025",
+          "study_name": "Breast Cancer (MSK, Nat Genet 2025)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 50,
+          "study_id": "breast_msk_cfdna_2026",
+          "study_name": "Breast Cancer ctDNA (MSK, 2026)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 25,
+          "study_id": "ilc_msk_2023",
+          "study_name": "Breast Invasive Lobular Carcinoma (MSK, NPJ Precis Oncol 2024)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 122,
+          "sample_count": 122,
+          "study_id": "brca_cptac_2020",
+          "study_name": "Proteogenomic landscape of breast cancer (CPTAC, Cell 2020)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 157,
+          "sample_count": 379,
+          "study_id": "brca_mbcproject_2022",
+          "study_name": "The Metastatic Breast Cancer Project (Provisional, December 2021)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 146,
+          "sample_count": 237,
+          "study_id": "brca_mbcproject_wagle_2017",
+          "study_name": "The Metastatic Breast Cancer Project (Archived, 2020)"
+        },
+        {
+          "cancer_type_id": "brca",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 168,
+          "sample_count": 187,
+          "study_id": "brca_smc_2018",
+          "study_name": "Breast Cancer (SMC 2018)"
+        },
+        {
+          "cancer_type_id": "breast",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 133,
+          "sample_count": 154,
+          "study_id": "breast_cptac_gdc",
+          "study_name": "Breast Cancer (CPTAC GDC, 2025)"
+        }
+      ],
+      "tcga_cohort": "TCGA-BRCA"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "CESC",
+      "coverage_status": "search_in_progress",
+      "name": "Cervical squamous cell carcinoma and endocervical adenocarcinoma",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "cesc",
+          "reason": "disallowed_accession",
+          "sample_count": 310,
+          "study_id": "cesc_tcga",
+          "study_name": "Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "cesc",
+          "reason": "disallowed_accession",
+          "sample_count": 309,
+          "study_id": "cesc_tcga_gdc",
+          "study_name": "Cervical Squamous Cell Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "cesc",
+          "reason": "disallowed_accession",
+          "sample_count": 297,
+          "study_id": "cesc_tcga_pan_can_atlas_2018",
+          "study_name": "Cervical Squamous Cell Carcinoma (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-CESC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "CHOL",
+      "coverage_status": "search_in_progress",
+      "name": "Cholangiocarcinoma",
+      "rejection_count": 8,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 5
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "chol",
+          "reason": "disallowed_accession",
+          "sample_count": 51,
+          "study_id": "chol_tcga",
+          "study_name": "Cholangiocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "disallowed_accession",
+          "sample_count": 51,
+          "study_id": "chol_tcga_gdc",
+          "study_name": "Cholangiocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "disallowed_accession",
+          "sample_count": 36,
+          "study_id": "chol_tcga_pan_can_atlas_2018",
+          "study_name": "Cholangiocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 489,
+          "study_id": "chol_icgc_2017",
+          "study_name": "Cholangiocarcinoma (ICGC, Cancer Discov 2017)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 40,
+          "study_id": "chol_jhu_2013",
+          "study_name": "Intrahepatic Cholangiocarcinoma (JHU, Nat Genet 2013)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 195,
+          "study_id": "chol_msk_2018",
+          "study_name": "Cholangiocarcinoma (MSK, Clin Cancer Res 2018)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 15,
+          "study_id": "chol_nccs_2013",
+          "study_name": "Cholangiocarcinoma (National Cancer Centre of Singapore, Nat Genet 2013)"
+        },
+        {
+          "cancer_type_id": "chol",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 8,
+          "study_id": "chol_nus_2012",
+          "study_name": "Cholangiocarcinoma (National University of Singapore, Nat Genet 2012)"
+        }
+      ],
+      "tcga_cohort": "TCGA-CHOL"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "coad",
+          "citation": "Vasaikar et al. Cell 2019",
+          "dataset_id": "cbioportal-coad-cptac-2019",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "DFS",
+              "status_column": "DFS_STATUS",
+              "time_column": "DFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-06 00:55:23",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "31031003",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA gene expression (RNA Seq V2 RSEM Upper Quartile Log2(n+1))",
+              "id": "coad_cptac_2019_rna_seq_v2_mrna",
+              "name": "mRNA expression (RNA Seq V2 RSEM UQ Log2)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 106,
+          "sample_count": 110,
+          "source_url": "https://www.cbioportal.org/study/summary?id=coad_cptac_2019",
+          "study_id": "coad_cptac_2019",
+          "study_name": "Colon Cancer (CPTAC-2 Prospective, Cell 2019)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "citation": "Moorman et al. Nature 2025",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-17 17:00:37",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "39478232",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Pseudobulk expression derived from scRNA-seq data. Raw counts were summed across cells per sample, then CPM normalized and log1p transformed.",
+              "id": "crc_hta8_htan_2024_mrna_seq_cpm",
+              "name": "Pseudobulk mRNA expression (log-normalized CPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Pseudobulk expression derived from scRNA-seq data. Raw counts were summed across cells per sample.",
+              "id": "crc_hta8_htan_2024_rna_seq_mrna",
+              "name": "Pseudobulk mRNA expression (raw counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 81,
+          "sample_count": 83,
+          "source_url": "https://www.cbioportal.org/study/summary?id=crc_hta8_htan_2024",
+          "study_id": "crc_hta8_htan_2024",
+          "study_name": "Colorectal Cancer (HTAN MSK, Nature 2025)"
+        }
+      ],
+      "code": "COAD",
+      "coverage_status": "available",
+      "name": "Colon adenocarcinoma",
+      "rejection_count": 21,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "fewer_than_10_rna_samples": 1,
+        "no_eligible_bulk_rna_profile": 14,
+        "no_recognized_survival_endpoint_pair": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "coad",
+          "reason": "disallowed_accession",
+          "sample_count": 463,
+          "study_id": "coad_tcga_gdc",
+          "study_name": "Colon Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "disallowed_accession",
+          "sample_count": 640,
+          "study_id": "coadread_tcga",
+          "study_name": "Colorectal Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "disallowed_accession",
+          "sample_count": 594,
+          "study_id": "coadread_tcga_pan_can_atlas_2018",
+          "study_name": "Colorectal Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "disallowed_accession",
+          "sample_count": 276,
+          "study_id": "coadread_tcga_pub",
+          "study_name": "Colorectal Adenocarcinoma (TCGA, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "coad",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 348,
+          "study_id": "coad_silu_2022",
+          "study_name": "Colon Cancer (Sidra-LUMC AC-ICAM, Nat Med 2023)"
+        },
+        {
+          "cancer_type_id": "coad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 29,
+          "study_id": "coad_caseccc_2015",
+          "study_name": "Colon Adenocarcinoma (CaseCCC, PNAS 2015)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 146,
+          "study_id": "coadread_cass_2020",
+          "study_name": "Colorectal Cancer (CAS Shanghai, Cancer Cell 2020)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 619,
+          "study_id": "coadread_dfci_2016",
+          "study_name": "Colorectal Adenocarcinoma (DFCI, Cell Reports 2016)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 74,
+          "study_id": "coadread_genentech",
+          "study_name": "Colorectal Adenocarcinoma (Genentech, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 138,
+          "study_id": "coadread_mskcc",
+          "study_name": "Colorectal Adenocarcinoma Triplets (MSK, Genome Biol 2014)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 22,
+          "study_id": "coadread_mskresistance_2022",
+          "study_name": "Colorectal Cancer (MSK, Cancer Discovery 2022)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 471,
+          "study_id": "crc_apc_impact_2020",
+          "study_name": "Colorectal Cancer (MSK, Gastroenterology 2020)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 47,
+          "study_id": "crc_dd_2022",
+          "study_name": "Colorectal Cancer (MSK, JCO Precis Oncol 2022)"
+        },
+        {
+          "cancer_type_id": "bowel",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1516,
+          "study_id": "crc_eo_2020",
+          "study_name": "Colorectal Cancer (MSK, JNCI 2021)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1134,
+          "study_id": "crc_msk_2017",
+          "study_name": "Metastatic Colorectal Cancer (MSK, Cancer Cell 2018)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 64,
+          "study_id": "crc_nigerian_2020",
+          "study_name": "Disparities in metastatic colorectal cancer between Africans and Americans (MSK, 2020)"
+        },
+        {
+          "cancer_type_id": "bowel",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 74,
+          "study_id": "crc_orion_2024",
+          "study_name": "Colorectal Adenocarcinoma (DFCI/Orion, BioRxiv 2024)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1015,
+          "study_id": "crc_sysucc_2022",
+          "study_name": "Colorectal Cancer- ChangKang Project (SYSUCC, Nat Commun 2022)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 339,
+          "study_id": "rectal_msk_2019",
+          "study_name": "Rectal Cancer (MSK,Nature Medicine 2019)"
+        },
+        {
+          "cancer_type_id": "coad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 105,
+          "sample_count": 109,
+          "study_id": "coad_cptac_gdc",
+          "study_name": "Colon Adenocarcinoma (CPTAC GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "coadread",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 55,
+          "sample_count": 61,
+          "study_id": "crc_hta11_htan_2021",
+          "study_name": "Pre-cancer Colorectal Polyps (HTAN Vanderbilt, Cell 2021)"
+        }
+      ],
+      "tcga_cohort": "TCGA-COAD"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "DLBC",
+      "coverage_status": "search_in_progress",
+      "name": "Diffuse large B-cell lymphoma",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 2,
+        "no_eligible_bulk_rna_profile": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "dlbclnos",
+          "reason": "disallowed_accession",
+          "sample_count": 48,
+          "study_id": "dlbc_tcga",
+          "study_name": "Lymphoid Neoplasm Diffuse Large B-cell Lymphoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "dlbclnos",
+          "reason": "disallowed_accession",
+          "sample_count": 48,
+          "study_id": "dlbc_tcga_pan_can_atlas_2018",
+          "study_name": "Diffuse Large B-Cell Lymphoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "dlbclnos",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 58,
+          "study_id": "dlbc_broad_2012",
+          "study_name": "Diffuse Large B-Cell Lymphoma (Broad, PNAS 2012)"
+        }
+      ],
+      "tcga_cohort": "TCGA-DLBC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "ESCA",
+      "coverage_status": "search_in_progress",
+      "name": "Esophageal carcinoma",
+      "rejection_count": 4,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "esca",
+          "reason": "disallowed_accession",
+          "sample_count": 186,
+          "study_id": "esca_tcga",
+          "study_name": "Esophageal Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "esca",
+          "reason": "disallowed_accession",
+          "sample_count": 186,
+          "study_id": "esca_tcga_gdc",
+          "study_name": "Esophageal Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "esca",
+          "reason": "disallowed_accession",
+          "sample_count": 182,
+          "study_id": "esca_tcga_pan_can_atlas_2018",
+          "study_name": "Esophageal Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "esca",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 151,
+          "study_id": "esca_broad",
+          "study_name": "Esophageal Adenocarcinoma (DFCI, Nat Genet 2013)"
+        }
+      ],
+      "tcga_cohort": "TCGA-ESCA"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "difg",
+          "citation": "Vaubel et al. Clin Cancer Res 2020",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-07 13:12:46",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "31852831",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "RNAseq RPKM expression",
+              "id": "gbm_mayo_pdx_sarkaria_2019_rna_seq_mrna",
+              "name": "mRNA RNAseq RPKM expression"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 66,
+          "sample_count": 106,
+          "source_url": "https://www.cbioportal.org/study/summary?id=gbm_mayo_pdx_sarkaria_2019",
+          "study_id": "gbm_mayo_pdx_sarkaria_2019",
+          "study_name": "Brain Tumor PDXs (Mayo Clinic, Clin Cancer Res 2020)"
+        },
+        {
+          "cancer_type_id": "adifg",
+          "citation": "Cloughesy et al. Nat Med. 2019",
+          "dataset_id": "cbioportal-gbm-iatlas-prins-2019",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-16 13:44:24",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "30742122",
+          "reference_genome": "hg38",
+          "review_status": "registered_spec",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (log2 upper quartile normalized counts)",
+              "id": "gbm_iatlas_prins_2019_rna_seq_mrna",
+              "name": "mRNA expression (log2 upper quartile normalized counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 30,
+          "sample_count": 30,
+          "source_url": "https://www.cbioportal.org/study/summary?id=gbm_iatlas_prins_2019",
+          "study_id": "gbm_iatlas_prins_2019",
+          "study_name": "Glioblastoma (Randomized Clinical Trial, Nat Med. 2019) - iAtlas Harmonized"
+        }
+      ],
+      "code": "GBM",
+      "coverage_status": "search_in_progress",
+      "name": "Glioblastoma multiforme",
+      "rejection_count": 7,
+      "rejection_reasons": {
+        "disallowed_accession": 5,
+        "no_eligible_bulk_rna_profile": 1,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 619,
+          "study_id": "gbm_tcga",
+          "study_name": "Glioblastoma Multiforme (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 611,
+          "study_id": "gbm_tcga_gdc",
+          "study_name": "Glioblastoma Multiforme (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 592,
+          "study_id": "gbm_tcga_pan_can_atlas_2018",
+          "study_name": "Glioblastoma Multiforme (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 206,
+          "study_id": "gbm_tcga_pub",
+          "study_name": "Glioblastoma (TCGA, Nature 2008)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 577,
+          "study_id": "gbm_tcga_pub2013",
+          "study_name": "Glioblastoma (TCGA, Cell 2013)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 42,
+          "study_id": "gbm_columbia_2019",
+          "study_name": "Glioblastoma (Columbia, Nat Med. 2019)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 99,
+          "sample_count": 99,
+          "study_id": "gbm_cptac_2021",
+          "study_name": "Glioblastoma (CPTAC, Cell 2021)"
+        }
+      ],
+      "tcga_cohort": "TCGA-GBM"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "ohnca",
+          "citation": null,
+          "dataset_id": "cbioportal-hnsc-cptac-gdc-2025",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-14 11:03:33",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": null,
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "ohnca_cptac_gdc_mrna_seq_fpkm",
+              "name": "mRNA Expression (FPKM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq TPM)",
+              "id": "ohnca_cptac_gdc_mrna_seq_tpm",
+              "name": "mRNA Expression (TPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "ohnca_cptac_gdc_rna_seq_mrna",
+              "name": "mRNA Expression"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 170,
+          "sample_count": 172,
+          "source_url": "https://www.cbioportal.org/study/summary?id=ohnca_cptac_gdc",
+          "study_id": "ohnca_cptac_gdc",
+          "study_name": "Head and Neck Carcinoma, Other (CPTAC GDC, 2025)"
+        }
+      ],
+      "code": "HNSC",
+      "coverage_status": "available",
+      "name": "Head and neck squamous cell carcinoma",
+      "rejection_count": 8,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "fewer_than_10_rna_samples": 1,
+        "no_eligible_bulk_rna_profile": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "disallowed_accession",
+          "sample_count": 530,
+          "study_id": "hnsc_tcga",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "disallowed_accession",
+          "sample_count": 530,
+          "study_id": "hnsc_tcga_gdc",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "disallowed_accession",
+          "sample_count": 523,
+          "study_id": "hnsc_tcga_pan_can_atlas_2018",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "disallowed_accession",
+          "sample_count": 279,
+          "study_id": "hnsc_tcga_pub",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (TCGA, Nature 2015)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 94,
+          "study_id": "hnsc_a5consortium_2025",
+          "study_name": "Hereditary SDHB-Mutant Pheochromocytomas and Paragangliomas (A5 Consortium, Nature Comm 2025)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 74,
+          "study_id": "hnsc_broad",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (Broad, Science 2011)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 32,
+          "study_id": "hnsc_jhu",
+          "study_name": "Head and Neck Squamous Cell Carcinoma (Johns Hopkins, Science 2011)"
+        },
+        {
+          "cancer_type_id": "hnsc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 40,
+          "study_id": "hnsc_mdanderson_2013",
+          "study_name": "Oral Squamous Cell Carcinoma (MD Anderson, Cancer Discov 2013)"
+        }
+      ],
+      "tcga_cohort": "TCGA-HNSC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "KICH",
+      "coverage_status": "search_in_progress",
+      "name": "Kidney chromophobe",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "chrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 113,
+          "study_id": "kich_tcga",
+          "study_name": "Kidney Chromophobe (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "chrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 65,
+          "study_id": "kich_tcga_pan_can_atlas_2018",
+          "study_name": "Kidney Chromophobe (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "chrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 66,
+          "study_id": "kich_tcga_pub",
+          "study_name": "Kidney Chromophobe (TCGA, Cancer Cell 2014)"
+        }
+      ],
+      "tcga_cohort": "TCGA-KICH"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "ccrcc",
+          "citation": "Choueiri et al. Clin Cancer Res. 2016",
+          "dataset_id": "cbioportal-kirc-iatlas-choueiri-2016",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-16 13:43:00",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "27169994",
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (log2 upper quartile normalized counts)",
+              "id": "ccrcc_iatlas_choueiri_2016_rna_seq_mrna",
+              "name": "mRNA expression (log2 upper quartile normalized counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 16,
+          "sample_count": 16,
+          "source_url": "https://www.cbioportal.org/study/summary?id=ccrcc_iatlas_choueiri_2016",
+          "study_id": "ccrcc_iatlas_choueiri_2016",
+          "study_name": "Metastatic Renal Clear Cell Carcinoma (Phase 1 Biomarker Trial, Clin Cancer Res. 2016) - iAtlas Harmonized"
+        }
+      ],
+      "code": "KIRC",
+      "coverage_status": "available",
+      "name": "Kidney renal clear cell carcinoma",
+      "rejection_count": 9,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 5
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 537,
+          "study_id": "ccrcc_tcga_gdc",
+          "study_name": "Renal Clear Cell Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 538,
+          "study_id": "kirc_tcga",
+          "study_name": "Kidney Renal Clear Cell Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 512,
+          "study_id": "kirc_tcga_pan_can_atlas_2018",
+          "study_name": "Kidney Renal Clear Cell Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "disallowed_accession",
+          "sample_count": 446,
+          "study_id": "kirc_tcga_pub",
+          "study_name": "Kidney Renal Clear Cell Carcinoma (TCGA, Nature 2013)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 35,
+          "study_id": "ccrcc_dfci_2019",
+          "study_name": "Clear Cell Renal Cell Carcinoma (DFCI, Science 2019)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 79,
+          "study_id": "ccrcc_irc_2014",
+          "study_name": "Kidney Renal Clear Cell Carcinoma (IRC, Nat Genet 2014)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 943,
+          "study_id": "ccrcc_sjuh_2023",
+          "study_name": "Renal Cell Carcinoma (St. James, Clin Cancer Res 2023)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 106,
+          "study_id": "ccrcc_utokyo_2013",
+          "study_name": "Renal Clear Cell Carcinoma (UTokyo, Nat Genet 2013)"
+        },
+        {
+          "cancer_type_id": "ccrcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 98,
+          "study_id": "kirc_bgi",
+          "study_name": "Kidney Renal Clear Cell Carcinoma (BGI, Nat Genet 2012)"
+        }
+      ],
+      "tcga_cohort": "TCGA-KIRC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "KIRP",
+      "coverage_status": "search_in_progress",
+      "name": "Kidney renal papillary cell carcinoma",
+      "rejection_count": 2,
+      "rejection_reasons": {
+        "disallowed_accession": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "prcc",
+          "reason": "disallowed_accession",
+          "sample_count": 293,
+          "study_id": "kirp_tcga",
+          "study_name": "Kidney Renal Papillary Cell Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "prcc",
+          "reason": "disallowed_accession",
+          "sample_count": 283,
+          "study_id": "kirp_tcga_pan_can_atlas_2018",
+          "study_name": "Kidney Renal Papillary Cell Carcinoma (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-KIRP"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "aml",
+          "citation": "Bottomly et al. Cancer Cell 2022",
+          "dataset_id": "cbioportal-laml-ohsu-2022",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-16 15:27:06",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "35868306",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression derived from log2-normalized RPKM values",
+              "id": "aml_ohsu_2022_rna_seq_v2_mrna",
+              "name": "mRNA expression (log2 RNA Seq RPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 698,
+          "sample_count": 942,
+          "source_url": "https://www.cbioportal.org/study/summary?id=aml_ohsu_2022",
+          "study_id": "aml_ohsu_2022",
+          "study_name": "Acute Myeloid Leukemia (OHSU, Cancer Cell 2022)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "citation": "Tyner et al. Nature 2018",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-05 13:18:56",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "30333627",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels for genes in 451 AML cases (RNA Seq CPM).",
+              "id": "aml_ohsu_2018_mrna_seq_cpm",
+              "name": "mRNA expression (RNA Seq CPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels for genes in 451 AML cases (RNA Seq RPKM).",
+              "id": "aml_ohsu_2018_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq RPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 451,
+          "sample_count": 672,
+          "source_url": "https://www.cbioportal.org/study/summary?id=aml_ohsu_2018",
+          "study_id": "aml_ohsu_2018",
+          "study_name": "Acute Myeloid Leukemia (OHSU, Nature 2018)"
+        }
+      ],
+      "code": "LAML",
+      "coverage_status": "available",
+      "name": "Acute myeloid leukemia",
+      "rejection_count": 7,
+      "rejection_reasons": {
+        "disallowed_accession": 6,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 1025,
+          "study_id": "aml_target_2018_pub",
+          "study_name": "Pediatric Acute Myeloid Leukemia (TARGET, 2018)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 2766,
+          "study_id": "aml_target_gdc",
+          "study_name": "Acute Myeloid Leukemia (TARGET GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 200,
+          "study_id": "aml_tcga_gdc",
+          "study_name": "Acute Myeloid Leukemia (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 200,
+          "study_id": "laml_tcga",
+          "study_name": "Acute Myeloid Leukemia (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 200,
+          "study_id": "laml_tcga_pan_can_atlas_2018",
+          "study_name": "Acute Myeloid Leukemia (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "disallowed_accession",
+          "sample_count": 200,
+          "study_id": "laml_tcga_pub",
+          "study_name": "Acute Myeloid Leukemia (TCGA, NEJM 2013)"
+        },
+        {
+          "cancer_type_id": "aml",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 887,
+          "sample_count": 887,
+          "study_id": "aml_stjude_2024",
+          "study_name": "Pediatric Acute Myeloid Leukemia (St. Jude, Nat Genet 2024)"
+        }
+      ],
+      "tcga_cohort": "TCGA-LAML"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "difg",
+          "citation": "Varn et al. Cell 2022, Malta et al. Cancer Res. 2023",
+          "dataset_id": "cbioportal-lgg-glass-2022",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-16 16:46:26",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "35649412,38117484",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels from 168 diffuse glioma cases (RNA-Seq TPM). Values as calculated by Kallisto.",
+              "id": "difg_glass_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 355,
+          "sample_count": 693,
+          "source_url": "https://www.cbioportal.org/study/summary?id=difg_glass",
+          "study_id": "difg_glass",
+          "study_name": "Diffuse Glioma (GLASS Consortium)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "citation": "Barthel & Johnson et al. Nature 2019",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-07 03:51:35",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "31748746",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels from 222 diffuse glioma cases (RNA-Seq RPKM) converted to log2 scale.",
+              "id": "difg_glass_2019_rna_seq_mrna",
+              "name": "mRNA expression (log RNA Seq RPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 79,
+          "sample_count": 444,
+          "source_url": "https://www.cbioportal.org/study/summary?id=difg_glass_2019",
+          "study_id": "difg_glass_2019",
+          "study_name": "Diffuse Glioma (GLASS Consortium, Nature 2019)"
+        }
+      ],
+      "code": "LGG",
+      "coverage_status": "available",
+      "name": "Brain lower grade glioma",
+      "rejection_count": 10,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 5,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 530,
+          "study_id": "difg_tcga_gdc",
+          "study_name": "Diffuse Glioma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 530,
+          "study_id": "lgg_tcga",
+          "study_name": "Brain Lower Grade Glioma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 514,
+          "study_id": "lgg_tcga_pan_can_atlas_2018",
+          "study_name": "Brain Lower Grade Glioma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "disallowed_accession",
+          "sample_count": 1122,
+          "study_id": "lgggbm_tcga_pub",
+          "study_name": "Merged Cohort of LGG and GBM (TCGA, Cell 2016)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 73,
+          "study_id": "difg_msk_2023",
+          "study_name": "IDH-mutated Diffuse Glioma (MSK, Clin Cancer Res 2024)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 91,
+          "study_id": "glioma_msk_2018",
+          "study_name": "Glioma (MSK, Nature 2019)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1004,
+          "study_id": "glioma_mskcc_2019",
+          "study_name": "Glioma (MSK, Clin Cancer Res 2019)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 61,
+          "study_id": "lgg_ucsf_2014",
+          "study_name": "Low-Grade Gliomas (UCSF, Science 2014)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 22,
+          "study_id": "odg_msk_2017",
+          "study_name": "Anaplastic Oligodendroglioma and Anaplastic Oligoastrocytoma (MSK, Neuro Oncol 2017)"
+        },
+        {
+          "cancer_type_id": "difg",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 22,
+          "sample_count": 31,
+          "study_id": "lgg_ctf_synodos_2025",
+          "study_name": "Pediatric Low-Grade Glioma (CTF, Acta Neuropathol 2021)"
+        }
+      ],
+      "tcga_cohort": "TCGA-LGG"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "LIHC",
+      "coverage_status": "search_in_progress",
+      "name": "Liver hepatocellular carcinoma",
+      "rejection_count": 12,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 8,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "hcc",
+          "reason": "disallowed_accession",
+          "sample_count": 379,
+          "study_id": "hcc_tcga_gdc",
+          "study_name": "Hepatocellular Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "disallowed_accession",
+          "sample_count": 379,
+          "study_id": "lihc_tcga",
+          "study_name": "Liver Hepatocellular Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "disallowed_accession",
+          "sample_count": 372,
+          "study_id": "lihc_tcga_pan_can_atlas_2018",
+          "study_name": "Liver Hepatocellular Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 243,
+          "study_id": "hcc_inserm_fr_2015",
+          "study_name": "Hepatocellular Carcinomas (INSERM, Nat Genet 2015)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 90,
+          "study_id": "hcc_jcopo_msk_2023",
+          "study_name": "Hepatocellular Carcinoma (MSK, JCO Precis Oncol 2023)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 122,
+          "study_id": "hcc_meric_2021",
+          "study_name": "Hepatocellular Carcinoma (MERiC/Basel, Nat Commun. 2022)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1370,
+          "study_id": "hcc_msk_2024",
+          "study_name": "Hepatocellular Carcinoma (MSK, Clin Cancer Res 2024)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 19,
+          "study_id": "hcc_msk_venturaa_2018",
+          "study_name": "Liver Hepatocellular Adenoma and Carcinomas (MSK, PLOS One 2018)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 127,
+          "study_id": "hcc_mskimpact_2018",
+          "study_name": "Hepatocellular Carcinoma (MSK, Clin Cancer Res 2018)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 231,
+          "study_id": "lihc_amc_prv",
+          "study_name": "Liver Hepatocellular Carcinoma (AMC, Hepatology 2014)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 27,
+          "study_id": "lihc_riken",
+          "study_name": "Liver Hepatocellular Carcinoma (RIKEN, Nat Genet 2012)"
+        },
+        {
+          "cancer_type_id": "hcc",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 239,
+          "sample_count": 494,
+          "study_id": "hcc_clca_2024",
+          "study_name": "Hepatocellular Carcinoma (CLCA, Nature 2024)"
+        }
+      ],
+      "tcga_cohort": "TCGA-LIHC"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "luad",
+          "citation": "Xu, Jun-Yu et al. Cell 2020",
+          "dataset_id": "cbioportal-luad-cas-2020",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "DFS",
+              "status_column": "DFS_STATUS",
+              "time_column": "DFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-19 21:56:08",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "32649877",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "luad_cas_2020_rna_seq_mrna",
+              "name": "mRNA expression (FPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 51,
+          "sample_count": 103,
+          "source_url": "https://www.cbioportal.org/study/summary?id=luad_cas_2020",
+          "study_id": "luad_cas_2020",
+          "study_name": "Lung Adenocarcinoma (CAS, Cell 2020)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "citation": null,
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-14 10:47:44",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": null,
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "luad_cptac_gdc_mrna_seq_fpkm",
+              "name": "mRNA Expression (FPKM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq TPM)",
+              "id": "luad_cptac_gdc_mrna_seq_tpm",
+              "name": "mRNA Expression (TPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "luad_cptac_gdc_rna_seq_mrna",
+              "name": "mRNA Expression"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 231,
+          "sample_count": 241,
+          "source_url": "https://www.cbioportal.org/study/summary?id=luad_cptac_gdc",
+          "study_id": "luad_cptac_gdc",
+          "study_name": "Lung Adenocarcinoma (CPTAC GDC, 2025)"
+        }
+      ],
+      "code": "LUAD",
+      "coverage_status": "available",
+      "name": "Lung adenocarcinoma",
+      "rejection_count": 15,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 10,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "luad",
+          "reason": "disallowed_accession",
+          "sample_count": 586,
+          "study_id": "luad_tcga",
+          "study_name": "Lung Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "disallowed_accession",
+          "sample_count": 571,
+          "study_id": "luad_tcga_gdc",
+          "study_name": "Lung Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "disallowed_accession",
+          "sample_count": 566,
+          "study_id": "luad_tcga_pan_can_atlas_2018",
+          "study_name": "Lung Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "disallowed_accession",
+          "sample_count": 230,
+          "study_id": "luad_tcga_pub",
+          "study_name": "Lung Adenocarcinoma (TCGA, Nature 2014)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 183,
+          "study_id": "luad_broad",
+          "study_name": "Lung Adenocarcinoma (Broad, Cell 2012)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 426,
+          "study_id": "luad_msk_npjpo_2021",
+          "study_name": "Lung Adenocarcinoma (MSK, NPJ Precision Oncology 2021)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 35,
+          "study_id": "luad_mskcc_2015",
+          "study_name": "Lung Adenocarcinoma (MSK, Science 2015)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 604,
+          "study_id": "luad_mskcc_2020",
+          "study_name": "Lung Adenocarcinoma (MSK, J Thorac Oncol 2020)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 2653,
+          "study_id": "luad_mskcc_2023_met_organotropism",
+          "study_name": "Lung Adenocarcinoma Met Organotropism (MSK, Cancer Cell 2023)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 186,
+          "study_id": "luad_mskimpact_2021",
+          "study_name": "Lung Adenocarcinoma (MSK, 2021)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 305,
+          "study_id": "luad_oncosg_2020",
+          "study_name": "Lung Adenocarcinoma (OncoSG, Nat Genet 2020)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 163,
+          "study_id": "luad_tsp",
+          "study_name": "Lung Adenocarcinoma (TSP, Nature 2008)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 915,
+          "study_id": "lung_msk_2017",
+          "study_name": "Non-Small Cell Cancer (MSK, Cancer Discov 2017)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 232,
+          "study_id": "lung_nci_2022",
+          "study_name": "Lung Cancer in Never Smokers (NCI, Nature Genetics 2021)"
+        },
+        {
+          "cancer_type_id": "luad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 110,
+          "sample_count": 110,
+          "study_id": "luad_cptac_2020",
+          "study_name": "Lung Adenocarcinoma (CPTAC, Cell 2020)"
+        }
+      ],
+      "tcga_cohort": "TCGA-LUAD"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "lusc",
+          "citation": null,
+          "dataset_id": "cbioportal-lusc-cptac-gdc-2025",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-14 10:55:51",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": null,
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "lusc_cptac_gdc_mrna_seq_fpkm",
+              "name": "mRNA Expression (FPKM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq TPM)",
+              "id": "lusc_cptac_gdc_mrna_seq_tpm",
+              "name": "mRNA Expression (TPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "lusc_cptac_gdc_rna_seq_mrna",
+              "name": "mRNA Expression"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 110,
+          "sample_count": 110,
+          "source_url": "https://www.cbioportal.org/study/summary?id=lusc_cptac_gdc",
+          "study_id": "lusc_cptac_gdc",
+          "study_name": "Lung Squamous Cell Carcinoma (CPTAC GDC, 2025)"
+        }
+      ],
+      "code": "LUSC",
+      "coverage_status": "available",
+      "name": "Lung squamous cell carcinoma",
+      "rejection_count": 5,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "lusc",
+          "reason": "disallowed_accession",
+          "sample_count": 511,
+          "study_id": "lusc_tcga",
+          "study_name": "Lung Squamous Cell Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "lusc",
+          "reason": "disallowed_accession",
+          "sample_count": 503,
+          "study_id": "lusc_tcga_gdc",
+          "study_name": "Lung Squamous Cell Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "lusc",
+          "reason": "disallowed_accession",
+          "sample_count": 487,
+          "study_id": "lusc_tcga_pan_can_atlas_2018",
+          "study_name": "Lung Squamous Cell Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "lusc",
+          "reason": "disallowed_accession",
+          "sample_count": 178,
+          "study_id": "lusc_tcga_pub",
+          "study_name": "Lung Squamous Cell Carcinoma (TCGA, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "lusc",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 108,
+          "sample_count": 80,
+          "study_id": "lusc_cptac_2021",
+          "study_name": "Lung Squamous Cell Carcinoma (CPTAC, Cell 2021)"
+        }
+      ],
+      "tcga_cohort": "TCGA-LUSC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "MESO",
+      "coverage_status": "search_in_progress",
+      "name": "Mesothelioma",
+      "rejection_count": 2,
+      "rejection_reasons": {
+        "disallowed_accession": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "plmeso",
+          "reason": "disallowed_accession",
+          "sample_count": 87,
+          "study_id": "meso_tcga",
+          "study_name": "Mesothelioma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "plmeso",
+          "reason": "disallowed_accession",
+          "sample_count": 87,
+          "study_id": "meso_tcga_pan_can_atlas_2018",
+          "study_name": "Mesothelioma (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-MESO"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "OV",
+      "coverage_status": "search_in_progress",
+      "name": "Ovarian serous cystadenocarcinoma",
+      "rejection_count": 9,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 4,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "hgsoc",
+          "reason": "disallowed_accession",
+          "sample_count": 604,
+          "study_id": "hgsoc_tcga_gdc",
+          "study_name": "High-Grade Serous Ovarian Cancer (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "hgsoc",
+          "reason": "disallowed_accession",
+          "sample_count": 617,
+          "study_id": "ov_tcga",
+          "study_name": "Ovarian Serous Cystadenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "hgsoc",
+          "reason": "disallowed_accession",
+          "sample_count": 585,
+          "study_id": "ov_tcga_pan_can_atlas_2018",
+          "study_name": "Ovarian Serous Cystadenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "hgsoc",
+          "reason": "disallowed_accession",
+          "sample_count": 489,
+          "study_id": "ov_tcga_pub",
+          "study_name": "Ovarian Serous Cystadenocarcinoma (TCGA, Nature 2011)"
+        },
+        {
+          "cancer_type_id": "hgsoc",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 45,
+          "study_id": "hgsoc_msk_2021",
+          "study_name": "High-Grade Serous Ovarian Cancer (MSK, NPJ Genome Med 2021)"
+        },
+        {
+          "cancer_type_id": "ovary",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 82,
+          "study_id": "msk_spectrum_tme_2022",
+          "study_name": "Ovarian Cancer - MSK SPECTRUM (MSK, Nature 2022)"
+        },
+        {
+          "cancer_type_id": "ovary",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 31,
+          "study_id": "ovarian_msk_2025",
+          "study_name": "Serous Ovarian Cancer (MSK, 2025)"
+        },
+        {
+          "cancer_type_id": "ovary",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 567,
+          "study_id": "ovary_geomx_gray_foundation_2024",
+          "study_name": "Ovarian Cancer (Gray Foundation, Cancer Discov 2024)"
+        },
+        {
+          "cancer_type_id": "ovary",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 101,
+          "sample_count": 112,
+          "study_id": "ovary_cptac_gdc",
+          "study_name": "Ovarian Cancer (CPTAC GDC, 2025)"
+        }
+      ],
+      "tcga_cohort": "TCGA-OV"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "paad",
+          "citation": "Padron et al. Nat Med. 2022",
+          "dataset_id": "cbioportal-paad-iatlas-prince-2022",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-16 13:44:38",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "35662283",
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (log2 upper quartile normalized counts)",
+              "id": "paad_iatlas_prince_2022_rna_seq_mrna",
+              "name": "mRNA expression (log2 upper quartile normalized counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 93,
+          "sample_count": 93,
+          "source_url": "https://www.cbioportal.org/study/summary?id=paad_iatlas_prince_2022",
+          "study_id": "paad_iatlas_prince_2022",
+          "study_name": "Metastatic Pancreatic Adenocarcinoma (PRINCE Trial, Nat Med. 2022) - iAtlas Harmonized"
+        },
+        {
+          "cancer_type_id": "pancreas",
+          "citation": null,
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-14 11:11:19",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": null,
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "pancreas_cptac_gdc_mrna_seq_fpkm",
+              "name": "mRNA Expression (FPKM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq TPM)",
+              "id": "pancreas_cptac_gdc_mrna_seq_tpm",
+              "name": "mRNA Expression (TPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "pancreas_cptac_gdc_rna_seq_mrna",
+              "name": "mRNA Expression"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 161,
+          "sample_count": 183,
+          "source_url": "https://www.cbioportal.org/study/summary?id=pancreas_cptac_gdc",
+          "study_id": "pancreas_cptac_gdc",
+          "study_name": "Pancreatic Cancer (CPTAC GDC, 2025)"
+        }
+      ],
+      "code": "PAAD",
+      "coverage_status": "available",
+      "name": "Pancreatic adenocarcinoma",
+      "rejection_count": 12,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 7,
+        "no_recognized_survival_endpoint_pair": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "paad",
+          "reason": "disallowed_accession",
+          "sample_count": 186,
+          "study_id": "paad_tcga",
+          "study_name": "Pancreatic Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "disallowed_accession",
+          "sample_count": 186,
+          "study_id": "paad_tcga_gdc",
+          "study_name": "Pancreatic Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "disallowed_accession",
+          "sample_count": 184,
+          "study_id": "paad_tcga_pan_can_atlas_2018",
+          "study_name": "Pancreatic Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 99,
+          "study_id": "paad_icgc",
+          "study_name": "Pancreatic Adenocarcinoma (ICGC, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 29,
+          "study_id": "paad_msk_2025",
+          "study_name": "Pancreatic Adenocarcinoma (MSK, 2025)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 109,
+          "study_id": "paad_utsw_2015",
+          "study_name": "Pancreatic Cancer (UTSW, Nat Commun 2015)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 412,
+          "study_id": "pancreas_ctdna_msk_2025",
+          "study_name": "Pancreatic Cancer cfDNA (MSK, J Natl Cancer Inst 2025)"
+        },
+        {
+          "cancer_type_id": "pancreas",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 395,
+          "study_id": "pancreas_msk_2024",
+          "study_name": "Pancreatic Cancer (MSK, Cancer Cell 2024)"
+        },
+        {
+          "cancer_type_id": "pancreas",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 65,
+          "study_id": "panet_msk_erc_2023",
+          "study_name": "Pancreatic Neuroendocrine Tumors (MSK, 2023)"
+        },
+        {
+          "cancer_type_id": "pancreas",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 2336,
+          "study_id": "pdac_msk_2024",
+          "study_name": "Pancreatic Adenocarcinoma (MSK, Nat Med 2024)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 140,
+          "sample_count": 140,
+          "study_id": "paad_cptac_2021",
+          "study_name": "Pancreatic Ductal Adenocarcinoma (CPTAC, Cell 2021)"
+        },
+        {
+          "cancer_type_id": "paad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 96,
+          "sample_count": 456,
+          "study_id": "paad_qcmg_uq_2016",
+          "study_name": "Pancreatic Adenocarcinoma (QCMG, Nature 2016)"
+        }
+      ],
+      "tcga_cohort": "TCGA-PAAD"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "PCPG",
+      "coverage_status": "search_in_progress",
+      "name": "Pheochromocytoma and paraganglioma",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "mnet",
+          "reason": "disallowed_accession",
+          "sample_count": 184,
+          "study_id": "pcpg_tcga",
+          "study_name": "Pheochromocytoma and Paraganglioma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "disallowed_accession",
+          "sample_count": 178,
+          "study_id": "pcpg_tcga_pan_can_atlas_2018",
+          "study_name": "Pheochromocytoma and Paraganglioma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "disallowed_accession",
+          "sample_count": 178,
+          "study_id": "pcpg_tcga_pub",
+          "study_name": "Pheochromocytoma and Paraganglioma (TCGA, Cell 2017)"
+        }
+      ],
+      "tcga_cohort": "TCGA-PCPG"
+    },
+    {
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "cancer_type_id": "prad",
+          "citation": "Abida et al. PNAS 2019",
+          "dataset_id": "cbioportal-prad-su2c-2019",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-16 18:21:41",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "31061129",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "prad_su2c_2019_mrna_seq_fpkm_capture",
+              "name": "mRNA expression (FPKM capture)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from polyA (RNA Seq FPKM)",
+              "id": "prad_su2c_2019_mrna_seq_fpkm_polya",
+              "name": "mRNA expression (FPKM polyA)"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 208,
+          "sample_count": 444,
+          "source_url": "https://www.cbioportal.org/study/summary?id=prad_su2c_2019",
+          "study_id": "prad_su2c_2019",
+          "study_name": "Metastatic Prostate Adenocarcinoma (SU2C/PCF Dream Team, PNAS 2019)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "citation": "Tang et al. Science 2022",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-16 16:42:34",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "35617398",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (RNA Seq TPM).",
+              "id": "prad_organoids_msk_2022_mrna_seq_tpm",
+              "name": "mRNA expression (RNA Seq TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 15,
+          "sample_count": 47,
+          "source_url": "https://www.cbioportal.org/study/summary?id=prad_organoids_msk_2022",
+          "study_id": "prad_organoids_msk_2022",
+          "study_name": "Prostate Cancer (MSK, Science 2022)"
+        }
+      ],
+      "code": "PRAD",
+      "coverage_status": "available",
+      "name": "Prostate adenocarcinoma",
+      "rejection_count": 25,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "fewer_than_10_rna_samples": 3,
+        "no_eligible_bulk_rna_profile": 15,
+        "no_recognized_survival_endpoint_pair": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "prad",
+          "reason": "disallowed_accession",
+          "sample_count": 501,
+          "study_id": "prad_tcga",
+          "study_name": "Prostate Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "disallowed_accession",
+          "sample_count": 501,
+          "study_id": "prad_tcga_gdc",
+          "study_name": "Prostate Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "disallowed_accession",
+          "sample_count": 494,
+          "study_id": "prad_tcga_pan_can_atlas_2018",
+          "study_name": "Prostate Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "disallowed_accession",
+          "sample_count": 333,
+          "study_id": "prad_tcga_pub",
+          "study_name": "Prostate Adenocarcinoma (TCGA, Cell 2015)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 114,
+          "study_id": "nepc_wcm_2016",
+          "study_name": "Neuroendocrine Prostate Cancer (Multi-Institute, Nat Med 2016)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 65,
+          "study_id": "prad_eururol_2017",
+          "study_name": "Prostate Adenocarcinoma (SMMU, Eur Urol 2017)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 176,
+          "study_id": "prad_fhcrc",
+          "study_name": "Prostate Adenocarcinoma (Fred Hutchinson CRC, Nat Med 2016)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 123,
+          "study_id": "prad_broad",
+          "study_name": "Prostate Adenocarcinoma (Broad/Cornell, Nat Genet 2012)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 82,
+          "study_id": "prad_broad_2013",
+          "study_name": "Prostate Adenocarcinoma (Broad/Cornell, Cell 2013)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1465,
+          "study_id": "prad_cdk12_mskcc_2020",
+          "study_name": "Prostate Adenocarcinoma (MSK, Eur Urol 2020)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 477,
+          "study_id": "prad_cpcg_2017",
+          "study_name": "Prostate Adenocarcinoma (CPC-GENE, Nature 2017)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 99,
+          "study_id": "prad_idhmut_msk_2025",
+          "study_name": "Prostate Cancer-IDH Driver Mutant Cohort (MSK, 2024)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 424,
+          "study_id": "prad_mcspc_mskcc_2020",
+          "study_name": "Metastatic castration-sensitive prostate cancer (MSK, Clin Cancer Res 2020)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 121,
+          "study_id": "prad_mich",
+          "study_name": "Metastatic Prostate Adenocarcinoma (MCTP, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "prostate",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 18,
+          "study_id": "prad_msk_2019",
+          "study_name": "Prostate Cancer (MSK, Cell Metab 2020)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 120,
+          "study_id": "prad_msk_2025",
+          "study_name": "Prostate Adenocarcinoma (MSK, 2025)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 2069,
+          "study_id": "prad_msk_stopsack_2021",
+          "study_name": "Race Differences in Prostate Cancer (MSK, 2021)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 240,
+          "study_id": "prad_mskcc",
+          "study_name": "Prostate Adenocarcinoma (MSK, Cancer Cell 2010)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 104,
+          "study_id": "prad_mskcc_2014",
+          "study_name": "Prostate Adenocarcinoma (MSK, PNAS 2014)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 504,
+          "study_id": "prad_mskcc_2017",
+          "study_name": "Prostate Cancer (MSK, JCO Precis Oncol 2017)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1013,
+          "study_id": "prad_p1000",
+          "study_name": "Prostate Adenocarcinoma (MSK/DFCI, Nature Genetics 2018)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1417,
+          "study_id": "prad_pik3r1_msk_2021",
+          "study_name": "Prostate Adenocarcinoma (MSK, Clin Cancer Res. 2022)"
+        },
+        {
+          "cancer_type_id": "prostate",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 88,
+          "sample_count": 88,
+          "study_id": "prad_msk_mdanderson_2023",
+          "study_name": "Prostate Cancer MDA PCa PDX (MD Anderson, Clin Cancer Res 2024)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 10,
+          "sample_count": 12,
+          "study_id": "prad_mskcc_cheny1_organoids_2014",
+          "study_name": "Prostate Adenocarcinoma Organoids (MSK, Cell 2014)"
+        },
+        {
+          "cancer_type_id": "prad",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 118,
+          "sample_count": 150,
+          "study_id": "prad_su2c_2015",
+          "study_name": "Metastatic Prostate Cancer (SU2C/PCF Dream Team, Cell 2015)"
+        }
+      ],
+      "tcga_cohort": "TCGA-PRAD"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "READ",
+      "coverage_status": "search_in_progress",
+      "name": "Rectum adenocarcinoma",
+      "rejection_count": 2,
+      "rejection_reasons": {
+        "disallowed_accession": 1,
+        "no_eligible_bulk_rna_profile": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "read",
+          "reason": "disallowed_accession",
+          "sample_count": 171,
+          "study_id": "read_tcga_gdc",
+          "study_name": "Rectal Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "read",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 48,
+          "study_id": "rectal_radiation_msk_2024",
+          "study_name": "Colorectal Cancer Radiation (MSK, 2024)"
+        }
+      ],
+      "tcga_cohort": "TCGA-READ"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "SARC",
+      "coverage_status": "search_in_progress",
+      "name": "Sarcoma",
+      "rejection_count": 4,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "disallowed_accession",
+          "sample_count": 265,
+          "study_id": "sarc_tcga",
+          "study_name": "Sarcoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "disallowed_accession",
+          "sample_count": 255,
+          "study_id": "sarc_tcga_pan_can_atlas_2018",
+          "study_name": "Sarcoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "disallowed_accession",
+          "sample_count": 206,
+          "study_id": "sarc_tcga_pub",
+          "study_name": "Adult Soft Tissue Sarcomas (TCGA, Cell 2017)"
+        },
+        {
+          "cancer_type_id": "soft_tissue",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 207,
+          "study_id": "sarc_mskcc",
+          "study_name": "Sarcoma (MSKCC/Broad, Nat Genet 2010)"
+        }
+      ],
+      "tcga_cohort": "TCGA-SARC"
+    },
+    {
+      "candidate_count": 9,
+      "candidates": [
+        {
+          "cancer_type_id": "skcm",
+          "citation": "Van Allen et al. Science 2015",
+          "dataset_id": "cbioportal-skcm-dfci-2015",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "DFS",
+              "status_column": "DFS_STATUS",
+              "time_column": "DFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-13 15:17:39",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": "26359337",
+          "reference_genome": "hg19",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (RNA-Seq FPKM)",
+              "id": "skcm_dfci_2015_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 40,
+          "sample_count": 110,
+          "source_url": "https://www.cbioportal.org/study/summary?id=skcm_dfci_2015",
+          "study_id": "skcm_dfci_2015",
+          "study_name": "Metastatic Melanoma (DFCI, Science 2015)"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Liu et al. Nature Medicine 2019",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-11 00:52:17",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "31792460",
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "mel_iatlas_liu_2019_rna_seq_mrna",
+              "name": "mRNA expression"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 122,
+          "sample_count": 122,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_iatlas_liu_2019",
+          "study_id": "mel_iatlas_liu_2019",
+          "study_name": "Metastatic Melanoma (DFCI, Nat Med. 2019) - iAtlas Harmonized"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Liu et al. Nature Medicine 2019",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-10 13:26:44",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "31792460",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels for genes in 144 metastatic melanoma samples (RNA Seq TPM).",
+              "id": "mel_dfci_2019_mrna_seq_tpm",
+              "name": "mRNA expression (RNA Seq TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 121,
+          "sample_count": 144,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_dfci_2019",
+          "study_id": "mel_dfci_2019",
+          "study_name": "Metastatic Melanoma (DFCI, Nature Medicine 2019)"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Riaz et al. Cell 2017",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-11 00:43:48",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "29033130",
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (RNA Seq log TPM)",
+              "id": "mel_iatlas_riaz_nivolumab_2017_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq log TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 107,
+          "sample_count": 107,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_iatlas_riaz_nivolumab_2017",
+          "study_id": "mel_iatlas_riaz_nivolumab_2017",
+          "study_name": "Melanoma (MSK, Cell 2017) - iAtlas Harmonized"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Gide et al. Cancer Cell 2019",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "PFS",
+              "status_column": "PFS_STATUS",
+              "time_column": "PFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-16 13:46:12",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "30753825",
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (log2 upper quartile normalized counts)",
+              "id": "mel_iatlas_gide_2019_rna_seq_mrna",
+              "name": "mRNA expression (log2 upper quartile normalized counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 91,
+          "sample_count": 91,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_iatlas_gide_2019",
+          "study_id": "mel_iatlas_gide_2019",
+          "study_name": "Metastatic Melanoma (Immunotherapy Trial, Cancer Cell 2019) - iAtlas Harmonized"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Liang et al. Genome Res 2017",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            },
+            {
+              "endpoint": "DFS",
+              "status_column": "DFS_STATUS",
+              "time_column": "DFS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-08 15:05:34",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "28373299",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels.",
+              "id": "mel_tsam_liang_2017_rna_seq_mrna",
+              "name": "mRNA expression (FPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 36,
+          "sample_count": 38,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_tsam_liang_2017",
+          "study_id": "mel_tsam_liang_2017",
+          "study_name": "Acral Melanoma (TGEN, Genome Res 2017)"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Hugo et al. Cell 2016",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-11 00:46:24",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "26997480",
+          "reference_genome": "hg38",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "mel_iatlas_hugo_ucla_2016_rna_seq_mrna",
+              "name": "mRNA expression (TPM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 27,
+          "sample_count": 27,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_iatlas_hugo_ucla_2016",
+          "study_id": "mel_iatlas_hugo_ucla_2016",
+          "study_name": "Metastatic Melanoma (UCLA, Cell 2016) - iAtlas Harmonized"
+        },
+        {
+          "cancer_type_id": "mel",
+          "citation": "Hugo et al. Cell 2016",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-02-10 13:22:25",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "26997480",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels (RNA Seq read counts)",
+              "id": "mel_ucla_2016_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq read counts)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 27,
+          "sample_count": 38,
+          "source_url": "https://www.cbioportal.org/study/summary?id=mel_ucla_2016",
+          "study_id": "mel_ucla_2016",
+          "study_name": "Metastatic Melanoma (UCLA, Cell 2016)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "citation": "Snyder et al. NEJM 2014",
+          "dataset_id": null,
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-13 14:56:24",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "required",
+          "pmid": "25409260",
+          "reference_genome": "hg19",
+          "review_status": "screening_candidate",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels for TARGET ALL Phase II Discovery cases (RNA-Seq RPKM).",
+              "id": "skcm_mskcc_2014_rna_seq_mrna",
+              "name": "mRNA expression (RNA Seq RPKM)"
+            }
+          ],
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 21,
+          "sample_count": 64,
+          "source_url": "https://www.cbioportal.org/study/summary?id=skcm_mskcc_2014",
+          "study_id": "skcm_mskcc_2014",
+          "study_name": "Melanoma (MSK, NEJM 2014)"
+        }
+      ],
+      "code": "SKCM",
+      "coverage_status": "available",
+      "name": "Skin cutaneous melanoma",
+      "rejection_count": 10,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 6
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "skcm",
+          "reason": "disallowed_accession",
+          "sample_count": 480,
+          "study_id": "skcm_tcga",
+          "study_name": "Skin Cutaneous Melanoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "disallowed_accession",
+          "sample_count": 473,
+          "study_id": "skcm_tcga_gdc",
+          "study_name": "Cutaneous Melanoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "disallowed_accession",
+          "sample_count": 448,
+          "study_id": "skcm_tcga_pan_can_atlas_2018",
+          "study_name": "Skin Cutaneous Melanoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "disallowed_accession",
+          "sample_count": 359,
+          "study_id": "skcm_tcga_pub_2015",
+          "study_name": "Melanomas (TCGA, Cell 2015)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 696,
+          "study_id": "mel_mskimpact_2020",
+          "study_name": "Melanoma (MSK, Clin Cancer Res 2021)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 121,
+          "study_id": "skcm_broad",
+          "study_name": "Skin Cutaneous Melanoma (Broad, Cell 2012)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 78,
+          "study_id": "skcm_broad_brafresist_2012",
+          "study_name": "Skin Cutaneous Melanoma(Broad, Cancer Discov 2014)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 26,
+          "study_id": "skcm_broad_dfarber",
+          "study_name": "Melanoma (Broad/Dana Farber, Nature 2012)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 66,
+          "study_id": "skcm_vanderbilt_mskcc_2015",
+          "study_name": "Metastatic Melanoma (MSK, JCO Precis Oncol 2017)"
+        },
+        {
+          "cancer_type_id": "skcm",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 147,
+          "study_id": "skcm_yale",
+          "study_name": "Skin Cutaneous Melanoma (Yale, Nat Genet 2012)"
+        }
+      ],
+      "tcga_cohort": "TCGA-SKCM"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "STAD",
+      "coverage_status": "search_in_progress",
+      "name": "Stomach adenocarcinoma",
+      "rejection_count": 8,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "fewer_than_10_rna_samples": 1,
+        "no_eligible_bulk_rna_profile": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "stad",
+          "reason": "disallowed_accession",
+          "sample_count": 478,
+          "study_id": "stad_tcga",
+          "study_name": "Stomach Adenocarcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "disallowed_accession",
+          "sample_count": 443,
+          "study_id": "stad_tcga_gdc",
+          "study_name": "Stomach Adenocarcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "disallowed_accession",
+          "sample_count": 440,
+          "study_id": "stad_tcga_pan_can_atlas_2018",
+          "study_name": "Stomach Adenocarcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "disallowed_accession",
+          "sample_count": 295,
+          "study_id": "stad_tcga_pub",
+          "study_name": "Stomach Adenocarcinoma (TCGA, Nature 2014)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "fewer_than_10_rna_samples",
+          "rna_sample_count_source": "study.mrnaRnaSeqSampleCount",
+          "rna_seq_sample_count": 0,
+          "sample_count": 147,
+          "study_id": "stad_oncosg_2018",
+          "study_name": "Gastric Cancer (OncoSG, 2018)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 100,
+          "study_id": "stad_pfizer_uhongkong",
+          "study_name": "Stomach Adenocarcinoma (Pfizer and UHK, Nat Genet 2014)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 22,
+          "study_id": "stad_uhongkong",
+          "study_name": "Stomach Adenocarcinoma (UHK, Nat Genet 2011)"
+        },
+        {
+          "cancer_type_id": "stad",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 30,
+          "study_id": "stad_utokyo",
+          "study_name": "Stomach Adenocarcinoma (U Tokyo, Nat Genet 2014)"
+        }
+      ],
+      "tcga_cohort": "TCGA-STAD"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "TGCT",
+      "coverage_status": "search_in_progress",
+      "name": "Testicular germ cell tumors",
+      "rejection_count": 2,
+      "rejection_reasons": {
+        "disallowed_accession": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "nsgct",
+          "reason": "disallowed_accession",
+          "sample_count": 156,
+          "study_id": "tgct_tcga",
+          "study_name": "Testicular Germ Cell Cancer (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "testis",
+          "reason": "disallowed_accession",
+          "sample_count": 149,
+          "study_id": "tgct_tcga_pan_can_atlas_2018",
+          "study_name": "Testicular Germ Cell Tumors (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-TGCT"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "THCA",
+      "coverage_status": "search_in_progress",
+      "name": "Thyroid carcinoma",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "thpa",
+          "reason": "disallowed_accession",
+          "sample_count": 516,
+          "study_id": "thca_tcga",
+          "study_name": "Thyroid Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "thpa",
+          "reason": "disallowed_accession",
+          "sample_count": 500,
+          "study_id": "thca_tcga_pan_can_atlas_2018",
+          "study_name": "Thyroid Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "thpa",
+          "reason": "disallowed_accession",
+          "sample_count": 496,
+          "study_id": "thca_tcga_pub",
+          "study_name": "Papillary Thyroid Carcinoma (TCGA, Cell 2014)"
+        }
+      ],
+      "tcga_cohort": "TCGA-THCA"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "THYM",
+      "coverage_status": "search_in_progress",
+      "name": "Thymoma",
+      "rejection_count": 3,
+      "rejection_reasons": {
+        "disallowed_accession": 3
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "thym",
+          "reason": "disallowed_accession",
+          "sample_count": 124,
+          "study_id": "thym_tcga",
+          "study_name": "Thymoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "thym",
+          "reason": "disallowed_accession",
+          "sample_count": 124,
+          "study_id": "thym_tcga_gdc",
+          "study_name": "Thymoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "thym",
+          "reason": "disallowed_accession",
+          "sample_count": 123,
+          "study_id": "thym_tcga_pan_can_atlas_2018",
+          "study_name": "Thymoma (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-THYM"
+    },
+    {
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "cancer_type_id": "uec",
+          "citation": null,
+          "dataset_id": "cbioportal-ucec-cptac-gdc-2025",
+          "endpoint_pairs": [
+            {
+              "endpoint": "OS",
+              "status_column": "OS_STATUS",
+              "time_column": "OS_MONTHS"
+            }
+          ],
+          "import_date": "2026-01-14 11:20:38",
+          "independence_screen": "not_tcga_by_accession_or_description",
+          "license_review": "passed",
+          "pmid": null,
+          "reference_genome": "hg38",
+          "review_status": "promoted",
+          "rna_profiles": [
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq FPKM)",
+              "id": "uec_cptac_gdc_mrna_seq_fpkm",
+              "name": "mRNA Expression (FPKM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "mRNA expression from capture (RNA Seq TPM)",
+              "id": "uec_cptac_gdc_mrna_seq_tpm",
+              "name": "mRNA Expression (TPM)"
+            },
+            {
+              "datatype": "CONTINUOUS",
+              "description": "Expression levels",
+              "id": "uec_cptac_gdc_rna_seq_mrna",
+              "name": "mRNA Expression"
+            }
+          ],
+          "rna_sample_count_source": "study sample list: all_cases_with_mrna_rnaseq_data",
+          "rna_seq_sample_count": 435,
+          "sample_count": 442,
+          "source_url": "https://www.cbioportal.org/study/summary?id=uec_cptac_gdc",
+          "study_id": "uec_cptac_gdc",
+          "study_name": "Uterine Endometrioid Carcinoma (CPTAC GDC, 2025)"
+        }
+      ],
+      "code": "UCEC",
+      "coverage_status": "available",
+      "name": "Uterine corpus endometrial carcinoma",
+      "rejection_count": 12,
+      "rejection_reasons": {
+        "disallowed_accession": 4,
+        "no_eligible_bulk_rna_profile": 7,
+        "no_recognized_survival_endpoint_pair": 1
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "ucec",
+          "reason": "disallowed_accession",
+          "sample_count": 549,
+          "study_id": "ucec_tcga",
+          "study_name": "Uterine Corpus Endometrial Carcinoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "disallowed_accession",
+          "sample_count": 547,
+          "study_id": "ucec_tcga_gdc",
+          "study_name": "Endometrial Carcinoma (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "disallowed_accession",
+          "sample_count": 529,
+          "study_id": "ucec_tcga_pan_can_atlas_2018",
+          "study_name": "Uterine Corpus Endometrial Carcinoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "disallowed_accession",
+          "sample_count": 373,
+          "study_id": "ucec_tcga_pub",
+          "study_name": "Uterine Corpus Endometrial Carcinoma (TCGA, Nature 2013)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 1882,
+          "study_id": "ucec_ancestry_cds_msk_2023",
+          "study_name": "Endometrial Cancer (MSK, Cancer Discovery 2023)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 44,
+          "study_id": "ucec_ccr_cfdna_msk_2022",
+          "study_name": "Endometrial Carcinoma cfDNA (MSK, Clin Cancer Res 2022)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 181,
+          "study_id": "ucec_ccr_msk_2022",
+          "study_name": "Endometrial Carcinoma MSI (MSK, Clin Cancer Res 2022)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 197,
+          "study_id": "ucec_msk_2018",
+          "study_name": "Endometrial Cancer (MSK, 2018)"
+        },
+        {
+          "cancer_type_id": "mixed",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 33,
+          "study_id": "ucec_msk_2024",
+          "study_name": "Endometrial and Ovarian Cancer (MSK, Nature Medicine 2024)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 11,
+          "study_id": "ucec_msk_dacruzpaula_2025",
+          "study_name": "Evolution and co-occurrence of PI3K pathway gene mutations in endometrial carcinoma molecular subtypes at the single-cell level"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 24,
+          "study_id": "uec_msk_2024",
+          "study_name": "Endometrial cancer HR-positive (MSK, 2024)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_recognized_survival_endpoint_pair",
+          "rna_seq_sample_count": 95,
+          "sample_count": 81,
+          "study_id": "ucec_cptac_2020",
+          "study_name": "Endometrial Carcinoma (CPTAC, Cell 2020)"
+        }
+      ],
+      "tcga_cohort": "TCGA-UCEC"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "UCS",
+      "coverage_status": "search_in_progress",
+      "name": "Uterine carcinosarcoma",
+      "rejection_count": 5,
+      "rejection_reasons": {
+        "disallowed_accession": 3,
+        "no_eligible_bulk_rna_profile": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "ucs",
+          "reason": "disallowed_accession",
+          "sample_count": 57,
+          "study_id": "ucs_tcga",
+          "study_name": "Uterine Carcinosarcoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "ucs",
+          "reason": "disallowed_accession",
+          "sample_count": 57,
+          "study_id": "ucs_tcga_gdc",
+          "study_name": "Uterine Carcinosarcoma/Uterine Malignant Mixed Mullerian Tumor (TCGA GDC, 2025)"
+        },
+        {
+          "cancer_type_id": "ucs",
+          "reason": "disallowed_accession",
+          "sample_count": 57,
+          "study_id": "ucs_tcga_pan_can_atlas_2018",
+          "study_name": "Uterine Carcinosarcoma (TCGA, PanCancer Atlas)"
+        },
+        {
+          "cancer_type_id": "ucs",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 22,
+          "study_id": "ucs_jhu_2014",
+          "study_name": "Uterine Carcinosarcoma (Johns Hopkins, Nat Commun 2014)"
+        },
+        {
+          "cancer_type_id": "ucec",
+          "reason": "no_eligible_bulk_rna_profile",
+          "sample_count": 69,
+          "study_id": "ucs_msk_2024",
+          "study_name": "Endometrial Carcinoma (MSK, Molecular Oncology 2024)"
+        }
+      ],
+      "tcga_cohort": "TCGA-UCS"
+    },
+    {
+      "candidate_count": 0,
+      "candidates": [],
+      "code": "UVM",
+      "coverage_status": "search_in_progress",
+      "name": "Uveal melanoma",
+      "rejection_count": 2,
+      "rejection_reasons": {
+        "disallowed_accession": 2
+      },
+      "rejections": [
+        {
+          "cancer_type_id": "um",
+          "reason": "disallowed_accession",
+          "sample_count": 80,
+          "study_id": "uvm_tcga",
+          "study_name": "Uveal Melanoma (TCGA, Firehose Legacy)"
+        },
+        {
+          "cancer_type_id": "um",
+          "reason": "disallowed_accession",
+          "sample_count": 80,
+          "study_id": "uvm_tcga_pan_can_atlas_2018",
+          "study_name": "Uveal Melanoma (TCGA, PanCancer Atlas)"
+        }
+      ],
+      "tcga_cohort": "TCGA-UVM"
+    }
+  ],
+  "generated_at": "2026-07-27T13:15:18.298941+00:00",
+  "schema_version": "tcga-trace-cbioportal-discovery-v2",
+  "screening_policy": {
+    "candidate_is_not_published_dataset": true,
+    "excludes_tcga_target_pcawg_and_cell_line_accessions": true,
+    "manual_checks_still_required": [
+      "patient-level endpoint completeness and event count",
+      "bulk RNA-seq matrix semantics and transform",
+      "gene identifier mapping",
+      "TCGA independence",
+      "license and redistribution terms",
+      "sample-to-patient linkage"
+    ],
+    "minimum_rna_seq_samples": 10,
+    "requires_recognized_survival_time_and_status_columns": true
+  },
+  "source": {
+    "base_url": "https://www.cbioportal.org/api",
+    "clinical_attribute_queries": 49,
+    "mapped_studies": 301,
+    "molecular_profile_count": 2531,
+    "provider": "cBioPortal public API",
+    "sample_list_queries": 26,
+    "screened_rna_studies": 49,
+    "study_count": 538,
+    "unmapped_studies": 237
+  },
+  "summary": {
+    "cancer_types_with_candidates": 14,
+    "candidate_studies": 29,
+    "promoted_studies": 12,
+    "rejected_mapped_studies": 272,
+    "rejection_reason_counts": {
+      "disallowed_accession": 113,
+      "fewer_than_10_rna_samples": 8,
+      "no_eligible_bulk_rna_profile": 131,
+      "no_recognized_survival_endpoint_pair": 20
+    },
+    "tcga_cancer_types": 33
+  }
+}

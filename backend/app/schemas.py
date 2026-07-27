@@ -17,6 +17,7 @@ CutpointMethod = Literal[
 
 FontFamily = Literal["sans", "serif", "mono"]
 PlotAspect = Literal["rectangular", "square"]
+CoxForestModelLayout = Literal["combined", "separate"]
 SignatureMethod = Literal["single", "mean", "zscore", "weighted"]
 CombinedSignatureMethod = Literal["median", "tertiles"]
 ClinicalCovariate = Literal["age_at_index", "stage", "grade", "gender", "race"]
@@ -126,8 +127,11 @@ class CoxForestPlotStyle(BaseModel):
     lower_hazard_color: str = "#1f6f8b"
     higher_hazard_color: str = "#b94d48"
     reference_color: str = "#7b8582"
+    model_layout: CoxForestModelLayout = "combined"
     show_title: bool = True
     plot_title: str | None = Field(default=None, max_length=140)
+    univariable_plot_title: str | None = Field(default=None, max_length=140)
+    multivariable_plot_title: str | None = Field(default=None, max_length=140)
     x_axis_title: str | None = Field(default=None, max_length=100)
 
     @field_validator(
@@ -139,7 +143,13 @@ class CoxForestPlotStyle(BaseModel):
     def validate_colors(cls, value: str) -> str:
         return validate_hex_color(value)
 
-    @field_validator("plot_title", "x_axis_title", mode="before")
+    @field_validator(
+        "plot_title",
+        "univariable_plot_title",
+        "multivariable_plot_title",
+        "x_axis_title",
+        mode="before",
+    )
     @classmethod
     def normalize_labels(cls, value: Any) -> str | None:
         return normalize_optional_plot_label(value)
