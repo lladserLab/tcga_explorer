@@ -58,6 +58,10 @@ desktop/runtime/
 frontend/public/tutorial-videos/**/*.mp4
 frontend/public/tutorial-videos/**/*.part-*
 
+# Research writing and newly generated experiment outputs stay separate.
+/manuscript/
+/docs/publication/
+
 # Filled owner metadata may include private reviewer URLs or contact details.
 manuscript/bioinformatics_app_note/submission/owner_metadata*.json
 !manuscript/bioinformatics_app_note/submission/owner_metadata.template.json
