@@ -1,0 +1,70 @@
+{
+  "schema_version": "trace-teaching-contract-v2",
+  "content_kind": "fixed_interpretation_case",
+  "source_kind": "synthetic_case",
+  "result_id": "TRACE-TEACH-UPLOAD-ERRORS-V1",
+  "pipeline_version": "teaching-contract-only",
+  "snapshot_date": "2026-08-05",
+  "title": "Private-data error lab",
+  "status": "not_a_computed_analysis_result",
+  "scenario": {
+    "fixture_files": [
+      {
+        "file": "synthetic_expression.tsv",
+        "declared_scale": "raw counts",
+        "issue": "sample S-004 appears twice and one value is negative",
+        "classification": "blocking_error",
+        "repair": "resolve the duplicate against the source and correct or redeclare the expression scale before import"
+      },
+      {
+        "file": "synthetic_outcome.tsv",
+        "issue": "the time column is labeled months while the data dictionary declares days",
+        "classification": "blocking_semantic_conflict",
+        "repair": "resolve the unit from the source documentation; never infer it from the numeric range"
+      },
+      {
+        "file": "synthetic_metadata.tsv",
+        "issue": "sample S-009 has no outcome match",
+        "classification": "repairable_linkage_notice",
+        "repair": "retain the original row, report the unmatched ID and exclude it only from linked analyses"
+      },
+      {
+        "file": "synthetic_metadata.tsv",
+        "issue": "rare_subtype has only 3 usable patients in one level",
+        "classification": "analysis_ineligible_metadata",
+        "repair": "do not use the sparse level for a two-group analysis unless a scientifically justified rule was declared independently"
+      },
+      {
+        "file": "synthetic_metadata.tsv",
+        "issue": "therapy_response is measured after baseline treatment",
+        "classification": "post_treatment_semantic_risk",
+        "repair": "do not add it automatically to a baseline Cox model or use it as independent baseline evidence"
+      }
+    ],
+    "expected_mapping": {
+      "patient_key": "patient_id",
+      "expression_rows": "genes",
+      "expression_columns": "samples",
+      "outcome_time": "time",
+      "outcome_event": "event (1 = event, 0 = censored)",
+      "metadata_timing": "declared for every candidate variable"
+    },
+    "blocking_errors": [
+      "non-unique sample or gene identifiers",
+      "insufficient linked patients or events",
+      "invalid expression scale values"
+    ],
+    "semantic_review": [
+      "time-unit meaning",
+      "expression-scale declaration",
+      "measurement timing and circularity"
+    ],
+    "repairable_notices": [
+      "unmatched identifiers retained in only one table"
+    ],
+    "privacy_boundary": "The fixture contains synthetic identifiers only; a reusable checklist must preserve source files and exclude direct identifiers from uploads and exports."
+  },
+  "answer_key": "Duplicate identifiers and invalid scale values block import; unmatched identifiers may be repairable notices; time units and measurement timing always require semantic review.",
+  "interpretation_boundary": "Uploaded metadata remain descriptive or filtering variables and are never added automatically to a Cox model.",
+  "completion_rule": "Completion depends on correctly classifying the issue, not on forcing every fixture to import."
+}

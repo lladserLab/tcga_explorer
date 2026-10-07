@@ -1,0 +1,315 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-esca-humanitas-gse273848-2024",
+    "cancer_code": "ESCA",
+    "name": "Humanitas esophageal adenocarcinoma cohort (GSE273848)",
+    "description": "Independent esophageal adenocarcinoma cohort with direct bulk total RNA sequencing and individually published postoperative disease-free survival.",
+    "cohort_context": "The source study profiled tumor and matched non-tumor esophageal tissues. TRACE Explorer retains one primary tumor profile for each of the twenty patients with an unambiguous postoperative relapse/progression status and follow-up time. Two tumor profiles without a reported postoperative endpoint are excluded.",
+    "source_provider": "geo",
+    "source_accession": "GSE273848",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273848",
+    "publication_citation": "Lambroia et al. Cancers 2024",
+    "publication_id": "PMID:39123475; PMCID:PMC11311406; DOI:10.3390/cancers16152748",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Humanitas Research Hospital esophageal adenocarcinoma cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the open-access article supplement",
+      "source_platform": "Illumina NextSeq 550",
+      "library_method": "SMARTer Stranded Total RNA libraries, paired-end sequencing, STAR GRCh38 alignment and featureCounts with GENCODE release 38 gene symbols",
+      "endpoint_context": "Postoperative disease-free survival after esophageal adenocarcinoma resection",
+      "redistribution_note": "TRACE Explorer analyzes the public GEO count matrix and a curated transcription of endpoint rows from the CC BY 4.0 article supplement. Raw matrix redistribution is disabled and the source terms remain controlling.",
+      "curation_note": "Supplementary Table S1 reports follow-up in months and postoperative relapse or progression. Figure 4B explicitly labels the local analysis as disease-free survival, and its event steps occur at the published follow-up months of the relapse/progression records. Event-free patients are censored at their reported follow-up. Patient_07 and Patient_10 are excluded because the table does not report a postoperative event status.",
+      "clinical_covariate_note": "Histologic grade and sex are exposed as analysis covariates. The reported pathologic TNM string is retained in each source metadata record but is not represented as an ordinal stage group because the supplement does not publish an AJCC stage-group field.",
+      "source_matrix_note": "The frozen GEO matrix has a malformed final non-tumor column labelled Patient_22_NT whose value is constant across genes. It is not selected or used: all retained samples are tumor columns with direct title-to-patient linkage."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE273848",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE273nnn/GSE273848/suppl/GSE273848_totalRNAseq_raw_counts_matrix.txt.gz",
+    "expression_size": 1098032,
+    "expression_sha256": "ce5acec889c252109c7c6980bf9ed0bdf9cf110a73be9e460c6e57f0175097cb",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE273nnn/GSE273848/soft/GSE273848_family.soft.gz",
+    "soft_size": 4297,
+    "soft_sha256": "c75c6dcbc3f535af3e46c202de51680910fbada02f8379ef39baaa2db26a8151",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Patient_[0-9]+_T",
+    "expected_primary_samples": 22,
+    "expected_endpoint_complete_samples": 20,
+    "expected_events": 12,
+    "expected_censored": 8,
+    "expected_expression_columns": 20,
+    "expected_expression_gene_rows": 20386,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "dfs months",
+    "event_characteristic": "dfs event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "grade_characteristic": "grade",
+    "sex_characteristic": "sex",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://mdpi-res.com/d_attachment/cancers/cancers-16-02748/article_deploy/cancers-16-02748-s001.zip",
+      "evidence_size": 1576249,
+      "evidence_sha256": "713f3374459a8e838f033ce6e54f41725b4561fb0652317459883aecaea77837",
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/about/copyright/",
+      "record_id_column": "Patient ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(Patient_[0-9]+)_T",
+      "expected_records": 20,
+      "records": [
+        {
+          "Patient ID": "Patient_01",
+          "DFS months": 10,
+          "DFS event": 1,
+          "Postoperative event": "Relapse",
+          "Sex": "Male",
+          "Grade": "G2",
+          "TNM": "ypT3N0 R0"
+        },
+        {
+          "Patient ID": "Patient_02",
+          "DFS months": 7,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N1 R0"
+        },
+        {
+          "Patient ID": "Patient_03",
+          "DFS months": 10,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G2",
+          "TNM": "ypT2N0 R0"
+        },
+        {
+          "Patient ID": "Patient_05",
+          "DFS months": 12,
+          "DFS event": 1,
+          "Postoperative event": "Relapse",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N3 R0"
+        },
+        {
+          "Patient ID": "Patient_06",
+          "DFS months": 9,
+          "DFS event": 1,
+          "Postoperative event": "Relapse",
+          "Sex": "Female",
+          "Grade": "G3",
+          "TNM": "ypT3N3 R0"
+        },
+        {
+          "Patient ID": "Patient_08",
+          "DFS months": 13,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Female",
+          "Grade": "G2",
+          "TNM": "ypT3N3 R0"
+        },
+        {
+          "Patient ID": "Patient_09",
+          "DFS months": 5,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Female",
+          "Grade": "G2",
+          "TNM": "pT3N3a R0"
+        },
+        {
+          "Patient ID": "Patient_11",
+          "DFS months": 19,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "",
+          "TNM": "ypT3N1 R0"
+        },
+        {
+          "Patient ID": "Patient_12",
+          "DFS months": 54,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N0 R0"
+        },
+        {
+          "Patient ID": "Patient_13",
+          "DFS months": 42,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "",
+          "TNM": "ypT3N3 R0"
+        },
+        {
+          "Patient ID": "Patient_14",
+          "DFS months": 4,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N1 R0"
+        },
+        {
+          "Patient ID": "Patient_15",
+          "DFS months": 5,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N0 R0"
+        },
+        {
+          "Patient ID": "Patient_16",
+          "DFS months": 6,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N2 R0"
+        },
+        {
+          "Patient ID": "Patient_18",
+          "DFS months": 45,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Female",
+          "Grade": "G2",
+          "TNM": "ypT0N0 R0"
+        },
+        {
+          "Patient ID": "Patient_19",
+          "DFS months": 26,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G2",
+          "TNM": "ypT2N1 R0"
+        },
+        {
+          "Patient ID": "Patient_20",
+          "DFS months": 5,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G2",
+          "TNM": "pT2N0 R0"
+        },
+        {
+          "Patient ID": "Patient_21",
+          "DFS months": 8,
+          "DFS event": 1,
+          "Postoperative event": "Relapse",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "pT3N1 R0"
+        },
+        {
+          "Patient ID": "Patient_22",
+          "DFS months": 30,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT1bN0 R0"
+        },
+        {
+          "Patient ID": "Patient_23",
+          "DFS months": 51,
+          "DFS event": 0,
+          "Postoperative event": "None reported",
+          "Sex": "Male",
+          "Grade": "G2",
+          "TNM": "ypT3N0 R0"
+        },
+        {
+          "Patient ID": "Patient_24",
+          "DFS months": 1,
+          "DFS event": 1,
+          "Postoperative event": "Progression",
+          "Sex": "Male",
+          "Grade": "G3",
+          "TNM": "ypT3N3 R0"
+        }
+      ]
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "gene_id",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary esophageal adenocarcinoma resection tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Raw featureCounts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GENCODE release 38 gene_name values supplied directly in the frozen GEO matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The frozen matrix contains 20,386 unique gene symbols; no implicit aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM from the selected tumor columns and applies log2(CPM + 1). Values are suitable for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Primary esophageal adenocarcinoma surgery",
+      "event_definition": "First reported postoperative relapse or progression",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

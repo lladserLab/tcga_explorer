@@ -1,0 +1,93 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "gdc-dlbc-htmcp-2020",
+    "cancer_code": "DLBC",
+    "name": "HIV-associated diffuse large B-cell lymphoma (HTMCP)",
+    "description": "Independent HIV-associated diffuse large B-cell lymphoma cohort with open GDC-harmonized bulk RNA-seq STAR-counts and linked overall-survival follow-up.",
+    "cohort_context": "CGCI HIV+ Tumor Molecular Characterization Project DLBCL biopsies. This clinically specific cohort remains separate from TCGA-DLBC and from other external DLBCL releases.",
+    "source_provider": "gdc_api",
+    "source_accession": "CGCI-HTMCP-DLBCL",
+    "source_url": "https://portal.gdc.cancer.gov/projects/CGCI-HTMCP-DLBCL",
+    "publication_citation": "Fedoriw et al. Modern Pathology 2020",
+    "publication_id": "PMID:32080349; DOI:10.1038/s41379-020-0506-3",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NIH-GDS-Open-Data",
+    "license_url": "https://gdc.cancer.gov/about-gdc/gdc-policies",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Cancer Genome Characterization Initiative (CGCI)",
+      "source_data_system": "NCI Genomic Data Commons",
+      "redistribution_note": "The open cohort is analyzable in TRACE Explorer, but matrix downloads remain disabled pending a dedicated redistribution review.",
+      "curation_note": "Only primary-tumor STAR-counts files are eligible. One project expression profile whose sample type is not reported is excluded before endpoint intersection."
+    }
+  },
+  "source": {
+    "provider": "gdc_api",
+    "project_id": "CGCI-HTMCP-DLBCL",
+    "sample_type_priority": [
+      "Primary Tumor"
+    ],
+    "download_workers": 4,
+    "matrix_shard_size": 32,
+    "license_evidence_url": "https://gdc.cancer.gov/about-gdc/gdc-policies"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary DLBCL biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GDC STAR-counts GENCODE v36 gene_id and gene_name fields",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Distinct Ensembl gene identifiers sharing one supplied symbol are excluded rather than merged implicitly.",
+    "scale_note": "The GDC STAR-counts files supply non-negative tpm_unstranded values. TRACE Explorer applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as implemented by the GDC survival endpoint",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

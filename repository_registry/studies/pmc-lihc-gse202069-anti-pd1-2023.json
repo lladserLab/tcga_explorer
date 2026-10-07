@@ -1,0 +1,163 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-lihc-gse202069-anti-pd1-2023",
+    "cancer_code": "LIHC",
+    "name": "Nanjing Drum Tower anti-PD-1 HCC cohort (2023)",
+    "description": "Independent hepatocellular-carcinoma cohort with tumor bulk RNA sequencing and individual overall- and progression-free-survival follow-up among patients treated with anti-PD-1.",
+    "cohort_context": "The source release contains RNA sequencing for 41 HCC tumors and 25 paired or unpaired nontumor liver specimens. TRACE Explorer prespecifies the 17 HCC patients marked as receiving anti-PD-1 therapy and excludes untreated tumors and nontumor tissues before endpoint analysis.",
+    "source_provider": "GEO expression and PMC public article supplement",
+    "source_accession": "GSE202069; PMC10789383",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE202069",
+    "publication_citation": "Li et al. Hepatology 2024",
+    "publication_id": "PMID:37540187; PMCID:PMC10789383; DOI:10.1097/HEP.0000000000000553",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Nanjing Drum Tower Hospital hepatocellular-carcinoma multiomics cohort",
+      "source_data_system": "GEO gene-expression matrix and Europe PMC article supplement",
+      "library_method": "Bulk RNA sequencing of human HCC tumor and nontumor liver specimens",
+      "treatment_context": "Seventeen patients with HCC and available clinical response to anti-PD-1 therapy",
+      "endpoint_context": "Source-defined overall and progression-free survival in the anti-PD-1-treated subset",
+      "sample_selection_note": "Supplementary Table S1 contains 41 unique HCC clinical labels, all present among the 66 GSE202069 expression columns. Eligibility is fixed before endpoint analysis to PD1.therapy = Yes, a present tumor expression column, positive OS and PFS times and explicit binary event indicators, retaining 17 unique patients. The other 24 clinical tumors were not treated with anti-PD-1, and the 25 nontumor expression columns have no eligible clinical record.",
+      "expression_processing_note": "GEO names the supplied file as a gene TPM expression matrix, but its numeric range is already log2-like and the source does not document the exact offset. TRACE Explorer therefore preserves the released values unchanged and does not apply a second transformation or infer an offset.",
+      "expression_curation_note": "The pinned GSE202069 matrix contains 31,082 non-empty exact and case-insensitively unique gene symbols across 66 columns. The 17 eligible tumor columns contain no missing or nonfinite values.",
+      "endpoint_caveat": "The source OS and PFS fields encode 1 as an observed event and 0 as censoring. The retained anti-PD-1 cohort contains 9 OS events and 8 OS-censored observations, and 11 PFS events and 6 PFS-censored observations. The article supplement does not state the exact clinical time origin, so TRACE Explorer preserves the endpoints as source-defined rather than inferring a treatment landmark.",
+      "overlap_note": "This institutional anti-PD-1 cohort is independent of TCGA-LIHC and of the active LIRI-JP, SNUH, PLANET and other external LIHC releases.",
+      "license_note": "The CC BY-NC-ND 4.0 article identifies GSE202069 as the transcriptomic source and publicly supplies individual clinical data. Files are downloaded and transformed in place with pinned hashes; redistribution of source or derived expression remains disabled."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC10789383",
+    "publication_date": "2023-08-07",
+    "full_text_size": 126354,
+    "full_text_sha256": "65d5c9c82588eb175b2cebf8ceca6abe3a5d188cd80d8ecdfa3f27a97b2aecc1",
+    "source_license_id": "CC-BY-NC-ND-4.0",
+    "clinical_member": "hep-79-289-s002.xlsx",
+    "clinical_size": 761708,
+    "clinical_sha256": "f2a0bf565c58356b11812986d1b509d9243c7a9d1b15f6f56add451fcefd9366",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE202nnn/GSE202069/suppl/GSE202069_gene_tpm_expression.txt.gz",
+    "expression_size": 10925859,
+    "expression_sha256": "89c3500aa32efe07dfccc30f868d0b95c5d825d4b25a9ccae470fe9e234a4635",
+    "clinical": {
+      "format": "xlsx",
+      "sheet_name": "Table S1",
+      "header_row": 2,
+      "expected_rows": 41,
+      "sample_id_column": "Label",
+      "patient_id_column": "Label",
+      "sample_type": "Anti-PD-1-treated HCC tumor",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "PD1.therapy",
+          "include": [
+            "Yes"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS.Time",
+          "required": true
+        },
+        {
+          "column": "PFS",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "PFS.Time",
+          "required": true
+        }
+      ]
+    },
+    "expression": {
+      "layout": "simple",
+      "delimiter": "\t",
+      "expected_samples": 66,
+      "expected_gene_rows": 31082
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Anti-PD-1-treated HCC tumor",
+    "sample_role": "HCC tumor specimen used for bulk RNA sequencing in an anti-PD-1-treated patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Anti-PD-1-treated HCC tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ],
+    "stage_fields": [
+      "patient.Stage"
+    ],
+    "grade_fields": [
+      "patient.Grade"
+    ]
+  },
+  "expression": {
+    "layer_id": "source_provided_log2_like_tpm",
+    "label": "Source-provided log2-like TPM expression",
+    "source_unit": "Source-provided log2-like TPM expression",
+    "transform": "identity",
+    "analysis_unit": "Source-provided log2-like TPM expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene symbols supplied in GSE202069",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 31,082 supplied gene labels are non-empty and case-insensitively unique, so no aggregation or online remapping is applied.",
+    "stream_source_order": true,
+    "scale_note": "The GSE202069 values are preserved unchanged because they are already log2-like and the source does not document the exact offset. Values are intended only for within-cohort analyses."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-defined overall survival",
+      "time_column": "OS.Time",
+      "event_column": "OS",
+      "time_unit": "days",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by the source OS field",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Source-defined progression-free survival",
+      "time_column": "PFS.Time",
+      "event_column": "PFS",
+      "time_unit": "days",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Progression or death as encoded by the source PFS field",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

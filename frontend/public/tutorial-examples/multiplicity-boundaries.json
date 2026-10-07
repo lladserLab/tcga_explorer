@@ -1,0 +1,62 @@
+{
+  "schema_version": "trace-teaching-contract-v2",
+  "content_kind": "fixed_interpretation_case",
+  "source_kind": "synthetic_case",
+  "result_id": "TRACE-TEACH-MULTIPLICITY-V1",
+  "pipeline_version": "teaching-contract-only",
+  "snapshot_date": "2026-08-05",
+  "title": "Multiplicity boundaries",
+  "status": "not_a_computed_analysis_result",
+  "scenario": {
+    "prospective_family": "A Multiverse family declared before execution, including unsuccessful specifications.",
+    "side_by_side_comparison": "A Compare matrix whose tested genes and cutpoints are declared together.",
+    "post_hoc_record": "Browser run history exported as an explicitly exploratory family.",
+    "decision_timeline": [
+      { "order": 1, "decision": "Freeze endpoints, scoring and cutpoints", "timing": "before any specification result" },
+      { "order": 2, "decision": "Execute the complete Multiverse grid", "timing": "after family freeze" },
+      { "order": 3, "decision": "Export the browser run history", "timing": "after exploratory runs; explicitly post hoc" }
+    ],
+    "compare_family": {
+      "declared_cells": ["GENE_A × median", "GENE_A × tertile", "GENE_B × median", "GENE_B × tertile"],
+      "multiplicity_boundary": "four gene-by-cutpoint cells declared together",
+      "inferential_role": "exploratory sensitivity"
+    },
+    "multiverse_family": {
+      "family_id": "SYNTHETIC-MV-001",
+      "frozen_dimensions": {
+        "endpoints": ["OS", "PFI"],
+        "scoring_methods": ["single"],
+        "cutpoint_methods": ["median", "percentile", "maxstat"]
+      },
+      "summary": { "planned": 6, "completed": 4, "not_evaluable": 1, "failed": 1 },
+      "specification_curve": {
+        "included_specification_ids": ["S001", "S002", "S003", "S004", "S005", "S006"],
+        "display_rule": "completed effects retain intervals; crosses retain not-evaluable or failed specifications",
+        "selection_rule": "none"
+      },
+      "execution_ledger": [
+        { "specification_id": "S001", "endpoint": "OS", "scoring_method": "single", "cutpoint_method": "median", "status": "completed", "grouped_hazard_ratio": 1.36, "confidence_interval_95": [1.03, 1.8] },
+        { "specification_id": "S002", "endpoint": "OS", "scoring_method": "single", "cutpoint_method": "percentile", "status": "completed", "grouped_hazard_ratio": 1.29, "confidence_interval_95": [0.96, 1.74] },
+        { "specification_id": "S003", "endpoint": "OS", "scoring_method": "single", "cutpoint_method": "maxstat", "status": "completed", "grouped_hazard_ratio": 1.51, "confidence_interval_95": [1.08, 2.12] },
+        { "specification_id": "S004", "endpoint": "PFI", "scoring_method": "single", "cutpoint_method": "median", "status": "completed", "grouped_hazard_ratio": 1.08, "confidence_interval_95": [0.79, 1.48] },
+        { "specification_id": "S005", "endpoint": "PFI", "scoring_method": "single", "cutpoint_method": "percentile", "status": "not_evaluable", "reason": "too few events in one group" },
+        { "specification_id": "S006", "endpoint": "PFI", "scoring_method": "single", "cutpoint_method": "maxstat", "status": "failed", "reason": "model fit did not converge" }
+      ],
+      "failures_and_unavailable": [
+        { "specification_id": "S005", "status": "not_evaluable", "reason": "too few events in one group" },
+        { "specification_id": "S006", "status": "failed", "reason": "model fit did not converge" }
+      ]
+    },
+    "run_history_ledger": {
+      "inferential_role": "post_hoc_exploration",
+      "entries": [
+        { "run_id": "RUN-001", "endpoint": "OS", "status": "completed", "included_in_export": true },
+        { "run_id": "RUN-002", "endpoint": "PFI", "status": "failed", "included_in_export": true },
+        { "run_id": "RUN-003", "endpoint": "DSS", "status": "completed", "included_in_export": true }
+      ]
+    }
+  },
+  "answer_key": "The multiverse and Compare matrix are declared families. The run history is an explicitly post hoc family and cannot be described as preregistered.",
+  "interpretation_boundary": "A retrospective run ledger is not preregistration, and failed or unfavorable specifications cannot be silently removed.",
+  "completion_rule": "Completion depends on naming the multiplicity family and preserving all planned attempts."
+}

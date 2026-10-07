@@ -1,0 +1,124 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-nci-umd-german-gse224564-2023",
+    "cancer_code": "PAAD",
+    "name": "NCI-UMD-German resected PDAC cohort (GSE224564)",
+    "description": "Independent multicenter pancreatic ductal adenocarcinoma cohort with primary-tumor bulk RNA sequencing and individual source-defined overall-survival follow-up.",
+    "cohort_context": "The NCI-UMD-German cohort contains 175 surgically resected PDAC tumors collected through the University of Maryland Medical System and University Medical Center Goettingen. The GEO subseries publishes one whole-transcriptome profile and one complete positive survival time/status pair for every retained tumor.",
+    "source_provider": "geo",
+    "source_accession": "GSE224564",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE224564",
+    "publication_citation": "Ohara et al. Cell Reports 2023",
+    "publication_id": "PMID:37980563; PMCID:PMC10842852; DOI:10.1016/j.celrep.2023.113434",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "NCI-UMD-German resected PDAC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "TruSeq Stranded mRNA whole-transcriptome sequencing of resected PDAC tumors; 150-bp paired-end reads were aligned to hg38 with STAR and quantified with RSEM",
+      "endpoint_context": "Source-defined overall survival in months for 175 resected PDAC patients",
+      "endpoint_caveat": "The article explicitly describes the Kaplan-Meier endpoint as overall survival, while the pinned GEO metadata names its binary field cancer_death and does not separately document non-cancer deaths. TRACE Explorer therefore labels this source-defined OS and preserves the original field semantics in the audit record.",
+      "sample_selection_note": "The GSE224564 patient-tumor subseries contains exactly one RNA profile per source sample title. All 175 titles are unique and match the 175 expression-matrix columns exactly; no sample-selection fallback is required.",
+      "expression_processing_note": "GEO supplies a matrix of CPM-TMM normalized values for 20,080 non-empty, case-insensitively unique gene symbols. Because the source values include negatives and GEO does not specify a further logarithmic formula, TRACE Explorer imports them unchanged rather than applying an inferred transform.",
+      "clinical_covariate_note": "GEO supplies source stage and grade for all 175 records. Exact age and sex are not present in the pinned family metadata and are not inferred.",
+      "overlap_note": "The NCI-UMD-German cohort is institutionally and accession-wise distinct from TCGA-PAAD and from the other active external pancreatic-cancer releases in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE224564",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE224nnn/GSE224564/suppl/GSE224564_RNAseq_Pancreatic_cancer_YO_Hussain_lab.txt.gz",
+    "expression_filename": "GSE224564_RNAseq_Pancreatic_cancer_YO_Hussain_lab.txt.gz",
+    "expression_size": 12745047,
+    "expression_sha256": "a13bce3d860a81f6d172df783d171db2b11bc5058c3bdb6f891b458e85147377",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE224nnn/GSE224564/soft/GSE224564_family.soft.gz",
+    "soft_size": 12694,
+    "soft_sha256": "3167575aadceac0d41c6b6eb77da07e45a8ce0c7c247c403e496903d255efe54",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "^[0-9]+_[A-Za-z0-9_]+$",
+    "expected_primary_samples": 175,
+    "expected_endpoint_complete_samples": 175,
+    "expected_events": 118,
+    "expected_censored": 57,
+    "expected_expression_columns": 175,
+    "expected_expression_gene_rows": 20080,
+    "expected_normalized_expression_gene_rows": 20080,
+    "patient_id_characteristic": "",
+    "expression_sample_metadata_field": "title",
+    "time_characteristic": "month",
+    "event_characteristic": "cancer_death",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "stage",
+    "grade_characteristic": "grading",
+    "sample_type": "Primary PDAC Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "header_missing_feature_column": true,
+      "value_transform": "identity",
+      "allow_negative_values": true,
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary PDAC Tumor",
+    "sample_role": "Surgically resected primary pancreatic ductal adenocarcinoma, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary PDAC Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_cpm_tmm",
+    "label": "GEO source-provided CPM-TMM normalized expression",
+    "source_unit": "CPM-TMM normalized gene expression supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "Source-provided CPM-TMM normalized expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene-symbol column in the pinned GEO matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 20,080 source gene symbols are non-empty and unique under case-insensitive comparison, so no aggregation or ambiguity exclusion is required.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer imports the source-provided CPM-TMM normalized values unchanged. GEO does not declare a further logarithmic formula, and the presence of negative values precludes applying log2(value + 1). Values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-defined overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death as encoded by the source cancer_death field and analyzed as overall survival in the accompanying article",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

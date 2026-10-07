@@ -1,0 +1,85 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-kirc-iatlas-immotion150-2018",
+    "cancer_code": "KIRC",
+    "name": "Metastatic clear-cell RCC (IMmotion150, 2018)",
+    "description": "Independent randomized phase II renal-cell carcinoma cohort with pretreatment bulk RNA-seq and treatment-anchored progression-free survival.",
+    "cohort_context": "Treatment-naive metastatic clear-cell or sarcomatoid-component renal-cell carcinoma randomized to atezolizumab, atezolizumab plus bevacizumab or sunitinib. This treatment-selected metastatic cohort remains separate from primary-tumor TCGA-KIRC and other renal cohorts.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "rcc_iatlas_immotion150_2018",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/rcc_iatlas_immotion150_2018",
+    "publication_citation": "McDermott et al. Nature Medicine 2018",
+    "publication_id": "PMID:29867230; PMCID:PMC6721896; DOI:10.1038/s41591-018-0053-3; ClinicalTrials.gov:NCT01984242",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Randomized phase II first-line metastatic RCC trial",
+      "treatment_context": "Atezolizumab, atezolizumab plus bevacizumab, or sunitinib",
+      "histology_basis": "Trial eligibility required metastatic clear-cell RCC or RCC with a sarcomatoid component; the DataHub sample code is the broader RCC label.",
+      "curation_note": "All 263 source RNA-seq profiles are labelled pretreatment and map one-to-one to endpoint-complete patients. PFS analyses must remain within one randomized arm; pooled estimates across atezolizumab, atezolizumab plus bevacizumab and sunitinib are prohibited."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/rcc_iatlas_immotion150_2018",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment metastatic clear-cell RCC biopsy",
+    "sample_role": "Pretreatment metastatic clear-cell or sarcomatoid-component RCC biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["RCC"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_TREATMENT",
+        "include": ["Pre"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.CLINICAL_STAGE"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(TPM + 1); different identifiers are never merged implicitly.",
+    "scale_note": "The DataHub molecular-profile metadata identifies the frozen source values as TPM. TRACE Explorer applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Randomized first-line treatment start",
+      "event_definition": "Disease progression or death as encoded by the source trial PFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

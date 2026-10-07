@@ -29,7 +29,13 @@ class CacheWarmupError(RuntimeError):
 
 def warm_startup_cache(db: Session, settings: Settings) -> dict[str, Any]:
     started = time.monotonic()
-    cohort_ids = list(db.scalars(select(Cohort.id).order_by(Cohort.id)).all())
+    cohorts = list(db.scalars(select(Cohort).order_by(Cohort.id)).all())
+    external_cohort_ids = [
+        cohort.id for cohort in cohorts if cohort.status == "external_only"
+    ]
+    cohort_ids = [
+        cohort.id for cohort in cohorts if cohort.status != "external_only"
+    ]
     manifest: dict[str, Any] = {
         "status": "running",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -43,6 +49,7 @@ def warm_startup_cache(db: Session, settings: Settings) -> dict[str, Any]:
             "gdc_expression_matrices",
         ],
         "cohort_count": len(cohort_ids),
+        "skipped_external_cohorts": external_cohort_ids,
         "cohorts": [],
         "errors": [],
     }

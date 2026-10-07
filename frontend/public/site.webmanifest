@@ -1,0 +1,31 @@
+{
+  "name": "TRACE Explorer",
+  "short_name": "TRACE",
+  "description": "Study-aware survival, gene-expression, GSEA and pan-cancer analysis across curated bulk RNA cohorts and de-identified user data.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F8F9",
+  "theme_color": "#182235",
+  "icons": [
+    {
+      "src": "icons/trace-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/trace-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/trace-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

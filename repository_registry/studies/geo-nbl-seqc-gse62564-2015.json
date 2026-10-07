@@ -1,0 +1,157 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-nbl-seqc-gse62564-2015",
+    "cancer_code": "NBL",
+    "name": "SEQC neuroblastoma cohort (GSE62564/GSE49711)",
+    "description": "Independent 498-patient primary-neuroblastoma cohort with gene-level bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The MAQC-III/SEQC project profiled 498 primary neuroblastomas. TRACE Explorer links the gene-level TUC_G matrix deposited with GSE49711 to the survival annotations deposited for the same patients in GSE62564; the transcript-level GSE62564 matrix and the overlapping GSE49710 microarray are not treated as additional cohorts.",
+    "source_provider": "geo",
+    "source_accession": "GSE49711 / GSE62564",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE62564",
+    "publication_citation": "Zhang et al. Genome Biology 2015",
+    "publication_id": "PMID:26109056; PMCID:PMC4506430; DOI:10.1186/s13059-015-0694-1",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "MAQC-III / Sequencing Quality Control (SEQC)",
+      "source_data_system": "NCBI GEO GSE49711 expression and GSE62564 outcome records",
+      "source_platform": "Illumina HiSeq 2000",
+      "biological_cohort_id": "seqc_nb_498",
+      "library_method": "Primary-tumor mRNA sequencing aligned to hg19 and quantified with Cufflinks; TRACE uses the source gene-level TUC_G log2(FPKM + 1) matrix.",
+      "endpoint_context": "Source-defined overall survival from neuroblastoma diagnosis",
+      "endpoint_caveat": "The source OS event denotes death from disease. TRACE preserves the OS label and event definition and does not reinterpret it as all-cause mortality.",
+      "sample_selection_note": "Exactly one gene-level RNA profile is linked to each of 498 patients. Source matrix column suffixes are normalized deterministically to the SEQC_NB patient key, with collisions prohibited.",
+      "treatment_note": "The tumors are source-described as primary, but prior-treatment status at sampling is not documented consistently and remains unknown; TRACE does not label the cohort treatment-naive.",
+      "overlap_note": "GSE49710 is a microarray and GSE49711/GSE62564 represent the same 498 biological patients. They are registered once and must never be counted as independent studies.",
+      "secondary_endpoint_note": "The source also reports event-free survival for all 498 patients (183 events and 315 censures). This release exposes OS while the GEO adapter's multi-endpoint contract is being extended; it does not create a duplicate EFS study."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE49711",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE49nnn/GSE49711/suppl/GSE49711_SEQC_NB_TUC_G_log2.txt.gz",
+    "expression_filename": "GSE49711_SEQC_NB_TUC_G_log2.txt.gz",
+    "expression_size": 81339446,
+    "expression_sha256": "be8774b5d46e6459285f9e47b859cd567a4b17abcdd72e4241e15ec818719070",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE49nnn/GSE49711/soft/GSE49711_family.soft.gz",
+    "soft_size": 29744,
+    "soft_sha256": "7a2965394499b639b995cda41fe2d6d4e8836360003e5c510cbfdbdb08c121b7",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "SEQC_NB[0-9]{3}",
+    "expected_primary_samples": 498,
+    "expected_characteristic_eligible_samples": 498,
+    "expected_endpoint_complete_samples": 498,
+    "expected_events": 105,
+    "expected_censored": 393,
+    "expected_source_expression_files": 498,
+    "expected_expression_columns": 498,
+    "expected_expression_gene_rows": 23146,
+    "expected_normalized_expression_gene_rows": 23146,
+    "expected_source_sample_id_normalizations": 498,
+    "time_characteristic": "os_days",
+    "event_characteristic": "os_event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age at diagnosis",
+    "age_divisor": 365.25,
+    "stage_characteristic": "inss stage",
+    "stage_value_map": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "4S": "4S"
+    },
+    "expression_sample_metadata_field": "title",
+    "sample_type": "Primary neuroblastoma tumor",
+    "sample_characteristic_filters": [
+      {
+        "key": "source name",
+        "include": ["neuroblastoma"],
+        "required": true
+      }
+    ],
+    "clinical": {
+      "evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE62nnn/GSE62564/soft/GSE62564_family.soft.gz",
+      "evidence_size": 27522,
+      "evidence_sha256": "a76d0f437e396415ebc0fc4ed664128040874742c356c4c803e4edee9e29b984",
+      "evidence_format": "geo_soft",
+      "record_id_column": "sample_title",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(SEQC_NB[0-9]{3})(?: \\[2\\])?",
+      "sample_id_replacement": "\\1",
+      "field_name_map": {
+        "training/validation": "source_split",
+        "age": "age at diagnosis",
+        "efs day": "efs_days",
+        "efs bin": "efs_event",
+        "os day": "os_days",
+        "os bin": "os_event",
+        "high risk": "high_risk_source_label"
+      },
+      "expected_records": 498,
+      "expected_matched_records": 498,
+      "expected_unmatched_records": 0
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "00gene_id",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "source_sample_id_pattern": "^(SEQC_NB[0-9]{3})_.+$",
+      "source_sample_id_replacement": "\\1",
+      "value_transform": "identity",
+      "duplicate_feature_policy": "error"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary neuroblastoma tumor",
+    "sample_role": "Primary neuroblastoma tumor; treatment status at sampling unknown",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary neuroblastoma tumor"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE"],
+    "age_fields": ["patient.AGE_AT_INDEX"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_fpkm",
+    "label": "Provided gene-level log2(FPKM + 1)",
+    "source_unit": "Gene-level FPKM provided as log2(FPKM + 1)",
+    "transform": "identity",
+    "analysis_unit": "Provided log2(FPKM + 1)",
+    "feature_column_count": 1,
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned GSE49711 TUC_G matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 23,146 source gene symbols are non-empty and unique; no implicit aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "The pinned SEQC README defines the TUC_G values as gene-level log2(FPKM + 1). TRACE preserves that scale without a second transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival (source-defined disease death)",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Neuroblastoma diagnosis",
+      "event_definition": "Death from disease as encoded by the source OS event",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

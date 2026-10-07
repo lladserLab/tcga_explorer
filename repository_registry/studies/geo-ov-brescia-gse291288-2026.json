@@ -1,0 +1,168 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-ov-brescia-gse291288-2026",
+    "cancer_code": "OV",
+    "name": "Brescia high-grade serous ovarian cancer cohort (GSE291288)",
+    "description": "Independent high-grade serous ovarian cancer cohort with fresh-frozen primary-tumor bulk RNA-seq and individual overall-survival follow-up.",
+    "cohort_context": "The Brescia cohort contains 139 patients with high-grade serous ovarian cancer. All patients contribute one fresh-frozen bulk tumor, exact vital status and follow-up time; 131 of 139 have FIGO stage III or IV disease.",
+    "source_provider": "geo",
+    "source_accession": "GSE291288; Code Ocean 0608104",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE291288",
+    "publication_citation": "Rai et al. Clinical Cancer Research 2026",
+    "publication_id": "PMID:40705052; DOI:10.1158/1078-0432.CCR-24-4250; Code Ocean DOI:10.24433/CO.4397505.v1",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Brescia HGSOC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus and Code Ocean verified capsule",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "NEBNext Ultra II RNA library preparation and paired-end sequencing; Trim Galore preprocessing; Kallisto 0.46.2 quantification against Ensembl release 75; tximport 1.14.2 gene-level summarization",
+      "endpoint_context": "Source-provided overall survival",
+      "endpoint_caveat": "The verified analysis capsule labels Time in years and Event as all-cause death/censoring but does not state a more precise clinical day-zero. TRACE Explorer preserves the source interval and does not reinterpret it as TCGA-CDR OS.",
+      "clinical_evidence_note": "The peer-reviewed article states that the Brescia cohort was selected for clinical-data availability. Its verified Code Ocean capsule exposes the exact BSSurvivalData.csv used by the published Cox and Kaplan-Meier analyses. The capsule record is identified by Code Ocean ID 8ff8a82d-53c6-422f-8111-c9332e8b9bf6 and DOI 10.24433/CO.4397505.v1.",
+      "sample_linkage_note": "Each GEO bulk-tumor sample records its internal R-number twice in the sample descriptions. The clinical table uses the corresponding BS-number. All 139 R-number and BS-number keys match one-to-one, including the four nonconsecutive identifiers.",
+      "expression_curation_note": "The GEO filename describes the matrix as TPM, but the deposited matrix has counts.R sample headers, non-integer tximport abundance values and per-library totals of approximately 29-40 million rather than one million. TRACE Explorer therefore treats it as the source tximport estimated-count component, computes CPM over all 28,175 unique source symbols and applies log2(CPM + 1).",
+      "stage_coding_note": "The source analysis table codes FIGO stage I/II as 0 and stage III/IV as 1. The published Table 1 confirms 8 early-stage and 131 advanced-stage patients.",
+      "residual_tumor_note": "The source RT field codes no visible postoperative residual tumor as 0 and visible residual tumor as 1. It is retained in the auditable source clinical record but is not promoted as a generic stage or grade field.",
+      "overlap_note": "The institutionally defined Brescia cohort is external to TCGA-OV and to the previously registered multicenter, Cedars-Sinai and CHA ovarian releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO matrix and verified Code Ocean clinical file in place. Direct redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE291288",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE291nnn/GSE291288/suppl/GSE291288_TPM_BresciaSamples.csv.gz",
+    "expression_filename": "GSE291288_TPM_BresciaSamples.csv.gz",
+    "expression_size": 11103374,
+    "expression_sha256": "9ac5376aa2261544f3fa25900ebcdca4112eae345f18707a1717da02d361caa6",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE291nnn/GSE291288/soft/GSE291288_family.soft.gz",
+    "soft_size": 10443,
+    "soft_sha256": "282eb9178425eeb54f4633bdd240882ea405b802d1e227ca3a25f02cb37eb93f",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "^Brescia Ovarian Tumour - [0-9]+$",
+    "expected_primary_samples": 139,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "Ovarian Tumour"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 139,
+    "expected_endpoint_complete_samples": 139,
+    "expected_events": 101,
+    "expected_censored": 38,
+    "expected_expression_columns": 139,
+    "expected_expression_gene_rows": 28175,
+    "expected_normalized_expression_gene_rows": 28175,
+    "clinical": {
+      "evidence_url": "https://files.codeocean.com/files/verified/8ff8a82d-53c6-422f-8111-c9332e8b9bf6_v1.0/data/BSSurvivalData.csv",
+      "evidence_format": "csv",
+      "evidence_size": 4373,
+      "evidence_sha256": "7fb6502a50ca6aa4c8cde5ed02ba893b97d62ff1c1aa2ca424f0ccfb8e38c275",
+      "record_id_column": "SampleID",
+      "sample_metadata_field": "descriptions",
+      "sample_id_pattern": "^(?:BS|Library name: R|counts\\.R)([0-9]+)$",
+      "sample_id_replacement": "\\1",
+      "field_name_map": {
+        "SampleID": "source patient id",
+        "EMTscore": "source emt score",
+        "EMT_group": "source emt group",
+        "Event": "os event",
+        "Time": "os years",
+        "Stage": "stage binary",
+        "RT": "residual tumor binary",
+        "Age": "age years"
+      },
+      "expected_records": 139,
+      "expected_matched_records": 139,
+      "expected_unmatched_records": 0
+    },
+    "patient_id_characteristic": "source patient id",
+    "expression_sample_characteristic": "source patient id",
+    "expression_sample_id_pattern": "^BS([0-9]+)$",
+    "expression_sample_id_replacement": "counts.R\\1",
+    "time_characteristic": "os years",
+    "event_characteristic": "os event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "stage binary",
+    "stage_value_map": {
+      "0": "Stage I/II",
+      "1": "Stage III/IV"
+    },
+    "age_characteristic": "age years",
+    "sex_default": "Female",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "count_value_type": "nonnegative_numeric"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Fresh-frozen primary high-grade serous ovarian tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO tximport abundance normalized as log2(CPM + 1)",
+    "source_unit": "Source-provided gene-level Kallisto/tximport estimated counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols from Ensembl release 75 transcript quantification summarized by tximport",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 28,175 non-empty source symbols are unique under case-normalized comparison; no implicit aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes CPM from all 28,175 source rows in each selected tumor and applies log2(CPM + 1). Values support within-cohort relative analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_YEARS",
+      "event_column": "OS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Source study baseline; the exact day-zero definition is not specified in the public capsule",
+      "event_definition": "Death from any cause as encoded by the source Event field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-nki-gse192341-2022",
+    "cancer_code": "BRCA",
+    "name": "NKI HER2-negative neoadjuvant breast cancer RNA-seq cohort (GSE192341)",
+    "description": "Independent HER2-negative breast cancer cohort with treatment-naive tumor-biopsy bulk RNA sequencing and individual recurrence-free-survival follow-up.",
+    "cohort_context": "The GEO release contains 87 fresh-frozen pretreatment breast tumor biopsies from patients scheduled for neoadjuvant chemotherapy at the Netherlands Cancer Institute. Seventy-two expression-linked patients have both an individual recurrence-free-survival time and recurrence status; the remaining 15 profiles are retained in the source release but excluded from survival analysis because the endpoint is incomplete.",
+    "source_provider": "geo",
+    "source_accession": "GSE192341",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE192341",
+    "publication_citation": "Hoogstraat et al. npj Breast Cancer 2022",
+    "publication_id": "PMID:35523804; PMCID:PMC9076915; DOI:10.1038/s41523-022-00428-8",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Netherlands Cancer Institute HER2-negative neoadjuvant breast cancer study",
+      "source_data_system": "NCBI Gene Expression Omnibus and npj Breast Cancer",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Bulk RNA sequencing of fresh-frozen pretreatment biopsies with greater than 50% tumor, 50-bp single-end libraries, TopHat 2.1 alignment to the GRCh37 release 75 transcriptome and gene-level lcount quantification",
+      "endpoint_context": "Source-defined recurrence-free survival after treatment-naive biopsy and neoadjuvant therapy",
+      "endpoint_caveat": "The public release supplies RFS in years and recurrence status but does not state a precise calendar origin for the interval. TRACE Explorer preserves the source RFS label and does not reinterpret it as TCGA DFI or PFI.",
+      "sample_selection_note": "Each GEO record represents one treatment-naive tumor biopsy. Exactly 72 of 87 records contain both positive RFS time and an explicit recurrence status; endpoint-incomplete records are excluded deterministically.",
+      "clinical_evidence_note": "Age, subtype, pathologic response, nodal status, recurrence and RFS are embedded in the GEO family SOFT and linked to count-matrix columns by the source sample_id.",
+      "expression_curation_note": "TRACE Explorer computes library sizes across all 42,877 released Ensembl rows and applies log2(CPM + 1). The source-declared pinned GRCh37 release 75 annotation maps 41,460 rows; 1,417 identifiers absent from that reference and 78 symbols represented by multiple Ensembl genes are excluded, leaving 40,505 analyzable symbols.",
+      "overlap_note": "The NKI neoadjuvant cohort is independent of TCGA-BRCA and of the active SCAN-B, CNP, BRCA-KR, POG570 and iAtlas breast cancer releases. GSE34138 contributes additional microarray profiles to the source publication but is not included in this RNA-seq release.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO count matrix in place. Direct source-file redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE192341",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE192nnn/GSE192341/suppl/GSE192341_processed_data.txt.gz",
+    "expression_size": 4604875,
+    "expression_sha256": "4b6bd3455c6abce7c152e92b7117bd6de41d8f12fddf94982280ddb6f40c9cc2",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE192nnn/GSE192341/soft/GSE192341_family.soft.gz",
+    "soft_size": 10023,
+    "soft_sha256": "579aff051edc29465bca1e2a19b1da23a350607e9e277f59839c021c4f937193",
+    "license_evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9076915/",
+    "primary_sample_title_pattern": "[0-9]+",
+    "expected_primary_samples": 87,
+    "expected_endpoint_complete_samples": 72,
+    "expected_events": 14,
+    "expected_censored": 58,
+    "expected_expression_columns": 72,
+    "expected_expression_gene_rows": 42877,
+    "expected_normalized_expression_gene_rows": 42877,
+    "patient_id_characteristic": "sample_id",
+    "time_characteristic": "rfs (years)",
+    "event_characteristic": "recurrence",
+    "event_value_map": {
+      "No": 0,
+      "Yes": 1
+    },
+    "age_characteristic": "age",
+    "expression_sample_id_pattern": "^([0-9]+)$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "ensembl_gene_id",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Treatment-naive fresh-frozen breast tumor biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Gene-level raw read counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 gene_name annotation declared by the source",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer calculates CPM from all 42,877 released source rows before applying log2(CPM + 1). Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Source-defined recurrence-free survival",
+      "time_column": "RFS_YEARS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Source follow-up origin not explicitly reported",
+      "event_definition": "Breast cancer recurrence according to the GEO clinical record",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

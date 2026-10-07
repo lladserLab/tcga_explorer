@@ -1,0 +1,140 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-skcm-wisconsin-hu1418il2-gse133713-2020",
+    "cancer_code": "SKCM",
+    "name": "Wisconsin resectable-melanoma hu14.18-IL2 cohort (GSE133713)",
+    "description": "Independent advanced-melanoma clinical-trial cohort with bulk tumor RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "Twenty-three patients with resectable recurrent stage III or IV melanoma contributed one FFPE resection specimen each. TRACE Explorer retains the 21 patients who received hu14.18-IL2 and excludes two patients recorded as never treated. Thirteen retained tumors were resected after the first hu14.18-IL2 course (group A), whereas eight were resected before the first course (group B).",
+    "source_provider": "geo",
+    "source_accession": "GSE133713",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE133713",
+    "publication_citation": "Yang et al. Clinical Cancer Research 2020",
+    "publication_id": "PMID:32152202; PMCID:PMC7334053; DOI:10.1158/1078-0432.CCR-19-3294",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "University of Wisconsin CO05601 / NCT00590824 pilot clinical trial",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NextSeq 500",
+      "library_method": "RNA from one representative FFPE melanoma block per patient was captured with Illumina TruSeq RNA Exome and sequenced as 80-bp paired-end reads; the deposited matrix contains source-calculated gene-level RPKM",
+      "endpoint_context": "Overall survival among patients with resectable recurrent stage III or IV melanoma who received hu14.18-IL2",
+      "endpoint_caveat": "GEO provides individual OS time and vital status for every retained patient but does not restate the exact calendar origin. TRACE Explorer therefore exposes source-provided OS without treating this mixed pre/post-treatment expression cohort as untreated natural history.",
+      "sample_selection_note": "The source trial deliberately sampled two biological time points across randomized groups: group-A tumors after one hu14.18-IL2 course and group-B tumors before the first course. This context is preserved in each source-metadata record and must be considered when interpreting pooled expression-survival associations.",
+      "disease_selection_note": "The source describes recurrent stage III or IV melanoma and does not provide patient-level primary-site labels. The cohort is mapped to the TCGA-SKCM analysis family as advanced melanoma, consistent with the treatment cohorts already represented there, but should not be interpreted as a purely primary-cutaneous cohort.",
+      "overlap_note": "The CO05601 hu14.18-IL2 trial is independent of TCGA-SKCM and of the checkpoint-inhibitor and adoptive-cell-therapy cohorts already represented in the catalog.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO matrix in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE133713",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE133nnn/GSE133713/suppl/GSE133713_RPKM_Data_Filt_Consolidated.GeneNames.txt.gz",
+    "expression_size": 6431977,
+    "expression_sha256": "c3b39428bf38c43a547a57c42a04e64de3d933b68bdd8207a10639786e13ecb9",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE133nnn/GSE133713/soft/GSE133713_family.soft.gz",
+    "soft_size": 3839,
+    "soft_sha256": "c3e75949712ba5e5a1746b5fb84bafbf9d32e448924b91eca7141fca2d1c1208",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Melanoma, Sondel_RNA_[A-W]",
+    "expected_primary_samples": 23,
+    "sample_characteristic_filters": [
+      {
+        "key": "diagnosis",
+        "include": [
+          "melanoma"
+        ],
+        "required": true
+      },
+      {
+        "key": "tissue type",
+        "include": [
+          "tumor"
+        ],
+        "required": true
+      },
+      {
+        "key": "treatment",
+        "include": [
+          "Hu14.18-IL2"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 21,
+    "expected_endpoint_complete_samples": 21,
+    "expected_events": 10,
+    "expected_censored": 11,
+    "expected_expression_columns": 21,
+    "expected_expression_gene_rows": 55773,
+    "expected_normalized_expression_gene_rows": 55765,
+    "patient_id_characteristic": "",
+    "time_characteristic": "overall survival time (os in months)",
+    "event_characteristic": "death",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "expression_sample_id_pattern": "^Melanoma, (Sondel_RNA_[A-W])$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Resected Melanoma Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "GeneName",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 8,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Resected Melanoma Tumor",
+    "sample_role": "Resected stage III/IV melanoma before or after the first hu14.18-IL2 course",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Resected Melanoma Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_rpkm",
+    "label": "log2(RPKM + 1)",
+    "source_unit": "Source-provided gene-level RPKM",
+    "transform": "identity",
+    "analysis_unit": "log2(RPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The four symbols repeated only by letter case are excluded with all corresponding rows; the remaining 55,765 symbols are unique case-insensitively.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer selects the 21 treated-patient columns, applies log2(RPKM + 1) once to non-negative source RPKM values and excludes case-insensitive duplicate symbols. Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "CO05601 trial follow-up; exact calendar origin is not restated in GEO",
+      "event_definition": "Death from any cause; living patients are censored at the source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

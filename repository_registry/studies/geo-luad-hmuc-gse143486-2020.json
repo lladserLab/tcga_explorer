@@ -1,0 +1,133 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-luad-hmuc-gse143486-2020",
+    "cancer_code": "LUAD",
+    "name": "HMU stage I FFPE lung adenocarcinoma RNA-seq cohort (GSE143486)",
+    "description": "Independent resected stage I lung adenocarcinoma cohort with FFPE tumor bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study collected 76 stage I lung adenocarcinoma FFPE tumors after curative-intent surgical resection at Harbin Medical University Cancer Hospital. RNA-seq libraries were generated for the 30 specimens with RIN greater than 2, an expression-quality rule independent of outcome. All 30 sequenced patients have individual overall-survival time and vital status.",
+    "source_provider": "geo",
+    "source_accession": "GSE143486",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE143486",
+    "publication_citation": "Zhang et al. Briefings in Bioinformatics 2021",
+    "publication_id": "PMID:32383445; DOI:10.1093/bib/bbaa081",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-OUP-Standard-Publication-Model",
+    "license_url": "https://academic.oup.com/journals/pages/open_access/funder_policies/chorus/standard_publication_model",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Harbin Medical University Cancer Hospital stage I lung adenocarcinoma study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Briefings in Bioinformatics",
+      "source_platform": "Illumina HiSeq X Ten",
+      "library_method": "Directional paired-end bulk RNA sequencing of surgically resected FFPE lung adenocarcinoma, aligned to GRCh38 with HISAT2 and quantified with featureCounts 1.6.3 against GENCODE v32",
+      "endpoint_context": "Overall survival from initial surgical resection to death or last contact",
+      "endpoint_caveat": "The cohort is restricted to stage I tumors and to the 30 of 76 archived FFPE specimens with RIN greater than 2. Results therefore describe the sequenced RNA-quality subset rather than every collected case.",
+      "sample_selection_note": "The source study selected the 30 sequenced specimens by the prespecified technical RIN greater than 2 criterion. Every released profile has complete OS time and status, and there is one profile per patient.",
+      "clinical_evidence_note": "Age, sex, stage, TN classification, treatment, OS time and vital status are embedded in the GEO family SOFT. TRACE Explorer preserves source-provided fields, including internally unusual stage/T/N combinations, without silent correction.",
+      "expression_curation_note": "The released matrix contains 60,564 GENCODE v32 Ensembl gene rows for 30 samples. One row is NA in every sample and is excluded without imputation. TRACE Explorer computes log2(CPM + 1) over the remaining 60,563 rows, maps all of them against the exact pinned GENCODE v32 annotation and excludes 69 ambiguous symbols, leaving 59,298 analyzable symbols.",
+      "overlap_note": "The HMU FFPE cohort is independent of TCGA-LUAD and of the active Uppsala, TCIA radiogenomics, NYU, Steiner, CPTAC, CAS and POG570 lung adenocarcinoma releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO count matrix in place. Direct source-file redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE143486",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE143nnn/GSE143486/suppl/GSE143486_readcounts_featurecounts.txt.gz",
+    "expression_size": 6127774,
+    "expression_sha256": "bce6e597620f0a53a38542d39f800bfa23f4ca478e4146a10d0a0ffc3b2ce360",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE143nnn/GSE143486/soft/GSE143486_family.soft.gz",
+    "soft_size": 4275,
+    "soft_sha256": "31e3e63c2dd5b8ca3126f00b084551f385c565f5900eaf00a93b04d4f0bf9b23",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "H[0-9]+",
+    "expected_primary_samples": 30,
+    "expected_endpoint_complete_samples": 30,
+    "expected_events": 19,
+    "expected_censored": 11,
+    "expected_expression_columns": 30,
+    "expected_expression_gene_rows": 60564,
+    "expected_dropped_all_missing_features": 1,
+    "expected_normalized_expression_gene_rows": 60563,
+    "time_characteristic": "time to last followup (month)",
+    "event_characteristic": "survstatus",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "stage",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "GeneID",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 7,
+      "count_value_type": "integer",
+      "drop_all_missing_features": true,
+      "missing_value_tokens": [
+        "NA"
+      ]
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_32/gencode.v32.annotation.gtf.gz",
+      "name": "gencode.v32.annotation.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 43097815,
+      "sha256": "da9dc827e9a111c9bde60c55f55b7d37ffebc4649fc01f0745a670240e939ed4"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Curative-intent resected stage I FFPE lung adenocarcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE v32 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 60,564 source rows for each tumor and applies log2(CPM + 1). Values are intended for within-cohort analysis, particularly given the FFPE source material."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial surgical resection",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

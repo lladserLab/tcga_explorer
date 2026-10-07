@@ -1,10 +1,28 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from statistics import median
 
+from app.cohort_audit import (
+    finish_selection_audit,
+    record_selection_step,
+    start_selection_audit,
+)
 from app.models import Sample
+from app.sample_population import (
+    POPULATIONS,
+    count_sample_types as population_sample_type_counts,
+    resolve_tcga_sample_population,
+    sample_matches_population,
+    sample_population_metadata_conflict,
+)
 from app.schemas import AnalysisFilters
+
+
+MIN_ANALYSIS_PATIENTS = 10
+MIN_ANALYSIS_EVENTS = 5
+RMST_TAU_QUANTILE = 75.0
+RMST_TAU_CAP_DAYS = 5 * 365.25
 
 
 SAMPLE_CODE_PRIORITY = {
@@ -54,21 +72,11 @@ SAMPLE_TYPE_PRIORITY = {
 }
 
 SAMPLE_SELECTION_RULE = (
-    "one eligible RNA-seq sample per TCGA participant; primary tumor or primary blood-derived cancer samples are "
-    "preferred, followed by recurrent/additional/metastatic tumor samples, then normal/control samples only when no "
-    "higher-priority sample remains after user filters; ties are resolved by RNA analyte/portion metadata and barcode."
+    "one expression-complete eligible RNA-seq sample per TCGA participant inside an explicitly allowed molecular "
+    "population; disallowed tissue classes are removed first, clinical and endpoint eligibility are applied next, "
+    "and expression completeness precedes deterministic aliquot/portion selection. TRACE never falls back to a "
+    "different tumor class, normal tissue or control material."
 )
-
-SAMPLE_SELECTION_PRIORITY_ORDER = [
-    "Primary tumor / primary blood-derived cancer",
-    "Recurrent tumor",
-    "Additional new primary",
-    "Metastatic / additional metastatic",
-    "Human tumor original cells",
-    "Normal tissue / normal blood",
-    "Control, cell line, xenograft or unknown",
-]
-
 
 @dataclass(frozen=True)
 class ClinicalOutcome:
@@ -76,6 +84,9 @@ class ClinicalOutcome:
     time_days: float
     event: int
     source: str
+    competing_risk_status: int | None = None
+    competing_event: int | None = None
+    competing_risk_source: str | None = None
 
 
 @dataclass(frozen=True)
@@ -89,9 +100,18 @@ class SurvivalRecord:
     event: int
     sample_type: str | None
     stage: str | None
+    grade: str | None
     gender: str | None
     race: str | None
     age_at_index: float | None
+    competing_risk_status: int | None = None
+    competing_event: int | None = None
+    competing_risk_source: str | None = None
+    expression_value_a: float | None = None
+    expression_value_b: float | None = None
+    group_a: str | None = None
+    group_b: str | None = None
+    external_covariates: dict[str, str | float | None] = field(default_factory=dict)
 
     def as_dict(self) -> dict:
         return {
@@ -99,14 +119,23 @@ class SurvivalRecord:
             "sample_barcode": self.sample_barcode,
             "endpoint": self.endpoint,
             "expression_value": self.expression_value,
+            "expression_value_a": self.expression_value_a,
+            "expression_value_b": self.expression_value_b,
             "group": self.group,
+            "group_a": self.group_a,
+            "group_b": self.group_b,
             "time_days": self.time_days,
             "event": self.event,
+            "competing_risk_status": self.competing_risk_status,
+            "competing_event": self.competing_event,
+            "competing_risk_source": self.competing_risk_source,
             "sample_type": self.sample_type,
             "stage": self.stage,
+            "grade": self.grade,
             "gender": self.gender,
             "race": self.race,
             "age_at_index": self.age_at_index,
+            "external_covariates": self.external_covariates,
         }
 
 
@@ -121,6 +150,355 @@ def sample_os_outcome(sample: Sample) -> ClinicalOutcome | None:
     )
 
 
+def filter_sample_candidates(
+    samples: list[Sample],
+    filters: AnalysisFilters,
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    endpoint_label: str = "overall survival",
+    selection_rule: str = "tcga",
+    endpoint_source: str | None = None,
+    required_single_study_arm: bool = False,
+    clinical_filter_cohort: str | None = None,
+    clinical_filter_tcga_data_dir: object | None = None,
+    clinical_filter_tcga_cdr_path: object | None = None,
+    clinical_filter_repository: bool | None = None,
+) -> tuple[list[Sample], list[str], dict]:
+    """Apply user and endpoint eligibility without choosing a biospecimen."""
+
+    warnings: list[str] = []
+    selected = samples
+    selection_audit = start_selection_audit(samples)
+    previous_selection = list(samples)
+
+    def audit_step(stage: str) -> None:
+        nonlocal previous_selection
+        record_selection_step(selection_audit, stage, previous_selection, selected)
+        previous_selection = list(selected)
+
+    is_tcga = selection_rule == "tcga"
+    population: dict | None = None
+    population_excluded: list[Sample] = []
+
+    if is_tcga:
+        cohort_ids = {
+            str(getattr(sample, "cohort", "") or "").strip()
+            for sample in samples
+            if str(getattr(sample, "cohort", "") or "").strip()
+        }
+        if len(cohort_ids) != 1:
+            raise ValueError(
+                "TCGA sample selection requires exactly one cohort at a time."
+            )
+        cohort = next(iter(cohort_ids))
+        policy, population = resolve_tcga_sample_population(
+            cohort,
+            getattr(filters, "sample_population", None),
+            getattr(filters, "sample_types", []) or [],
+        )
+        if getattr(filters, "sample_types", None):
+            requested_types = {
+                value.strip().casefold()
+                for value in filters.sample_types
+                if value.strip()
+            }
+            allowed_types = {
+                value.casefold() for value in policy.allowed_sample_types
+            }
+            if not requested_types.issubset(allowed_types):
+                raise ValueError(
+                    "Sample type filters cannot expand or cross the declared "
+                    "molecular population."
+                )
+        population_excluded = [
+            sample
+            for sample in selected
+            if not sample_matches_population(sample, policy)
+        ]
+        selected = [
+            sample for sample in selected if sample_matches_population(sample, policy)
+        ]
+
+        audit_step("molecular_population")
+
+    def outcome(sample: Sample) -> ClinicalOutcome | None:
+        if endpoint_by_patient is not None:
+            return endpoint_by_patient.get(sample.patient_id)
+        return sample_os_outcome(sample)
+
+    if filters.sample_types and not is_tcga:
+        allowed = set(filters.sample_types)
+        selected = [sample for sample in selected if sample.sample_type in allowed]
+        audit_step("filter_sample_type")
+    if filters.stages:
+        allowed = set(filters.stages)
+        selected = [sample for sample in selected if sample.stage in allowed]
+        audit_step("filter_stage")
+    if filters.grades:
+        allowed = set(filters.grades)
+        selected = [sample for sample in selected if sample.grade in allowed]
+        audit_step("filter_grade")
+    if filters.genders:
+        allowed = {item.lower() for item in filters.genders}
+        selected = [sample for sample in selected if sample.gender and sample.gender.lower() in allowed]
+        audit_step("filter_gender")
+    if filters.races:
+        allowed = {item.lower() for item in filters.races}
+        selected = [sample for sample in selected if sample.race and sample.race.lower() in allowed]
+        audit_step("filter_race")
+    if filters.age_min is not None:
+        selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index >= filters.age_min]
+        audit_step("filter_age_min")
+    if filters.age_max is not None:
+        selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index <= filters.age_max]
+        audit_step("filter_age_max")
+    custom_filter_audit: list[dict] = []
+    custom_filters = list(getattr(filters, "custom_filters", []) or [])
+    if custom_filters:
+        # Local import avoids the existing clinical-grouping dependency on
+        # this module's shared sample-priority rule.
+        from app.clinical_grouping import apply_custom_clinical_filters
+
+        selected, custom_filter_audit, custom_warnings = (
+            apply_custom_clinical_filters(
+                selected,
+                custom_filters,
+                analysis_context="survival",
+                cohort=clinical_filter_cohort or (
+                    cohort if is_tcga else None
+                ),
+                tcga_data_dir=clinical_filter_tcga_data_dir,
+                tcga_cdr_path=clinical_filter_tcga_cdr_path,
+                repository=(
+                    clinical_filter_repository
+                    if clinical_filter_repository is not None
+                    else not is_tcga
+                ),
+            )
+        )
+        warnings.extend(custom_warnings)
+        audit_step("custom_clinical_filters")
+    retained_study_arms = sorted(
+        {
+            str(getattr(sample, "study_arm", "") or "").strip()
+            for sample in selected
+            if str(getattr(sample, "study_arm", "") or "").strip()
+        }
+    )
+    if required_single_study_arm and len(retained_study_arms) != 1:
+        raise ValueError(
+            "IMmotion150 PFS analyses require exactly one randomized treatment "
+            "arm. Select Atezolizumab, Atezolizumab + Bevacizumab, or Sunitinib; "
+            "TRACE does not pool PFS across arms."
+        )
+    with_endpoint = [sample for sample in selected if outcome(sample) is not None]
+    record_selection_step(selection_audit, "endpoint_completeness", selected, with_endpoint)
+    dropped = len(selected) - len(with_endpoint)
+    if dropped:
+        warnings.append(f"{dropped} samples were excluded because {endpoint_label} was not usable.")
+
+    summary = {
+        "rule": (
+            "tcga_expression_complete_biospecimen_priority_one_sample_per_patient"
+            if is_tcga
+            else "curated_external_expression_complete_selection_rank_one_sample_per_patient"
+        ),
+        "rule_description": (
+            SAMPLE_SELECTION_RULE
+            if is_tcga
+            else (
+                "After user filters and endpoint completeness, require the requested "
+                "expression and retain one sample per patient using the release's "
+                "prespecified selection_rank followed by sample identifier."
+            )
+        ),
+        "selection_order": [
+            "molecular_population" if is_tcga else "release_eligibility",
+            "user_filters",
+            "endpoint_completeness",
+            "requested_expression_or_score_completeness",
+            "biospecimen_priority" if is_tcga else "curated_selection_rank",
+        ],
+        "priority_order": (
+            [
+                f"Declared population only: {population['label']}",
+                "TCGA RNA analyte preference (R, then T, then H)",
+                "Lowest portion identifier, then barcode",
+            ]
+            if is_tcga and population
+            else ["selection_rank", "sample_id"]
+        ),
+        "selection_rule_kind": selection_rule,
+        "endpoint": endpoint,
+        "endpoint_label": endpoint_label,
+        "endpoint_source": endpoint_source or (
+            "tcga_cdr" if endpoint_by_patient is not None else "derived_sample_metadata"
+        ),
+        "selection_audit": selection_audit,
+        "input_samples": len(samples),
+        "sample_population": population,
+        "population_filter_applied": is_tcga,
+        "population_excluded_samples": len(population_excluded),
+        "population_excluded_sample_types": population_sample_type_counts(
+            population_excluded
+        ),
+        "population_metadata_conflicts_excluded": sum(
+            sample_population_metadata_conflict(sample)
+            for sample in population_excluded
+        ),
+        "after_user_filters": len(selected),
+        "complete_endpoint_samples": len(with_endpoint),
+        "complete_os_samples": len(with_endpoint),
+        "missing_endpoint_removed": dropped,
+        "missing_os_removed": dropped,
+        "candidate_patients": len({sample.patient_id for sample in with_endpoint}),
+        "sample_type_filter_applied": bool(filters.sample_types),
+        "custom_clinical_filters": custom_filter_audit,
+        "custom_clinical_filter_count": len(custom_filter_audit),
+        "custom_clinical_automatic_cox_adjustment": False,
+        "study_arm_policy": (
+            "single_randomized_arm_required"
+            if required_single_study_arm
+            else "not_required"
+        ),
+        "retained_study_arms": retained_study_arms,
+    }
+    return with_endpoint, warnings, summary
+
+
+def select_expression_complete_samples(
+    candidates: list[Sample],
+    expression_barcodes: set[str] | None,
+    *,
+    warnings: list[str] | None = None,
+    summary: dict | None = None,
+) -> tuple[list[Sample], list[str], dict]:
+    """Select one sample per patient after required-expression completeness."""
+
+    warnings = list(warnings or [])
+    summary = dict(summary or {})
+    is_tcga = summary.get("selection_rule_kind", "tcga") == "tcga"
+    expression_requirement_applied = expression_barcodes is not None
+    complete = (
+        [sample for sample in candidates if sample.barcode in expression_barcodes]
+        if expression_requirement_applied
+        else list(candidates)
+    )
+    complete_barcodes = {sample.barcode for sample in complete}
+    missing_expression = [
+        sample for sample in candidates if sample.barcode not in complete_barcodes
+    ]
+    candidate_patients = {sample.patient_id for sample in candidates}
+    complete_patients = {sample.patient_id for sample in complete}
+    missing_expression_patients = candidate_patients - complete_patients
+    if missing_expression:
+        if missing_expression_patients:
+            warnings.append(
+                f"{len(missing_expression)} sample records lacked the requested gene "
+                "or complete signature score; "
+                f"{len(missing_expression_patients)} participants had no complete "
+                "sample and were excluded."
+            )
+        else:
+            warnings.append(
+                f"{len(missing_expression)} candidate sample records did not carry "
+                "the requested gene or complete signature score. Every affected "
+                "participant retained another complete sample, so no participants "
+                "were excluded for missing expression."
+            )
+
+    deduplicated: dict[str, Sample] = {}
+    removed_duplicates: list[Sample] = []
+    for sample in sorted(complete, key=sample_selection_key):
+        if sample.patient_id in deduplicated:
+            removed_duplicates.append(sample)
+            continue
+        deduplicated[sample.patient_id] = sample
+    retained = list(deduplicated.values())
+
+    if is_tcga:
+        population_id = str(
+            ((summary.get("sample_population") or {}).get("id") or "")
+        )
+        population_policy = POPULATIONS.get(population_id)
+        violations = (
+            [
+                sample
+                for sample in retained
+                if not sample_matches_population(sample, population_policy)
+            ]
+            if population_policy is not None
+            else list(retained)
+        )
+        if violations:
+            raise RuntimeError(
+                "TCGA molecular-population invariant failed: retained samples "
+                "fell outside the declared population."
+            )
+
+    candidates_by_patient: dict[str, list[Sample]] = {}
+    for sample in candidates:
+        candidates_by_patient.setdefault(sample.patient_id, []).append(sample)
+    candidate_priority = {
+        patient_id: min(candidates_by_patient[patient_id], key=sample_selection_key)
+        for patient_id in complete_patients
+    }
+    expression_priority_fallbacks = [
+        sample
+        for patient_id, sample in deduplicated.items()
+        if candidate_priority[patient_id].barcode != sample.barcode
+    ]
+    if expression_priority_fallbacks:
+        if is_tcga:
+            warnings.append(
+                f"{len(expression_priority_fallbacks)} participants used a lower-priority "
+                "biospecimen because a higher-priority eligible candidate lacked complete "
+                "required expression."
+            )
+        else:
+            warnings.append(
+                f"{len(expression_priority_fallbacks)} participants used a lower-priority "
+                "sample because a higher-priority eligible candidate lacked complete "
+                "required expression."
+            )
+    if removed_duplicates:
+        if is_tcga:
+            warnings.append(
+                f"{len(removed_duplicates)} extra expression-complete sample records from "
+                "patients with multiple eligible barcodes were removed; one sample per "
+                "patient was retained using TCGA biospecimen priority."
+            )
+        else:
+            warnings.append(
+                f"{len(removed_duplicates)} extra expression-complete sample records from "
+                "patients with multiple eligible sample identifiers were removed; one sample "
+                "per patient was retained using the release selection rule."
+            )
+
+    summary.update({
+        "expression_requirement_applied": expression_requirement_applied,
+        "expression_complete_samples": len(complete),
+        "expression_complete_patients": len(complete_patients),
+        "missing_expression_samples_removed": len(missing_expression),
+        "missing_expression_patients_removed": len(missing_expression_patients),
+        "expression_priority_fallbacks": len(expression_priority_fallbacks),
+        "expression_priority_fallback_barcodes": [
+            sample.barcode for sample in expression_priority_fallbacks
+        ],
+        "duplicate_samples_removed": len(removed_duplicates),
+        "retained_patients": len(retained),
+        "retained_sample_types": count_sample_types(retained),
+        "removed_duplicate_sample_types": count_sample_types(removed_duplicates),
+    })
+
+    if summary.get("selection_audit") is not None:
+        summary["selection_audit"] = finish_selection_audit(
+            summary["selection_audit"], candidates, complete, retained
+        )
+
+    return retained, warnings, summary
+
+
 def filter_samples(
     samples: list[Sample],
     filters: AnalysisFilters,
@@ -128,92 +506,32 @@ def filter_samples(
     endpoint: str = "OS",
     endpoint_label: str = "overall survival",
 ) -> tuple[list[Sample], list[str], dict]:
-    warnings: list[str] = []
-    selected = samples
+    """Backward-compatible clinical/endpoint filtering and sample selection."""
 
-    def outcome(sample: Sample) -> ClinicalOutcome | None:
-        if endpoint_by_patient is not None:
-            return endpoint_by_patient.get(sample.patient_id)
-        return sample_os_outcome(sample)
-
-    if filters.sample_types:
-        allowed = set(filters.sample_types)
-        selected = [sample for sample in selected if sample.sample_type in allowed]
-    if filters.stages:
-        allowed = set(filters.stages)
-        selected = [sample for sample in selected if sample.stage in allowed]
-    if filters.genders:
-        allowed = {item.lower() for item in filters.genders}
-        selected = [sample for sample in selected if sample.gender and sample.gender.lower() in allowed]
-    if filters.races:
-        allowed = {item.lower() for item in filters.races}
-        selected = [sample for sample in selected if sample.race and sample.race.lower() in allowed]
-    if filters.age_min is not None:
-        selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index >= filters.age_min]
-    if filters.age_max is not None:
-        selected = [sample for sample in selected if sample.age_at_index is not None and sample.age_at_index <= filters.age_max]
-    if filters.max_time_days is not None:
-        selected = [
-            sample
-            for sample in selected
-            if outcome(sample) is not None and outcome(sample).time_days <= filters.max_time_days
-        ]
-
-    with_endpoint = [sample for sample in selected if outcome(sample) is not None]
-    dropped = len(selected) - len(with_endpoint)
-    if dropped:
-        warnings.append(f"{dropped} samples were excluded because {endpoint_label} was not usable.")
-
-    deduplicated: dict[str, Sample] = {}
-    removed_duplicates: list[Sample] = []
-    for sample in sorted(with_endpoint, key=sample_selection_key):
-        if sample.patient_id in deduplicated:
-            removed_duplicates.append(sample)
-            continue
-        deduplicated[sample.patient_id] = sample
-    retained = list(deduplicated.values())
-    if removed_duplicates:
-        warnings.append(
-            f"{len(removed_duplicates)} extra sample records from patients with multiple eligible barcodes were removed; "
-            "one sample per patient was retained using TCGA biospecimen priority."
-        )
-
-    retained_non_tumor = [
-        sample
-        for sample in retained
-        if sample_priority(sample) >= 80
-    ]
-    if retained_non_tumor and not filters.sample_types:
-        sample_word = "sample is" if len(retained_non_tumor) == 1 else "samples are"
-        warnings.append(
-            f"{len(retained_non_tumor)} retained patient-level {sample_word} normal/control/unknown sample type because no "
-            "higher-priority tumor sample was available after user filters."
-        )
-
-    summary = {
-        "rule": "tcga_biospecimen_priority_one_sample_per_patient",
-        "rule_description": SAMPLE_SELECTION_RULE,
-        "priority_order": SAMPLE_SELECTION_PRIORITY_ORDER,
-        "endpoint": endpoint,
-        "endpoint_label": endpoint_label,
-        "endpoint_source": "tcga_cdr" if endpoint_by_patient is not None else "derived_sample_metadata",
-        "input_samples": len(samples),
-        "after_user_filters": len(selected),
-        "complete_endpoint_samples": len(with_endpoint),
-        "complete_os_samples": len(with_endpoint),
-        "missing_endpoint_removed": dropped,
-        "missing_os_removed": dropped,
-        "duplicate_samples_removed": len(removed_duplicates),
-        "retained_patients": len(retained),
-        "retained_sample_types": count_sample_types(retained),
-        "removed_duplicate_sample_types": count_sample_types(removed_duplicates),
-        "sample_type_filter_applied": bool(filters.sample_types),
-    }
-
-    return retained, warnings, summary
+    candidates, warnings, summary = filter_sample_candidates(
+        samples,
+        filters,
+        endpoint_by_patient=endpoint_by_patient,
+        endpoint=endpoint,
+        endpoint_label=endpoint_label,
+    )
+    return select_expression_complete_samples(
+        candidates,
+        None,
+        warnings=warnings,
+        summary=summary,
+    )
 
 
 def sample_selection_key(sample: Sample) -> tuple[int, int, int, str]:
+    external_rank = getattr(sample, "selection_rank", None)
+    if external_rank is not None:
+        return (
+            int(external_rank),
+            0,
+            0,
+            sample.barcode or "",
+        )
     return (
         sample_priority(sample),
         analyte_priority(sample.barcode),
@@ -316,14 +634,14 @@ def assign_groups_with_cutpoint(
         q1 = percentile(sorted_values, 25)
         q3 = percentile(sorted_values, 75)
         details.update({"lower_quartile": q1, "upper_quartile": q3})
-        labels = ["Low" if value < q1 else "High" if value > q3 else None for value in values]
+        labels = ["Low" if value <= q1 else "High" if value >= q3 else None for value in values]
         return labels, ["Low", "High"], details
 
     if method == "percentile":
         pct = 50.0 if custom_percentile is None else custom_percentile
         threshold = percentile(sorted_values, pct)
         details.update({"percentile": pct, "threshold": threshold})
-        labels = ["Low" if value < threshold else "High" for value in values]
+        labels = ["Low" if value <= threshold else "High" for value in values]
         return labels, ["Low", "High"], details
 
     raise ValueError(f"Unsupported cutpoint method: {method}")
@@ -339,6 +657,22 @@ def percentile(sorted_values: list[float], pct: float) -> float:
     return sorted_values[lower] * (1 - weight) + sorted_values[upper] * weight
 
 
+def _apply_time_ceiling(outcome: ClinicalOutcome, max_time_days: float) -> ClinicalOutcome:
+    if outcome.time_days <= max_time_days:
+        return outcome
+    return ClinicalOutcome(
+        endpoint=outcome.endpoint,
+        time_days=max_time_days,
+        event=0,
+        source=outcome.source,
+        competing_risk_status=(
+            0 if outcome.competing_risk_status is not None else None
+        ),
+        competing_event=0 if outcome.competing_event is not None else None,
+        competing_risk_source=outcome.competing_risk_source,
+    )
+
+
 def build_survival_records(
     samples: list[Sample],
     expression_by_barcode: dict[str, float],
@@ -347,6 +681,10 @@ def build_survival_records(
     endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
     endpoint: str = "OS",
     precomputed_cutpoint: dict | None = None,
+    max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
 ) -> tuple[list[SurvivalRecord], list[str], dict]:
     samples_with_expression = [sample for sample in samples if sample.barcode in expression_by_barcode]
     values = [expression_by_barcode[sample.barcode] for sample in samples_with_expression]
@@ -364,6 +702,8 @@ def build_survival_records(
         outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
         if outcome is None:
             continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
         records.append(
             SurvivalRecord(
                 patient_id=sample.patient_id,
@@ -373,18 +713,215 @@ def build_survival_records(
                 group=label,
                 time_days=float(outcome.time_days),
                 event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
                 sample_type=sample.sample_type,
                 stage=sample.stage,
+                grade=sample.grade,
                 gender=sample.gender,
                 race=sample.race,
                 age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
             )
         )
     return records, group_levels, cutpoint_details
 
 
+def build_continuous_survival_records(
+    samples: list[Sample],
+    expression_by_barcode: dict[str, float],
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
+) -> list[SurvivalRecord]:
+    """Build the expression-complete population before any cutpoint exclusions."""
+    records: list[SurvivalRecord] = []
+    for sample in samples:
+        if sample.barcode not in expression_by_barcode:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None:
+            continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
+        records.append(
+            SurvivalRecord(
+                patient_id=sample.patient_id,
+                sample_barcode=sample.barcode,
+                endpoint=endpoint,
+                expression_value=expression_by_barcode[sample.barcode],
+                group="All eligible",
+                time_days=float(outcome.time_days),
+                event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
+                sample_type=sample.sample_type,
+                stage=sample.stage,
+                grade=sample.grade,
+                gender=sample.gender,
+                race=sample.race,
+                age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
+            )
+        )
+    return records
+
+
+def build_combined_survival_records(
+    samples: list[Sample],
+    expression_a_by_barcode: dict[str, float],
+    expression_b_by_barcode: dict[str, float],
+    method: str,
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    endpoint: str = "OS",
+    max_time_days: float | None = None,
+    external_covariates_by_patient: (
+        dict[str, dict[str, str | float | None]] | None
+    ) = None,
+) -> tuple[list[SurvivalRecord], list[str], dict]:
+    samples_with_expression = [
+        sample
+        for sample in samples
+        if sample.barcode in expression_a_by_barcode and sample.barcode in expression_b_by_barcode
+    ]
+    values_a = [expression_a_by_barcode[sample.barcode] for sample in samples_with_expression]
+    values_b = [expression_b_by_barcode[sample.barcode] for sample in samples_with_expression]
+    labels_a, levels_a, details_a = assign_groups_with_cutpoint(values_a, method)
+    labels_b, levels_b, details_b = assign_groups_with_cutpoint(values_b, method)
+
+    records: list[SurvivalRecord] = []
+    for sample, label_a, label_b in zip(samples_with_expression, labels_a, labels_b, strict=False):
+        if label_a is None or label_b is None:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None:
+            continue
+        if max_time_days is not None:
+            outcome = _apply_time_ceiling(outcome, max_time_days)
+        value_a = expression_a_by_barcode[sample.barcode]
+        value_b = expression_b_by_barcode[sample.barcode]
+        records.append(
+            SurvivalRecord(
+                patient_id=sample.patient_id,
+                sample_barcode=sample.barcode,
+                endpoint=endpoint,
+                expression_value=(value_a + value_b) / 2,
+                expression_value_a=value_a,
+                expression_value_b=value_b,
+                group=f"{label_a}_{label_b}",
+                group_a=label_a,
+                group_b=label_b,
+                time_days=float(outcome.time_days),
+                event=int(outcome.event),
+                competing_risk_status=outcome.competing_risk_status,
+                competing_event=outcome.competing_event,
+                competing_risk_source=outcome.competing_risk_source,
+                sample_type=sample.sample_type,
+                stage=sample.stage,
+                grade=sample.grade,
+                gender=sample.gender,
+                race=sample.race,
+                age_at_index=sample.age_at_index,
+                external_covariates=(
+                    external_covariates_by_patient.get(sample.patient_id, {})
+                    if external_covariates_by_patient
+                    else {}
+                ),
+            )
+        )
+
+    present_groups = {record.group for record in records}
+    group_levels = [
+        f"{level_a}_{level_b}"
+        for level_a in levels_a
+        for level_b in levels_b
+        if f"{level_a}_{level_b}" in present_groups
+    ]
+    cutpoint_details = combined_cutpoint_details(method, details_a, details_b, levels_a, levels_b)
+    return records, group_levels, cutpoint_details
+
+
+def select_rmst_tau(
+    samples: list[Sample],
+    expression_barcodes: set[str],
+    endpoint_by_patient: dict[str, ClinicalOutcome] | None = None,
+    max_time_days: float | None = None,
+) -> dict:
+    """Choose one cutpoint-independent RMST horizon from the eligible cohort."""
+    times: list[float] = []
+    for sample in samples:
+        if sample.barcode not in expression_barcodes:
+            continue
+        outcome = endpoint_by_patient.get(sample.patient_id) if endpoint_by_patient is not None else sample_os_outcome(sample)
+        if outcome is None or outcome.time_days <= 0:
+            continue
+        time_days = float(outcome.time_days)
+        if max_time_days is not None:
+            time_days = min(time_days, float(max_time_days))
+        times.append(time_days)
+
+    if len(times) < MIN_ANALYSIS_PATIENTS:
+        return {
+            "status": "unavailable",
+            "reason": "Fewer than 10 eligible patients were available to define a fixed RMST horizon.",
+            "source_n_patients": len(times),
+        }
+
+    tau_days = min(
+        RMST_TAU_CAP_DAYS,
+        percentile(sorted(times), RMST_TAU_QUANTILE),
+    )
+    return {
+        "status": "available",
+        "tau_days": tau_days,
+        "source_n_patients": len(times),
+        "rule": (
+            "minimum of 5 years and the 75th percentile of observed endpoint times "
+            "in the unstratified, expression-complete eligible cohort"
+        ),
+        "quantile": RMST_TAU_QUANTILE / 100.0,
+        "cap_days": RMST_TAU_CAP_DAYS,
+        "cutpoint_independent": True,
+    }
+
+
+def combined_cutpoint_details(
+    method: str,
+    details_a: dict,
+    details_b: dict,
+    levels_a: list[str],
+    levels_b: list[str],
+) -> dict:
+    details = {
+        "method": method,
+        "combination": "signature_a_x_signature_b",
+        "signature_a_levels": "/".join(levels_a),
+        "signature_b_levels": "/".join(levels_b),
+    }
+    for key, value in details_a.items():
+        if key != "method":
+            details[f"signature_a_{key}"] = value
+    for key, value in details_b.items():
+        if key != "method":
+            details[f"signature_b_{key}"] = value
+    return details
+
+
 def validate_records(records: list[SurvivalRecord], endpoint_label: str = "survival endpoint") -> None:
-    if len(records) < 10:
+    if len(records) < MIN_ANALYSIS_PATIENTS:
         raise ValueError(f"The analysis requires at least 10 patients with usable {endpoint_label} and expression.")
     groups: dict[str, int] = {}
     for record in records:
@@ -394,5 +931,9 @@ def validate_records(records: list[SurvivalRecord], endpoint_label: str = "survi
     small = {group: n for group, n in groups.items() if n < 5}
     if small:
         raise ValueError(f"Each group must contain at least 5 patients; undersized groups: {small}.")
-    if sum(record.event for record in records) == 0:
-        raise ValueError("No survival events remain after applying filters.")
+    n_events = sum(record.event for record in records)
+    if n_events < MIN_ANALYSIS_EVENTS:
+        raise ValueError(
+            f"The analysis requires at least {MIN_ANALYSIS_EVENTS} survival events after applying filters; "
+            f"{n_events} remain."
+        )

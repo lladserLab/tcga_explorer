@@ -1,0 +1,104 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-skcm-orien-ici-2024",
+    "cancer_code": "SKCM",
+    "name": "ORIEN metastatic-melanoma ICI cohort (2024)",
+    "description": "Independent metastatic-melanoma cohort with pretreatment bulk tumor RNA sequencing and individual overall-survival follow-up during immune-checkpoint-inhibitor therapy.",
+    "cohort_context": "The ORIEN Avatar study contains one baseline tumor profile for each of 71 patients with metastatic melanoma treated with immune checkpoint inhibitors. The public reproducibility repository links every expression column to positive individual overall-survival time and vital status.",
+    "source_provider": "europe_pmc",
+    "source_accession": "PMC11307144; PRJNA856973",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11307144/",
+    "publication_citation": "Dravillas et al. Cancer Research Communications 2024",
+    "publication_id": "PMID:39015091; PMCID:PMC11307144; DOI:10.1158/2767-9764.CRC-23-0170",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Oncology Research Information Exchange Network (ORIEN) Avatar program",
+      "source_data_system": "Europe PMC article and MIT-licensed author reproducibility repository",
+      "source_platform": "Illumina TruSeq RNA Exome, sequenced as 100-bp or 150-bp paired reads",
+      "library_method": "Pretreatment frozen, OCT or FFPE tumor RNA was aligned to GRCh38 with STAR and quantified at gene level with RSEM against GENCODE v32",
+      "treatment_context": "Metastatic melanoma treated with nivolumab, pembrolizumab or another immune checkpoint inhibitor",
+      "endpoint_context": "Overall survival after initiation of immune-checkpoint-inhibitor treatment",
+      "sample_selection_note": "The public clinical file and expression matrix contain the same 71 unique identifiers. The article defines all specimens as baseline tumors obtained before immune-checkpoint-inhibitor treatment, so no longitudinal sample selection is required.",
+      "expression_processing_note": "The publication states that gene-level RSEM TPM was transformed as log2(TPM + 1). TRACE Explorer preserves the released values unchanged. Exact current HGNC symbols are resolved through the cBioPortal gene service; every row belonging to a duplicated recognized symbol is excluded rather than aggregated.",
+      "disease_mapping_note": "The source identifies the cohort as metastatic melanoma and does not publish primary-site subtype per expression identifier. The release is mapped to the TCGA-SKCM analysis family with that limitation visible and must not be interpreted as a strictly primary cutaneous-melanoma cohort.",
+      "overlap_note": "The ORIEN Avatar cohort is independently generated and is not reported as sharing patients with TCGA-SKCM or the active DFCI, Gide, Hugo, Riaz, PUCH, Copenhagen, Wisconsin, Mount Sinai, Yale or Central South University releases.",
+      "license_note": "The CC BY 4.0 article identifies the public author repository as the source of processed data and analysis code; that repository also carries an MIT license. TRACE Explorer pins the article, source files and checksums but conservatively disables redistribution of the patient-derived matrix."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC11307144",
+    "publication_date": "2024-08-01",
+    "full_text_size": 164546,
+    "full_text_sha256": "04306d025be10be35b62595e118ef263809d286369fecda18574fa867a1a9405",
+    "source_license_id": "CC-BY-4.0",
+    "clinical_url": "https://raw.githubusercontent.com/spakowiczlab/exorien-melio/89bbd4eb485ec2ff15268da5de564e5cea9b1ff7/data/IO_NOVA_mel_clin.txt",
+    "clinical_size": 2071,
+    "clinical_sha256": "03ef0af765b4cbb3533fe5f09febfe217dc944bfd6ae0874637b3e8e25358dd5",
+    "expression_url": "https://raw.githubusercontent.com/spakowiczlab/exorien-melio/89bbd4eb485ec2ff15268da5de564e5cea9b1ff7/data/IO_NOVA_mel_seq.txt",
+    "expression_size": 26854012,
+    "expression_sha256": "0eb7c08a265d999de0d1a322a60b049f7ea349a7adec4fcf8ec004a2a9f8667c",
+    "clinical": {
+      "format": "tsv",
+      "expected_rows": 71,
+      "sample_id_column": "Sample_ID",
+      "patient_id_column": "Sample_ID",
+      "require_expression_sample": true,
+      "sample_type": "Pretreatment metastatic-melanoma tumor"
+    },
+    "expression": {
+      "layout": "simple",
+      "delimiter": "\t",
+      "expected_samples": 71,
+      "expected_gene_rows": 60609
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment metastatic-melanoma tumor",
+    "sample_role": "Baseline metastatic-melanoma tumor obtained before immune-checkpoint-inhibitor treatment",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment metastatic-melanoma tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "provided_log2_tpm",
+    "label": "Source-provided log2(TPM + 1)",
+    "source_unit": "RSEM log2(TPM + 1)",
+    "transform": "identity",
+    "analysis_unit": "Source-provided gene-level log2(TPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal gene service exact HGNC-symbol match",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Only exact symbols recognized by the gene service are retained. Every source row belonging to a case-insensitively duplicated recognized symbol is excluded rather than guessed or aggregated.",
+    "stream_source_order": true,
+    "scale_note": "The article documents gene-level RSEM TPM followed by log2(TPM + 1). TRACE Explorer preserves the public matrix unchanged and limits interpretation to within-cohort analyses."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival after immune-checkpoint-inhibitor initiation",
+      "time_column": "os",
+      "event_column": "os_event",
+      "time_unit": "months",
+      "time_origin": "Initiation of immune-checkpoint-inhibitor treatment",
+      "event_definition": "Death from any cause; patients alive at the last source follow-up are censored",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

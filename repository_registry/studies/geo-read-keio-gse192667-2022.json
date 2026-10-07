@@ -1,0 +1,145 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-read-keio-gse192667-2022",
+    "cancer_code": "READ",
+    "name": "Japanese advanced rectal-cancer cohort (GSE192667)",
+    "description": "Independent primary rectal-cancer cohort with FFPE bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study profiled 89 untreated primary colorectal tumors from 89 patients, including 66 stage IV cancers. TRACE Explorer restricts this release to the 27 source-designated rectal tumors. The 62 colon tumors are exposed separately under TCGA-COAD and are never pooled with this cohort.",
+    "source_provider": "geo",
+    "source_accession": "GSE192667",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE192667",
+    "publication_citation": "Sugawara et al. iScience 2022",
+    "publication_id": "PMID:35128352; PMCID:PMC8800070; DOI:10.1016/j.isci.2022.103740",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Japanese advanced colorectal-cancer transcriptome study",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY-NC-ND 4.0 publication",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "Bulk mRNA sequencing of FFPE primary colorectal tumors; reads were aligned to GRCh38 with STAR 2.7.1a, counted with featureCounts in Rsubread and converted to TPM against Ensembl release 98",
+      "endpoint_context": "Source-provided overall survival in a predominantly advanced colorectal-cancer cohort",
+      "endpoint_caveat": "GEO provides exact individual OS months and Alive/Dead status but does not state whether time begins at diagnosis, resection, sampling or treatment. TRACE Explorer therefore preserves the source endpoint without claiming harmonization to a specific clinical origin.",
+      "sample_selection_note": "Expression eligibility is applied before one-sample-per-patient selection. Every patient has one primary-tumor profile; source_name_ch1 deterministically assigns colon or rectum before endpoint QC.",
+      "disease_selection_note": "Only records with source_name_ch1 = Rectum are assigned to TCGA-READ. Colon tumors from the same parent series are registered as a separate, non-overlapping TCGA-COAD release.",
+      "expression_processing_note": "The source-provided Ensembl release 98 TPM values are transformed as log2(TPM + 1). Ensembl identifiers are mapped with the pinned release 98 GTF; ambiguous symbol mappings are excluded.",
+      "overlap_note": "This rectal release and the companion colon release share a GEO parent series but contain disjoint patients selected by the source-reported primary site.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE192667",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE192nnn/GSE192667/suppl/GSE192667_RAW.tar",
+    "expression_size": 64921600,
+    "expression_sha256": "8709d18b8916be5e7bed1b085e8c017e9c6d3f76dc9b3cb429647ce3c000c748",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE192nnn/GSE192667/soft/GSE192667_family.soft.gz",
+    "soft_size": 7720,
+    "soft_sha256": "ce59bfa4a178e44cabb0dd308b90e5fc02eeb59004b41195f40e30a90f039901",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "CRC_[0-9]+",
+    "expected_primary_samples": 89,
+    "sample_characteristic_filters": [
+      {
+        "key": "source name",
+        "include": [
+          "Rectum"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 27,
+    "expected_endpoint_complete_samples": 27,
+    "expected_events": 21,
+    "expected_censored": 6,
+    "expected_expression_columns": 27,
+    "expected_source_expression_files": 89,
+    "expected_expression_gene_rows": 58825,
+    "expected_normalized_expression_gene_rows": 58825,
+    "patient_id_characteristic": "",
+    "time_characteristic": "overall survival (os) (month)",
+    "event_characteristic": "outcome",
+    "event_value_map": {
+      "Alive": 0,
+      "Dead": 1
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "ajcc/uicc-tnm stage",
+    "sex_characteristic": "Sex",
+    "sample_type": "Primary Rectal Tumor",
+    "expression": {
+      "layout": "normalized_files_tar",
+      "supplementary_file_pattern": ".+_TPM\\.txt\\.gz",
+      "feature_column": "ENSG_ID",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "value_column_index": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": false,
+      "feature_order_policy": "strict",
+      "require_nonnegative": true,
+      "require_value_header_matches_sample_id": false
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-98/gtf/homo_sapiens/Homo_sapiens.GRCh38.98.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.98.gtf.gz",
+      "size": 46712404,
+      "sha256": "7966e412a6c5864f232ebcb40d67f9ab873064af090dac28a8cab013aaea18b7"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Rectal Tumor",
+    "sample_role": "Untreated FFPE primary rectal tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Rectal Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO gene-level TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 98 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 58,825 source Ensembl identifiers are unique in every selected profile. Symbols mapped from more than one Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to the source-provided gene-level TPM. Values are suitable for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by the GEO outcome field; Alive records are censored at the source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

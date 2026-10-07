@@ -1,0 +1,135 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-gbm-dkfz-gse121720-2020",
+    "cancer_code": "GBM",
+    "name": "DKFZ adult glioblastoma cohort (GSE121720)",
+    "description": "Independent adult glioblastoma cohort with direct bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The Heidelberg, Duesseldorf and Zurich study profiled 60 adult grade-IV gliomas and four normal-brain controls. TRACE Explorer retains the 58 tumor profiles with positive complete overall-survival time/status. The historical cohort includes twelve IDH1 R132H tumors and should not be interpreted as a modern WHO IDH-wildtype-only glioblastoma series.",
+    "source_provider": "geo",
+    "source_accession": "GSE121720",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121720",
+    "publication_citation": "Wu et al. Nature Communications 2020",
+    "publication_id": "PMID:33339831; PMCID:PMC7749178; DOI:10.1038/s41467-020-20225-w",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "DKFZ adult glioblastoma epigenome and transcriptome study",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Strand-specific ribosomal-RNA-depleted bulk RNA sequencing; reads were aligned to hg19 with STAR 2.3.0e and quantified against GENCODE release 19",
+      "endpoint_context": "Source-provided overall survival in months for the original adult grade-IV glioma cohort",
+      "endpoint_caveat": "GEO publishes exact individual OS time and vital status but does not define whether follow-up begins at diagnosis, surgery, sampling or treatment. TRACE Explorer preserves the source endpoint without claiming a harmonized clinical origin.",
+      "additional_endpoint_note": "GEO also publishes individual progression-free-survival time/status for the same 58 endpoint-complete tumors. The current release registers OS only because the GEO adapter currently materializes one source time/event pair per study specification.",
+      "classification_caveat": "Twelve retained tumors carry IDH1 R132H and were classified as glioblastoma under the historical diagnostic framework used by the source study. They would not all satisfy the current WHO definition of IDH-wildtype glioblastoma.",
+      "sample_selection_note": "The title pattern selects the 60 source-designated tumor RNA-seq profiles and excludes four normal-brain controls. AK132 and AK217 are excluded because GEO reports NA for both OS time and status; every retained tumor represents one patient.",
+      "expression_processing_note": "The public matrix supplies 57,820 unique versioned GENCODE v19 Ensembl gene identifiers and TPM values. TRACE Explorer selects the 58 endpoint-linked columns, repairs the source header's explicitly declared missing feature-column label, maps identifiers with the pinned GENCODE v19 GTF and applies log2(TPM + 1).",
+      "source_matrix_scope_note": "The source matrix contains 92 expression columns spanning the discovery tumors, normal brains and additional analysis cohorts. Only sample identifiers selected from the pinned GSE121720 clinical metadata are imported.",
+      "raw_data_note": "Raw sequence data are controlled at EGA; the complete processed gene-level TPM matrix and individual GEO clinical annotations used by this release are public and independently sufficient for the registered analysis layer.",
+      "overlap_note": "The DKFZ/Duesseldorf/Zurich cohort is institutionally and accession-wise distinct from the promoted CPTAC, GLASS and CGGA glioma releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE121720",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE121nnn/GSE121720/suppl/GSE121720_RNAseq_expression_matrix_TPMs.txt.gz",
+    "expression_filename": "GSE121720_RNAseq_expression_matrix_TPMs.txt.gz",
+    "expression_size": 29427197,
+    "expression_sha256": "f23d9f4b79bba7312c2536e8920f4ec6aacd6034f3c103e942644fb99677e2b8",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE121nnn/GSE121720/soft/GSE121720_family.soft.gz",
+    "soft_size": 9876,
+    "soft_sha256": "d8d880f871ec710f2e09112c3819431a0aabec0ab158cb6244682f84687adb8e",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "AK[0-9]+ \\[tumor RNA-seq\\]",
+    "expected_primary_samples": 60,
+    "expected_endpoint_complete_samples": 58,
+    "expected_events": 38,
+    "expected_censored": 20,
+    "expected_expression_columns": 58,
+    "expected_source_expression_files": 92,
+    "expected_expression_gene_rows": 57820,
+    "expected_normalized_expression_gene_rows": 57820,
+    "patient_id_characteristic": "",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^([^ ]+) \\[tumor RNA-seq\\]$",
+    "expression_sample_id_replacement": "\\1",
+    "time_characteristic": "os (overall survival, month)",
+    "event_characteristic": "survival_status",
+    "event_value_map": {
+      "alive": 0,
+      "dead": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "header_missing_feature_column": true,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": false
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz",
+      "name": "gencode.v19.annotation.gtf.gz",
+      "size": 37991892,
+      "sha256": "9909e8123a40eca090c3f8e501633f7cc65cd6c4adb83b95009745eca3564d70"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Source-designated adult grade-IV glioma tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO gene-level TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE release 19 GRCh37 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 57,820 source Ensembl identifiers are unique. Symbols represented by more than one mapped Ensembl row are excluded rather than combined without an unambiguous rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to source-provided gene-level TPM. Values are intended for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by the GEO survival_status field; alive records are censored at the source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-luad-mayo-never-smoker-gse87340-2014",
+    "cancer_code": "LUAD",
+    "name": "Mayo never-smoker lung adenocarcinoma cohort (GSE87340)",
+    "description": "Independent stage I lung adenocarcinoma cohort from never-smokers with paired tumor/normal bulk RNA-seq and individual overall-survival follow-up.",
+    "cohort_context": "Twenty-seven patients with stage IA or IB lung adenocarcinoma and no smoking history contributed one primary tumor and one matched nonmalignant lung specimen. TRACE Explorer retains only the 27 primary-tumor profiles.",
+    "source_provider": "geo",
+    "source_accession": "GSE87340:LUAD",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87340",
+    "publication_citation": "Sun et al. BMC Medical Genomics 2014",
+    "publication_id": "PMID:24894543; PMCID:PMC4060138; DOI:10.1186/1755-8794-7-32",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Mayo Clinic never-smoker lung adenocarcinoma cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2000",
+      "raw_data_accession": "GSE87340; PRJNA344450; SRP090460",
+      "endpoint_context": "Source-provided vital status and time to last follow-up in years",
+      "endpoint_caveat": "GEO labels the interval as time to last follow-up but does not state a more precise time origin. TRACE Explorer preserves the source interval and event coding and does not reinterpret it as TCGA-CDR OS.",
+      "sample_selection_note": "GEO contains 27 tumor/normal pairs. Titles ending in A.RNA-seq are the adenocarcinoma specimens; B.RNA-seq and the single C.RNA-seq title are matched nonmalignant lung and are excluded before normalization.",
+      "overlap_note": "This frozen Mayo Clinic never-smoker cohort is independent of TCGA-LUAD and of the other institutionally named LUAD releases registered in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO count matrix in place. Direct source-matrix redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE87340",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE87nnn/GSE87340/suppl/GSE87340_RawExpr.txt.gz",
+    "expression_filename": "GSE87340_RawExpr.txt.gz",
+    "expression_size": 2152807,
+    "expression_sha256": "2b794e10843d117bb0f224422b736ef8ac483693b9049b08e3f66d12d305bfb5",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE87nnn/GSE87340/soft/GSE87340_family.soft.gz",
+    "soft_size": 4677,
+    "soft_sha256": "0d7fd9d9ced3f046a518adec08403aba5a3fc3822b333f7d46010d1808218383",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Lu[0-9]+A\\.RNA-seq",
+    "expected_primary_samples": 27,
+    "expected_endpoint_complete_samples": 27,
+    "expected_events": 7,
+    "expected_censored": 20,
+    "expected_expression_columns": 27,
+    "expected_expression_gene_rows": 22558,
+    "expected_normalized_expression_gene_rows": 22558,
+    "patient_id_characteristic": "",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^(.+)\\.RNA-seq$",
+    "expression_sample_id_replacement": "\\1",
+    "time_characteristic": "time to last followup",
+    "event_characteristic": "survstatus",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "stage",
+    "grade_characteristic": "grade",
+    "age_characteristic": "age",
+    "sex_characteristic": "sex",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "Gene",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Resected stage I lung adenocarcinoma from a never-smoker",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Source-provided gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned GEO raw-expression matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 22,558 non-empty source symbols are unique after case normalization; no implicit aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer selects the 27 primary-tumor columns, computes library-size CPM across all 22,558 non-empty source rows and applies log2(CPM + 1). Matched nonmalignant lung columns are excluded before normalization."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_YEARS",
+      "event_column": "OS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Not specified beyond the source follow-up interval",
+      "event_definition": "Death from any cause as encoded by the GEO survstatus field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

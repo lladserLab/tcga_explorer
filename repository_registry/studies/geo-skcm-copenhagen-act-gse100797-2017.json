@@ -1,0 +1,125 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-skcm-copenhagen-act-gse100797-2017",
+    "cancer_code": "SKCM",
+    "name": "Copenhagen cutaneous-melanoma ACT cohort (GSE100797)",
+    "description": "Independent stage-IV cutaneous-melanoma cohort with pre-ACT bulk tumor RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The phase I/II adoptive T-cell therapy study analyzed pre-ACT tumor material from 27 patients. Public gene-level expression is available for 25. To preserve the TCGA-SKCM disease definition, TRACE Explorer further restricts eligibility to the 17 patients whose source record identifies a cutaneous primary, excluding two mucosal and six unknown-primary melanomas.",
+    "source_provider": "geo",
+    "source_accession": "GSE100797",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100797",
+    "publication_citation": "Lauss et al. Nature Communications 2017",
+    "publication_id": "PMID:29170503; PMCID:PMC5701046; DOI:10.1038/s41467-017-01460-0",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Copenhagen phase I/II adoptive T-cell therapy trial NCT00937625",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Pre-ACT metastatic-tumor RNA processed with TopHat2 and Cufflinks 2.1.1; isoform FPKM values were summed to genes, quantile normalized and transformed with log2(value + 1)",
+      "endpoint_context": "Overall survival in previously treated stage-IV cutaneous melanoma receiving adoptive T-cell therapy",
+      "endpoint_caveat": "The article and GEO provide the locked ACT-trial survival values but do not restate the exact calendar origin in the deposited expression record. TRACE Explorer therefore exposes source-provided OS without equating it to an untreated natural-history endpoint.",
+      "sample_selection_note": "All retained profiles precede ACT. The source notes that some tumors were obtained after or during prior BRAF-targeted therapy; this treatment context remains visible and the release must not be interpreted as treatment-naive melanoma.",
+      "disease_selection_note": "Only source records with type.of.primary = skin are eligible. Mucosal and unknown-primary tumors are excluded before endpoint QC even though their expression is public.",
+      "overlap_note": "This adoptive-cell-therapy cohort is distinct from the Hugo, Riaz and Gide checkpoint-inhibitor cohorts already represented in the catalog.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO matrix in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE100797",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE100nnn/GSE100797/suppl/GSE100797_ProcessedData.txt.gz",
+    "expression_size": 1388991,
+    "expression_sha256": "7aa32f0affb84b76182cdd81b839cc2c24e39386fa2f34ce6d13b00943eb7b33",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE100nnn/GSE100797/soft/GSE100797_family.soft.gz",
+    "soft_size": 4159,
+    "soft_sha256": "f1ec18ea7554efeb7aa73ba073ae07f7c77a4b8f58841f98f54e09e77f18cd65",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "MM909_[0-9]{2}_[12]",
+    "expected_primary_samples": 25,
+    "sample_characteristic_filters": [
+      {
+        "key": "type.of.primary",
+        "include": [
+          "skin"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 17,
+    "expected_endpoint_complete_samples": 17,
+    "expected_events": 11,
+    "expected_censored": 6,
+    "expected_expression_columns": 17,
+    "expected_expression_gene_rows": 18418,
+    "expected_normalized_expression_gene_rows": 18418,
+    "patient_id_characteristic": "",
+    "time_characteristic": "os.time",
+    "event_characteristic": "os.event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "ajcc.stage",
+    "expression_sample_characteristic": "",
+    "sample_type": "Metastatic Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "identity",
+      "duplicate_feature_policy": "error"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Metastatic Tumor",
+    "sample_role": "Metastatic cutaneous-melanoma tumor sampled before adoptive T-cell therapy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Metastatic Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_source_log2_fpkm",
+    "label": "Source quantile-normalized log2(FPKM + 1)",
+    "source_unit": "Source-provided quantile-normalized gene-level log2(FPKM + 1)",
+    "transform": "identity",
+    "analysis_unit": "Source quantile-normalized log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided HGNC protein-coding gene symbols",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned matrix contains 18,418 unique non-empty source gene symbols.",
+    "stream_source_order": true,
+    "scale_note": "The source summed transcript FPKM to gene level, quantile normalized across samples and applied log2(value + 1). TRACE Explorer retains those values without an additional transform and restricts analysis to the 17 cutaneous-primary records."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "ACT trial follow-up; exact calendar origin not restated in the deposited expression record",
+      "event_definition": "Death from any cause; living patients are censored at the source-locked follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

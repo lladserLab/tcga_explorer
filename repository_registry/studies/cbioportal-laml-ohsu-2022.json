@@ -1,0 +1,95 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-laml-ohsu-2022",
+    "cancer_code": "LAML",
+    "name": "Acute myeloid leukemia cohort (OHSU, 2022)",
+    "description": "Large independent AML cohort restricted to diagnostic specimens with linked overall survival.",
+    "cohort_context": "Adult AML cohort; only specimens labelled Initial Diagnosis and Acute Myeloid Leukemia are included, with one prespecified specimen per patient.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "aml_ohsu_2022",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/aml_ohsu_2022",
+    "publication_citation": "Bottomly et al. Cancer Cell 2022",
+    "publication_id": "PMID:35868306",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Prospective functional-genomics cohort",
+      "curation_note": "The 2022 release supersedes the overlapping 2018 OHSU candidate for repository coverage."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/aml_ohsu_2022",
+    "files": {
+      "expression": "data_mrna_seq_rpkm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_rpkm.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SPECIMEN_TYPE",
+    "sample_type_default": "Diagnostic AML specimen",
+    "sample_role": "Initial-diagnosis AML specimen",
+    "eligibility_rules": [
+      {
+        "field": "sample.CANCER_TYPE",
+        "include": ["Acute Myeloid Leukemia"],
+        "required": true
+      },
+      {
+        "field": "sample.DISEASE_STAGE_AT_SPECIMEN_COLLECTION",
+        "include": ["Initial Diagnosis"],
+        "required": true
+      }
+    ],
+    "selection_rank_rules": [
+      {
+        "field": "sample.SPECIMEN_TYPE",
+        "order": ["Bone Marrow Aspirate", "Peripheral Blood", "Leukapheresis"],
+        "default_rank": 10
+      }
+    ],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["sample.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_rpkm",
+    "label": "OHSU log2-normalized RPKM",
+    "source_unit": "log2-normalized RPKM",
+    "transform": "identity",
+    "analysis_unit": "Provided log2-normalized RPKM",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "Although the source filename contains RPKM, the DataHub molecular-profile metadata explicitly describes log2-normalized RPKM. Values are preserved without a second logarithm."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

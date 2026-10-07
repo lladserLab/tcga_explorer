@@ -1,0 +1,134 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-skcm-mount-sinai-gse98394-2017",
+    "cancer_code": "SKCM",
+    "name": "Mount Sinai primary melanoma cohort (GSE98394)",
+    "description": "Independent treatment-naive primary cutaneous-melanoma cohort with bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The discovery series contains 51 primary skin melanomas and 27 benign nevi. TRACE Explorer excludes every nevus before endpoint QC and retains the 44 primary melanomas with positive overall-survival time and a recognized vital status. Seven additional primary melanomas lack a public endpoint and are not exposed.",
+    "source_provider": "geo",
+    "source_accession": "GSE98394",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE98394",
+    "publication_citation": "Badal et al. JCI Insight 2017",
+    "publication_id": "PMID:28469092; PMCID:PMC5414564; DOI:10.1172/jci.insight.92102",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Icahn School of Medicine at Mount Sinai primary-melanoma discovery cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Ribosomal-RNA-depleted paired-end bulk RNA-seq aligned with STAR to Ensembl build 37 and quantified at gene level with Rsubread featureCounts",
+      "endpoint_context": "Overall survival in treatment-naive patients with primary cutaneous melanoma",
+      "endpoint_caveat": "GEO supplies time to death or last follow-up and vital status, but the exact calendar origin is not stated. TRACE Explorer therefore labels this as source-provided OS and preserves that uncertainty.",
+      "sample_selection_note": "Tissue type is applied before endpoint and expression QC. All 27 benign nevi are excluded, as are seven primary melanomas whose GEO records do not contain both a usable OS time and vital status.",
+      "annotation_caveat": "The publication identifies Ensembl build 37 but not the exact release. TRACE Explorer pins the final canonical GRCh37 Ensembl release 75 to map stable Ensembl gene identifiers deterministically; unmapped repetitive-element rows remain excluded.",
+      "overlap_note": "The study collected an independent treatment-naive primary-melanoma series and is not derived from TCGA-SKCM or the metastatic immunotherapy cohorts already in the catalog.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE98394",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE98nnn/GSE98394/suppl/GSE98394_counts.txt.gz",
+    "expression_size": 2906170,
+    "expression_sha256": "2bffac06ee01adc88faf75ff5b97a540f56b67cdcb6f449cb75fdd74f49d1ddd",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE98nnn/GSE98394/soft/GSE98394_family.soft.gz",
+    "soft_size": 8434,
+    "soft_sha256": "217b88a72f18cd25c5e3b263a10e65b429f07474b25f10419f62e734f74edd54",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "primary melanoma \\(JC[0-9]{3}\\)",
+    "expected_primary_samples": 51,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "primary melanoma"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 51,
+    "expected_endpoint_complete_samples": 44,
+    "expected_events": 18,
+    "expected_censored": 26,
+    "expected_expression_columns": 44,
+    "expected_expression_gene_rows": 24505,
+    "patient_id_characteristic": "",
+    "time_characteristic": "time to death/last followup, months",
+    "event_characteristic": "survival status (1=dead, 0=alive)",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "tumor stage (ajcc classification)",
+    "sex_characteristic": "gender",
+    "expression_sample_id_pattern": "^primary melanoma \\((JC[0-9]{3})\\)$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "gene/repeat.element",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Treatment-naive primary cutaneous melanoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized to log2(CPM + 1)",
+    "source_unit": "Rsubread featureCounts gene and repetitive-element raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Only rows that map uniquely to a gene symbol are analyzable; unmapped repetitive-element rows and symbols represented by multiple Ensembl rows are excluded.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library size over all 24,505 source rows, converts counts to CPM, applies log2(CPM + 1), maps build-37 Ensembl IDs and excludes ambiguous symbols. The resulting values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Not specified by the source",
+      "event_definition": "Death from any cause; living patients are censored at the source-provided last follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

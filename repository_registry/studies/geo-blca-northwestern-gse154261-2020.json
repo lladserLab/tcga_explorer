@@ -1,0 +1,114 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-blca-northwestern-gse154261-2020",
+    "cancer_code": "BLCA",
+    "name": "Northwestern T1 bladder BCG cohort (GSE154261)",
+    "description": "Independent high-grade stage-T1 bladder-cancer cohort with pretreatment bulk RNA sequencing and individual recurrence follow-up after BCG.",
+    "cohort_context": "The discovery cohort contains 73 primary stage-T1 bladder tumors treated at one institution. The source study prespecified recurrence after bacillus Calmette-Guerin as its primary endpoint and profiled the tumors before outcome ascertainment. A separate 26-tumor early-cystectomy validation cohort is not included because GEO does not publish individual recurrence follow-up for those profiles.",
+    "source_provider": "geo",
+    "source_accession": "GSE154261",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE154261",
+    "publication_citation": "Robertson et al. European Urology 2020",
+    "publication_id": "PMID:32684305; DOI:10.1016/j.eururo.2020.06.048",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Northwestern University high-grade T1 non-muscle-invasive bladder-cancer cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "FFPE primary-tumor RNA aligned to GRCh38.p12 with STAR 2.6.0a and quantified against Ensembl release 95 with HTSeq 0.11.2",
+      "endpoint_context": "Recurrence after repeat transurethral resection and induction BCG, with maintenance BCG reported by the source",
+      "endpoint_caveat": "GEO provides recurrence status and a recurrence-or-follow-up time in months. The exact calendar origin is not restated, so TRACE Explorer exposes the endpoint as source-provided recurrence-free survival rather than equating it with a TCGA-CDR endpoint.",
+      "sample_selection_note": "Only the 73 source-labelled discovery-cohort tumors have both the pinned raw-count matrix and individual endpoint records. The 26 validation profiles are excluded before endpoint and expression QC.",
+      "overlap_note": "The cohort is institutionally independent of TCGA-BLCA. The 26 early-cystectomy validation profiles belong to the same publication but are not counted as a second release.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE154261",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE154nnn/GSE154261/suppl/GSE154261_T1_n73_RNAseq_read_counts_with_info.txt.gz",
+    "expression_size": 4735792,
+    "expression_sha256": "4edb127f03ba211f15f5246964bef44a3b0e33b7d8684566d6603fb78cb3d4e0",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE154nnn/GSE154261/soft/GSE154261_family.soft.gz",
+    "soft_size": 9649,
+    "soft_sha256": "9024578f74aa98a7b2f1807f19d077746aed51c45abce16cee3b430b0f910f9e",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Discovery cohort [0-9]+",
+    "expected_primary_samples": 73,
+    "expected_endpoint_complete_samples": 73,
+    "expected_events": 31,
+    "expected_censored": 42,
+    "expected_expression_columns": 73,
+    "expected_expression_gene_rows": 58735,
+    "patient_id_characteristic": "processed data characteristics",
+    "time_characteristic": "recurrence_time_mo",
+    "event_characteristic": "recurrence",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "expression_sample_metadata_field": "description",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "gene_id",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 8,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.95.gtf.gz",
+      "size": 43668708,
+      "sha256": "b54faa39220ab12d62dfa9c6a529668fc56bc926bba64bb2faaa1003319b7341"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary high-grade stage-T1 bladder tumor sampled before BCG outcome ascertainment",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO HTSeq counts normalized to log2(CPM + 1)",
+    "source_unit": "HTSeq gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 95 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without a source-defined rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained library size over all 58,735 source Ensembl rows, converts raw counts to CPM and applies log2(CPM + 1). Values are suitable for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Source-provided recurrence-free survival",
+      "time_column": "RFS_MONTHS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "After BCG treatment; exact calendar origin not restated by the source",
+      "event_definition": "Documented bladder-cancer recurrence; patients without recurrence are censored at source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

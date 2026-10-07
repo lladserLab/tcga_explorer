@@ -1,0 +1,86 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-skcm-hugo-ucla-2016",
+    "cancer_code": "SKCM",
+    "name": "Pretreatment metastatic melanoma (Hugo, 2016)",
+    "description": "Independent metastatic melanoma cohort with pretreatment bulk RNA-seq and survival after anti-PD-1 therapy.",
+    "cohort_context": "Treatment-selected metastatic melanoma subsequently treated with anti-PD-1 therapy. The single source-labelled on-treatment biopsy is excluded.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "mel_iatlas_hugo_ucla_2016",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/mel_iatlas_hugo_ucla_2016",
+    "publication_citation": "Hugo et al. Cell 2016",
+    "publication_id": "PMID:26997480; PMCID:PMC4808437; DOI:10.1016/j.cell.2016.02.065",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Pretreatment anti-PD-1 biomarker cohort",
+      "treatment_context": "Anti-PD-1 therapy",
+      "curation_note": "The harmonized source contains 27 RNA-seq profiles. One on-treatment biopsy and one pretreatment patient without usable OS time/status are excluded, leaving 25 endpoint-complete pretreatment patients."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/mel_iatlas_hugo_ucla_2016",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "BIOPSY_SITE",
+    "sample_type_default": "Pretreatment metastatic melanoma biopsy",
+    "sample_role": "Pretreatment metastatic melanoma biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["MEL"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_TREATMENT",
+        "include": ["Pre"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.CLINICAL_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(TPM + 1); different identifiers are never merged implicitly.",
+    "scale_note": "The DataHub molecular-profile metadata identifies the frozen source values as TPM. TRACE Explorer applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Start of anti-PD-1 therapy",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

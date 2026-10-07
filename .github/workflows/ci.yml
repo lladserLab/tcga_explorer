@@ -1,0 +1,77 @@
+name: Source checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Test interface and build web assets
+        working-directory: frontend
+        run: |
+          npm ci
+          npm test
+          npm run videos:list
+          npm run build
+      - name: Build desktop assets
+        working-directory: frontend
+        env:
+          VITE_TRACE_LOCAL_DESKTOP: 'true'
+          VITE_API_BASE_URL: /tcga_explorer
+        run: npm run build
+      - name: Check desktop download and platform guards
+        run: node --test desktop/native/test_downloads.cjs desktop/linux/test-downloads.cjs desktop/linux/test-platform.cjs
+
+  backend:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: backend/requirements.lock
+      - name: Install the locked Python environment
+        run: python -m pip install --require-hashes -r backend/requirements.lock
+      - name: Test API, CLI and desktop package handling
+        run: python -m pytest -q backend/tests scripts/tests desktop/native/test_data_packages.py desktop/native/test_serving.py
+      - name: Verify generated documentation and dependency locks
+        run: |
+          python scripts/build_static_methods.py --check
+          python scripts/vendor_api_docs.py --check
+          python scripts/lock_python_dependencies.py --check
+
+  browser:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check browser interactions and accessibility
+        run: >-
+          docker run --rm --ipc=host -e CI=1
+          -v "$PWD:/workspace" -w /workspace/frontend
+          mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
+          bash -lc 'npm ci --silent && npm run test:e2e'
+
+  secrets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Scan source history
+        run: >-
+          docker run --rm -v "$PWD:/repo:ro"
+          zricethezav/gitleaks@sha256:e1b35e12a8c6fa8901f060459cfb6b2fc4c484d3afbe3b029733a3bbfab07055
+          git --config /repo/.gitleaks.toml --redact --no-banner /repo

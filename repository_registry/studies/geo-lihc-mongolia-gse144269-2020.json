@@ -1,0 +1,162 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-lihc-mongolia-gse144269-2020",
+    "cancer_code": "LIHC",
+    "name": "Mongolian resected hepatocellular-carcinoma cohort (GSE144269)",
+    "description": "Independent Mongolian hepatocellular-carcinoma cohort with resected primary-tumor bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The National Cancer Center in Ulaanbaatar collected paired tumor and adjacent nontumor liver specimens from 76 surgically treated HCC patients in 2015-2016. Seventy patients have a primary-tumor RNA profile and complete positive overall-survival time/status in the authors' commit-pinned analysis repository.",
+    "source_provider": "geo",
+    "source_accession": "GSE144269",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE144269",
+    "publication_citation": "Candia et al. Nature Communications 2020",
+    "publication_id": "PMID:32873799; PMCID:PMC7462863; DOI:10.1038/s41467-020-18186-1",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-GPL-3.0-only",
+    "license_url": "https://github.com/juliancandia/MongolianHCC/blob/c0391e5a62732ab76fde1428e428a229bbea743b/LICENSE",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "National Cancer Center of Mongolia resected HCC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the authors' commit-pinned GPL-3.0 analysis repository",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Total bulk RNA sequencing of paired resected tumor and adjacent nontumor liver. The authors retained rows with mean tumor count greater than one, applied limma-voom with quantile normalization and exported log2-scale expression.",
+      "endpoint_context": "Overall survival in days from diagnosis, with death from any cause as the event",
+      "clinical_evidence_note": "The authors' public patient_sample_metadata.txt defines survival.status as alive=0/dead=1 and survival.time as days from diagnosis. It contains 76 clinical records; all 70 patients with a GEO tumor RNA profile have complete positive OS time/status, while six clinical records without RNA are excluded deterministically.",
+      "sample_selection_note": "GEO contains one tumor and one matched adjacent-nontumor profile for each of 70 RNA-sequenced patients. TRACE Explorer retains only the single source-labelled tumor profile and links it to the numeric patient identifier used by the authors' tumor-only expression matrix.",
+      "expression_processing_note": "The commit-pinned tumor-only matrix contains 34,234 source rows and 70 patient columns on the authors' voom/quantile-normalized log2 scale. All rows assigned to a case-insensitive duplicated symbol are excluded rather than silently combined, leaving 33,994 analyzable symbols.",
+      "clinical_covariate_note": "The public clinical table supplies exact age and sex for 69 RNA-profiled patients. Source sex codes 0 and 1 are mapped explicitly to Female and Male. TNM stage is available for 54 RNA-profiled patients and is preserved when present.",
+      "privacy_note": "The GEO record points phenotypic data to dbGaP, while the publication's public GPL-3.0 analysis repository independently exposes the deidentified clinical input used by its survival scripts. TRACE Explorer consumes only that public commit-pinned file, disables source redistribution and does not retrieve controlled dbGaP data.",
+      "overlap_note": "This 2015-2016 Mongolian surgical cohort is institutionally and geographically distinct from TCGA-LIHC, ICGC LIRI-JP, SNUH GSE148355, PLANet and the promoted immunotherapy cohort.",
+      "redistribution_note": "TRACE Explorer downloads and transforms pinned public files in place. Source-file redistribution is disabled; NCBI GEO terms and the authors' GPL-3.0 repository license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE144269",
+    "expression_url": "https://raw.githubusercontent.com/juliancandia/MongolianHCC/c0391e5a62732ab76fde1428e428a229bbea743b/DATA/PROCESSED/gene_expr_voom_T.txt",
+    "expression_filename": "gene_expr_voom_T.txt",
+    "expression_size": 28610803,
+    "expression_sha256": "8f21bc3f76a95b2329c7dd5b66533f538df314100f4c353a5f80e6cc5203cc1e",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE144nnn/GSE144269/soft/GSE144269_family.soft.gz",
+    "soft_size": 9468,
+    "soft_sha256": "03667ed9fb919ba5bdab818891721a6505eea8327860647895ccca996ea68075",
+    "license_evidence_url": "https://raw.githubusercontent.com/juliancandia/MongolianHCC/c0391e5a62732ab76fde1428e428a229bbea743b/LICENSE",
+    "primary_sample_title_pattern": "pat [0-9]+ tumor \\[HDV_[0-9]+A_S[0-9]+\\]",
+    "expected_primary_samples": 70,
+    "expected_endpoint_complete_samples": 70,
+    "expected_events": 23,
+    "expected_censored": 47,
+    "expected_expression_columns": 70,
+    "expected_expression_gene_rows": 34234,
+    "expected_normalized_expression_gene_rows": 33994,
+    "expected_duplicate_feature_symbols": 78,
+    "expected_excluded_duplicate_feature_rows": 240,
+    "patient_id_characteristic": "clinical patient id",
+    "time_characteristic": "survival time",
+    "event_characteristic": "survival status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "sex",
+    "sex_value_map": {
+      "0": "Female",
+      "1": "Male"
+    },
+    "stage_characteristic": "tnm staging",
+    "stage_value_map": {
+      "1": "Stage I",
+      "2": "Stage II",
+      "3": "Stage III",
+      "4": "Stage IV"
+    },
+    "expression_sample_characteristic": "clinical patient id",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://raw.githubusercontent.com/juliancandia/MongolianHCC/c0391e5a62732ab76fde1428e428a229bbea743b/DATA/ORIGINAL/patient_sample_metadata.txt",
+      "evidence_size": 9640,
+      "evidence_sha256": "a9e318a55da298ce619a187badb317eb5c58abaf881e03a0223032dcbad74ab5",
+      "evidence_format": "tsv",
+      "header_row": 1,
+      "record_id_column": "RNASeq_T",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "^(?:pat [0-9]+ tumor \\[)?(HDV_[0-9]+A_S[0-9]+)(?:\\])?$",
+      "expected_records": 70,
+      "expected_matched_records": 70,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Patient": "clinical patient id",
+        "age": "age",
+        "sex": "sex",
+        "TNM_staging": "tnm staging",
+        "survival.status": "survival status",
+        "survival.time": "survival time"
+      },
+      "terms_url": "https://raw.githubusercontent.com/juliancandia/MongolianHCC/c0391e5a62732ab76fde1428e428a229bbea743b/LICENSE"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "Description",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 3,
+      "value_transform": "identity",
+      "allow_negative_values": true,
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Resected primary hepatocellular-carcinoma tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_source_voom",
+    "label": "Author-provided voom quantile-normalized log2 expression",
+    "source_unit": "Voom log2 expression with quantile normalization",
+    "transform": "identity",
+    "analysis_unit": "Source-provided voom log2 expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided Description gene-symbol column in the commit-pinned tumor-only matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All occurrences of 78 case-insensitive duplicated symbols are excluded before canonicalization; the remaining 33,994 symbols are unique and retain source row order.",
+    "stream_source_order": true,
+    "scale_note": "The authors filtered genes by mean tumor count greater than one, ran limma-voom with quantile normalization over the paired tumor/nontumor matrix and supplied the resulting tumor-only log2-scale values. TRACE Explorer applies no additional expression transformation; values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis",
+      "event_definition": "Death from any cause (source survival.status 1 = death; 0 = alive/censored)",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-prad-neoadjuvant-adt-gse111177-2018",
+    "cancer_code": "PRAD",
+    "name": "Matched neoadjuvant-ADT prostate cohort, pretreatment biopsies (GSE111177)",
+    "description": "Independent prostate-cancer cohort with pretreatment tumor-biopsy bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study generated whole-transcriptome profiles from 20 patient-matched pretreatment needle-core biopsies and post-ADT prostatectomy specimens. TRACE Explorer retains one pretreatment biopsy per patient and links it to exact overall-survival follow-up in the public clinical workbook. Four additional paired GEO patients without records in that workbook are excluded before analysis.",
+    "source_provider": "geo",
+    "source_accession": "GSE111177",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE111177",
+    "publication_citation": "Sharma et al. Cancers 2018",
+    "publication_id": "PMID:30314329; PMCID:PMC6210624; DOI:10.3390/cancers10100379",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Matched neoadjuvant androgen-deprivation therapy prostate-cancer study",
+      "source_data_system": "NCBI Gene Expression Omnibus, MDPI and Europe PMC",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Whole-transcriptome RNA sequencing of FFPE prostate needle-core biopsies obtained before neoadjuvant ADT; GEO reports STAR 2.5 alignment to hg38 and GENCODE v21 annotation.",
+      "endpoint_context": "Overall survival from diagnosis to death from any cause or last follow-up",
+      "endpoint_definition_note": "The source workbook defines dx_lasttime as months from diagnosis to last follow-up and vital_status as 0=alive, 1=dead from prostate cancer and 2=dead from another cause. TRACE Explorer treats both death codes as OS events.",
+      "sample_linkage_note": "GEO titles and the clinical workbook use the same CHU patient/specimen identifiers. The public GSE111177_Sample-key.xlsx file maps each pretreatment title to its raw-count matrix column; the exact mapping is frozen in the study specification.",
+      "sample_linkage_evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE111nnn/GSE111177/suppl/GSE111177_Sample-key.xlsx",
+      "sample_linkage_evidence_size": 10152,
+      "sample_linkage_evidence_sha256": "66b89d2b53ea09625a2ce82305ce4208afa795c2db44a31de12d3f672ec3cec2",
+      "sample_selection_note": "The treatment=pre-ADT filter identifies 24 source biopsies or TURP specimens. Twenty standard pretreatment biopsies map one-to-one to the public clinical workbook and expression columns; four endpoint-unlinked profiles are excluded.",
+      "expression_processing_note": "TRACE Explorer computes library sizes from all 60,155 released Ensembl rows, applies log2(CPM + 1), maps versioned Ensembl gene identifiers against the source-declared pinned GENCODE v21 annotation, and excludes symbols represented by multiple Ensembl genes rather than silently aggregating them.",
+      "overlap_note": "The CHU and Emory/CRCHUM neoadjuvant-ADT cohort is independent of TCGA-PRAD and of the other prostate-cancer cohorts currently promoted in the repository.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Direct source-file redistribution is disabled; NCBI GEO terms and the article's CC BY 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE111177",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE111nnn/GSE111177/suppl/GSE111177_Movreadcounts.txt.gz",
+    "expression_size": 2371668,
+    "expression_sha256": "6682951cdefdfdf40458285aa7b8b54dd59d8a12446276be7c1cd4810f8955ed",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE111nnn/GSE111177/soft/GSE111177_family.soft.gz",
+    "soft_size": 5072,
+    "soft_sha256": "ab147cd314b607b1fd7381c89f667eeb13e124af8eeb4a97f6ce8ae9e3316c77",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "primary_sample_title_pattern": "CHU[0-9]+-.+",
+    "expected_primary_samples": 48,
+    "sample_characteristic_filters": [
+      {
+        "key": "treatment",
+        "include": [
+          "pre-ADT"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 24,
+    "expected_endpoint_complete_samples": 20,
+    "expected_events": 5,
+    "expected_censored": 15,
+    "expected_source_expression_files": 48,
+    "expected_expression_columns": 20,
+    "expected_expression_gene_rows": 60155,
+    "expected_normalized_expression_gene_rows": 60155,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "os months",
+    "event_characteristic": "vital status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1,
+      "2": 1
+    },
+    "age_characteristic": "age at diagnosis",
+    "grade_characteristic": "grade",
+    "stage_characteristic": "stage",
+    "race_characteristic": "race",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_aliases": {
+      "CHU001-Bx": "R031_2",
+      "CHU003-Bx": "R031_4",
+      "CHU006-Bx": "R031_6",
+      "CHU007-Bx": "R031_8",
+      "CHU008-Bx": "R031_10",
+      "CHU009-Bx": "R031_12",
+      "CHU011-Bx": "R031_14",
+      "CHU013-Bx": "R031_16",
+      "CHU014-Bx": "R031_18",
+      "CHU015-Bx": "R031_20",
+      "CHU016-Bx": "R031_22",
+      "CHU018-Bx": "R031_24",
+      "CHU019-Bx": "MSA11033-PoolA1-27646640",
+      "CHU020-Bx": "MSA11033-PoolA2-27651638",
+      "CHU021-Bx": "R031_26",
+      "CHU022-Bx": "R031_28",
+      "CHU024-Bx": "R031_30",
+      "CHU025-Bx": "R031_32",
+      "CHU026-Bx": "R031_34",
+      "CHU028-Bx": "MSA11033-PoolA3-27631708"
+    },
+    "sample_type": "Pretreatment Biopsy",
+    "clinical": {
+      "evidence_url": "https://mdpi-res.com/d_attachment/cancers/cancers-10-00379/article_deploy/cancers-10-00379-s001.zip",
+      "evidence_size": 125704,
+      "evidence_sha256": "3790cbff70dda4773010c0ab354013fd6739d47b4824950d38f9c71b164eebc3",
+      "evidence_container_size": 1300583,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "cancers-357908-suppl.-proof-/SupplementaryTables.Cancers.final.xlsx",
+      "sheet_name": "Supplementary Table 1",
+      "header_row": 2,
+      "header_name_overrides": {
+        "42": "postadt_gleason_primary",
+        "43": "postadt_gleason_secondary",
+        "44": "postadt_gleason_sum"
+      },
+      "record_id_column": "Pre-ADT Specimen",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(CHU[0-9]+)-(?:[Bb][Xx])",
+      "sample_id_replacement": "\\1",
+      "field_name_map": {
+        "patient_id": "patient id",
+        "race": "clinical race code",
+        "age_dx": "age at diagnosis",
+        "clin_stage": "stage",
+        "bx_gs": "grade",
+        "dx_lasttime": "os months",
+        "vital_status": "vital status",
+        "recur": "clinical recurrence code",
+        "mets": "clinical metastasis code"
+      },
+      "expected_records": 20,
+      "expected_matched_records": 20,
+      "expected_unmatched_records": 0,
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6210624/"
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "gene_id",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 3,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_21/gencode.v21.annotation.gtf.gz",
+      "name": "gencode.v21.annotation.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 40923376,
+      "sha256": "083556ff3729ad888c51e7a9e26860b3e9d1c9d63b4bd1e2f9d7be1c75250a1e"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment Biopsy",
+    "sample_role": "One FFPE prostate needle-core biopsy collected before neoadjuvant ADT per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment Biopsy"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Gene-level raw read counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE v21 hg38 gene_name annotation declared by the source",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer calculates CPM from all 60,155 released source rows before applying log2(CPM + 1), then maps Ensembl identifiers with pinned GENCODE v21. Values support within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from diagnosis",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Prostate-cancer diagnosis",
+      "event_definition": "Death from any cause; source vital_status 1 and 2 are events and 0 denotes censoring",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

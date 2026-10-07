@@ -13,13 +13,19 @@ __pycache__/
 venv/
 
 # Node / Vite
+node_modules/
 frontend/node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
 
 # Docker / local runtime state
 postgres_data/
 logs/
 *.log
+.tmp/
+Rplots.pdf
+backend/Rplots.pdf
 
 # Generated analysis outputs and local data caches
 artifacts/*
@@ -30,3 +36,28 @@ clinical/*
 !clinical/.gitkeep
 jcga/*
 !jcga/.gitkeep
+external_repository/*
+!external_repository/.gitkeep
+external_repository_staging/*
+!external_repository_staging/.gitkeep
+user_uploads/*
+!user_uploads/.gitkeep
+
+# Generated manuscript outputs
+/dist/
+manuscript/bioinformatics_app_note/build/
+manuscript/briefings_in_bioinformatics/build/
+
+# Local point-in-time backups are retained on the workstation, not in Git.
+release_backups/
+downloads/desktop/
+
+# Native runtimes, test profiles and large optional video assets.
+desktop/build/
+desktop/runtime/
+frontend/public/tutorial-videos/**/*.mp4
+frontend/public/tutorial-videos/**/*.part-*
+
+# Filled owner metadata may include private reviewer URLs or contact details.
+manuscript/bioinformatics_app_note/submission/owner_metadata*.json
+!manuscript/bioinformatics_app_note/submission/owner_metadata.template.json

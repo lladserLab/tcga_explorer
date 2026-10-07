@@ -1,0 +1,30 @@
+name: Full scientific runtime
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scientific-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build locked Python and R environment
+        run: |
+          docker build -f backend/Dockerfile -t trace-explorer-ci-backend:local .
+          docker build -f scripts/publication/Dockerfile.test_tools \
+            --build-arg RUNTIME_IMAGE=trace-explorer-ci-backend:local \
+            -t trace-explorer-ci-tests:local .
+      - name: Run scientific and API tests
+        run: >-
+          docker run --rm --entrypoint python3
+          -e PYTHONPATH=/workspace/backend:/workspace
+          -v "$PWD:/workspace:ro" -w /workspace
+          trace-explorer-ci-tests:local -m pytest -q -p no:cacheprovider backend/tests scripts/tests
+      - name: Check concurrent PostgreSQL admission
+        run: bash scripts/check_compute_concurrency.sh trace-explorer-ci-tests:local
+      - name: Check self-hosted API documentation
+        run: bash scripts/check_api_docs.sh trace-explorer-ci-backend:local

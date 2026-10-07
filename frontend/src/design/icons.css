@@ -1,0 +1,104 @@
+.trace-icon {
+  --trace-icon-size: 20px;
+  display: inline-block;
+  width: var(--trace-icon-size);
+  height: var(--trace-icon-size);
+  flex: 0 0 var(--trace-icon-size);
+  color: inherit;
+  stroke-width: 1.8;
+  vertical-align: -0.125em;
+}
+
+.trace-icon-size-xsm {
+  --trace-icon-size: 12px;
+}
+
+.trace-icon-size-sm {
+  --trace-icon-size: 16px;
+}
+
+.trace-icon-size-md {
+  --trace-icon-size: 20px;
+}
+
+.trace-icon-size-lg {
+  --trace-icon-size: 24px;
+}
+
+.trace-icon-tone-inherit {
+  color: inherit;
+}
+
+.trace-icon-tone-primary {
+  color: var(--ink-strong);
+}
+
+.trace-icon-tone-secondary {
+  color: var(--muted);
+}
+
+.trace-icon-tone-accent {
+  color: var(--accent-strong);
+}
+
+.trace-icon-tone-success {
+  color: var(--success);
+}
+
+.trace-icon-tone-caution {
+  color: var(--warning);
+}
+
+.trace-icon-tone-error {
+  color: var(--danger);
+}
+
+.trace-icon-tone-disabled {
+  color: var(--line-strong);
+}
+
+.trace-icon-button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted-strong);
+  font: inherit;
+  line-height: 1;
+}
+
+.trace-icon-button-size-sm {
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+}
+
+.trace-icon-button-size-md {
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+}
+
+.trace-icon-button-size-lg {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+}
+
+.trace-icon-button-secondary {
+  border-color: var(--line);
+  background: var(--surface-raised);
+  color: var(--accent-strong);
+}
+
+.trace-icon-button-destructive {
+  color: var(--danger);
+}
+
+.trace-icon-button:disabled {
+  color: var(--line-strong);
+  cursor: not-allowed;
+}

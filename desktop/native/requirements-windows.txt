@@ -1,0 +1,19 @@
+fastapi==0.141.1
+uvicorn==0.52.1
+SQLAlchemy==2.0.51
+psycopg[binary]==3.3.4
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+pytest==9.1.1
+openpyxl==3.1.5
+pyxlsb==1.0.10
+pypdf==6.16.1
+# Build tools are pinned too: distro-provided copies predate security fixes.
+setuptools==83.0.0
+wheel==0.46.2
+alembic==1.19.1
+mcp==1.28.1
+httpx==0.28.1
+cryptography==50.0.0
+
+pywin32==312

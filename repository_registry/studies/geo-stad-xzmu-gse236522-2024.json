@@ -1,0 +1,116 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-stad-xzmu-gse236522-2024",
+    "cancer_code": "STAD",
+    "name": "Xuzhou gastric-cancer cohort (GSE236522)",
+    "description": "Independent gastric-cancer cohort with tumor bulk RNA sequencing and individual source-provided overall-survival follow-up.",
+    "cohort_context": "The GEO series contains one bulk RNA-seq profile from a biopsy or surgical tumor specimen for each of 33 patients with gastric cancer. TRACE Explorer retains all 33 endpoint-complete profiles as a separate external cohort and does not pool them with TCGA-STAD or the CPTAC gastric-cancer cohort.",
+    "source_provider": "geo",
+    "source_accession": "GSE236522",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE236522",
+    "publication_citation": "Su et al. NCBI Gene Expression Omnibus 2024",
+    "publication_id": "GEO:GSE236522; BioProject:PRJNA991524",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Xuzhou Medical University gastric-cancer prognostic-model cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Bulk total-RNA libraries prepared with the SMARTer mRNA-Seq Library Prep Kit and processed with CLC Genomics Workbench 11.0.1",
+      "endpoint_context": "Source-provided overall-survival duration and death status",
+      "endpoint_caveat": "GEO reports individual OS duration in days and death status but does not define the exact time origin. Follow-up is heterogeneous and only seven deaths are observed, so estimates from this small cohort require correspondingly cautious interpretation.",
+      "sample_selection_note": "Every GEO title maps one-to-one to one patient and one column in the pinned FPKM matrix; no sample selection or pooling is required.",
+      "clinical_evidence_note": "The pinned GEO family SOFT contains OS duration, death status, TNM stage, age and gender for all 33 retained samples.",
+      "overlap_note": "The GEO record describes 33 newly sequenced gastric-cancer tissues and does not report reuse of TCGA, CPTAC or another cohort registered in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Direct redistribution of the source matrix is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE236522",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE236nnn/GSE236522/suppl/GSE236522_FPKM.txt.gz",
+    "expression_size": 4940860,
+    "expression_sha256": "36c98d93cd277b608a77a8dd776b0693ade4bea4a0f8ee75511c2e1537a60af2",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE236nnn/GSE236522/soft/GSE236522_family.soft.gz",
+    "soft_size": 3114,
+    "soft_sha256": "eb34c2215a7dd5f9478cb4f2e8254134414bb9dbbb69c9b54b67d60414cd5a4b",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "(?:ET(?:[1-9]|1[01])|YT(?:[1-9]|1[0-5789]|2[0-3]))",
+    "expected_primary_samples": 33,
+    "expected_endpoint_complete_samples": 33,
+    "expected_events": 7,
+    "expected_censored": 26,
+    "expected_expression_columns": 33,
+    "patient_id_characteristic": "",
+    "expression_sample_characteristic": "",
+    "time_characteristic": "os(day)",
+    "event_characteristic": "death",
+    "event_value_map": {
+      "Yes": 1,
+      "No": 0
+    },
+    "stage_characteristic": "tnm",
+    "sex_characteristic": "gender",
+    "age_characteristic": "age",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "delimited_matrix"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Gastric-cancer tumor obtained by biopsy or surgical resection",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_fpkm",
+    "label": "GEO FPKM transformed to log2(FPKM + 1)",
+    "source_unit": "Gene-level FPKM supplied by GEO",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "HUGO gene-symbol catalog returned by the cBioPortal gene API and frozen in the release",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to any repeated case-normalized source symbol are excluded rather than averaged without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer selects the 33 endpoint-complete columns and applies log2(FPKM + 1) once to non-negative GEO-supplied FPKM values. Symbols absent from the frozen HUGO mapping and all repeated symbols are excluded."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Not specified by the source",
+      "event_definition": "Death from any cause as encoded in the GEO death field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

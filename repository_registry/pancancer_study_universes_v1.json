@@ -1,0 +1,228 @@
+{
+  "schema_version": "tcga-trace-pancancer-study-universe-registry-v1",
+  "registry_version": "2026.08.20",
+  "description": "Versioned study-universe and overlap policy used only by hierarchical pan-cancer analyses. Universe definitions are resolved from cancer_types.json and the pinned external study manifests; this file records the cross-release decisions that cannot be inferred safely from identifiers alone.",
+  "expected_counts": {
+    "tcga": 33,
+    "external_active": 144,
+    "total_active": 177
+  },
+  "inactive_manifest_ids": [
+    "biostudies-brca-nottingham-icart1-2-2020",
+    "biostudies-brca-nottingham-icart1-2024",
+    "cbioportal-brca-iatlas-anders-2022",
+    "cbioportal-gbm-iatlas-prins-2019"
+  ],
+  "clinical_context": {
+    "hematologic_cancer_codes": ["CLL", "DLBC", "LAML"],
+    "metastatic_dataset_ids": [
+      "cbioportal-blca-iatlas-imvigor210-2017",
+      "cbioportal-brca-pog570-2020",
+      "cbioportal-coad-pog570-2020",
+      "cbioportal-kirc-iatlas-choueiri-2016",
+      "cbioportal-kirc-iatlas-immotion150-2018",
+      "cbioportal-luad-pog570-2020",
+      "cbioportal-ov-pog570-2020",
+      "cbioportal-paad-iatlas-prince-2022",
+      "cbioportal-paad-pog570-2020",
+      "cbioportal-prad-su2c-2019",
+      "cbioportal-sarc-pog570-2020",
+      "cbioportal-skcm-dfci-2015",
+      "cbioportal-skcm-dfci-2019",
+      "cbioportal-skcm-gide-2019",
+      "cbioportal-skcm-hugo-ucla-2016",
+      "cbioportal-skcm-riaz-nivolumab-2017",
+      "geo-blca-unc-gse176307-2021",
+      "geo-brca-palbo-bio-gse186901-2023",
+      "geo-coad-keio-gse192667-2022",
+      "geo-ov-cedars-sinai-gse138866-2020",
+      "geo-read-keio-gse192667-2022",
+      "geo-skcm-copenhagen-act-gse100797-2017",
+      "metaprism-thca-gr-2023",
+      "pmc-kirc-checkmate-nivolumab-2020",
+      "pmc-kirc-fuscc-sunitinib-2023",
+      "pmc-kirc-hcrn-gu16-260-nivolumab-2025",
+      "pmc-kirc-javelin101-avelumab-axitinib-2020",
+      "pmc-lihc-gse202069-anti-pd1-2023",
+      "pmc-skcm-orien-ici-2024",
+      "pmc-skcm-puch-anti-pd1-2021",
+      "zenodo-meso-nibit-epi-meso-2026"
+    ],
+    "recurrent_dataset_ids": [
+      "geo-gbm-ucla-pembrolizumab-expansion-gse264695-2024",
+      "geo-skcm-wisconsin-hu1418il2-gse133713-2020",
+      "mendeley-kirc-vanderbilt-recurrence-2021"
+    ],
+    "post_treatment_residual_dataset_ids": [
+      "geo-brca-nsabp-b41-residual-gse275065-2025",
+      "geo-esca-big-ten-durvalumab-gse183924-2021"
+    ],
+    "unknown_dataset_ids": [
+      "biostudies-blca-uromol-2016",
+      "geo-brca-case-cnp-gse241876-2024",
+      "geo-kirc-dfci-epigenomic-atlas-gse309697-2026",
+      "geo-lgg-mdacc-gse184941-2023",
+      "geo-skcm-acral-yale-csu-gse190113-2022",
+      "geo-skcm-sunexposed-yale-gse190113-2022"
+    ]
+  },
+  "release_clusters": [
+    {
+      "study_cluster_id": "kirc-checkmate-009-010-025-biomarker",
+      "members": [
+        "cbioportal-kirc-iatlas-choueiri-2016",
+        "pmc-kirc-checkmate-nivolumab-2020"
+      ],
+      "preferred_dataset_id": "pmc-kirc-checkmate-nivolumab-2020",
+      "evidence": "The 16 Choueiri phase-I patients are the CheckMate-009 subset represented inside the larger 181-patient nivolumab release."
+    },
+    {
+      "study_cluster_id": "brca-nottingham-primary-icart1",
+      "members": [
+        "biostudies-brca-nottingham-icart1-2-2020",
+        "biostudies-brca-nottingham-icart1-2024"
+      ],
+      "preferred_dataset_id": "biostudies-brca-nottingham-icart1-2024",
+      "evidence": "Fifty-two of the 60 ICART1-2 participants reconcile to the broader ICART1 source cohort; the releases are not independent."
+    },
+    {
+      "study_cluster_id": "paad-apgi-paca-au",
+      "members": [
+        "cbioportal-paad-qcmg-nonoverlap-2016",
+        "icgc-paad-paca-au-2016"
+      ],
+      "preferred_dataset_id": "icgc-paad-paca-au-2016",
+      "evidence": "Both releases derive from the Australian Pancreatic Cancer Genome Initiative. The QCMG release is an explicitly non-overlapping supplement but is not treated as an independent study."
+    }
+  ],
+  "overlap_relations": [
+    {
+      "source_dataset_id": "cbioportal-kirc-iatlas-choueiri-2016",
+      "target_dataset_id": "pmc-kirc-checkmate-nivolumab-2020",
+      "relation_type": "confirmed_subset",
+      "synthesis_action": "prefer_target_release",
+      "evidence": "All 16 Choueiri patients are the CheckMate-009 subset included in the promoted CheckMate biomarker resource."
+    },
+    {
+      "source_dataset_id": "biostudies-brca-nottingham-icart1-2-2020",
+      "target_dataset_id": "biostudies-brca-nottingham-icart1-2024",
+      "relation_type": "confirmed_partial_overlap",
+      "synthesis_action": "prefer_target_release",
+      "evidence": "Fifty-two participants overlap; only eight ICART1-2 participants are an expansion."
+    },
+    {
+      "source_dataset_id": "cbioportal-paad-qcmg-nonoverlap-2016",
+      "target_dataset_id": "icgc-paad-paca-au-2016",
+      "relation_type": "same_program_nonoverlapping_supplement",
+      "synthesis_action": "prefer_target_release",
+      "evidence": "The retained 18 QCMG donors do not overlap the 66 PACA-AU donors, but both releases belong to APGI and must not be counted as independent studies."
+    }
+  ],
+  "partition_groups": [
+    {
+      "group_id": "pog570-cancer-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "cbioportal-brca-pog570-2020",
+        "cbioportal-coad-pog570-2020",
+        "cbioportal-luad-pog570-2020",
+        "cbioportal-ov-pog570-2020",
+        "cbioportal-paad-pog570-2020",
+        "cbioportal-sarc-pog570-2020"
+      ],
+      "evidence": "Cancer-specific, non-overlapping subsets of the POG570 precision-oncology program; retained as separate cancer universes but linked to one parent study."
+    },
+    {
+      "group_id": "cgga-release-and-disease-partitions",
+      "relation_type": "independent_batch_or_disjoint_disease_partition",
+      "members": [
+        "cgga-gbm-mrnaseq-325-2020",
+        "cgga-gbm-mrnaseq-693-2020",
+        "cgga-lgg-mrnaseq-325-2020",
+        "cgga-lgg-mrnaseq-693-2020"
+      ],
+      "evidence": "GBM and LGG are disjoint disease filters; the pinned mRNAseq_325 and mRNAseq_693 releases share no CGGA identifiers or complete clinical fingerprints."
+    },
+    {
+      "group_id": "glass-disease-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "cbioportal-gbm-glass-2022",
+        "cbioportal-lgg-glass-2022"
+      ],
+      "evidence": "Primary grade-IV and primary grade-II/III filters from GLASS are mutually exclusive; recurrent and TCGA-labelled samples are excluded."
+    },
+    {
+      "group_id": "gse103584-histology-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "geo-luad-tcia-radiogenomics-gse103584-2018",
+        "geo-lusc-tcia-radiogenomics-gse103584-2018"
+      ],
+      "evidence": "Mutually exclusive adenocarcinoma and squamous-cell histology filters from GSE103584."
+    },
+    {
+      "group_id": "gse81089-histology-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "geo-luad-uppsala-gse81089-2016",
+        "geo-lusc-uppsala-gse81089-2016"
+      ],
+      "evidence": "Mutually exclusive LUAD and LUSC histology-code filters from GSE81089."
+    },
+    {
+      "group_id": "gse192667-site-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "geo-coad-keio-gse192667-2022",
+        "geo-read-keio-gse192667-2022"
+      ],
+      "evidence": "Mutually exclusive colon and rectal primary-site partitions from GSE192667."
+    },
+    {
+      "group_id": "gse273377-validation-partitions",
+      "relation_type": "independent_validation_partition",
+      "members": [
+        "geo-luad-steiner-gse273377-discovery-2026",
+        "geo-luad-steiner-gse273377-validation-2026"
+      ],
+      "evidence": "Prespecified independent discovery and validation cohorts released in the same GEO series."
+    },
+    {
+      "group_id": "gse152431-treatment-arm-partitions",
+      "relation_type": "disjoint_treatment_arm_partition",
+      "members": [
+        "geo-laml-uchicago-aza-hidac-gse152431-2023",
+        "geo-laml-uchicago-hidac-gse152431-2023"
+      ],
+      "evidence": "Non-overlapping prospective AZA-HiDAC-Mito and historical HiDAC-Mito patient arms from GSE152431."
+    },
+    {
+      "group_id": "gse190113-melanoma-subtype-partitions",
+      "relation_type": "disjoint_subtype_partition",
+      "members": [
+        "geo-skcm-acral-yale-csu-gse190113-2022",
+        "geo-skcm-sunexposed-yale-gse190113-2022"
+      ],
+      "evidence": "Acral and sun-exposed subcohorts share the GEO series but no patients."
+    },
+    {
+      "group_id": "figshare-jikuya-kidney-partitions",
+      "relation_type": "disjoint_cancer_partition",
+      "members": [
+        "figshare-kich-jikuya-2025",
+        "figshare-kirp-jikuya-2025"
+      ],
+      "evidence": "Mutually exclusive chromophobe and papillary renal-cancer partitions from the same public article release."
+    }
+  ],
+  "preflight_policy": {
+    "primary": {"min_patients": 20, "min_events": 10, "min_censored": 5},
+    "exploratory": {"min_patients": 10, "min_events": 5, "min_censored": 5},
+    "endpoint_class": "OS",
+    "require_known_clinical_context": true,
+    "require_known_time_origin": true,
+    "release_rule": "one_preferred_release_per_study_cluster",
+    "compatibility_rule": "pool_only_within_identical_endpoint_time_origin_and_clinical_context_classes"
+  }
+}

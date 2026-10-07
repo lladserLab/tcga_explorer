@@ -1,0 +1,103 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "dryad-brca-providence-ffpe-2012",
+    "cancer_code": "BRCA",
+    "name": "Providence FFPE breast cancer recurrence cohort (2012)",
+    "description": "Primary breast cancer FFPE tumors with public whole-transcriptome RNA-seq counts and exact individual follow-up for a recurrence and breast-cancer-death composite endpoint.",
+    "cohort_context": "The source publication reports 136 archival primary breast cancer tumors from Providence St. Joseph Medical Center. All 136 specimens with adequate remaining RNA were sequenced. The cohort includes node-negative and node-positive disease and mixed adjuvant treatment; patient-level stage, age, treatment and receptor covariates are not released with the endpoint table.",
+    "source_provider": "Dryad",
+    "source_accession": "doi:10.5061/dryad.q760h v1",
+    "source_url": "https://datadryad.org/dataset/doi:10.5061/dryad.q760h",
+    "publication_citation": "Sinicropi et al. PLoS One 2012",
+    "publication_id": "DOI:10.1371/journal.pone.0040092",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC0-1.0",
+    "license_url": "https://spdx.org/licenses/CC0-1.0.html",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Providence St. Joseph Medical Center archival breast cancer cohort",
+      "source_data_system": "Dryad public dataset version 1",
+      "library_method": "ScriptSeq whole-transcriptome libraries from FFPE tumor RNA; single-read Illumina HiSeq 2000 sequencing",
+      "independence_note": "The publication identifies a Providence St. Joseph Medical Center archival cohort used before the TCGA era. Its anonymous Sample_1 through Sample_136 identifiers, institutional provenance and assay release are distinct from TCGA and from every BRCA cohort already registered in TRACE.",
+      "curation_note": "The release contains one primary-tumor profile and one positive follow-up interval per patient. Expression and clinical identifiers match exactly. The source event is a composite of first breast cancer recurrence, breast-cancer death or death from unknown cause and is not relabelled as a pure recurrence endpoint."
+    }
+  },
+  "source": {
+    "provider": "dryad_publication",
+    "identifier": "doi:10.5061/dryad.q760h",
+    "version_id": 26903,
+    "version_number": 1,
+    "publication_date": "2012-07-16",
+    "expected_license": "https://spdx.org/licenses/CC0-1.0.html",
+    "expected_eligible_patients": 136,
+    "expected_events": 26,
+    "expected_censored": 110,
+    "expected_gene_rows": 21285,
+    "expected_unique_source_symbols": 21283,
+    "expected_normalized_gene_rows": 21281,
+    "files": {
+      "expression": {
+        "file_id": 96050,
+        "name": "gene_counts.txt",
+        "size": 9373351,
+        "md5": "fbfb286592cf21b9fb993f7099a4bccb",
+        "sha256": "16ab393c25df4e79068a811fb138326804b6e8309c65da18569f3b64e7995040"
+      },
+      "clinical": {
+        "file_id": 96058,
+        "name": "recurrence.txt",
+        "size": 3440,
+        "md5": "0c6413ab9415b610e693939a013fb5e4",
+        "sha256": "8d7935f02d9c59da8b327a0d95f50ea8f5e40863d845635d23340f67d2a31fab"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary breast cancer FFPE tumor",
+    "sample_role": "Primary FFPE tumor used for whole-transcriptome RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary breast cancer FFPE tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "dryad_log2_cpm",
+    "label": "Dryad counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "Exact HUGO symbol validation through the cBioPortal gene service",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The two case-insensitively duplicated source symbols are excluded rather than guessed or aggregated.",
+    "scale_note": "TRACE computes library sizes across all 21,285 source RefSeq gene rows for each sample, converts counts to CPM and applies log2(CPM + 1). Symbols not recognized by the exact current HUGO mapping are retained in source evidence but excluded from the analysis layer."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Breast cancer recurrence/death composite",
+      "time_column": "RFS_YEARS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Source clinical follow-up origin; the public RNA-seq release does not further specify the calendar origin",
+      "event_definition": "First breast cancer recurrence, death due to breast cancer, or death due to unknown cause",
+      "event_values": [
+        "1"
+      ],
+      "censor_values": [
+        "0"
+      ]
+    }
+  ]
+}

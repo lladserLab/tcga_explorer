@@ -1,0 +1,151 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-lusc-uppsala-gse81089-2016",
+    "cancer_code": "LUSC",
+    "name": "Uppsala resected lung squamous carcinoma (GSE81089)",
+    "description": "Independent Swedish lung squamous-cell carcinoma cohort with public bulk RNA-seq and individual overall-survival follow-up.",
+    "cohort_context": "Fresh-frozen primary lung squamous-cell carcinomas from patients surgically treated at Uppsala University Hospital during 2006-2010. Histology code 1 and pathologic stages I-III are retained exactly as documented by GEO.",
+    "source_provider": "geo",
+    "source_accession": "GSE81089:LUSC",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE81089",
+    "publication_citation": "Djureinovic et al. JCI Insight 2016",
+    "publication_id": "PMID:27699219; PMCID:PMC5033889; DOI:10.1172/jci.insight.86837",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Uppsala NSCLC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2500",
+      "raw_data_accession": "GSE81089 / linked SRA runs",
+      "redistribution_note": "NCBI places no restrictions on use or distribution of GEO data but notes that submitters may retain intellectual-property rights. TRACE Explorer therefore enables analysis while disabling direct matrix redistribution.",
+      "curation_note": "Tumor titles matching L followed by an integer and T are considered. The cohort is restricted before outcome analysis to histology code 1 (squamous-cell carcinoma) and pTNM codes 1-6 (stages I-III). OS is the positive interval from surgery date to death or latest contact. GEO explicitly maps L608T and L771T to expression columns L608T_2122 and L771T_1."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE81089",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE81nnn/GSE81089/suppl/GSE81089_FPKM_cufflinks.tsv.gz",
+    "expression_size": 24162817,
+    "expression_sha256": "cbeae4f473d4d41724e3089510e788d508915ae70336e8f230997df20a720ffc",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE81nnn/GSE81089/soft/GSE81089_family.soft.gz",
+    "soft_size": 17014,
+    "soft_sha256": "1b1a58db5a141313ed30cdc51de7a136a8234ab913fbe9d0020d7f36184a2c05",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "L[0-9]+T",
+    "expected_primary_samples": 199,
+    "sample_characteristic_filters": [
+      {
+        "key": "histology",
+        "include": [
+          "1"
+        ],
+        "required": true
+      },
+      {
+        "key": "stage tnm",
+        "include": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 67,
+    "expected_endpoint_complete_samples": 67,
+    "expected_events": 29,
+    "expected_censored": 38,
+    "expected_expression_columns": 218,
+    "time_start_characteristic": "surgery date",
+    "time_end_characteristic": "vital date",
+    "event_characteristic": "dead",
+    "stage_characteristic": "stage tnm",
+    "stage_value_map": {
+      "1": "Stage IA",
+      "2": "Stage IB",
+      "3": "Stage IIA",
+      "4": "Stage IIB",
+      "5": "Stage IIIA",
+      "6": "Stage IIIB",
+      "7": "Stage IV"
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "expression_sample_aliases": {
+      "L608T": "L608T_2122",
+      "L771T": "L771T_1"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-73/gtf/homo_sapiens/Homo_sapiens.GRCh37.73.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.73.gtf.gz",
+      "size": 29911687,
+      "sha256": "b65dbd0b469b1cd91807505455a718c1e0521c3f3357159b874ae2d8deb90e65"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Resected primary lung squamous-cell carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm",
+    "label": "log2(FPKM + 1)",
+    "source_unit": "Cufflinks FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 73 GRCh37 GTF used by the source study",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Ensembl identifiers mapping to the same case-normalized gene symbol are all excluded rather than combined implicitly.",
+    "stream_source_order": true,
+    "scale_note": "GEO supplies non-negative Cufflinks 2.1.1 FPKM values quantified against Ensembl release 73 on GRCh37. TRACE Explorer maps identifiers with that pinned GTF and applies log2(FPKM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Surgical resection",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

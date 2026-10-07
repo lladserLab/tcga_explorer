@@ -1,0 +1,115 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "icgc-ov-ov-au-2015",
+    "cancer_code": "OV",
+    "name": "Australian high-grade serous ovarian cancer (ICGC OV-AU)",
+    "description": "Independent Australian high-grade serous ovarian cancer cohort with open ICGC Release 28 bulk RNA-seq and linked overall-survival follow-up.",
+    "cohort_context": "FIGO stage III-IV high-grade serous ovarian, fallopian-tube or primary-peritoneal cancers. Primary solid tumors are preferred; a recurrent or metastatic tumor is selected only when no eligible primary RNA-seq profile exists.",
+    "source_provider": "icgc_release28",
+    "source_accession": "ICGC25K:R28:OV-AU",
+    "source_url": "https://docs.icgc-argo.org/docs/data-access/icgc-25k-data",
+    "publication_citation": "Patch et al. Nature 2015",
+    "publication_id": "PMID:26017449; DOI:10.1038/nature14410",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-ICGC-Data-Access-and-Publication-Policy",
+    "license_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "International Cancer Genome Consortium 25K",
+      "source_project": "Ovarian Cancer - Australia",
+      "source_release": "Release 28 (2019-11-26)",
+      "redistribution_note": "The open cohort is analyzable in TRACE Explorer, while direct matrix download remains disabled pending a dedicated ICGC redistribution review.",
+      "curation_note": "TRACE Explorer uses endpoint-complete donors with an open Ensembl/FPKM RNA-seq analysis linked to a prespecified tumor-specimen class. One analysis is selected deterministically per donor."
+    }
+  },
+  "source": {
+    "provider": "icgc_release28",
+    "object_endpoint": "https://object.genomeinformatics.org",
+    "bucket": "icgc25k-open",
+    "release_prefix": "release_28",
+    "release_date": "2019-11-26",
+    "project_code": "OV-AU",
+    "release_readme_key": "release_28/projects_files/README.txt",
+    "license_evidence_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "download_workers": 12,
+    "specimen_type_priority": [
+      "Primary tumour - solid tissue",
+      "Primary tumour - other",
+      "Recurrent tumour - solid tissue",
+      "Recurrent tumour - other",
+      "Metastatic tumour - metastasis to distant location"
+    ],
+    "required_gene_model": "Ensembl",
+    "required_normalization_algorithm": "FPKM http://www.nature.com/nbt/journal/v28/n5/full/nbt.1621.html",
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary or recurrent high-grade serous ovarian cancer",
+    "sample_role": "Tumor RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary tumour - solid tissue",
+          "Primary tumour - other",
+          "Recurrent tumour - solid tissue",
+          "Recurrent tumour - other",
+          "Metastatic tumour - metastasis to distant location"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm",
+    "label": "log2(FPKM + 1)",
+    "source_unit": "RSEM FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 GTF",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Ambiguous symbols mapped from more than one Ensembl gene are removed before the matrix is written.",
+    "stream_source_order": true,
+    "scale_note": "ICGC provides non-negative RSEM FPKM values. TRACE Explorer maps Ensembl identifiers with the pinned GRCh37 reference and applies log2(value + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "ICGC_OS_DAYS",
+      "event_column": "ICGC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Primary diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

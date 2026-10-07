@@ -1,0 +1,147 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-ov-multicenter-stic-gse102073-2017",
+    "cancer_code": "OV",
+    "name": "Multicenter pelvic HGSC cohort (GSE102073)",
+    "description": "Independent multicenter high-grade serous pelvic-carcinoma cohort with treatment-naive primary-tumor bulk RNA-seq and individual progression-free-survival follow-up.",
+    "cohort_context": "The source study selected 96 previously untreated high-grade serous carcinomas to compare tumors with and without serous tubal intraepithelial carcinoma. The RNA-seq SubSeries contains 85 unique primary-tumor profiles. Pathology review assigns ovarian, fallopian-tube and primary-peritoneal sites within this shared pelvic HGSC disease spectrum; TRACE Explorer maps the cohort to OV consistently with the existing OV-AU release and does not present it as an ovary-only cohort.",
+    "source_provider": "geo",
+    "source_accession": "GSE102073",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE102073",
+    "publication_citation": "Ducie et al. Nature Communications 2017",
+    "publication_id": "PMID:29042553; PMCID:PMC5645359; DOI:10.1038/s41467-017-01217-9",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Multicenter STIC-associated pelvic HGSC study",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Ribo-Zero-depleted stranded total RNA sequencing; STAR 2.3.1z alignment to NCBI build 37 and featureCounts 1.4.3 against GENCODE v18",
+      "endpoint_context": "Source-defined progression-free survival",
+      "endpoint_caveat": "GEO provides exact PFS in months and recurrence status for every RNA-profiled tumor but does not define the clinical day-zero or decompose recurrence, progression and death. The endpoint is therefore exposed as source-defined PFS rather than harmonized TCGA-CDR PFI.",
+      "disease_mapping_note": "All 85 profiles are labelled primary ovarian tumor tissue and high-grade serous pelvic carcinoma by GEO. Diagnostic review includes ovarian, fallopian-tube and primary-peritoneal origins, which remain visible in the audit metadata. This release supports HGSC transportability under OV but not ovary-site-specific inference.",
+      "expression_curation_note": "Each endpoint-complete GEO sample links to exactly one public featureCounts file. TRACE Explorer computes library-size CPM across all 57,445 GENCODE v18 gene rows, applies log2(CPM + 1), maps the versioned Ensembl identifiers with the exact pinned GENCODE v18 annotation and excludes symbols represented by more than one Ensembl gene.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Direct redistribution of the source archive remains disabled because GEO access does not resolve every submitter intellectual-property claim."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE102073",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE102nnn/GSE102073/suppl/GSE102073_RAW.tar",
+    "expression_size": 270643200,
+    "expression_sha256": "0a7dcc73ec0681f58e5f68d4594e9fde98466f7d655807081f863879918ec486",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE102nnn/GSE102073/soft/GSE102073_family.soft.gz",
+    "soft_size": 11850,
+    "soft_sha256": "3da96769d1b985a33573e4e6a3b46d4b90c13db4e97bee39d33534fdcd3b2cc5",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "^HGSC_.+$",
+    "expected_primary_samples": 85,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "primary tumor tissue from high grade serous ovarian tumors"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 85,
+    "expected_endpoint_complete_samples": 85,
+    "expected_events": 57,
+    "expected_censored": 28,
+    "expected_source_expression_files": 85,
+    "expected_expression_columns": 85,
+    "expected_expression_gene_rows": 57445,
+    "time_characteristic": "pfs.mos..",
+    "event_characteristic": "recurrence",
+    "event_value_map": {
+      "Y": 1,
+      "N": 0
+    },
+    "expression_sample_id_pattern": "^HGSC_(.+)$",
+    "expression_sample_id_replacement": "\\1",
+    "expression_sample_aliases": {
+      "JB 5705": "JB5705",
+      "JB 5727": "JB5727",
+      "JB 5768": "JB5768"
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "path.stage",
+    "race_characteristic": "race",
+    "sex_default": "Female",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "featurecounts_tar",
+      "feature_column": "Geneid",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "count_column_index": 7,
+      "supplementary_file_pattern": "GSM[0-9]+_(?:Sample_)?[^/]+_counts\\.txt\\.gz"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_18/gencode.v18.annotation.gtf.gz",
+      "name": "gencode.v18.annotation.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 36635898,
+      "sha256": "b26be80a99543d7a0f29185df9bf4f82cf888631ac390521144a9648c2a242e8"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Treatment-naive primary high-grade serous pelvic carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized to log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE v18 GRCh37 gene_name annotation used by the source quantification command",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one GENCODE v18 Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes CPM from all 57,445 source rows in each selected tumor and applies log2(CPM + 1). Values support within-cohort relative analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Source-defined progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source study baseline; the exact day-zero definition is not specified by GEO",
+      "event_definition": "Recurrence according to the released GEO field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

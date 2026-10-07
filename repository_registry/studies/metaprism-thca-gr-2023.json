@@ -1,0 +1,108 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "metaprism-thca-gr-2023",
+    "cancer_code": "THCA",
+    "name": "Advanced non-TCGA thyroid cancer cohort (META-PRISM, 2023)",
+    "description": "Histology-specific thyroid cancer subset of the independent META-PRISM refractory and metastatic pan-cancer cohort with public gene-level TPM and individual overall survival.",
+    "cohort_context": "Advanced, refractory or metastatic thyroid cancer sampled during precision-oncology care. Nine of ten patients have medullary thyroid carcinoma and one has poorly differentiated thyroid carcinoma; this release expands histologic coverage and is not population-matched to primary papillary TCGA-THCA.",
+    "source_provider": "metaprism_public",
+    "source_accession": "metaprism_2023:THCA - Not_TCGA; EGAD00001009684",
+    "source_url": "https://cbioportal.gustaveroussy.fr/study/summary?id=metaprism_2023",
+    "publication_citation": "Basse et al. Cancer Discovery 2023",
+    "publication_id": "PMID:36701105; PMCID:PMC10157368; DOI:10.1158/2159-8290.CD-22-0966",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-META-PRISM-Public-Data",
+    "license_url": "https://nextcloud.gustaveroussy.fr/s/dbCwPWKZMj6BmDp",
+    "redistribution_allowed": false,
+    "metadata": {
+      "study_design": "Prospective molecular profiling of refractory or metastatic adult cancers",
+      "source_program": "META-PRISM, Gustave Roussy",
+      "source_data_system": "Gustave Roussy cBioPortal and public Nextcloud data release",
+      "source_platform": "Bulk RNA-seq quantified with Kallisto v0.44.0 and tximport v1.16.0",
+      "endpoint_context": "Overall survival recorded by the source study",
+      "redistribution_note": "The processed TPM matrix is publicly downloadable and analyzable in TRACE Explorer. Direct redistribution remains disabled because the public release does not state a standard redistribution license.",
+      "curation_note": "The release includes only the source-defined THCA - Not_TCGA cohort. RNASEQ_SAMPLE_ID is required to link each cBioPortal clinical sample deterministically to one TPM column. This is a small advanced-disease histology expansion, not an external replication cohort for papillary TCGA-THCA."
+    }
+  },
+  "source": {
+    "provider": "metaprism_public",
+    "api_base_url": "https://cbioportal.gustaveroussy.fr/api",
+    "study_id": "metaprism_2023",
+    "cohort_values": [
+      "THCA - Not_TCGA"
+    ],
+    "source_snapshot_sha256": "4f72596b86c0b1de3224f34d629449da91130f470ab55cdd0ece80f3a28ffdd8",
+    "expression": {
+      "url": "https://nextcloud.gustaveroussy.fr/public.php/dav/files/dbCwPWKZMj6BmDp/Data_Table_2.rna_gene_tpm.tsv.gz",
+      "name": "Data_Table_2.rna_gene_tpm.tsv.gz",
+      "size": 258169671,
+      "sha256": "622c13a2f6e5c44e5f2af9dbe4d2f0c333e58d0a9099e9ac83ea5c8bda67ecbb",
+      "range_chunk_size": 8388608
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_27/gencode.v27.annotation.gtf.gz",
+      "name": "gencode.v27.annotation.gtf.gz",
+      "size": 40927910,
+      "sha256": "c1a65bb8989baaf449486d16739cc5c8953d954ee0939d8b151c3035d340ea64"
+    },
+    "readme": {
+      "url": "https://nextcloud.gustaveroussy.fr/public.php/dav/files/dbCwPWKZMj6BmDp/README.md",
+      "name": "META_PRISM_DATA_README.md",
+      "size": 6522,
+      "sha256": "2eadd709c1c22e7a45976be6b31176e6b3c85647c7fb5cecd2a047ffe18b3ce7"
+    },
+    "license_evidence_url": "https://nextcloud.gustaveroussy.fr/s/dbCwPWKZMj6BmDp"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Advanced tumor biopsy",
+    "sample_role": "Biopsy from advanced, refractory or metastatic thyroid cancer",
+    "eligibility_rules": [
+      {
+        "field": "sample.CANCER_COHORT",
+        "include": [
+          "THCA - Not_TCGA"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_BIOPSY"
+    ]
+  },
+  "expression": {
+    "layer_id": "metaprism_log2_tpm",
+    "label": "META-PRISM TPM transformed as log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "feature_column_count": 1,
+    "mapping_source": "Pinned GENCODE release 27 annotation declared by META-PRISM",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Ensembl identifiers mapping to a duplicated case-normalized gene symbol are excluded rather than combined without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "The source publishes Kallisto and tximport gene-level TPM against GENCODE v27. TRACE Explorer applies log2(TPM + 1) without cross-study renormalization; values are suitable for within-cohort analysis only."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical follow-up origin",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

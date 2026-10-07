@@ -1,0 +1,137 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-laml-amlcg-gse106291-2018",
+    "cancer_code": "LAML",
+    "name": "AMLCG intensively treated AML cohort (GSE106291)",
+    "description": "Independent adult acute myeloid leukemia cohort with baseline bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The published validation cohort contains 210 patients enrolled in AMLCG-2008 and 40 additional resistant-disease cases from AMLCG-1999. The deliberate resistant-disease enrichment increases outcome prevalence and must be considered when interpreting absolute survival summaries; this cohort is independent of TCGA-LAML and the active OHSU repository cohort.",
+    "source_provider": "geo",
+    "source_accession": "GSE106291",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE106291",
+    "publication_citation": "Herold et al. Haematologica 2018",
+    "publication_id": "PMID:29242298; PMCID:PMC5830382; DOI:10.3324/haematol.2017.178442",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "AMLCG-2008 and AMLCG-1999",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 1500",
+      "library_method": "Poly(A)-selected paired-end bulk RNA-seq from baseline bone-marrow or peripheral-blood mononuclear cells",
+      "endpoint_context": "Overall survival after AML study entry",
+      "redistribution_note": "The GEO-processed matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "curation_note": "All 250 GEO records contain positive overall-survival time, life status, age and sex. The source workbook contains 23,368 unique supplied gene labels; 1,966 features are NA for every sample and are excluded without imputation, leaving 21,402 complete numeric features. Fourteen legacy SEP/SEPT symbols were converted to dates in the XLSX file and are repaired by an explicit map verified against the pinned GSE106291 raw HTSeq archive (SHA-256 85032aa9fe049f9526a837aa447bb9eae7177de22883d6bed27fe622b188f664). The publication defines overall survival from study entry to death and generally censored analyses at stem-cell transplantation, but GEO does not expose transplant timing; TRACE Explorer therefore preserves the released time/status fields without additional transplant censoring."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE106291",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE106nnn/GSE106291/suppl/GSE106291_Matrix_table.xlsx",
+    "expression_size": 61184527,
+    "expression_sha256": "0a978e3d2d185b7d00808832bebf870ba52c0e0997341de5b4278964eb06c830",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE106nnn/GSE106291/soft/GSE106291_family.soft.gz",
+    "soft_size": 19332,
+    "soft_sha256": "b981ae16b896af4a11d65d2beb03fa7bd9439be14fa9fdb57da02ab71c460600",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "GEO-[0-9]+",
+    "expected_primary_samples": 250,
+    "expected_endpoint_complete_samples": 250,
+    "expected_events": 150,
+    "expected_censored": 100,
+    "expected_expression_columns": 250,
+    "expected_expression_gene_rows": 21402,
+    "expected_dropped_all_missing_features": 1966,
+    "expected_feature_replacements": 14,
+    "time_characteristic": "overall survival (days)",
+    "event_characteristic": "life status",
+    "event_value_map": {
+      "dead": 1,
+      "alive": 0
+    },
+    "age_characteristic": "age (years)",
+    "sex_characteristic": "gender",
+    "sample_type": "Diagnostic AML specimen",
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "RNASeq",
+      "header_row": 1,
+      "feature_column": "GEO_ID",
+      "sample_start_column": 2,
+      "feature_replacements": {
+        "2015-09-01T00:00:00": "SEP15",
+        "2001-09-01T00:00:00": "SEPT1",
+        "2010-09-01T00:00:00": "SEPT10",
+        "2011-09-01T00:00:00": "SEPT11",
+        "2012-09-01T00:00:00": "SEPT12",
+        "2014-09-01T00:00:00": "SEPT14",
+        "2002-09-01T00:00:00": "SEPT2",
+        "2003-09-01T00:00:00": "SEPT3",
+        "2004-09-01T00:00:00": "SEPT4",
+        "2005-09-01T00:00:00": "SEPT5",
+        "2006-09-01T00:00:00": "SEPT6",
+        "2007-09-01T00:00:00": "SEPT7",
+        "2008-09-01T00:00:00": "SEPT8",
+        "2009-09-01T00:00:00": "SEPT9"
+      },
+      "drop_all_missing_features": true,
+      "missing_value_tokens": [
+        "NA"
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Diagnostic AML specimen",
+    "sample_role": "Baseline AML bone-marrow or peripheral-blood mononuclear-cell specimen",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Diagnostic AML specimen"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "published_gene_scaled_expression",
+    "label": "Published DESeq2-derived gene-scaled expression",
+    "source_unit": "Gene-wise standardized DESeq2 expression",
+    "transform": "identity",
+    "analysis_unit": "Published gene-wise standardized expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene labels supplied in the pinned GSE106291 workbook",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 23,368 supplied feature labels are unique both exactly and case-insensitively; no implicit feature aggregation is performed.",
+    "stream_source_order": true,
+    "scale_note": "The source publication states that RNA-seq data were analyzed with DESeq2 and all gene-expression variables were scaled to mean 0 and variance 1. TRACE Explorer preserves the published values without a second transform. This cohort-standardized scale is not directly comparable with expression units from other studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Study entry",
+      "event_definition": "Death from any cause according to the released GEO life-status field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

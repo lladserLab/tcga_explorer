@@ -1,0 +1,100 @@
+[
+  {
+    "path": "01-survival/draft_v12_en.mp4",
+    "sha256": "c5e93cb5c81bca22a3f3fae26a905fa0a3955060ddbe89c5de09b1b89ab48406",
+    "duration_seconds": 99.933333,
+    "bytes": 62957184,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "02-robustness/draft_v4_en.mp4",
+    "sha256": "bc9fc8980a4e38f6afd878c7b2344ff83532f612c128a8e925e7a32f57ca601c",
+    "duration_seconds": 91.133333,
+    "bytes": 58060168,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "03-compare/draft_v3_en.mp4",
+    "sha256": "033f385fed112900cddebe7dde9c753339f8a3788cf46ee0e3aa9268d0508d03",
+    "duration_seconds": 86.7,
+    "bytes": 59789512,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "04-expression/draft_v3_en.mp4",
+    "sha256": "49e9198c232f073201a4269dff9b6a2d21c563b73863a2b2dffd8e30c3841202",
+    "duration_seconds": 80.5,
+    "bytes": 40508025,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "05-gsea/draft_v3_en.mp4",
+    "sha256": "22e01d93340eb56d2989a8de19df0bcb43ccebc254e22ffb020a89d1bd0d9119",
+    "duration_seconds": 69.666667,
+    "bytes": 43359653,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "06-pancancer/draft_v3_en.mp4",
+    "sha256": "4b06bcebea3fe97e51308d491d92eff4bd98fbdeea5a0d037ccfd75191171d60",
+    "duration_seconds": 63.266667,
+    "bytes": 40343627,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  {
+    "path": "07-runhistory/draft_v3_en.mp4",
+    "sha256": "2a46851a3f6599390bfdc42117c93550788e89ff0b381470002ae732ddd7a1ff",
+    "duration_seconds": 50.066667,
+    "bytes": 25072200,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  }
+]

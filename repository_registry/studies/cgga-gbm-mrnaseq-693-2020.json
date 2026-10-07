@@ -1,0 +1,115 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cgga-gbm-mrnaseq-693-2020",
+    "cancer_code": "GBM",
+    "name": "CGGA mRNAseq_693 adult primary glioblastoma cohort (2020)",
+    "description": "Independent Chinese adult primary glioblastoma cohort with author-supplied bulk RNA-seq FPKM and individual overall-survival follow-up.",
+    "cohort_context": "TRACE Explorer restricts the CGGA mRNAseq_693 sequencing batch to adults with primary tumors labelled GBM and WHO grade IV, with complete positive overall-survival follow-up. Source WHO labels are retained without retrospective 2021 molecular reclassification, and this batch remains separate from mRNAseq_325.",
+    "source_provider": "cgga_release",
+    "source_accession": "CGGA:mRNAseq_693:20200506",
+    "source_url": "https://www.cgga.org.cn/download.jsp",
+    "publication_citation": "Zhao et al. Genomics Proteomics Bioinformatics 2021; Zhang et al. Cancer Biology & Medicine 2022",
+    "publication_id": "DOI:10.1016/j.gpb.2020.10.005; DOI:10.20892/j.issn.2095-3941.2022.0469",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-CGGA-Open-Access",
+    "license_url": "https://www.cgga.org.cn/download.jsp",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Chinese Glioma Genome Atlas",
+      "source_data_system": "CGGA versioned public download",
+      "source_platform": "Illumina HiSeq",
+      "source_reference_ids": "PMID:33662628; PMCID:PMC8498921; DOI:10.1016/j.gpb.2020.10.005; PMID:36350010; PMCID:PMC9630520; DOI:10.20892/j.issn.2095-3941.2022.0469",
+      "library_method": "Bulk tumor RNA sequencing quantified by STAR and RSEM; gene-level FPKM supplied by CGGA",
+      "endpoint_context": "Overall survival from surgery to death or end of follow-up",
+      "redistribution_note": "CGGA labels the RNA-seq files open access and requests citation, but its portal does not grant a specific redistribution license. TRACE Explorer therefore permits analysis while disabling matrix downloads.",
+      "overlap_control": "The mRNAseq_693 and mRNAseq_325 releases share zero CGGA identifiers and zero exact full clinical fingerprints across progression type, histology, grade, sex, age, OS, censor status, IDH, 1p/19q and MGMT fields. They remain separate batches and are never pooled implicitly.",
+      "curation_note": "The pinned 2020-05-06 clinical and expression archives contain the same 693 unique CGGA identifiers. Restriction to primary tumors labelled GBM and WHO grade IV, age at least 18 years, positive OS and explicit 0/1 censor status retains 132 patients: 110 deaths and 22 censored. The source contains 23,987 exactly unique gene labels; three case-insensitive duplicate-symbol pairs are excluded without aggregation, leaving 23,981 unambiguous symbols."
+    }
+  },
+  "source": {
+    "provider": "cgga_release",
+    "dataset_id": "mRNAseq_693",
+    "snapshot_date": "2020-05-06T00:00:00Z",
+    "clinical_url": "https://www.cgga.org.cn/download/20200506/CGGA.mRNAseq_693_clinical.20200506.txt.zip",
+    "clinical_member": "CGGA.mRNAseq_693_clinical.20200506.txt",
+    "clinical_size": 8418,
+    "clinical_sha256": "4a587a484f2560232a887def1a99f908a7067ba300bf01a21b3cc65748e40268",
+    "expression_url": "https://www.cgga.org.cn/download/20200506/CGGA.mRNAseq_693.RSEM-genes.20200506.txt.zip",
+    "expression_member": "CGGA.mRNAseq_693.RSEM-genes.20200506.txt",
+    "expression_size": 29738046,
+    "expression_sha256": "5c4971d75fd7121be73d6e91b334d5b9dd44f4b8d24b9b0ca80ac92ee623a08d",
+    "license_evidence_url": "https://www.cgga.org.cn/download.jsp",
+    "open_access_evidence_url": "https://www.cgga.org.cn/",
+    "access_review_date": "2026-07-28",
+    "expected_source_samples": 693,
+    "expected_source_gene_rows": 23987,
+    "cohort_filter": {
+      "prs_type": "Primary",
+      "grades": [
+        "WHO IV"
+      ],
+      "histologies": [
+        "GBM"
+      ],
+      "minimum_age": 18
+    },
+    "expected_patients": 132,
+    "expected_events": 110,
+    "expected_censored": 22,
+    "sample_type": "Primary adult glioblastoma surgical tumor"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary adult glioblastoma surgical tumor",
+    "sample_role": "Primary WHO grade IV GBM surgical tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary adult glioblastoma surgical tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.Grade"
+    ],
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "cgga_log2_fpkm",
+    "label": "CGGA log2(FPKM + 1)",
+    "source_unit": "Author-supplied STAR+RSEM gene-level FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene labels supplied in the pinned CGGA mRNAseq_693 matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Three symbols represented by case variants are ambiguous and all six affected rows are excluded rather than combined.",
+    "stream_source_order": true,
+    "scale_note": "The pinned matrix contains complete non-negative FPKM values. TRACE Explorer excludes case-insensitive duplicate symbols and applies log2(FPKM + 1) without cross-batch normalization."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS",
+      "event_column": "Censor (alive=0; dead=1)",
+      "time_unit": "days",
+      "time_origin": "Day of surgery",
+      "event_definition": "Death from any cause; patients alive at the end of follow-up are censored",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

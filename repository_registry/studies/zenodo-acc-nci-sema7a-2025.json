@@ -1,0 +1,132 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "zenodo-acc-nci-sema7a-2025",
+    "cancer_code": "ACC",
+    "name": "NCI adrenocortical carcinoma cohort (2025)",
+    "description": "Independent bulk RNA-seq from 33 NCI adrenocortical carcinomas linked to individual overall survival.",
+    "cohort_context": "The publication combines 79 TCGA-ACC tumors and 33 tumors from an independent NCI cohort. TRACE Explorer retains only the 33 NCI patients; TCGA columns and three noncohort expression identifiers are excluded by prespecified identifier rules.",
+    "source_provider": "zenodo_publication",
+    "source_accession": "Zenodo 15253151",
+    "source_url": "https://zenodo.org/records/15253151",
+    "publication_citation": "Dhall et al. Cancers 2025",
+    "publication_id": "DOI:10.3390/cancers17132078",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "NCI-ACC",
+      "source_data_system": "Pinned Zenodo expression matrix and pinned publisher supplementary clinical table",
+      "library_method": "NCI CCBR RNA-seq pipeline with STAR 2.7.11b against hg38 and RSEM; publisher-provided log2(FPKM + 1) values were adjusted with limma RemoveBatchEffect",
+      "curation_note": "The deposited matrix contains 115 columns: 33 NCI tumors, 79 TCGA tumors and three other identifiers. Only exact NCI identifiers with clinical rows are retained. All 33 NCI profiles map one-to-one without reading outcomes.",
+      "endpoint_note": "OS is the source-reported number of months to death or last follow-up. All 33 NCI patients have a positive time and explicit vital status; nine deaths and 24 censored observations are retained.",
+      "redistribution_note": "The authors release the normalized matrix on Zenodo and the clinical supplement with the open-access article; both records identify CC BY 4.0."
+    }
+  },
+  "source": {
+    "provider": "zenodo_publication",
+    "record_id": 15253151,
+    "record_doi": "10.5281/zenodo.15253151",
+    "expected_revision": 6,
+    "expected_zenodo_license": "cc-by-4.0",
+    "publication_date": "2025-06-21",
+    "publication_doi": "10.3390/cancers17132078",
+    "license_evidence_url": "https://api.crossref.org/works/10.3390%2Fcancers17132078",
+    "expected_clinical_license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "expression_matrix": {
+      "key": "Gene_Expression.csv",
+      "size": 80810012,
+      "md5": "cf215592eb6bb43526f2635bee30d981",
+      "sha256": "c105c41a44722219f3ef1d2c82657ac08bd1c29cd07699f2a364038bbd874cee"
+    },
+    "clinical": {
+      "url": "https://mdpi-res.com/d_attachment/cancers/cancers-17-02078/article_deploy/cancers-17-02078-s001.zip",
+      "name": "cancers-17-02078-s001.zip",
+      "size": 612557,
+      "sha256": "0fc9f1a85100db172ba5d483cab47c63d20f1faa91398d880249623f02af1027",
+      "archive_member": "Supplimentary_Tables_June5.xlsx",
+      "extracted_name": "Supplimentary_Tables_June5.xlsx",
+      "member_size": 3092917,
+      "member_sha256": "66bba8a391dc3c6c319aa677f2580eec29e66e2df450cce48d0a327a8f5507b6",
+      "patient_sheet": "Table S1",
+      "patient_header_row": 2,
+      "patient_id_column": "Sample ID",
+      "patient_id_include_patterns": [
+        "^NCI-[0-9]+$"
+      ],
+      "expected_expression_eligible_patients": 33,
+      "output_sample_type": "Primary adrenocortical carcinoma tumor"
+    },
+    "expression": {
+      "delimiter": ",",
+      "feature_column": "ID",
+      "sample_start_column": 2,
+      "sample_to_patient_replacements": [],
+      "allowed_unmapped_sample_patterns": [
+        "^TCGA-",
+        "^(CL0247_T2|CP02875_T2|CP09449_T1)$"
+      ],
+      "allow_negative_values": true,
+      "expected_source_sample_columns": 115,
+      "expected_selected_sample_columns": 33,
+      "expected_gene_rows": 53590,
+      "minimum_gene_rows": 10000
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary adrenocortical carcinoma tumor",
+    "sample_role": "One primary ACC tumor RNA profile per NCI patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary adrenocortical carcinoma tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.Tumor Stage"
+    ],
+    "grade_fields": [],
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "race_fields": [],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "zenodo_batch_corrected_log2_fpkm",
+    "label": "NCI ACC batch-adjusted log2(FPKM + 1)",
+    "source_unit": "Publisher-provided batch-adjusted log2(FPKM + 1)",
+    "transform": "identity",
+    "analysis_unit": "Batch-adjusted log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_optional_ensembl",
+    "mapping_source": "Publisher-provided HUGO symbols, with an optional colon-delimited Ensembl gene identifier",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "When multiple source rows resolve to one HUGO symbol, all ambiguous rows for that symbol are excluded rather than silently aggregated.",
+    "stream_source_order": true,
+    "scale_note": "The publication reports RSEM log2(FPKM + 1) followed by limma RemoveBatchEffect. TRACE Explorer retains these finite publisher-provided values without another transformation; negative adjusted values are valid on this scale."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "Overall Survival (Months)",
+      "event_column": "Vital Status",
+      "time_unit": "months",
+      "time_origin": "Source-defined follow-up origin for the NCI ACC cohort",
+      "event_definition": "Death from any cause (source Vital Status = dead); source Vital Status = alive is censored at last follow-up",
+      "event_prefix": "dead",
+      "censor_prefix": "alive"
+    }
+  ]
+}

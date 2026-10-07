@@ -1,0 +1,98 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "fu-gbc-cancer-cell-2026",
+    "cancer_code": "GBC",
+    "name": "FU-GBC gallbladder cancer cohort (2026)",
+    "description": "Independent FU-GBC bulk RNA-seq cohort with source-reported survival, primary tumors, adjacent non-cancerous tissue and patient-matched tumor-minus-adjacent expression contrasts.",
+    "cohort_context": "The active release contains 135 RNA-profiled primary tumors and 66 matched adjacent non-cancerous tissues. Tumor is the default patient-level analysis population; adjacent tissue is a paired comparator and is not an independent survival observation. The source supplement does not explicitly define survival time zero.",
+    "source_provider": "elsevier_supplement",
+    "source_accession": "DOI:10.1016/j.ccell.2025.12.014",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S1535610825005483",
+    "publication_citation": "Fu et al. Cancer Cell 2026;44:405-423.e13",
+    "publication_id": "DOI:10.1016/j.ccell.2025.12.014; PMID:41512870",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "Elsevier-All-Rights-Reserved",
+    "license_url": "https://pubmed.ncbi.nlm.nih.gov/41512870/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Fudan University gallbladder cancer multi-omics cohort",
+      "source_data_system": "Pinned Cancer Cell supplementary workbook",
+      "source_snapshot_sha256": "94b1527c10777d2b10653753c614f67698962567351f8ca81d186c92605c8972",
+      "cohort_accessions": [
+        "HRA011141",
+        "PRJCA037941",
+        "PRJCA038692",
+        "PDC000606",
+        "PDC000607"
+      ],
+      "curation_note": "The listed accessions are molecular layers of one FU-GBC cohort and are not independent validation cohorts. One primary-tumor RNA profile is selected per patient before consulting survival.",
+      "endpoint_note": "The source supplies Survival (month) and Status but does not explicitly state the time origin. TRACE retains the source-reported survival label and OS API code, but excludes this cohort from hierarchical survival synthesis until time zero is verified.",
+      "redistribution_note": "No open redistribution license was identified. TRACE permits local analysis of the active release, disables matrix downloads and does not represent the source supplement or derived matrices as redistributable."
+    }
+  },
+  "source": {
+    "provider": "elsevier_supplement",
+    "publication_doi": "10.1016/j.ccell.2025.12.014",
+    "source_workbook": "FU-GBC_mmc2.xlsx",
+    "source_snapshot_sha256": "94b1527c10777d2b10653753c614f67698962567351f8ca81d186c92605c8972",
+    "expected_clinical_patients": 195,
+    "expected_tumor_samples": 135,
+    "expected_adjacent_samples": 66,
+    "expected_paired_patients": 66,
+    "expected_expression_genes": 15926,
+    "license_evidence_url": "https://pubmed.ncbi.nlm.nih.gov/41512870/"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "One outcome-independent primary-tumor RNA profile per patient; matched adjacent tissue is available only as an explicit comparator",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.GENDER"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "fu_gbc_log2_tpm",
+    "label": "FU-GBC source log2(TPM + 1)",
+    "source_unit": "log2(TPM + 1)",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided protein-coding gene symbols",
+    "duplicate_feature_policy": "error",
+    "duplicate_feature_rationale": "The active release contains 15,926 mapped, complete and unique source gene symbols; duplicates are rejected rather than silently aggregated.",
+    "scale_note": "Values are retained on the source-declared log2(TPM + 1) scale. Primary tumor has selection rank 0; adjacent non-cancerous tissue requires an explicit sample-type comparison."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-reported survival",
+      "time_column": "SURVIVAL_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Not explicitly specified in the source supplement",
+      "event_definition": "Source Status = dead is event 1; alive is censored",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

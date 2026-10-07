@@ -1,0 +1,128 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-lusc-moffitt-2019",
+    "cancer_code": "LUSC",
+    "name": "Moffitt resected lung squamous-cell carcinoma cohort (2019)",
+    "description": "Independent resected lung squamous-cell carcinoma cohort with primary-tumor bulk RNA-seq and individual overall-survival follow-up.",
+    "cohort_context": "The publication cohort contains 108 treatment-naive primary lung squamous-cell carcinomas resected at Moffitt Cancer Center. Every promoted patient contributes one tumor expression profile, exact vital status and overall-survival time from specimen collection.",
+    "source_provider": "europe_pmc_supplement",
+    "source_accession": "PMC6687710; GSE289256",
+    "source_url": "https://europepmc.org/article/PMC/6687710",
+    "publication_citation": "Stewart et al. Nature Communications 2019",
+    "publication_id": "PMID:31395880; PMCID:PMC6687710; DOI:10.1038/s41467-019-11452-x; GEO:GSE289256",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Moffitt Total Cancer Care lung squamous-cell carcinoma cohort",
+      "source_data_system": "Europe PMC open supplementary files, cross-referenced to NCBI GEO GSE289256",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Primary-tumor RNA-seq aligned to hs37d5 with TopHat2, quantified against RefSeq with HTSeq and normalized in the source analysis with DESeq2",
+      "endpoint_context": "Source-provided overall survival from specimen collection",
+      "endpoint_caveat": "TRACE Explorer preserves the published Overall_Survival_2__Days_ field and final vital status. It does not reinterpret this source endpoint as TCGA-CDR OS.",
+      "clinical_evidence_note": "Supplementary Data 1 provides 108 unique patient IDs, final vital status, exact overall-survival time in days, AJCC 7 stage and differentiation grade. The source analysis code explicitly models overall survival from specimen collection.",
+      "sample_linkage_note": "The 108 SCC identifiers in Supplementary Data 1 match the 108 expression columns in Supplementary Data 4 exactly and one-to-one. GSE289256 later released expected counts for 116 libraries; TRACE Explorer uses the publication-aligned 108-patient matrix so no inferred mapping or controlled dbGaP data are required.",
+      "expression_curation_note": "Supplementary Data 4 contains 19,559 unique source symbols on the publication's normalized expression scale. A total of 8,065 rows contain at least one source NA and are excluded without imputation, leaving 11,494 complete gene rows. TRACE Explorer applies no additional transformation.",
+      "overlap_note": "This institutionally defined Moffitt cohort is independent of TCGA-LUSC and the registered CPTAC-LUSC release.",
+      "redistribution_note": "The article and its supplementary files are distributed under CC BY 4.0. Source file hashes and the exact retained feature set are recorded in the release manifest."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC6687710",
+    "publication_date": "2019-08-08",
+    "full_text_size": 214118,
+    "full_text_sha256": "1471ab09e8215a05718c1f6ea98193bb13b0c729215baace1f4bde5421afd8d9",
+    "clinical_member": "41467_2019_11452_MOESM4_ESM.xlsx",
+    "clinical_size": 87232,
+    "clinical_sha256": "be2ead8b326172235ff344a557778e827afe95c7cb99fb9fc6deab17ec3708fb",
+    "expression_member": "41467_2019_11452_MOESM7_ESM.xlsx",
+    "expression_size": 26705047,
+    "expression_sha256": "29815920f344079f25d375ba2e89001606938c3aea1f0af32b5c3cee847191d1",
+    "clinical": {
+      "format": "xlsx",
+      "sheet_name": "Clinical Data",
+      "header_row": 2,
+      "sample_id_column": "sample_name",
+      "patient_id_column": "sample_name",
+      "sample_type": "Treatment-naive resected primary lung tumor",
+      "expected_rows": 108,
+      "require_expression_sample": true
+    },
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "RNAseq expression",
+      "header_row": 1,
+      "feature_column": "Symbol",
+      "sample_start_column": 2,
+      "missing_value_tokens": [
+        "NA"
+      ],
+      "drop_any_missing_features": true,
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true,
+      "expected_samples": 108,
+      "expected_gene_rows": 11494
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Treatment-naive resected primary lung tumor",
+    "sample_role": "Treatment-naive resected primary lung squamous-cell carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Treatment-naive resected primary lung tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.AJCC_7_Stage_Grp"
+    ],
+    "grade_fields": [
+      "patient.Grade_Differentiation"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "published_normalized_rnaseq",
+    "label": "Published normalized RNA-seq expression",
+    "source_unit": "Source-published normalized log-scale RNA-seq expression",
+    "transform": "identity",
+    "analysis_unit": "Source-published normalized expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Supplementary Data 4 Symbol field",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 19,559 source symbols are unique under case-normalized comparison. Features with any source NA are excluded rather than imputed.",
+    "scale_note": "Values are preserved on the publication's normalized expression scale. They support within-cohort relative analysis and must not be interpreted as TPM or compared numerically across studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from specimen collection",
+      "time_column": "Overall_Survival_2__Days_",
+      "event_column": "Vital_Status__Final_",
+      "time_unit": "days",
+      "time_origin": "Primary-tumor specimen collection",
+      "event_definition": "Death from any cause according to the source final vital-status field",
+      "censor_prefix": "Alive",
+      "event_prefix": "Dead"
+    }
+  ]
+}

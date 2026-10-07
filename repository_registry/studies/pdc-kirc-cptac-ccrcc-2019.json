@@ -1,0 +1,111 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pdc-kirc-cptac-ccrcc-2019",
+    "cancer_code": "KIRC",
+    "name": "Clear cell renal cell carcinoma (CPTAC discovery)",
+    "description": "Independent CPTAC discovery cohort with harmonized bulk RNA-seq and linked overall and progression-free survival.",
+    "cohort_context": "CPTAC characterized treatment-naive clear cell renal cell carcinomas independently of TCGA. The harmonized pan-cancer release contains 103 tumor RNA profiles after the source workflow excluded seven molecularly atypical non-ccRCC tumors. Ninety-four expression-linked patients have positive overall-survival time and explicit status, including 20 deaths and 74 censored observations; the same 94 patients have progression-free survival with 18 events and 76 censored observations.",
+    "source_provider": "pdc_pancancer",
+    "source_accession": "PDC000127; RNA_BCM_v1; Clinical_meta_data_v1",
+    "source_url": "https://pdc.cancer.gov/pdc/study/PDC000127",
+    "publication_citation": "Clark et al. Cell 2019",
+    "publication_id": "PMID:31675502; PMCID:PMC7331093; DOI:10.1016/j.cell.2019.10.007",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://proteomic.datacommons.cancer.gov/pdc/data-use-guidelines",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Clinical Proteomic Tumor Analysis Consortium (CPTAC)",
+      "source_data_system": "NCI Proteomic Data Commons pan-cancer data freeze v1",
+      "redistribution_note": "PDC states that its data are available under CC BY 4.0. The CPTAC BCM GENCODE mapping snapshot is also archived under CC BY 4.0 at Zenodo.",
+      "curation_note": "PDC000127 documents 110 discovery tumors and identifies seven molecularly atypical non-ccRCC samples excluded from the ccRCC analysis. None of those seven identifiers occurs in the released 103-column pan-cancer ccRCC RNA matrix. The official PDC clinical archive supplies exact OS_days, OS_event, PFS_days and PFS_event fields. The versioned LinkedOmics data-freeze expression member is accepted only after its SHA-256 matches the same ccRCC member independently extracted from the official PDC RNA_BCM_v1 archive. Versioned Ensembl identifiers are mapped with the CPTAC BCM GENCODE v34 snapshot; every symbol represented by more than one Ensembl identifier is excluded rather than merged."
+    }
+  },
+  "source": {
+    "provider": "pdc_pancancer",
+    "clinical_file_id": "24898fea-3bad-4d5c-8161-4183cc47cd2e",
+    "clinical_archive_member": "Clinical_meta_data_v1/ccRCC_meta.txt",
+    "clinical_archive_sha256": "eb1b0397249f3f38d9594b60c2bf23a3e21b9495ae4a43d5c563f38f5e43c890",
+    "clinical_member_sha256": "c1de54c52fa4f09bd7ef20ce617910cb1ddb0b49ba34af6d50d6009804e295e4",
+    "clinical_id_column": "idx",
+    "expression_file_id": "7900acde-4565-4f26-a1d1-bbaec677adaa",
+    "expression_archive_member": "RNA_BCM_v1/ccRCC_RNAseq_gene_RSEM_coding_UQ_1500_log2_Tumor.txt",
+    "expression_mirror_url": "https://cptac-pancancer-data.s3.us-west-2.amazonaws.com/data_freeze_v1.2_reorganized/CCRCC/CCRCC_RNAseq_gene_RSEM_coding_UQ_1500_log2_Tumor.txt",
+    "expression_member_sha256": "bcef3edfb1fcc738859369d78f2b7edb3f0972d438b4b1f50a114519f2ab9a50",
+    "mapping_url": "https://zenodo.org/api/records/8034305/files/bcm-ccrcc-mapping-gencode.v34.basic.annotation-mapping.txt.gz/content",
+    "mapping_sha256": "a073b4567f3268feb4997e854c2435df5de14813e04abcd18d5ded59ddbc34a8",
+    "mapping_release": "GENCODE v34 basic (CHR), CPTAC BCM snapshot; Zenodo 10.5281/zenodo.8034305",
+    "snapshot_date": "2023-05-24T17:18:28Z",
+    "license_evidence_url": "https://proteomic.datacommons.cancer.gov/pdc/data-use-guidelines"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Tumor",
+    "sample_role": "Treatment-naive primary ccRCC tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [],
+    "age_fields": [
+      "patient.AGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_rsem_uq",
+    "label": "log2(RSEM-UQ + 1)",
+    "source_unit": "RSEM upper-quartile normalized abundance",
+    "transform": "identity",
+    "analysis_unit": "log2(RSEM-UQ + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned CPTAC BCM GENCODE v34 basic (CHR) annotation mapping",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols represented by more than one Ensembl gene are all excluded rather than combined without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "The CPTAC BCM pipeline supplies gene-level RSEM abundance after upper-quartile normalization and log2(value + 1) transformation. TRACE Explorer preserves the released values without another transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as encoded in the CPTAC pan-cancer clinical freeze",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_DAYS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as encoded in the CPTAC pan-cancer clinical freeze",
+      "event_definition": "Progression or death as encoded by PFS_event in the CPTAC pan-cancer clinical freeze",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

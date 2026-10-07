@@ -1,0 +1,142 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-esca-big-ten-durvalumab-gse183924-2021",
+    "cancer_code": "ESCA",
+    "name": "Big Ten adjuvant durvalumab esophagogastric cohort (GSE183924)",
+    "description": "Independent esophageal and gastroesophageal-junction adenocarcinoma trial cohort with direct bulk RNA sequencing and individual relapse-free survival.",
+    "cohort_context": "The multicenter phase II BTCRC-ESO14-012 trial enrolled 37 patients with locally advanced esophageal or gastroesophageal-junction adenocarcinoma, residual disease after neoadjuvant chemoradiation and R0 resection, and adjuvant durvalumab treatment. TRACE Explorer retains one banked FFPE tumor RNA profile for each enrolled patient.",
+    "source_provider": "geo",
+    "source_accession": "GSE183924",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE183924",
+    "publication_citation": "Mamdani et al. Frontiers in Oncology 2021",
+    "publication_id": "PMID:34604072; PMCID:PMC8484871; DOI:10.3389/fonc.2021.736620; NCT02639065",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Big Ten Cancer Research Consortium BTCRC-ESO14-012 phase II trial",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the open-access article",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "RNA from banked FFPE tumor blocks, TruSeq RNA Exome libraries, STAR alignment to hg38, featureCounts quantification and source-provided edgeR FPKM",
+      "endpoint_context": "Relapse-free survival from esophageal surgery among patients treated with postoperative durvalumab",
+      "endpoint_caveat": "This is a single-arm treatment-selected cohort with residual disease after trimodality therapy. Associations are conditional on trial eligibility and adjuvant durvalumab exposure and should not be generalized as untreated-disease prognosis.",
+      "clinical_evidence_note": "The pinned GEO XLSX supplies a unique patient identifier, RNA-seq identifier, surgery date, source RFS time and source event indicator for all 37 GEO samples.",
+      "sample_selection_note": "Every GEO record contributes one tumor profile and maps one-to-one to a clinical record. The source FPKM matrix contains two additional RNA columns, SL446520 and SL462110, without GEO sample or clinical records; they are excluded by deterministic linkage.",
+      "overlap_note": "The prospective Big Ten trial cohort is independent of TCGA-ESCA and of the other ESCA cohorts represented in TRACE Explorer. Releases remain separate and are never pooled by default.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE183924",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE183nnn/GSE183924/suppl/GSE183924_FPKM.txt.gz",
+    "expression_size": 6602021,
+    "expression_sha256": "c2dba473affc941c09c12b9d8a6e7768128930899bc0387e9e339fafb0d2bd78",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE183nnn/GSE183924/soft/GSE183924_family.soft.gz",
+    "soft_size": 3569,
+    "soft_sha256": "439242c3ea393a4e7e7164220a12ee8c49254642b75cb8efd4729e7623addb83",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Patient ID: B012-[0-9]{4} \\[SL[0-9]+\\]",
+    "expected_primary_samples": 37,
+    "expected_endpoint_complete_samples": 37,
+    "expected_events": 20,
+    "expected_censored": 17,
+    "expected_expression_columns": 37,
+    "expected_expression_gene_rows": 28058,
+    "expected_normalized_expression_gene_rows": 28058,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "rfs months",
+    "event_characteristic": "rfs censor",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "expression_sample_characteristic": "rna-seq id",
+    "sample_type": "Tumor",
+    "clinical": {
+      "evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE183nnn/GSE183924/suppl/GSE183924_Clinical_Data_with_CIBERSORT_analysis_for_GEO.xlsx",
+      "evidence_size": 29622,
+      "evidence_sha256": "b614d33b7393cce2a3bc7a4f94a952fd26cccbd4349f8c25bccb53d92fad679e",
+      "evidence_format": "xlsx",
+      "sheet_name": "Sheet1",
+      "header_row": 1,
+      "record_id_column": "Patient ID",
+      "sample_metadata_field": "characteristic:patient id",
+      "sample_id_pattern": "(B012-[0-9]{4})",
+      "expected_records": 37,
+      "expected_matched_records": 37,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Patient ID": "patient id",
+        "RNA-Seq ID": "rna-seq id",
+        "RFS Censor": "rfs censor",
+        "RFS (months)": "rfs months"
+      },
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8484871/"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Tumor",
+    "sample_role": "Banked FFPE esophageal or gastroesophageal-junction adenocarcinoma tissue from a trial participant",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_fpkm",
+    "label": "GEO FPKM transformed to log2(FPKM + 1)",
+    "source_unit": "Gene-level FPKM supplied by the source study",
+    "transform": "identity",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned GEO FPKM matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 28,058 non-empty source symbols are case-insensitively unique, so no feature collapse or exclusion is required.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer selects the 37 patient-linked RNA columns from the 39-column source FPKM matrix and applies log2(FPKM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Relapse-free survival from surgery",
+      "time_column": "RFS_MONTHS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of esophageal surgery",
+      "event_definition": "Disease relapse by RECIST 1.1 or death from any cause; patients alive and relapse-free are censored at the last disease evaluation",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-skcm-riaz-nivolumab-2017",
+    "cancer_code": "SKCM",
+    "name": "Pretreatment metastatic melanoma (Riaz, 2017)",
+    "description": "Independent advanced-melanoma cohort with pretreatment bulk RNA-seq and overall survival after nivolumab therapy.",
+    "cohort_context": "Treatment-selected advanced melanoma treated with nivolumab. Only source-labelled pretreatment tumor biopsies are retained; on-treatment biopsies are excluded.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "mel_iatlas_riaz_nivolumab_2017",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/mel_iatlas_riaz_nivolumab_2017",
+    "publication_citation": "Riaz et al. Cell 2017",
+    "publication_id": "PMID:29033130; PMCID:PMC5685550; DOI:10.1016/j.cell.2017.09.028",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Immune-checkpoint therapy biomarker cohort",
+      "treatment_context": "Nivolumab",
+      "curation_note": "The frozen DataHub profile contains 107 RNA-seq biopsies from 64 patients. All 56 source-labelled on-treatment biopsies are excluded, leaving one pretreatment profile for each of 51 endpoint-complete patients.",
+      "source_crosscheck": "The underlying RNA-seq study is publicly deposited as GEO GSE91061; the DataHub release supplies the harmonized expression and treatment-anchored clinical tables used by this repository release."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/mel_iatlas_riaz_nivolumab_2017",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "CANCER_TISSUE",
+    "sample_type_default": "Pretreatment advanced-melanoma tumor biopsy",
+    "sample_role": "Pretreatment advanced-melanoma tumor biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["MEL"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_TREATMENT",
+        "include": ["Pre"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.CLINICAL_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "provided_log_tpm",
+    "label": "iAtlas log TPM (provided scale)",
+    "source_unit": "log TPM",
+    "transform": "identity",
+    "analysis_unit": "iAtlas log TPM (no additional transform)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The DataHub molecular-profile metadata describes these values as RNA-seq log TPM. TRACE Explorer preserves the supplied values and does not apply a second logarithm."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Start of nivolumab treatment",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

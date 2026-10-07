@@ -1,0 +1,134 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-mdx-gse283522-2025",
+    "cancer_code": "BRCA",
+    "name": "MDX-BRCA tumor-enriched breast cancer cohort (GSE283522)",
+    "description": "Independent invasive breast cancer cohort with laser-capture-microdissection-enriched bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The public MDX-BRCA release contains 1,254 RNA profiles. TRACE Explorer retains one source-designated invasive breast cancer profile for each of 596 patients with positive overall-survival time and explicit vital status. Extra regions of interest, in situ lesions, benign or healthy tissues, scroll controls, positive controls and the invasive profile without clinical data are excluded before endpoint analysis.",
+    "source_provider": "geo",
+    "source_accession": "GSE283522",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE283522",
+    "publication_citation": "Paul et al. Nature Communications 2025",
+    "publication_id": "PMID:39747865; DOI:10.1038/s41467-024-55583-2",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "MultiplexDX MDX-BRCA retrospective breast cancer study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Nature Communications",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Tumor-enriched regions selected by multiplex RNA-FISH-guided laser capture microdissection, followed by SMARTer Stranded Total RNA-seq of FFPE tissue, paired-end 100-bp sequencing and featureCounts gene quantification",
+      "endpoint_context": "Source-defined overall survival from breast cancer diagnosis",
+      "endpoint_caveat": "GEO provides exact OS time and vital status for 596 of the 1,013 invasive tumors with clinical data. Endpoint-incomplete profiles are excluded deterministically, so the analyzable cohort represents the complete-case OS subset.",
+      "sample_selection_note": "The source sample-category field identifies exactly 1,013 main invasive tumor profiles. Ninety-nine extra tumor regions and every non-invasive or experimental-control profile are excluded before OS completeness filtering.",
+      "clinical_evidence_note": "Vital status, OS in months, histopathology, grade, receptor status and treatment annotations are embedded in the pinned GEO family SOFT. Age is released as an interval and remains available in raw metadata rather than being converted to an artificial point estimate.",
+      "expression_curation_note": "TRACE Explorer computes library size over all 60,664 featureCounts rows in each selected profile, applies log2(CPM + 1), maps Ensembl identifiers with the source-declared GRCh38 release 104 annotation and excludes symbols represented by more than one Ensembl gene.",
+      "overlap_note": "The MDX-BRCA release is independent of TCGA-BRCA, METABRIC and the active SCAN-B, NKI, CNP, BRCA-KR, POG570 and iAtlas releases. TCGA and METABRIC were used only as external validation datasets in the source publication and are not included in GSE283522.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO featureCounts archive in place. Direct source-file redistribution and source-derived proprietary classifier outputs remain disabled."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE283522",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE283nnn/GSE283522/suppl/GSE283522_RAW.tar",
+    "expression_size": 6380154880,
+    "expression_sha256": "0173b48af3884d6c20a8d6af8767658b81b25325e94c07a7321f971dc7e65ec3",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE283nnn/GSE283522/soft/GSE283522_family.soft.gz",
+    "soft_size": 277603,
+    "soft_sha256": "536e6255c53aca045efb4e0326d5f6b2f766cd0f5253ad6d327fd10acda07bef",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": ".+",
+    "expected_primary_samples": 1254,
+    "sample_characteristic_filters": [
+      {
+        "key": "sample category",
+        "include": [
+          "invasive breast cancer sample"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 1013,
+    "expected_endpoint_complete_samples": 596,
+    "expected_events": 193,
+    "expected_censored": 403,
+    "expected_expression_columns": 596,
+    "expected_source_expression_files": 1254,
+    "expected_expression_gene_rows": 60664,
+    "time_characteristic": "overall survival_(months)",
+    "event_characteristic": "deceased (y/n)",
+    "event_value_map": {
+      "Y": 1,
+      "N": 0
+    },
+    "grade_characteristic": "g",
+    "sex_default": "Female",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "featurecounts_tar",
+      "supplementary_file_pattern": ".+\\.featureCounts\\.txt\\.gz",
+      "feature_column": "Geneid",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "count_column_index": 7
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.104.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 49701630,
+      "sha256": "2c1be3a18925eb033052f4019512eab4cb3227b2a87e7766787452fa6ebbb79c"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "LCM-enriched invasive breast tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized as log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 104 GRCh38 gene_name annotation declared by the source featureCounts command",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer calculates CPM from all 60,664 source rows in each selected tumor before applying log2(CPM + 1). Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Breast cancer diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-sclc-jiang-gse60052-2016",
+    "cancer_code": "SCLC",
+    "name": "Treatment-naive SCLC cohort (GSE60052)",
+    "description": "Independent Chinese small-cell lung-cancer cohort restricted to primary tumors collected before chemotherapy, with bulk RNA sequencing and individual overall survival.",
+    "cohort_context": "The source matrix contains 79 SCLC tumors and seven normal lungs. TRACE Explorer links only source-flagged tumor RNA profiles to Table S1, excludes all normals, excludes post-chemotherapy specimens and removes one patient whose two source tumor columns cannot be ranked from public evidence.",
+    "source_provider": "geo",
+    "source_accession": "GSE60052",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60052",
+    "publication_citation": "Jiang et al. PLOS Genetics 2016",
+    "publication_id": "PMID:27093186; PMCID:PMC4836692; DOI:10.1371/journal.pgen.1005895",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Chinese surgically resected SCLC genomic landscape study",
+      "source_data_system": "NCBI GEO plus the CC BY 4.0 PLOS Genetics clinical supplement",
+      "source_platform": "Illumina HiSeq 2000",
+      "endpoint_context": "Overall survival from diagnosis",
+      "sample_selection_note": "Patient 10-5656 has two eligible-looking matrix columns, B10-5656A and T10-5656A, without a public rule that identifies the intended profile. Both columns and the patient are excluded rather than selected arbitrarily.",
+      "treatment_note": "The primary release contains only Naive specimens. Eight post-chemotherapy patients are not pooled with it and are too few to satisfy TRACE's minimum ten-patient release rule.",
+      "normal_tissue_note": "All seven normal-lung columns are excluded before clinical linkage and can never be used as fallback samples.",
+      "selection_bias_note": "The cohort was assembled from resected tumors and is enriched for surgically accessible disease; it should not be interpreted as representative of all SCLC presentations.",
+      "clinical_coding_note": "Source gender and smoking codes are retained in provenance but are not exposed as structured covariates because their 1/2 coding is not defined unambiguously in the public supplement."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE60052",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE60nnn/GSE60052/suppl/GSE60052_79tumor.7normal.normalized.log2.data.Rda.tsv.gz",
+    "expression_filename": "GSE60052_79tumor.7normal.normalized.log2.data.Rda.tsv.gz",
+    "expression_size": 9871615,
+    "expression_sha256": "cbb2c8123529ff5128850dc98901605975ab517199d8c6beb534e836d3e3d74a",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE60nnn/GSE60052/soft/GSE60052_family.soft.gz",
+    "soft_size": 5193,
+    "soft_sha256": "76becb0d29185ff8f884fca916b888abbec46cab302a3146b4d1c275d129bb2a",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "(?!(?:B|T)10-5656A$).+A",
+    "expected_primary_samples": 84,
+    "expected_characteristic_eligible_samples": 41,
+    "expected_endpoint_complete_samples": 39,
+    "expected_events": 18,
+    "expected_censored": 21,
+    "expected_source_expression_files": 86,
+    "expected_expression_columns": 39,
+    "expected_expression_gene_rows": 51131,
+    "expected_normalized_expression_gene_rows": 51131,
+    "patient_id_characteristic": "patient_id",
+    "time_characteristic": "os_months",
+    "event_characteristic": "os_status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age_at_index",
+    "stage_characteristic": "stage",
+    "race_characteristic": "race",
+    "expression_sample_metadata_field": "title",
+    "sample_type": "Primary treatment-naive SCLC tumor",
+    "sample_characteristic_filters": [
+      {
+        "key": "source name",
+        "include": ["tumor"],
+        "required": true
+      },
+      {
+        "key": "tumor_rnaseq",
+        "include": ["X"],
+        "required": true
+      },
+      {
+        "key": "prior_chemo",
+        "include": ["Naive"],
+        "required": true
+      }
+    ],
+    "clinical": {
+      "evidence_url": "https://journals.plos.org/plosgenetics/article/file?type=supplementary&id=10.1371/journal.pgen.1005895.s012",
+      "evidence_size": 21677,
+      "evidence_sha256": "9380d311c2e896021191e3d033ee68e134724e04f254a57f88f904486d187dbd",
+      "evidence_format": "xlsx",
+      "sheet_name": "Sheet1",
+      "header_row": 2,
+      "header_name_overrides": {
+        "1": "Patient ID"
+      },
+      "record_id_column": "Patient ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?:[BT])?((?:[0-9]+|[0-9]{2}-[0-9]+))(?:T?A)?",
+      "field_name_map": {
+        "Patient ID": "patient_id",
+        "Tumor RNAseq data": "tumor_rnaseq",
+        "Race": "race",
+        "Age": "age_at_index",
+        "Gender": "source_gender_code_undocumented",
+        "Smoke": "source_smoking_code_undocumented",
+        "TNM stage": "tnm_stage",
+        "UICC stage  ": "uicc_stage",
+        "Collapsed Stage": "stage",
+        "Months": "os_months",
+        "Survival Status": "os_status",
+        "chemotherapy-exposed biopsy": "prior_chemo"
+      },
+      "allow_unmatched_records": true,
+      "expected_records": 99,
+      "expected_matched_records": 49,
+      "expected_unmatched_records": 50,
+      "terms_url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1005895"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "gene",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "identity",
+      "duplicate_feature_policy": "error"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary treatment-naive SCLC tumor",
+    "sample_role": "Primary SCLC tumor collected before chemotherapy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary treatment-naive SCLC tumor"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_INDEX"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_deseq_normalized",
+    "label": "Provided DESeq-normalized log2 expression",
+    "source_unit": "DESeq-normalized log2 expression",
+    "transform": "identity",
+    "analysis_unit": "Provided normalized log2 expression",
+    "feature_column_count": 1,
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned GSE60052 matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 51,131 source gene symbols are non-empty and unique; no aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "GEO and the source filename identify the matrix as DESeq-normalized log2 expression. TRACE preserves the published scale without applying another logarithm."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of diagnosis",
+      "event_definition": "Death as encoded by the source Survival Status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

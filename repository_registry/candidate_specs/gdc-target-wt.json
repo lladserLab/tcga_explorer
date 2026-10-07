@@ -1,0 +1,103 @@
+{
+  "schema_version": "tcga-trace-study-spec-v2",
+  "dataset": {
+    "id": "gdc-target-wt",
+    "cancer_code": "WT",
+    "name": "High-risk Wilms tumor (TARGET-WT)",
+    "description": "Public GDC-harmonized bulk RNA-seq from primary TARGET high-risk Wilms tumors with an overall-survival contract from diagnosis.",
+    "cohort_context": "Pediatric high-risk Wilms tumor in TARGET-WT. Only primary tumors are eligible; normal kidney, recurrent tumor and metastatic tumor are excluded before one RNA profile is selected per patient.",
+    "source_provider": "gdc_api",
+    "source_accession": "TARGET-WT",
+    "source_url": "https://portal.gdc.cancer.gov/projects/TARGET-WT",
+    "publication_citation": "NCI TARGET High-Risk Wilms Tumor project",
+    "publication_id": "dbGaP:phs000471",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NIH-GDS-Open-Data",
+    "license_url": "https://gdc.cancer.gov/about-gdc/gdc-policies",
+    "redistribution_allowed": false,
+    "metadata": {
+      "candidate_tier": "S1",
+      "registry_state": "candidate_specification",
+      "promotion_state": "not_promoted",
+      "source_cutoff": "2026-08-20",
+      "source_program": "Therapeutically Applicable Research to Generate Effective Treatments (TARGET)",
+      "source_data_system": "NCI Genomic Data Commons",
+      "clinical_context_class": "primary_diagnostic",
+      "sample_selection_note": "Primary Tumor is the only allowed sample type. Normal, recurrent and metastatic files are rejected before deterministic patient-level selection.",
+      "excluded_material": "Six Solid Tissue Normal, five Recurrent Tumor and one Metastatic RNA files at the source cutoff.",
+      "treatment_note": "Primary tumor denotes specimen origin and does not by itself prove treatment-naive status.",
+      "endpoint_note": "OS is measured from diagnosis by the GDC survival endpoint and is interpreted within high-risk Wilms tumor only.",
+      "preaudit_population": {
+        "source_expression_files": 136,
+        "selected_expression_patients": 124,
+        "os_events": 50,
+        "os_censored": 74,
+        "status": "provisional_until_bundle_qc"
+      }
+    }
+  },
+  "source": {
+    "provider": "gdc_api",
+    "project_id": "TARGET-WT",
+    "target_project_opt_in": "TARGET-WT",
+    "sample_type_priority": ["Primary Tumor"],
+    "expected_data_release": "Data Release 46.0 - August 10, 2026",
+    "expected_api_version": "8.5.0",
+    "expected_expression_files": 136,
+    "expected_selected_patients": 124,
+    "download_workers": 4,
+    "matrix_shard_size": 32,
+    "license_evidence_url": "https://gdc.cancer.gov/about-gdc/gdc-policies"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary Wilms tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary Tumor"],
+        "required": true
+      },
+      {
+        "field": "sample.TISSUE_TYPE",
+        "include": ["Tumor"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE"],
+    "grade_fields": ["patient.GRADE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_INDEX"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GDC STAR-counts GENCODE v36 gene_id and gene_name fields",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Distinct Ensembl gene identifiers sharing one supplied symbol are excluded rather than merged implicitly.",
+    "scale_note": "The GDC STAR-counts files supply non-negative tpm_unstranded values. TRACE Explorer applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as implemented by the GDC survival endpoint",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-ov-cha-gse165808-2021",
+    "cancer_code": "OV",
+    "name": "CHA high-grade serous ovarian carcinoma cohort (GSE165808)",
+    "description": "Independent Korean high-grade serous ovarian carcinoma cohort with primary-tumor bulk RNA-seq and individual progression-free-survival follow-up.",
+    "cohort_context": "Fresh-frozen primary tumors from 51 patients treated with surgery and platinum-based chemotherapy at CHA Bundang Medical Center from 2005 to 2014. TRACE Explorer retains the 47 patients with positive study-defined PFS time and explicit recurrence status.",
+    "source_provider": "geo",
+    "source_accession": "GSE165808",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE165808",
+    "publication_citation": "Kang et al. Cancers 2021",
+    "publication_id": "PMID:34439131; PMCID:PMC8391231; DOI:10.3390/cancers13163976",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "CHA Bundang Medical Center HGSC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "TruSeq stranded poly(A)-selected mRNA sequencing",
+      "endpoint_context": "Study-defined progression-free survival",
+      "redistribution_note": "NCBI places no restrictions on use or distribution of GEO data but notes that submitters may retain intellectual-property rights. TRACE Explorer therefore enables analysis while disabling direct matrix redistribution.",
+      "curation_note": "GEO supplies one primary-tumor RNA profile per patient. Four records lack a usable PFS time/status pair and are excluded, leaving 47 endpoint-complete patients with 37 recurrences and 10 censored observations. The supplied TPM matrix contains 20,416 unique rows encoded as HUGO|Entrez; the source symbols are retained without online remapping, and log2(TPM + 1) is applied once."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE165808",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE165nnn/GSE165808/suppl/GSE165808_hgsc_tpm.tsv.gz",
+    "expression_size": 2638140,
+    "expression_sha256": "6fea4a69ed82a8d73017f605b646cb54fc730ea5ba933aa841172ed251c3ce3a",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE165nnn/GSE165808/soft/GSE165808_family.soft.gz",
+    "soft_size": 5918,
+    "soft_sha256": "8ca0b6cb723a215139e0da5c92db0ba4cbb094c7934fce270b6c6b0a0100ff88",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "hgsc_[0-9]+",
+    "expected_primary_samples": 51,
+    "expected_endpoint_complete_samples": 47,
+    "expected_events": 37,
+    "expected_censored": 10,
+    "expected_expression_columns": 51,
+    "time_characteristic": "progression-free-survival_days",
+    "event_characteristic": "survival",
+    "event_value_map": {
+      "recurrence:1": 1,
+      "recurrence:0": 0
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "stage",
+    "sex_default": "female",
+    "sample_type": "Primary Tumor"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Fresh-frozen primary high-grade serous ovarian carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "GEO-supplied RSEM TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_hugo_entrez",
+    "mapping_source": "GEO GSE165808 supplied HUGO|Entrez identifiers",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 20,416 supplied HUGO symbols are unique, including after case normalization; no source rows are merged.",
+    "stream_source_order": true,
+    "scale_note": "GEO supplies non-negative RSEM TPM values for all 51 tumors. TRACE Explorer selects endpoint-complete columns and applies log2(TPM + 1) once; values remain cohort-specific."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_DAYS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Source study baseline; the exact day-zero definition is not further specified by GEO",
+      "event_definition": "Study-recorded recurrence",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

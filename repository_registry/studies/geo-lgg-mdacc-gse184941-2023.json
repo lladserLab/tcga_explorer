@@ -1,0 +1,169 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-lgg-mdacc-gse184941-2023",
+    "cancer_code": "LGG",
+    "name": "MDACC progression-enriched lower-grade glioma cohort (GSE184941)",
+    "description": "Independent lower-grade glioma cohort with bulk RNA sequencing of original grade II-III tumors and individual overall-survival follow-up.",
+    "cohort_context": "GSE184941 is a longitudinal, progression-enriched glioma series rather than an unselected population cohort. TRACE Explorer retains only source-labelled LGG libraries with at least 30% uniquely mapped reads, excludes all HGG libraries and one patient shared with the promoted GLASS release, and selects one technically highest-quality LGG library per remaining patient before endpoint QC.",
+    "source_provider": "geo",
+    "source_accession": "GSE184941",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE184941",
+    "publication_citation": "Khan et al. International Journal of Cancer 2023; Ozbek et al. PeerJ 2023",
+    "publication_id": "PMID:36250346; PMCID:PMC10071545; DOI:10.1002/ijc.34329; DOI:10.7717/peerj.15096",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Baylor College of Medicine and MD Anderson malignant-progression glioma cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 3000",
+      "library_method": "Paired-end total RNA-seq from FFPE resected glioma tissue",
+      "endpoint_context": "Overall survival from the initial glioma diagnosis",
+      "redistribution_note": "The GEO count matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "overlap_control": "Source patient 17 is excluded because its centre, sex, age, endpoint, initial grade and longitudinal pathology sequence identify it as GLSS-MD-0027, already represented in the promoted GLASS LGG release.",
+      "curation_note": "GEO exposes 180 direct bulk RNA-seq libraries, including 79 labelled LGG. The source processing description excludes libraries below 30% uniquely mapped reads. Applying that threshold and the cross-release overlap exclusion leaves 57 eligible libraries from 49 patients. A prespecified rank selects the highest uniquely mapped fraction, then highest total mapped fraction, with GEO accession as the stable final tie-break. Four selected patients have missing OS and one has a negative OS value, leaving 44 patients, 25 deaths and 19 censored observations. Counts are normalized over all 60,609 released rows to log2(CPM + 1). Pinned GENCODE v36 maps 60,531 rows to 59,299 symbols; 110 symbols represented by multiple Ensembl rows are excluded rather than combined, leaving 59,189 unambiguous genes."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE184941",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE184nnn/GSE184941/suppl/GSE184941_Raw_gene_counts_matrix.txt.gz",
+    "expression_size": 8015124,
+    "expression_sha256": "1b5bed13c0766f92c7445f390cff95b4456acc0c381a2346ad1eae0d9729e962",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE184nnn/GSE184941/soft/GSE184941_family.soft.gz",
+    "soft_size": 23037,
+    "soft_sha256": "45232f03696d9b67eef85c9dce99720b5ddc2956981a2902380abb9c532c8029",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Sample_.+",
+    "expected_primary_samples": 180,
+    "sample_characteristic_filters": [
+      {
+        "key": "grade",
+        "include": [
+          "LGG"
+        ],
+        "required": true
+      },
+      {
+        "key": "percentage of uniquely mapped reads",
+        "minimum_numeric": 30,
+        "required": true
+      },
+      {
+        "key": "patient id",
+        "exclude": [
+          "17"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 57,
+    "patient_sample_selection": {
+      "rank_by": [
+        {
+          "key": "percentage of uniquely mapped reads",
+          "type": "numeric",
+          "order": "desc"
+        },
+        {
+          "key": "percentage of total mapped reads",
+          "type": "numeric",
+          "order": "desc"
+        }
+      ],
+      "require_equal_characteristics": [
+        "overall survival (months)",
+        "vital status",
+        "diagnosis date",
+        "date of birth",
+        "gender"
+      ],
+      "expected_selected_samples": 49,
+      "expected_duplicate_patient_groups": 8,
+      "expected_removed_samples": 8
+    },
+    "expected_endpoint_complete_samples": 44,
+    "expected_events": 25,
+    "expected_censored": 19,
+    "expected_expression_columns": 44,
+    "expected_expression_gene_rows": 60609,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "overall survival (months)",
+    "event_characteristic": "vital status",
+    "event_value_map": {
+      "1": 1,
+      "0": 0
+    },
+    "age_characteristic": "age",
+    "grade_characteristic": "patient initial tumor grade",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "expression_feature_id_pattern": "(ENSG[0-9]+(?:\\.[0-9]+)?(?:_PAR_Y)?)",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "emsemblID",
+      "sample_start_column": 2
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_36/gencode.v36.annotation.gtf.gz",
+      "name": "gencode.v36.annotation.gtf.gz",
+      "size": 44507458,
+      "sha256": "81359865bab048361cbeaf91c9441aac4c700b63978e6691d579d78bf2322d30"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Original grade II-III glioma tissue in a progression-enriched longitudinal cohort",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO counts normalized to log2(CPM + 1)",
+    "source_unit": "FeatureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE release 36 GRCh38 annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained library size across all 60,609 pinned source rows, converts counts to CPM and applies log2(CPM + 1). Values are cohort-normalized and should not be compared directly with expression units from other releases."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial glioma diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

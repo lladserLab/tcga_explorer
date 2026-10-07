@@ -1,0 +1,120 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "biostudies-uvm-alsafadi-2016",
+    "cancer_code": "UVM",
+    "name": "Institut Curie primary uveal melanoma cohort (2016)",
+    "description": "Independent primary uveal melanoma cohort with public gene-level bulk RNA-seq counts and individual overall-survival follow-up.",
+    "cohort_context": "Seventy-four primary uveal melanomas treated by enucleation. Each participant contributes one tumor and one featureCounts profile. The clinical supplement distinguishes death from disease, death from other causes, alive with disease and no evidence of disease; overall survival treats both reported death categories as events.",
+    "source_provider": "biostudies_arrayexpress",
+    "source_accession": "E-MTAB-4097",
+    "source_url": "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-4097",
+    "publication_citation": "Alsafadi et al. Nature Communications 2016",
+    "publication_id": "PMID:26842708; DOI:10.1038/ncomms10615",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-EMBL-EBI-Terms-of-Use",
+    "license_url": "https://www.ebi.ac.uk/about/terms-of-use/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Institut Curie primary uveal melanoma transcriptomic study",
+      "source_data_system": "EMBL-EBI BioStudies / ArrayExpress",
+      "library_method": "Stranded poly(A) RNA-seq on Illumina HiSeq 2500; TopHat hg19 alignment and featureCounts gene quantification",
+      "curation_note": "The two pinned processed archives contain exactly the 74 count files declared by the SDRF. Tumor numbers encoded in those filenames link one-to-one to Supplementary Table 1. Raw counts are mapped with pinned Ensembl release 75 GRCh37 annotation and normalized by TRACE Explorer to log2(CPM + 1). EMBL-EBI terms add no restrictions beyond data-owner rights; redistribution is disabled conservatively."
+    }
+  },
+  "source": {
+    "provider": "biostudies_arrayexpress",
+    "accession": "E-MTAB-4097",
+    "publication_date": "2016-02-04",
+    "files": {
+      "idf": {
+        "url": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-4097/E-MTAB-4097.idf.txt",
+        "name": "E-MTAB-4097.idf.txt",
+        "size": 3420,
+        "sha256": "d83405986ef0a0ad828140aab35274d16015d1a326ec93d36006d18d2a66eec7"
+      },
+      "sdrf": {
+        "url": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-4097/E-MTAB-4097.sdrf.txt",
+        "name": "E-MTAB-4097.sdrf.txt",
+        "size": 55125,
+        "sha256": "283e117e8f70ccc0f4ffbe9ee5c6599deddd876ada43d87650bfd4472367f3b1"
+      },
+      "counts_archive_4": {
+        "url": "https://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/MTAB/E-MTAB-4097/E-MTAB-4097.processed.4.zip",
+        "name": "E-MTAB-4097.processed.4.zip",
+        "size": 172937211,
+        "sha256": "4b92bc3dad7e91baacfd6d9cfa2015c573fdc89d0bf9c951e3ac61fe34f8b932"
+      },
+      "counts_archive_5": {
+        "url": "https://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/MTAB/E-MTAB-4097/E-MTAB-4097.processed.5.zip",
+        "name": "E-MTAB-4097.processed.5.zip",
+        "size": 59742893,
+        "sha256": "63a609e580af83fb62452d4bc10d93307a5f96f12eeabb76381629188e450560"
+      },
+      "clinical": {
+        "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fncomms10615/MediaObjects/41467_2016_BFncomms10615_MOESM960_ESM.pdf",
+        "name": "ncomms10615-supplementary-information.pdf",
+        "size": 693243,
+        "sha256": "f140c5f7bfcbadf49e33baf3d6ff73393404f94250c2cce3b12d3018f1f3f0d3"
+      },
+      "gene_reference": {
+        "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+        "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+        "size": 39344043,
+        "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+      },
+      "license": {
+        "url": "https://www.ebi.ac.uk/about/terms-of-use/",
+        "name": "EMBL-EBI-terms-of-use.html",
+        "size": 21379,
+        "sha256": "29b7d5a384dd7e9520003fbf6b7a9a3c255da618a6c509bb76da84b0e9fe0529"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary uveal melanoma",
+    "sample_role": "Primary enucleation tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary uveal melanoma"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.TNM"
+    ]
+  },
+  "expression": {
+    "layer_id": "biostudies_log2_cpm",
+    "label": "BioStudies counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level featureCounts raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Ensembl release 75 GRCh37 GTF pinned in the release",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Canonical symbols represented by multiple Ensembl identifiers are excluded rather than combined without an unambiguous gene-level rule.",
+    "scale_note": "TRACE Explorer computes library sizes over all 57,736 featureCounts rows, converts each retained count to CPM and applies log2(CPM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from enucleation",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_EVENT",
+      "time_unit": "months",
+      "time_origin": "Primary enucleation",
+      "event_definition": "Death from uveal melanoma or another cause (DFD or DFO)",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

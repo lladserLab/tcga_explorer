@@ -1,0 +1,98 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-skcm-acral-liang-2017",
+    "cancer_code": "SKCM",
+    "name": "Primary acral melanoma (Liang, 2017)",
+    "description": "Independent acral melanoma cohort restricted to primary tumors with bulk RNA-seq and patient-level survival follow-up.",
+    "cohort_context": "Acral melanoma is a biologically distinct, non-UV-associated melanoma subtype. Primary tumors are retained and metastatic specimens are excluded so expression precedes the recorded disease course.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "mel_tsam_liang_2017",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/mel_tsam_liang_2017",
+    "publication_citation": "Liang et al. Genome Research 2017",
+    "publication_id": "PMID:28373299; PMCID:PMC5378171; DOI:10.1101/gr.213348.116",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Genomic and transcriptomic acral-melanoma cohort",
+      "curation_note": "The source profile contains 36 RNA-seq samples from 33 patients. Restricting to source-labelled primary tumors yields 15 unique endpoint-complete patients; metastatic specimens are not used as baseline expression."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/mel_tsam_liang_2017",
+    "files": {
+      "expression": "data_mrna_seq_fpkm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_fpkm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary acral melanoma",
+    "sample_role": "Primary acral melanoma tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["ACRM"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE_AT_PRESENTATION"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_DIAGNOSIS"]
+  },
+  "expression": {
+    "layer_id": "provided_standardized_expression",
+    "label": "DataHub-provided standardized expression",
+    "source_unit": "DataHub profile labelled FPKM; supplied values are standardized",
+    "transform": "identity",
+    "analysis_unit": "Provided standardized expression",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise; different identifiers are never merged implicitly.",
+    "scale_note": "The DataHub profile is named FPKM, but the frozen values include negatives and gene-wise means near zero with standard deviations near one, so they cannot be untransformed FPKM. TRACE Explorer preserves the supplied standardized values without a second transform and exposes this caveat in every result."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Acral melanoma diagnosis as encoded by the source clinical record",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Primary-disease baseline as encoded by the source clinical record",
+      "event_definition": "Disease recurrence or death as encoded by the source DFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

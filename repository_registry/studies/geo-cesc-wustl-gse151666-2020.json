@@ -1,0 +1,154 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-cesc-wustl-gse151666-2020",
+    "cancer_code": "CESC",
+    "name": "WUSTL pretreatment cervical-cancer cohort (GSE151666)",
+    "description": "Independent cervical-cancer cohort with whole-transcriptome bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "Washington University School of Medicine profiled 68 pretreatment primary cervical cancers by bulk RNA sequencing. TRACE Explorer links every GEO sample to the individual overall-survival record later published as source data for Fowle-Grider et al. The companion GSE275914 release contains different patients and remains a separate analysis option.",
+    "source_provider": "geo",
+    "source_accession": "GSE151666",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE151666",
+    "publication_citation": "Zhang et al. Journal of Clinical Investigation 2021; Fowle-Grider et al. Nature 2024",
+    "publication_id": "PMID:34255749; DOI:10.1172/JCI139232; PMID:39633044; DOI:10.1038/s41586-024-08258-3",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-Springer-Nature-Terms",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Washington University School of Medicine cervical-cancer tumor bank",
+      "source_data_system": "NCBI Gene Expression Omnibus plus pinned Springer Nature source data",
+      "source_platform": "Illumina HiSeq 3000",
+      "library_method": "Whole-transcriptome RNA sequencing of pretreatment primary cervical tumors; approximately 40 million 1 x 50 nt reads per sample, aligned to GRCh38 with STAR 2.7.0f",
+      "endpoint_context": "Source-published overall survival; Figure 2g defines the follow-up scale in months",
+      "endpoint_caveat": "The source-data workbook labels follow-up as FUtime.DeathTime and the accompanying figure labels the axis in months, but the exact clinical time origin is not stated. TRACE Explorer therefore does not claim diagnosis-, treatment- or surgery-anchored harmonization.",
+      "clinical_evidence_note": "The pinned Nature source-data workbook contains 99 individual records. A prespecified library-key pattern selects exactly the 68 large_ and pilot_ records belonging to GSE151666. Each key is independently encoded in the corresponding GEO supplementary filename and appears as one expression-matrix column.",
+      "sample_selection_note": "All retained samples are source-designated pretreatment primary cervical cancers, with one RNA profile and one endpoint record per patient.",
+      "overlap_note": "GSE151666 contains CxCC_01 through CxCC_68. GSE275914 contains CxCC_69 through CxCC_99 and distinct third_ library keys. The releases are not pooled and no patient identifiers overlap.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Source-file redistribution is disabled; NCBI GEO and Springer Nature terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE151666",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE151nnn/GSE151666/suppl/GSE151666_cervix_institute_68_fpkm.tsv.gz",
+    "expression_size": 10571426,
+    "expression_sha256": "a57b825e8768bc9a276622b8591b6a8bd129de0eb19a38d73e82798d6b1525ed",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE151nnn/GSE151666/soft/GSE151666_family.soft.gz",
+    "soft_size": 6433,
+    "soft_sha256": "f1603a5da1ba97dead5060f2318fa9dff08686edec737ea34d2e72e41951145b",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "CxCC_[0-9]+_.+",
+    "expected_primary_samples": 68,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "primary cervical cancer"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 68,
+    "expected_endpoint_complete_samples": 68,
+    "expected_events": 31,
+    "expected_censored": 37,
+    "expected_expression_columns": 68,
+    "expected_expression_gene_rows": 58379,
+    "expected_normalized_expression_gene_rows": 56332,
+    "patient_id_characteristic": "clinical library key",
+    "time_characteristic": "os months",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "stage_characteristic": "figo 2009 stage",
+    "expression_sample_characteristic": "clinical library key",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-024-08258-3/MediaObjects/41586_2024_8258_MOESM7_ESM.xlsx",
+      "evidence_size": 29336,
+      "evidence_sha256": "00f0106d5bc4c3c8365db48ba5494bb00a133bc550afb8c011536c1d60baa1b4",
+      "evidence_format": "xlsx",
+      "sheet_name": "G",
+      "header_row": 1,
+      "record_id_column": "Key",
+      "sample_metadata_field": "supplementary_file",
+      "sample_id_pattern": "(?:(?:ftp|https?)://.*/GSM[0-9]+_)?((?:large|pilot)_[A-Z]+)(?:\\.fpkm\\.tsv\\.gz)?",
+      "expected_records": 68,
+      "expected_matched_records": 68,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Key": "clinical library key",
+        "FUtime.DeathTime": "os months",
+        "DeathCensor": "os status",
+        "KHK-A": "khk-a",
+        "sort2": "source khk-a group"
+      },
+      "terms_url": "https://www.nature.com/info/terms-and-conditions"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "gene_name",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 3,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Pretreatment primary cervical-cancer tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_fpkm",
+    "label": "WUSTL gene-level FPKM transformed to log2(FPKM + 1)",
+    "source_unit": "Gene-level FPKM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene_name column in the pinned GEO matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned matrix contains 302 case-insensitive symbols represented by 2,047 rows. All occurrences of those ambiguous symbols are excluded before canonicalization; the remaining 56,332 symbols are unique and retain source row order.",
+    "stream_source_order": true,
+    "scale_note": "The source supplies gene-level FPKM. TRACE Explorer selects endpoint-linked columns, excludes every case-insensitive duplicated symbol rather than averaging distinct source features, and applies log2(FPKM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by DeathCensor (1 = death; 0 = censored)",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

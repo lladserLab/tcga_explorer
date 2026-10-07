@@ -1,0 +1,142 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-kirc-fuscc-sunitinib-2023",
+    "cancer_code": "KIRC",
+    "name": "FUSCC sunitinib-treated clear-cell renal carcinoma cohort (2023)",
+    "description": "Independent Chinese clear-cell renal-cell carcinoma cohort with pretreatment bulk tumor RNA-seq and individual progression-free and overall-survival follow-up during sunitinib therapy.",
+    "cohort_context": "FUSCC retrospectively assembled 115 advanced or subsequently recurrent clear-cell renal-cell carcinomas treated with sunitinib. Ninety-four pretreatment tumors have public RNA-seq profiles and complete study-defined PFS and OS fields. This treatment-selected cohort remains separate from untreated primary-tumor and randomized-trial KIRC cohorts.",
+    "source_provider": "europe_pmc_supplement",
+    "source_accession": "PMC10352361",
+    "source_url": "https://europepmc.org/article/PMC/10352361",
+    "publication_citation": "Zhang et al. Nature Communications 2023",
+    "publication_id": "PMID:37463927; PMCID:PMC10352361; DOI:10.1038/s41467-023-39981-6",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Fudan University Shanghai Cancer Center sunitinib cohort",
+      "source_data_system": "Europe PMC open supplementary files",
+      "library_method": "Fresh-frozen pretreatment tumor bulk RNA sequencing on Illumina HiSeq 4000; gene-level FPKM supplied by the authors",
+      "endpoint_context": "Study-defined progression-free and overall survival during follow-up of sunitinib-treated advanced or recurrent ccRCC",
+      "redistribution_note": "The article and its supplementary data are distributed under CC BY 4.0.",
+      "curation_note": "The public expression workbook contains 94 unique ccRCC sample columns that all map exactly to the 115-row clinical workbook. Eligibility is outcome-independent and requires an expression column plus positive 2021.12 PFS or OS time with an explicit 0/1 status. The source matrix contains 18,578 unique symbols; 7,370 genes with one or more missing values across the 94 patients are excluded without imputation, leaving 11,208 complete genes. The clinical catalog marks one additional sample, ccRCC_43, as RNA-sequenced, but that identifier is absent from the published quantification matrix and is therefore excluded."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC10352361",
+    "publication_date": "2023-07-17",
+    "clinical_member": "41467_2023_39981_MOESM4_ESM.xlsx",
+    "expression_member": "41467_2023_39981_MOESM6_ESM.xlsx",
+    "clinical_size": 43977,
+    "clinical_sha256": "ad4a1d3d77cb0c8bc070a54ae0ad9150f4ecdf93c494378fb77e13063df3dbb0",
+    "expression_size": 16911176,
+    "expression_sha256": "1bd1aa3984691ff866a432f9cc44964d2a89da79a4367348a9bbc297069d57d0",
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "RNA-seq",
+      "header_row": 1,
+      "feature_column": "Symbol",
+      "sample_start_column": 2,
+      "drop_any_missing_features": true
+    },
+    "clinical": {
+      "sheet_name": "Clinical characteristics",
+      "header_row": 1,
+      "sample_id_column": "Sample No.",
+      "patient_id_column": "Sample No.",
+      "sample_type": "Pretreatment ccRCC tumor",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "PFS (2021.12)",
+          "required": true
+        },
+        {
+          "column": "PFS event (2021.12)",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS (2021.12)",
+          "required": true
+        },
+        {
+          "column": "Live Status (2021.12)",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        }
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment ccRCC tumor",
+    "sample_role": "Fresh-frozen pretreatment tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment ccRCC tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.Stage  at diagnosis"
+    ],
+    "grade_fields": [
+      "patient.ISUP grade"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_fpkm",
+    "label": "log2(FPKM + 1)",
+    "source_unit": "Gene-level FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene symbols supplied in the pinned Supplementary Data 3 workbook",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 18,578 source feature symbols are unique exactly and case-insensitively; no implicit aggregation is performed.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer excludes every gene with a missing value in any retained patient, then applies log2(FPKM + 1) to the 11,208 complete published gene rows."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Study-defined progression-free survival",
+      "time_column": "PFS (2021.12)",
+      "event_column": "PFS event (2021.12)",
+      "time_unit": "months",
+      "time_origin": "Study-defined sunitinib-treatment follow-up; the exact calendar origin is not stated in the public supplement",
+      "event_definition": "Progression event recorded by the publication",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Study-defined overall survival",
+      "time_column": "OS (2021.12)",
+      "event_column": "Live Status (2021.12)",
+      "time_unit": "months",
+      "time_origin": "Study-defined sunitinib-treatment follow-up; the exact calendar origin is not stated in the public supplement",
+      "event_definition": "Death recorded during follow-up; the article describes all 84 deaths in the full cohort as deaths from ccRCC",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

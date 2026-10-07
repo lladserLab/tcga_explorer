@@ -1,0 +1,38 @@
+{
+  "files": {
+    "redoc-LICENSE": "d3026d549cf68ab7355bcfa85877bf8f845b3334a7efbfdc63936432fb34ff0e",
+    "redoc.standalone.js": "4329037bcffee3bd1892b05dfeff50cb462a1924fccd2b5a82f89f1543ed28bb",
+    "swagger-LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "swagger-ui-bundle.js": "a7e344f2770b2f07527ce828e0951626983b8f2dcdb7a826689c0232023f995b",
+    "swagger-ui.css": "d7f39f764aa18c7b47dd05b9af5613e373e4ac0f3557c2693d52d0abc2464d76"
+  },
+  "packages": [
+    {
+      "files": {
+        "LICENSE": "swagger-LICENSE",
+        "swagger-ui-bundle.js": "swagger-ui-bundle.js",
+        "swagger-ui.css": "swagger-ui.css"
+      },
+      "integrity": "sha512-TSFER+rFQlf1nzk6WvKkMaHTxAPQ3eAAxigFThnxQedSREanfZgSbJFayZVs/ULnSbNdrJOb99vLD6xpb3R3eg==",
+      "name": "swagger-ui-dist",
+      "version": "5.32.15"
+    },
+    {
+      "files": {
+        "LICENSE": "redoc-LICENSE",
+        "bundles/redoc.standalone.js": "redoc.standalone.js"
+      },
+      "integrity": "sha512-bBbat+Sx6xKWdyoCGTtA0BWeTEW9Vs4VnEja7q7ZLOk4IM7cHQLrf+kDxWF6dKeKxT8kOBnoy/OsNXCeLttpyQ==",
+      "name": "redoc",
+      "version": "2.5.3"
+    }
+  ],
+  "transformations": [
+    {
+      "file": "redoc.standalone.js",
+      "operation": "inline attribution SVG",
+      "sha256": "1dab4315f8de2177b2b2726b29e84a26314c69cd27d692228947c0058793d5a7",
+      "source": "https://cdn.redoc.ly/redoc/logo-mini.svg"
+    }
+  ]
+}

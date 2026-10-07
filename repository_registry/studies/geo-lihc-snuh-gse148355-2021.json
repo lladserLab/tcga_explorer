@@ -1,0 +1,152 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-lihc-snuh-gse148355-2021",
+    "cancer_code": "LIHC",
+    "name": "SNUH resected hepatocellular-carcinoma cohort (GSE148355)",
+    "description": "Independent Korean hepatocellular-carcinoma cohort with bulk RNA sequencing and individual disease-free-survival follow-up.",
+    "cohort_context": "Seoul National University Hospital collected liver specimens between 2004 and 2009. Among 54 expression-linked records with complete clinical follow-up, TRACE Explorer retains 52 source-coded G1-G3 HCC tumors and excludes one high-grade dysplastic nodule and one combined HCC-intrahepatic-cholangiocarcinoma tumor.",
+    "source_provider": "geo",
+    "source_accession": "GSE148355",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148355",
+    "publication_citation": "Yoon et al. npj Precision Oncology 2021",
+    "publication_id": "PMID:33772139; PMCID:PMC7997876; DOI:10.1038/s41698-021-00167-2",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-GPL-3.0-only",
+    "license_url": "https://github.com/sangho1130/KOR_HCC/blob/99938cc6087beee2afcdf3353c82bac5b9a3290e/LICENSE",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Seoul National University Hospital Korean HCC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the authors' commit-pinned analysis repository",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Paired-end bulk RNA sequencing aligned to hg19 with STAR and quantified at gene level with featureCounts; the publication describes FPKM conversion followed by quantile normalization",
+      "endpoint_context": "Postoperative disease-free survival in months, with recurrence or metastasis as the event",
+      "clinical_evidence_note": "The authors' Figure 1C input table supplies sample-level DFS time and recurrence status. Its 54 records comprise 52 source-coded G1-G3 HCC tumors, one high-grade dysplastic nodule and one combined HCC-intrahepatic-cholangiocarcinoma tumor; only the 52 HCC tumors are eligible.",
+      "sample_selection_note": "The source expression matrix contains the authors' retained profile for each endpoint-linked tumor. For TG1-017 and TG2-035 it contains the technical-replicate profile suffixed r rather than the original library; the clinical identifier without r is retained as the patient identifier.",
+      "annotation_caveat": "The GEO sample records label the malignant source tissue as 'Gastric cancer, liver', which conflicts with the GEO series design, publication, source clinical files and pathological cohort description identifying these specimens as HCC. Eligibility is therefore restricted to the 52 records source-coded G1-G3, and the conflicting submitter label remains recorded in each source metadata payload.",
+      "overlap_note": "This 2004-2009 Korean SNUH cohort is institutionally and geographically distinct from TCGA-LIHC and ICGC LIRI-JP. It is retained separately from the later multicenter PLANet cohort and is never pooled by default.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Source-file redistribution is disabled; NCBI GEO terms and the authors' repository license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE148355",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE148nnn/GSE148355/suppl/GSE148355_1.catholic.fpkm.RNAseqId.txt.gz",
+    "expression_size": 28985823,
+    "expression_sha256": "cfdc382fc90f7f2e5037670b028e04a187fe82966e4b7fe3b8b088add0734ba2",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE148nnn/GSE148355/soft/GSE148355_family.soft.gz",
+    "soft_size": 10513,
+    "soft_sha256": "6703725baad482996f5763e83973487aeafa3a7226f9c649c3322c06458b0390",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Sample_[0-9]+ \\[Cat_(?!(?:TG1-017|TG2-035)\\])TG[123]-[0-9]{3}r?\\]",
+    "expected_primary_samples": 56,
+    "sample_characteristic_filters": [
+      {
+        "key": "clinical sample id",
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 52,
+    "expected_endpoint_complete_samples": 52,
+    "expected_events": 21,
+    "expected_censored": 31,
+    "expected_expression_columns": 52,
+    "expected_expression_gene_rows": 57820,
+    "expected_normalized_expression_gene_rows": 55468,
+    "patient_id_characteristic": "clinical sample id",
+    "time_characteristic": "dfs months",
+    "event_characteristic": "dfs status",
+    "event_value_map": {
+      "1": 0,
+      "2": 1
+    },
+    "grade_characteristic": "tumor stage",
+    "age_characteristic": "patient age",
+    "sex_characteristic": "patient gender",
+    "expression_sample_id_pattern": "^Sample_[0-9]+ \\[(Cat_.+)\\]$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://raw.githubusercontent.com/sangho1130/KOR_HCC/99938cc6087beee2afcdf3353c82bac5b9a3290e/data/Figure%201C%20bottom%20input.txt",
+      "evidence_size": 1817,
+      "evidence_sha256": "179d6814718ad2914a5d3e780ff4b2db8712b47c0141142390292cb75e1c8a34",
+      "evidence_format": "tsv",
+      "header_row": 1,
+      "record_id_column": "Sample ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?:Sample_[0-9]+ \\[Cat_)?(TG[123]-[0-9]{3})r?(?:\\])?",
+      "expected_records": 52,
+      "expected_matched_records": 52,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Sample ID": "clinical sample id",
+        "Operational method": "clinical operational method",
+        "Recurrence status": "dfs status",
+        "DFS (month)": "dfs months"
+      },
+      "terms_url": "https://raw.githubusercontent.com/sangho1130/KOR_HCC/99938cc6087beee2afcdf3353c82bac5b9a3290e/LICENSE"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "Symbol",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 3,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Resected malignant HCC tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_fpkm",
+    "label": "SNUH source FPKM transformed to log2(FPKM + 1)",
+    "source_unit": "Source-provided quantile-normalized gene-level FPKM",
+    "transform": "identity",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided Symbol column in the pinned GEO matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All occurrences of case-insensitive duplicated symbols are excluded before canonicalization; the remaining 55,468 symbols are unique and retain source row order.",
+    "stream_source_order": true,
+    "scale_note": "The publication describes featureCounts quantification, FPKM conversion and quantile normalization. TRACE Explorer selects the 52 endpoint-linked HCC tumor columns, excludes every case-insensitive duplicated symbol and applies log2(FPKM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Source-provided disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Postoperative follow-up",
+      "event_definition": "Tumor recurrence or metastasis (source code 2 = event; source code 1 = censored)",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+{
+  "schema_version": "trace-signature-scoring-methods-v2",
+  "title": "Signature scoring",
+  "subtitle": "How TRACE turns one gene or a gene set into one score per sample",
+  "reviewed": "2026-09-07",
+  "canonical_path": "/tcga_explorer/methods/signature-scoring/",
+  "app_help_path": "/tcga_explorer/?view=help#trace-guide-methods-signature-scoring",
+  "runtime": {
+    "r": "4.4.2",
+    "bioconductor": "3.20"
+  },
+  "implementation_contract": {
+    "backend_contract_version": "bioconductor-single-sample-scoring-v2.0",
+    "engine_schema": "trace-bioconductor-signature-engine-v1",
+    "rank_minimum_genes": 1000,
+    "max_matrix_entries": 75000000,
+    "packages": {
+      "singscore": "1.26.0",
+      "GSVA": "2.0.7",
+      "AUCell": "1.28.0"
+    },
+    "parameters": {
+      "singscore": {
+        "ties_method": "min",
+        "center_score": true,
+        "known_direction": true
+      },
+      "ssgsea": {
+        "alpha": 0.25,
+        "normalize": false,
+        "min_size": 2,
+        "max_size": "Inf",
+        "check_na": "yes",
+        "missing_value_policy": "all.obs"
+      },
+      "aucell": {
+        "top_rank_fraction": 0.05,
+        "normalize_auc": true,
+        "split_by_blocks": false,
+        "keep_zeroes_as_na": false,
+        "tie_seed_base": 1
+      }
+    }
+  },
+  "summary": [
+    "A signature score is a compact summary of expression. It does not by itself establish pathway activity, prognosis or treatment response.",
+    "TRACE records the expression layer, resolved genes, scoring population, method parameters and score hash so the calculation can be inspected and repeated."
+  ],
+  "recommended": {
+    "method": "singscore",
+    "text": "For a bulk-RNA signature that may be examined across cohorts, start with singscore. It ranks genes within each sample and does not estimate its reference distribution from the other patients in the run."
+  },
+  "workflow": [
+    {
+      "title": "Choose the expression layer",
+      "text": "TRACE uses the analysis-ready layer declared by the dataset. Uploaded counts or abundance values are transformed during import according to their declared unit; the scorer never guesses a scale."
+    },
+    {
+      "title": "Resolve the signature",
+      "text": "Gene symbols and supported aliases are resolved before scoring. Every requested component must map. Consistent duplicates are reported and counted once; conflicting weights or directions are rejected."
+    },
+    {
+      "title": "Fix the patient and feature universe",
+      "text": "The selected molecular population or external sample types are applied before choosing one RNA profile per participant. Arithmetic scores use the analysis-eligible complete cases. Rank-based scores use this molecular population and the full frozen feature universe before endpoint and clinical filters are applied. Choosing a different tissue population changes the scoring population; it never falls back to another tissue type."
+    },
+    {
+      "title": "Calculate and record the score",
+      "text": "TRACE stores the method, parameters, direction of every component, population counts, resolved feature universe and a hash of the resulting score vector. Clinical filters are part of this record."
+    }
+  ],
+  "notation": [
+    {
+      "term": "xᵢg",
+      "definition": "analysis-ready expression for sample i and gene g"
+    },
+    {
+      "term": "w₍g₎",
+      "definition": "user-supplied gene weight; the default is 1"
+    },
+    {
+      "term": "G",
+      "definition": "number of distinct resolved genes in the signature"
+    },
+    {
+      "term": "U",
+      "definition": "number of usable genes in the frozen expression-layer universe"
+    }
+  ],
+  "methods": [
+    {
+      "id": "single",
+      "label": "Single gene",
+      "role": "Direct expression",
+      "status": "available",
+      "engine": "TRACE native scorer",
+      "package": null,
+      "formula": "Sᵢ = xᵢg",
+      "parameters": "Exactly one resolved gene.",
+      "direction": "A direction is not applied. The score retains the expression direction of the selected gene.",
+      "universe": "The selected gene. Participants without its expression value are excluded.",
+      "cohort_dependence": "The same stored expression value does not change when other participants are added or removed.",
+      "interpretation": "A one-unit score difference is one unit on the declared expression layer.",
+      "limits": "Values from different expression layers or processing pipelines are not directly interchangeable."
+    },
+    {
+      "id": "mean",
+      "label": "Mean",
+      "role": "Transparent arithmetic score",
+      "status": "available",
+      "engine": "TRACE native scorer",
+      "package": null,
+      "formula": "Sᵢ = (1/G) Σg xᵢg",
+      "parameters": "Two or more resolved genes; all components receive equal weight.",
+      "direction": "All genes are treated as positive components.",
+      "universe": "The resolved signature genes. Only participants with expression for every component are scored.",
+      "cohort_dependence": "It does not use other participants, but it depends directly on the expression scale.",
+      "interpretation": "Higher scores mean higher average expression of the listed genes on the declared layer.",
+      "limits": "Highly expressed genes can dominate the average. Use only genes measured on a common, appropriate scale."
+    },
+    {
+      "id": "weighted",
+      "label": "Weighted mean",
+      "role": "Signed arithmetic score",
+      "status": "available",
+      "engine": "TRACE native scorer",
+      "package": null,
+      "formula": "Sᵢ = Σg w₍g₎xᵢg / Σg |w₍g₎|",
+      "parameters": "Two or more resolved genes with finite, non-zero weights.",
+      "direction": "Positive weights increase the score; negative weights decrease it. Weight magnitude is retained.",
+      "universe": "The resolved signature genes. Only participants with expression for every component are scored.",
+      "cohort_dependence": "It does not use other participants, but it depends directly on the expression scale and chosen weights.",
+      "interpretation": "The sign and magnitude follow the declared weights and expression layer.",
+      "limits": "Weights learned in another assay may not transfer to a new processing pipeline."
+    },
+    {
+      "id": "zscore",
+      "label": "Z-score mean",
+      "role": "Within-run standardized score",
+      "status": "available",
+      "engine": "TRACE native scorer",
+      "package": null,
+      "formula": "Sᵢ = Σg w₍g₎[(xᵢg − x̄g)/s₍g₎] / Σg |w₍g₎|",
+      "parameters": "Two or more resolved genes with finite, non-zero weights; x̄g and sample SD s₍g₎ are estimated among eligible, expression-complete participants in the run.",
+      "direction": "Positive weights increase the score; negative weights decrease it. Weight magnitude is retained.",
+      "universe": "The resolved signature genes and the eligible complete-case scoring population.",
+      "cohort_dependence": "Yes. Changing clinical filters, endpoint eligibility or cohort composition can change every score.",
+      "interpretation": "A higher value means higher standardized expression relative to this run, not an absolute cross-study value.",
+      "limits": "Do not compare numerical z-scores from separately scored cohorts. Constant components contribute no variation and are reported."
+    },
+    {
+      "id": "singscore",
+      "label": "singscore",
+      "role": "Recommended rank-based bulk score",
+      "status": "available",
+      "engine": "singscore::rankGenes + singscore::simpleScore",
+      "package": {
+        "name": "singscore",
+        "version": "1.26.0",
+        "repository": "Bioconductor 3.20"
+      },
+      "formula": "Sᵢ = singscore TotalScore from centered within-sample ranks",
+      "parameters": "rankGenes(tiesMethod = \"min\"); simpleScore(centerScore = TRUE, knownDirection = TRUE).",
+      "direction": "Plain genes and +1 weights form upSet; −1 weights form downSet. Other weight magnitudes and zero are rejected because rank methods do not estimate weighted effects.",
+      "universe": "All usable genes in the selected frozen expression layer for that sample.",
+      "cohort_dependence": "It does not estimate ranks from other participants. Scores can still change if the measured gene universe, preprocessing or signature mapping changes.",
+      "interpretation": "Higher TotalScore means positive genes rank higher and negative genes rank lower within the sample.",
+      "limits": "Cross-study interpretation still requires comparable feature universes and attention to assay, batch and tissue composition."
+    },
+    {
+      "id": "ssgsea",
+      "label": "ssGSEA",
+      "role": "Sample-wise enrichment score",
+      "status": "available",
+      "engine": "GSVA::ssgseaParam + GSVA::gsva",
+      "package": {
+        "name": "GSVA",
+        "version": "2.0.7",
+        "repository": "Bioconductor 3.20"
+      },
+      "formula": "Sᵢ = ESᵢ(up) − ESᵢ(down); a missing direction contributes 0",
+      "parameters": "alpha = 0.25, normalize = FALSE, minSize = 2, maxSize = Inf.",
+      "direction": "Plain genes and +1 weights form the positive set; −1 weights form the negative set. Other magnitudes and zero are rejected.",
+      "universe": "All usable genes in the selected frozen expression layer for that sample. Each non-empty direction must retain at least two mapped genes.",
+      "cohort_dependence": "The enrichment walk is sample-wise and TRACE disables across-sample range normalization. Scores can still change with the feature universe, preprocessing and ties.",
+      "interpretation": "Higher values indicate relative enrichment of the positive component over the negative component within a sample.",
+      "limits": "Numerical scores should not be assumed exchangeable across assays. Signature size and gene-gene correlation affect behaviour."
+    },
+    {
+      "id": "aucell",
+      "label": "AUCell",
+      "role": "Top-ranked activity sensitivity",
+      "status": "available",
+      "engine": "AUCell::AUCell_buildRankings + AUCell::AUCell_calcAUC",
+      "package": {
+        "name": "AUCell",
+        "version": "1.28.0",
+        "repository": "Bioconductor 3.20"
+      },
+      "formula": "Sᵢ = normalized AUCᵢ(up) − normalized AUCᵢ(down)",
+      "parameters": "Sequential ranking with package-defined random tie handling; keepZeroesAsNA = FALSE; aucMaxRank = ceiling(0.05 × U); normAUC = TRUE. Per-sample seed = first 8 hex digits of SHA-256(\"bioconductor-single-sample-scoring-v2.0|1|<sample ID>\"), modulo 2,147,483,646, plus 1.",
+      "direction": "Plain genes and +1 weights form the positive set; −1 weights form the negative set. Other magnitudes and zero are rejected.",
+      "universe": "All usable genes in the selected frozen expression layer for that sample; U and the resulting aucMaxRank are exported.",
+      "cohort_dependence": "Ranking is performed per sample. Results still depend on feature detection, ties, the feature universe and the top-rank threshold.",
+      "interpretation": "Higher values indicate that positive signature genes are more concentrated near the top of the sample ranking than negative genes.",
+      "limits": "AUCell was developed for ranking-based activity assessment in single-cell workflows. TRACE presents it as a sensitivity, not the default bulk-RNA score."
+    },
+    {
+      "id": "gsva",
+      "label": "GSVA",
+      "role": "Current boundary",
+      "status": "boundary",
+      "engine": "Not implemented",
+      "package": null,
+      "formula": "Not available in TRACE Explorer.",
+      "parameters": "None.",
+      "direction": "Not applicable.",
+      "universe": "Not applicable.",
+      "cohort_dependence": "GSVA estimates expression distributions across a sample cohort, so its score is cohort-relative.",
+      "interpretation": "TRACE does not currently expose GSVA as a signature score.",
+      "limits": "If introduced later, it will require a frozen reference population and will not be presented as a transportable per-sample default."
+    }
+  ],
+  "rules": [
+    {
+      "title": "Expression input",
+      "text": "The result records the dataset, release, expression-layer identifier and analysis scale. Rank-based scores require a finite, frozen broad expression layer with at least 1,000 unique usable genes and no more than 75 million gene-by-sample entries; small targeted panels should use arithmetic methods. Rank-based methods are insensitive to strictly monotone transformations only when the feature universe and ties are unchanged."
+    },
+    {
+      "title": "Mapping and coverage",
+      "text": "Signature scoring requires 100% mapping of all requested components. TRACE reports submitted and resolved symbols, aliases, missing genes and duplicate resolutions. Consistent duplicates contribute once; a conflicting duplicate, an unmapped gene or fewer than two distinct resolved genes blocks a multi-gene score. Duplicate symbols inside a source matrix use the first row by recorded row number, and that policy is exported."
+    },
+    {
+      "title": "Missing expression",
+      "text": "Arithmetic methods use complete cases for all resolved signature genes. Rank methods require every value in the frozen expression layer and canonical molecular population to be finite; they do not silently drop a patient or feature when scoring. Constant signature genes remain in the calculation and are reported. Participant counts before and after scoring remain visible."
+    },
+    {
+      "title": "Direction and weights",
+      "text": "Mean treats all genes as positive. Weighted and z-score methods retain finite, non-zero weight magnitude. singscore, ssGSEA and AUCell accept only plain or +1 genes as up and −1 genes as down; zero and other magnitudes are invalid."
+    },
+    {
+      "title": "REST representation",
+      "text": "The interface uses GENE, GENE:1 and GENE:-1. REST clients may instead set signature_genes[].direction to up or down and should omit weight in that form. Explicit direction is authoritative if both fields are sent; any supplied rank-method weight must still be +1 or −1."
+    },
+    {
+      "title": "Filters and timing",
+      "text": "Arithmetic methods follow endpoint and clinical eligibility; z-score is recalculated in that complete-case population. Rank methods are scored once on the canonical molecular population before endpoint and clinical filters, then the stored scores are subset for the requested analysis. Thus filtering unrelated patients does not change a retained patient's rank score."
+    },
+    {
+      "title": "Across studies",
+      "text": "TRACE scores and fits associations inside each study. Raw patient-level rank scores from different studies are never pooled as if they shared one numerical scale. A workflow reports multi-study synthesis only for effect estimates that satisfy its declared common-scale and hierarchy rules; rank-signature effects remain study-level in the current pan-cancer workflow."
+    },
+    {
+      "title": "Downstream inference",
+      "text": "Scoring and inference are separate decisions. A score may enter a continuous model, a declared grouped comparison or GSEA grouping. Survival models report the effect per one standard deviation among the patients retained for that analysis, and grouped views recalculate their declared cutpoint there. Filtering therefore does not change a retained patient's frozen rank score, but it can change the model's unit or group assignment. A cutpoint does not validate a signature, and multiple tried definitions must be interpreted as a family."
+    }
+  ],
+  "limitations": [
+    "A high score is not direct evidence that a pathway is causally active.",
+    "Tumour purity and immune or stromal content can influence many signatures; adjustment is not automatic and should be justified for the biological question.",
+    "Batch, assay and feature-universe differences remain relevant even for within-sample rank methods.",
+    "A signature evaluated in the same data used to derive it is not an independent validation.",
+    "Random or matched gene sets can be useful negative controls, but they do not replace a prespecified hypothesis or external validation."
+  ],
+  "references": [
+    {
+      "id": "foroutan2018",
+      "citation": "Foroutan M et al. Single sample scoring of molecular phenotypes. BMC Bioinformatics. 2018;19:404.",
+      "url": "https://doi.org/10.1186/s12859-018-2435-4"
+    },
+    {
+      "id": "barbie2009",
+      "citation": "Barbie DA et al. Systematic RNA interference reveals that oncogenic KRAS-driven cancers require TBK1. Nature. 2009;462:108–112.",
+      "url": "https://doi.org/10.1038/nature08460"
+    },
+    {
+      "id": "hanzelmann2013",
+      "citation": "Hänzelmann S, Castelo R, Guinney J. GSVA: gene set variation analysis for microarray and RNA-seq data. BMC Bioinformatics. 2013;14:7.",
+      "url": "https://doi.org/10.1186/1471-2105-14-7"
+    },
+    {
+      "id": "aibar2017",
+      "citation": "Aibar S et al. SCENIC: single-cell regulatory network inference and clustering. Nature Methods. 2017;14:1083–1086.",
+      "url": "https://doi.org/10.1038/nmeth.4463"
+    },
+    {
+      "id": "gsva_manual",
+      "citation": "Bioconductor. GSVA package reference and vignette, version 2.0.7.",
+      "url": "https://bioconductor.org/packages/3.20/bioc/html/GSVA.html"
+    },
+    {
+      "id": "singscore_manual",
+      "citation": "Bioconductor. singscore package reference, version 1.26.0.",
+      "url": "https://bioconductor.org/packages/3.20/bioc/html/singscore.html"
+    },
+    {
+      "id": "aucell_manual",
+      "citation": "Bioconductor. AUCell package reference, version 1.28.0.",
+      "url": "https://bioconductor.org/packages/3.20/bioc/html/AUCell.html"
+    }
+  ]
+}

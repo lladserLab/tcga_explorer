@@ -1,0 +1,26 @@
+[
+  {
+    "file": "python.tar.gz",
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261003/cpython-3.13.16%2B20261003-aarch64-apple-darwin-install_only.tar.gz",
+    "sha256": "d8975d7df4f08f7b1c7aafcdfacbddcec3d366415f2c1a72b2466b6850815933",
+    "bytes": 25365830
+  },
+  {
+    "file": "R-4.4.2-cloud.pkg",
+    "url": "https://cloud.r-project.org/bin/macosx/big-sur-arm64/base/R-4.4.2-arm64.pkg",
+    "sha256": "0c2c6cc57b1976746cf3f0937a1764120648fd4cac0be53cc9bf99d215a5f213",
+    "bytes": 97943523
+  },
+  {
+    "file": "XQuartz-2.8.5.pkg",
+    "url": "https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.5/XQuartz-2.8.5.pkg",
+    "sha256": "e89538a134738dfa71d5b80f8e4658cb812e0803115a760629380b851b608782",
+    "bytes": 107523825
+  },
+  {
+    "file": "node.tar.gz",
+    "url": "https://nodejs.org/dist/v22.22.0/node-v22.22.0-darwin-arm64.tar.gz",
+    "sha256": "5ed4db0fcf1eaf84d91ad12462631d73bf4576c1377e192d222e48026a902640",
+    "bytes": 49923798
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "schema_version": "trace-teaching-contract-v2",
+  "content_kind": "fixed_interpretation_case",
+  "source_kind": "synthetic_case",
+  "result_id": "TRACE-TEACH-GSEA-DIRECTION-V1",
+  "pipeline_version": "teaching-contract-only",
+  "snapshot_date": "2026-08-05",
+  "title": "Direction in GSEA",
+  "status": "not_a_computed_analysis_result",
+  "scenario": {
+    "contrast": "Group B minus Group A",
+    "collection": "Gene Ontology Biological Process teaching subset",
+    "ranking_metric": "Welch t statistic, Group B minus Group A",
+    "positive_nes": "genes in the set accumulate toward the Group B end of the ranking",
+    "negative_nes": "genes in the set accumulate toward the Group A end of the ranking",
+    "fdr_family": {
+      "method": "Benjamini-Hochberg",
+      "tested_gene_sets": 3,
+      "displayed_gene_sets": 3,
+      "boundary": "all evaluable sets in this fixed GO teaching subset under the declared ranking and size limits"
+    },
+    "dotplot_contract": {
+      "display_limit": "up to the 30 pathways with lowest FDR",
+      "point_area": "min(-log10(FDR), 10)",
+      "negative_log10_fdr_cap": 10,
+      "point_color": "NES",
+      "color_midpoint": 0
+    },
+    "synthetic_pathways": [
+      {
+        "pathway": "SYNTHETIC_GO_INTERFERON_RESPONSE",
+        "nes": 1.75,
+        "fdr": 0.008,
+        "neglog10_fdr": 2.097,
+        "enriched_toward": "Group B",
+        "leading_edge": ["STAT1", "IRF7", "IFIT1", "ISG15"]
+      },
+      {
+        "pathway": "SYNTHETIC_GO_RESPONSE_TO_INTERFERON_GAMMA",
+        "nes": 1.53,
+        "fdr": 0.018,
+        "neglog10_fdr": 1.745,
+        "enriched_toward": "Group B",
+        "leading_edge": ["STAT1", "IRF7", "CXCL10"]
+      },
+      {
+        "pathway": "SYNTHETIC_CELL_CYCLE",
+        "nes": -1.42,
+        "fdr": 0.031,
+        "neglog10_fdr": 1.509,
+        "enriched_toward": "Group A",
+        "leading_edge": ["MKI67", "CCNB1", "CDC20"]
+      }
+    ],
+    "go_redundancy_context": [
+      {
+        "pathways": [
+          "SYNTHETIC_GO_INTERFERON_RESPONSE",
+          "SYNTHETIC_GO_RESPONSE_TO_INTERFERON_GAMMA"
+        ],
+        "shared_leading_edge_genes": ["STAT1", "IRF7"],
+        "interpretation": "The related GO labels and shared leading-edge genes are overlapping evidence, not independent replication."
+      }
+    ]
+  },
+  "answer_key": "Positive NES preserves the declared B minus A direction and therefore points toward Group B; negative NES points toward Group A. Neither result establishes pathway activation or causality.",
+  "interpretation_boundary": "Enrichment is a ranked-set association and does not establish pathway activation or causality.",
+  "completion_rule": "Completion depends on preserving contrast direction and the tested FDR family, never on significance."
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-palbo-bio-gse186901-2023",
+    "cancer_code": "BRCA",
+    "name": "Palbo-Bio metastatic breast-cancer cohort (GSE186901)",
+    "description": "Prospective HR-positive/HER2-negative metastatic breast-cancer cohort with baseline bulk tumor RNA sequencing and individual progression-free survival during palbociclib plus endocrine therapy.",
+    "cohort_context": "The Palbo-Bio study enrolled patients with recurrent or metastatic HR-positive/HER2-negative breast cancer treated with palbociclib plus endocrine therapy. GEO releases 90 baseline or progression whole-transcriptome profiles from 67 patients. TRACE Explorer retains the 64 source-designated baseline profiles and excludes every progression biopsy before endpoint and expression analysis.",
+    "source_provider": "geo",
+    "source_accession": "GSE186901",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE186901",
+    "publication_citation": "Park et al. Genome Medicine 2023",
+    "publication_id": "PMID:37480051; PMCID:PMC10360358; DOI:10.1186/s13073-023-01201-7",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Palbociclib Biomarker Translational Research Group prospective study NCT03401359",
+      "source_data_system": "NCBI Gene Expression Omnibus and Europe PMC",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Whole-transcriptome sequencing of fresh or FFPE breast and metastatic tumor specimens; source-provided gene-level TPM is transformed to log2(TPM + 1) by TRACE Explorer.",
+      "endpoint_context": "Progression-free survival during palbociclib plus an aromatase inhibitor or fulvestrant",
+      "endpoint_definition_note": "The source supplement reports PFS in months and a progressive-disease event indicator for every patient. TRACE Explorer preserves those source-coded values and does not infer unreported event causes.",
+      "sample_selection_note": "Only titles ending in _Baseline_WTS are eligible. This leaves 64 unique patients with baseline expression, exact PFS and event status; 26 progression profiles and seven clinically annotated patients without a public baseline WTS profile are not analyzed.",
+      "baseline_specimen_caveat": "The source baseline category includes both newly collected biopsies and archival surgical specimens obtained before palbociclib. Expression therefore represents the study-defined pretreatment tumor, but the interval from specimen acquisition to therapy is heterogeneous.",
+      "raw_access_note": "Raw WTS reads are controlled under EGA EGAS00001005736. The complete processed TPM matrix, deterministic sample identifiers and individual endpoint table used here are public.",
+      "expression_processing_note": "The GEO matrix has an unlabeled leading row-index column. TRACE Explorer records this structural defect, reads gene_name from the second physical column, selects the 64 baseline columns and excludes all eight rows belonging to four case-insensitively duplicated symbols.",
+      "overlap_note": "This Korean prospective treatment cohort is external to TCGA-BRCA and is not pooled with the SCAN-B, MDX-BRCA, NKI, CNP, POG570 or BRCA-KR cohorts.",
+      "redistribution_note": "TRACE Explorer downloads and transforms pinned public files in place. Source-file redistribution is disabled; NCBI GEO terms and the article's CC BY 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE186901",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE186nnn/GSE186901/suppl/GSE186901_palbo_geo_tpm_mat.txt.gz",
+    "expression_size": 3345619,
+    "expression_sha256": "76141c23b5bdd7b519823562b43f051af6c19de427354f3c3c430bd165efe2a2",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE186nnn/GSE186901/soft/GSE186901_family.soft.gz",
+    "soft_size": 5071,
+    "soft_sha256": "17238003c605092bd3254e96ce4c61571f04f2483dd999314d475027b171045c",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "(?:BRO7F|PR-[FLY])-[0-9]{3}_Baseline_WTS",
+    "expected_primary_samples": 64,
+    "expected_endpoint_complete_samples": 64,
+    "expected_events": 47,
+    "expected_censored": 17,
+    "expected_expression_columns": 64,
+    "expected_expression_gene_rows": 20234,
+    "expected_normalized_expression_gene_rows": 20226,
+    "expected_duplicate_feature_symbols": 4,
+    "expected_excluded_duplicate_feature_rows": 8,
+    "patient_id_characteristic": "patient_id",
+    "time_characteristic": "pfs_months",
+    "event_characteristic": "pd_event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age_at_index",
+    "sex_default": "female",
+    "expression_sample_metadata_field": "title",
+    "sample_type": "Baseline HR-positive/HER2-negative Breast Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10360358/supplementaryFiles",
+      "evidence_size": 74186,
+      "evidence_sha256": "c58381269bf884c6fa6932b1914ebb1c958c6118559b991e35cc68dccb8e36b8",
+      "evidence_container_size": 8259870,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "13073_2023_1201_MOESM1_ESM.xlsx",
+      "sheet_name": "S1b",
+      "header_row": 2,
+      "header_name_overrides": {
+        "14": "Metastatic cell type detail"
+      },
+      "record_id_column": "Patient ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "((?:BRO7F|PR-[FLY])-[0-9]{3})(?:_(?:Baseline|PD)_WTS)?",
+      "sample_id_replacement": "\\1",
+      "field_name_map": {
+        "Patient ID": "patient_id",
+        "PFS, mo": "pfs_months",
+        "PD event": "pd_event",
+        "Age, y": "age_at_index"
+      },
+      "allow_unmatched_records": true,
+      "expected_records": 71,
+      "expected_matched_records": 64,
+      "expected_unmatched_records": 7,
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10360358/"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "gene_name",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 4,
+      "header_missing_leading_column": true,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Baseline HR-positive/HER2-negative Breast Tumor",
+    "sample_role": "One source-designated baseline biopsy or archival tumor specimen per patient before palbociclib plus endocrine therapy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Baseline HR-positive/HER2-negative Breast Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO TPM normalized to log2(TPM + 1)",
+    "source_unit": "Source-provided gene-level TPM",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GEO GSE186901 gene_name column",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to the four case-insensitively repeated source symbols are excluded rather than merged without a source-defined rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to the public source TPM values after selecting baseline samples. Values support within-cohort analyses and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival during palbociclib plus endocrine therapy",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Start of palbociclib plus endocrine therapy",
+      "event_definition": "Source-coded progressive-disease event",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

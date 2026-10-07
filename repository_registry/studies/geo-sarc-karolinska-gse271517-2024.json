@@ -1,0 +1,146 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-sarc-karolinska-gse271517-2024",
+    "cancer_code": "SARC",
+    "name": "Karolinska primary synovial sarcoma cohort (GSE271517)",
+    "description": "Independent synovial-sarcoma cohort with FFPE bulk total-RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study sequenced 91 tumors from 55 patients treated at Karolinska University Hospital between 1992 and 2016. TRACE Explorer uses the source patient-level count matrix and retains the 49 patients represented by an endpoint-annotated primary-tumor profile. Six patients represented only by metastatic expression profiles and all additional longitudinal tumor profiles are excluded to avoid relating post-diagnosis metastatic expression to survival measured from the study baseline.",
+    "source_provider": "geo",
+    "source_accession": "GSE271517",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271517",
+    "publication_citation": "Chen et al. Advanced Science 2024",
+    "publication_id": "PMID:39257029; PMCID:PMC11892499; DOI:10.1002/advs.202404510",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Karolinska University Hospital synovial sarcoma discovery cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "TruSeq Stranded Total RNA with RiboZero from FFPE tumors; STAR alignment to hg19/GRCh37 and featureCounts quantification",
+      "endpoint_context": "Study-defined overall survival with follow-up completed in December 2019",
+      "publication_license": "Creative Commons Attribution 4.0",
+      "redistribution_note": "The GEO count matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "overlap_control": "This Swedish synovial-sarcoma cohort is institutionally and histologically distinct from the promoted Canadian POG570 soft-tissue sarcoma and French ICGC Ewing-sarcoma releases.",
+      "curation_note": "GEO exposes 91 direct bulk RNA-seq tumor profiles from 55 patients and a separate 55-column patient-level raw-count matrix. Patient identifiers in that matrix map directly to the patient-id characteristic in GEO. Requiring source-labelled primary tumor, positive OS time and explicit vital status retains 49 unique patients with 20 deaths and 29 censored observations. Six patients whose source patient-level profile corresponds only to metastatic tissue are excluded because expression was obtained after the survival time origin. The 63,677 unversioned Ensembl IDs match the complete gene set in Ensembl release 75 GRCh37; symbols represented by multiple Ensembl rows are excluded rather than combined."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE271517",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE271nnn/GSE271517/suppl/GSE271517_Patient_Counts.csv.gz",
+    "expression_size": 2190551,
+    "expression_sha256": "7d063db8dc662143aeb631aa14dad889d5fb6d73c4b345b6dd49d19b80f02d6d",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE271nnn/GSE271517/soft/GSE271517_family.soft.gz",
+    "soft_size": 8135,
+    "soft_sha256": "a03bfa387b9ac1f6a0f19668b20345ad552569a6d6d03d4c0291737534cfde1e",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "T[0-9]+",
+    "expected_primary_samples": 91,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "Synovial Sarcoma"
+        ],
+        "required": true
+      },
+      {
+        "key": "tumor type",
+        "include": [
+          "Primary_tumor"
+        ],
+        "required": true
+      },
+      {
+        "key": "overall survival_time_(days)",
+        "required": true
+      },
+      {
+        "key": "overal survival",
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 49,
+    "expected_endpoint_complete_samples": 49,
+    "expected_events": 20,
+    "expected_censored": 29,
+    "expected_expression_columns": 49,
+    "expected_expression_gene_rows": 63677,
+    "patient_id_characteristic": "patient id",
+    "expression_sample_characteristic": "patient id",
+    "time_characteristic": "overall survival_time_(days)",
+    "event_characteristic": "overal survival",
+    "event_value_map": {
+      "1": 1,
+      "0": 0
+    },
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "ID",
+      "sample_start_column": 2
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Source-selected patient-level primary synovial sarcoma profile",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO counts normalized to log2(CPM + 1)",
+    "source_unit": "FeatureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 annotation matching the source count identifiers",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained patient-profile library size across all 63,677 pinned source rows, converts counts to CPM and applies log2(CPM + 1). Values are cohort-normalized and should not be compared directly with expression units from other releases."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Source study baseline",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

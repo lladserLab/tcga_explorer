@@ -78,6 +78,79 @@ def get_expression_for_gene(
     return get_count_matrix_expression(db, tcga_data_dir, cohort_id, gene_symbol, expression_scale)
 
 
+def gdc_expression_gene_provenance(
+    tcga_data_dir: Path,
+    derived_expression_dir: Path,
+    cohort_id: str,
+    gene_symbol: str,
+) -> dict[str, Any]:
+    """Describe the exact GDC feature row used by a derived RNA matrix.
+
+    The count-matrix ``GeneIndex`` is not authoritative for GDC TPM/FPKM
+    matrices: those matrices have their own filtered row order.  Resolve the
+    row from the derived metadata and the source Ensembl identifier from a
+    mapped augmented STAR-count file instead.
+    """
+
+    target = gene_symbol.strip().upper()
+    metadata = load_gdc_expression_matrix_metadata(
+        derived_expression_dir,
+        cohort_id,
+    )
+    row_number = (
+        (metadata.get("gene_to_row") or {}).get(target)
+        if metadata
+        else None
+    )
+    if row_number is None:
+        raise GeneNotFoundError(
+            f"Gene {target} is missing from the derived GDC matrix metadata "
+            f"for {cohort_id}."
+        )
+
+    source_gene_ids: set[str] = set()
+    try:
+        file_map = load_or_build_cache_file_map(
+            tcga_data_dir,
+            derived_expression_dir,
+            cohort_id,
+        )
+        if file_map:
+            reference_path = Path(sorted(file_map.items())[0][1])
+            source_gene_ids = {
+                str(row.get("raw_gene_id") or row.get("gene_id") or "").strip()
+                for row in read_gdc_gene_rows(reference_path, target)
+                if str(
+                    row.get("raw_gene_id") or row.get("gene_id") or ""
+                ).strip()
+            }
+    except (OSError, ValueError):
+        # The expression matrix remains auditable by its own row metadata even
+        # when the archived source-file map is unavailable.  Never substitute
+        # the symbol or a count-matrix row as though either were a source ID.
+        source_gene_ids = set()
+
+    source_gene_id = (
+        next(iter(source_gene_ids)) if len(source_gene_ids) == 1 else None
+    )
+    return {
+        "resolved_symbol": target,
+        "source_gene_id": source_gene_id,
+        "source_identifier_type": (
+            "versioned_ensembl_gene_id" if source_gene_id else None
+        ),
+        "mapping_source": (
+            "GDC augmented STAR-count gene_id + derived matrix metadata"
+            if source_gene_id
+            else "derived GDC matrix metadata; source gene_id unavailable"
+        ),
+        "mapping_status": (
+            "verified" if source_gene_id else "source_id_unavailable"
+        ),
+        "row_number": int(row_number),
+    }
+
+
 def get_count_matrix_expression(
     db: Session,
     tcga_data_dir: Path,
@@ -597,9 +670,11 @@ def read_gdc_gene_rows(cache_file: Path, target_symbol: str) -> list[dict[str, A
             symbol = (row.get("gene_name") or "").strip().upper()
             if symbol != target_symbol:
                 continue
+            raw_gene_id = str(row.get("gene_id") or "").strip()
             rows.append(
                 {
-                    "gene_id": strip_ensembl_version(row.get("gene_id") or ""),
+                    "gene_id": strip_ensembl_version(raw_gene_id),
+                    "raw_gene_id": raw_gene_id,
                     "unstranded": _to_float(row.get("unstranded", "")),
                     "tpm_unstranded": _to_float(row.get("tpm_unstranded", "")),
                     "fpkm_unstranded": _to_float(row.get("fpkm_unstranded", "")),

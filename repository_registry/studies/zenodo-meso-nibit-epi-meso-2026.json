@@ -1,0 +1,126 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "zenodo-meso-nibit-epi-meso-2026",
+    "cancer_code": "MESO",
+    "name": "NIBIT-EPI-MESO immune-checkpoint inhibitor cohort (2026)",
+    "description": "Independent bulk RNA-seq from diagnostic pleural mesothelioma biopsies linked to individual overall survival after immune-checkpoint inhibitor treatment.",
+    "cohort_context": "The publication reports 91 patients with pleural mesothelioma treated with immune-checkpoint inhibitors. TRACE Explorer retains the 82 patients with one diagnostic tumor RNA profile and a positive, explicit overall-survival time and vital status. This treatment-selected cohort must not be interpreted as an unselected mesothelioma population.",
+    "source_provider": "zenodo_publication",
+    "source_accession": "Zenodo 16601674",
+    "source_url": "https://zenodo.org/records/16601674",
+    "publication_citation": "Calabro et al. Nature Genetics 2026",
+    "publication_id": "DOI:10.1038/s41588-026-02580-4",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "NIBIT-EPI-MESO",
+      "source_data_system": "Pinned Zenodo processed-expression and clinical files",
+      "library_method": "STAR v2.7.0b and featureCounts v1.6.3 followed by EDASeq v2.22.0 adjustment; TRACE Explorer applies log2(adjusted count + 1)",
+      "curation_note": "The Zenodo matrix contains exactly one RNA profile for each clinical row marked RNAseq profiling = yes. Period-delimited matrix identifiers are mapped to hyphen-delimited patient identifiers by a fixed character replacement; all 82 identifiers match one-to-one without reading outcome values.",
+      "endpoint_note": "OS is the source-reported number of days from initiation of immune-checkpoint inhibitor treatment to death or last follow-up. Diagnostic biopsy RNA may predate treatment, and the result is therefore conditional on subsequent ICI treatment.",
+      "redistribution_note": "The processed expression matrix and clinical table are distributed together by the authors under CC BY 4.0 on the pinned Zenodo record."
+    }
+  },
+  "source": {
+    "provider": "zenodo_publication",
+    "record_id": 16601674,
+    "record_doi": "10.5281/zenodo.16601674",
+    "expected_revision": 12,
+    "expected_zenodo_license": "cc-by-4.0",
+    "publication_date": "2026-04-27",
+    "publication_doi": "10.1038/s41588-026-02580-4",
+    "expression_matrix": {
+      "key": "NIBIT-EPI-MESO-adjustedCounts.txt",
+      "size": 7546051,
+      "md5": "c8bf70e77bef85349e78a71576f91909",
+      "sha256": "2b295e0e0036ca408cfd57c233dcbb8f44df1aced9044446c968265cef0571b6"
+    },
+    "clinical": {
+      "key": "NIBIT-EPI-MESO_Supplementary Table S1.xlsx",
+      "size": 66284,
+      "md5": "09f1959a677de1a825893b6d3a48f026",
+      "sha256": "c5822ef05dae39e7d90b2dbaffa1797ff3b81e5ca08c48f118640ed5cd2e98e0",
+      "patient_sheet": "Sheet 1",
+      "patient_header_row": 1,
+      "patient_id_column": "Patient ID",
+      "expression_eligibility_column": "RNAseq profiling",
+      "expression_eligibility_values": [
+        "yes"
+      ],
+      "expected_expression_eligible_patients": 82,
+      "output_sample_type": "Diagnostic pleural mesothelioma tumor biopsy"
+    },
+    "expression": {
+      "delimiter": "\t",
+      "feature_column": "SYMBOL",
+      "sample_start_column": 3,
+      "sample_to_patient_replacements": [
+        [
+          ".",
+          "-"
+        ]
+      ],
+      "expected_source_sample_columns": 82,
+      "expected_gene_rows": 22896,
+      "minimum_gene_rows": 10000
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Diagnostic pleural mesothelioma tumor biopsy",
+    "sample_role": "One diagnostic tumor RNA profile per ICI-treated pleural mesothelioma patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Diagnostic pleural mesothelioma tumor biopsy"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.Stage"
+    ],
+    "grade_fields": [],
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "race_fields": [],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "zenodo_edaseq_log2",
+    "label": "NIBIT-EPI-MESO EDASeq-adjusted counts, log2 transformed",
+    "source_unit": "Publisher-provided gene-level EDASeq adjusted counts",
+    "transform": "log2p",
+    "analysis_unit": "log2(EDASeq-adjusted count + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "SYMBOL values supplied alongside Ensembl gene IDs in the pinned adjusted-count matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned matrix contains 22,896 unique non-empty symbols; duplicate or empty symbols are rejected by the adapter.",
+    "stream_source_order": true,
+    "scale_note": "The publication reports STAR v2.7.0b, featureCounts v1.6.3 and EDASeq v2.22.0. TRACE Explorer retains the publisher-provided adjusted values and applies only log2(x + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from ICI initiation",
+      "time_column": "OS",
+      "event_column": "STATUS",
+      "time_unit": "days",
+      "time_origin": "Initiation of the immune-checkpoint inhibitor treatment represented in the source cohort",
+      "event_definition": "Death from any cause (source STATUS = DIED); source STATUS = ALIVE is censored at last follow-up",
+      "event_prefix": "DIED",
+      "censor_prefix": "ALIVE"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-kirc-javelin101-avelumab-axitinib-2020",
+    "cancer_code": "KIRC",
+    "name": "JAVELIN Renal 101 avelumab plus axitinib cohort (2020)",
+    "description": "Independent first-line advanced clear-cell renal-cell carcinoma cohort with pretreatment bulk tumor RNA sequencing and individual progression-free-survival follow-up during avelumab plus axitinib therapy.",
+    "cohort_context": "The randomized phase 3 JAVELIN Renal 101 biomarker release contains 886 clinical records and 726 expression-linked tumors. TRACE Explorer prespecifies the 354 patients assigned to avelumab plus axitinib and excludes the 372 expression-linked sunitinib records so treatment arms are not mixed in one prognostic analysis.",
+    "source_provider": "PMC public article supplement",
+    "source_accession": "PMC8493486",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8493486/",
+    "publication_citation": "Motzer et al. Nature Medicine 2020",
+    "publication_id": "PMID:32895571; PMCID:PMC8493486; DOI:10.1038/s41591-020-1044-8",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-PMC-Public-Supplement-Springer-Nature",
+    "license_url": "https://pmc.ncbi.nlm.nih.gov/about/copyright/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "JAVELIN Renal 101 randomized phase 3 trial (NCT02684006)",
+      "source_data_system": "PMC author manuscript and public binary Excel supplement",
+      "library_method": "Pretreatment FFPE advanced-RCC tumor whole-transcriptome RNA sequencing with Personalis ACE v3 on Illumina NovaSeq; STAR 2.4.2a-p1 alignment to NCBI hs37d5 and gene-level TPM quantification",
+      "treatment_context": "Previously untreated advanced clear-cell-component RCC assigned to avelumab plus axitinib",
+      "endpoint_context": "Trial-defined progression-free survival during first-line combination therapy",
+      "sample_selection_note": "Supplementary Table 11 contains 886 unique clinical IDs. Supplementary Table 13 contains 726 unique expression columns, all linked exactly to clinical records. Eligibility is fixed before endpoint analysis to the avelumab-plus-axitinib arm, a present expression column, positive PFS time and an explicit censor indicator, retaining 354 unique patients. The excluded expression-linked sunitinib arm contains 372 patients and remains recorded in the audit.",
+      "expression_processing_note": "The authors quantified gene-level TPM and supplied a log2-transformed matrix whose title states that values below 0.01 were set to 0.01. TRACE Explorer preserves the supplied numeric scale without attempting to reconstruct an undocumented offset.",
+      "expression_curation_note": "The source matrix contains 22,955 feature rows. Twenty-eight HUGO cells are stored as numeric Excel date serials and cannot be recovered unambiguously; they are excluded rather than guessed. The remaining 22,927 labels are exact and case-insensitively unique and complete across all retained samples.",
+      "endpoint_caveat": "PFS_P_CNSR uses 0 for an observed progression-or-death event and 1 for censoring. The retained avelumab-plus-axitinib cohort contains 157 events and 197 censored observations.",
+      "source_discrepancy_note": "The manuscript Methods describes 720 whole-transcriptome profiles, whereas the public Supplementary Tables 6, 11 and 13 consistently expose 726 expression-linked patients: 354 in the combination arm and 372 in the sunitinib arm. TRACE Explorer pins and reports the directly released supplement without silently reducing it to the narrative count.",
+      "overlap_note": "JAVELIN Renal 101 is independent of TCGA-KIRC and of the active RECA-EU, CPTAC, IMmotion150, FUSCC, Dana-Farber epigenomic-atlas and CheckMate releases.",
+      "license_note": "The author manuscript states that clinical response and normalized RNA-seq data are included in public Supplementary Tables 11 and 13. The workbook is downloaded and transformed in place with pinned hashes; source and derived expression redistribution remains disabled under PMC and Springer Nature terms."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC8493486",
+    "publication_date": "2020-09-07",
+    "full_text_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8493486/pdf/nihms-1737783.pdf",
+    "full_text_download_mode": "pmc_pow",
+    "full_text_size": 5518871,
+    "full_text_sha256": "dfe202f67e2e5bddf3cfe9f94c73491908d9a1fcbd37f48607329ebeda8cd409",
+    "source_license_id": "LicenseRef-PMC-Public-Supplement-Springer-Nature",
+    "clinical_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/8493486/bin/NIHMS1737783-supplement-Supplementary_Tables.xlsb",
+    "clinical_download_mode": "pmc_pow",
+    "clinical_size": 93320749,
+    "clinical_sha256": "7bcfb502eceaff4e655e3f313d6e37fe6fe73c01b3bb846ad1bb8c8d6bd2ba97",
+    "expression_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/8493486/bin/NIHMS1737783-supplement-Supplementary_Tables.xlsb",
+    "expression_download_mode": "pmc_pow",
+    "expression_size": 93320749,
+    "expression_sha256": "7bcfb502eceaff4e655e3f313d6e37fe6fe73c01b3bb846ad1bb8c8d6bd2ba97",
+    "clinical": {
+      "format": "xlsb",
+      "sheet_name": "S11_Clinical_data",
+      "header_row": 2,
+      "expected_rows": 886,
+      "sample_id_column": "ID",
+      "patient_id_column": "ID",
+      "sample_type": "Pretreatment advanced RCC FFPE tumor",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "TRT01P",
+          "include": [
+            "Avelumab+Axitinib"
+          ],
+          "required": true
+        },
+        {
+          "column": "PFS_P",
+          "required": true
+        },
+        {
+          "column": "PFS_P_CNSR",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "expression": {
+      "layout": "xlsb_matrix",
+      "sheet_name": "S13_Gene_expression_TPM",
+      "header_row": 2,
+      "feature_column": "HUGO",
+      "sample_start_column": 2,
+      "expected_samples": 726,
+      "expected_gene_rows": 22927,
+      "drop_non_string_features": true,
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment advanced RCC FFPE tumor",
+    "sample_role": "Pretreatment FFPE advanced-RCC tumor used for whole-transcriptome RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment advanced RCC FFPE tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "provided_log2_tpm_floor_0_01",
+    "label": "Source-provided log2 TPM with 0.01 floor",
+    "source_unit": "Source-provided log2 TPM with 0.01 floor",
+    "transform": "identity",
+    "analysis_unit": "Source-provided log2 TPM with 0.01 floor",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "HUGO labels supplied in JAVELIN Renal 101 Supplementary Table 13",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Twenty-eight numeric Excel date serials are excluded because their original HUGO labels cannot be recovered unambiguously. The remaining 22,927 labels are exact and case-insensitively unique, so no aggregation or online remapping is applied.",
+    "stream_source_order": true,
+    "scale_note": "The authors' released log2 TPM matrix is preserved unchanged after exclusion of unrecoverable numeric feature labels. Values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival during avelumab plus axitinib",
+      "time_column": "PFS_P",
+      "event_column": "PFS_P_CNSR",
+      "time_unit": "months",
+      "time_origin": "JAVELIN Renal 101 randomization",
+      "event_definition": "Trial-defined radiographic progression or death",
+      "censor_prefix": "1",
+      "event_prefix": "0"
+    }
+  ]
+}

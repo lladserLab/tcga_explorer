@@ -1,0 +1,130 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-hnsc-qilu-gse208576-2023",
+    "cancer_code": "HNSC",
+    "name": "Qilu Hospital HNSCC cohort (GSE208576)",
+    "description": "Independent primary head-and-neck squamous-cell carcinoma cohort with bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study retrospectively enrolled 28 patients diagnosed at Qilu Hospital of Shandong University from March 2010 through March 2015 and followed them through May 2019. All 28 primary FFPE tumors have source-published transcript counts and complete individual overall-survival time and status.",
+    "source_provider": "geo",
+    "source_accession": "GSE208576",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE208576",
+    "publication_citation": "Nan et al. Frontiers in Immunology 2023",
+    "publication_id": "PMID:36703967; PMCID:PMC9872116; DOI:10.3389/fimmu.2022.1100417",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Qilu Hospital of Shandong University retrospective HNSCC validation cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Bulk RNA sequencing of FFPE primary HNSCC tumors; the processed source matrix supplies both transcript-level FPKM and integer count columns",
+      "endpoint_context": "Overall survival in patients diagnosed between March 2010 and March 2015 and followed through May 2019",
+      "endpoint_caveat": "GEO supplies complete individual OS month and life-status fields but does not separately restate the precise calendar time origin. TRACE Explorer therefore preserves the source-provided endpoint without imposing a TCGA-CDR definition.",
+      "sample_selection_note": "Every GEO record is a source-labelled primary HNSCC tumor and maps one-to-one to a patient and to one integer-count matrix column.",
+      "expression_curation_note": "The 227,954 source ENST identifiers exactly match the transcript set in the pinned Ensembl release 100 GRCh38 GTF. TRACE Explorer ignores the transcript-level FPKM columns, sums integer transcript counts by source-defined Ensembl gene, computes library totals over all source transcripts, and then applies log2(CPM + 1).",
+      "overlap_note": "The Qilu Hospital cohort is institutionally independent of TCGA-HNSC and of the active CPTAC-HNSCC repository cohort.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO and Ensembl files in place. Source-file redistribution is disabled; GEO and Ensembl terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE208576",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE208nnn/GSE208576/suppl/GSE208576_Raw_gene_counts_matrix.txt.gz",
+    "expression_size": 10327865,
+    "expression_sha256": "43116336de0420d588db88f4c05c5b37908c3b4e8b5efd811bfac3c8fb8886c2",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE208nnn/GSE208576/soft/GSE208576_family.soft.gz",
+    "soft_size": 4985,
+    "soft_sha256": "7182494ccd9b2028350c1feb924e00ffc5fee0eb0a5853f72ea0c1aeb3d09db9",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "HNSCC_primary tumor_[0-9]{3}",
+    "expected_primary_samples": 28,
+    "expected_endpoint_complete_samples": 28,
+    "expected_events": 13,
+    "expected_censored": 15,
+    "expected_expression_columns": 28,
+    "expected_expression_transcript_rows": 227954,
+    "expected_normalized_expression_gene_rows": 60683,
+    "time_characteristic": "os month",
+    "event_characteristic": "os event",
+    "event_value_map": {
+      "alive": 0,
+      "dead": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "gender",
+    "stage_characteristic": "tnm stage",
+    "grade_characteristic": "grade",
+    "expression_sample_id_pattern": "^HNSCC_primary tumor_0*([1-9][0-9]*)$",
+    "expression_sample_id_replacement": "T\\1_count",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_transcript_counts",
+      "feature_column": "transcript_id",
+      "sample_start_column": 2,
+      "count_value_type": "integer",
+      "require_complete_reference": true
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-100/gtf/homo_sapiens/Homo_sapiens.GRCh38.100.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.100.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 46973686,
+      "sha256": "6deab14681c08eb4e6cffad4e9ded842cadac76386addb3fcda204e97ed93a37"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary FFPE HNSCC tumor collected before survival outcome ascertainment",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_transcript_sum_log2_cpm",
+    "label": "GEO transcript counts aggregated to genes and normalized to log2(CPM + 1)",
+    "source_unit": "Integer transcript-level counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 100 GRCh38 transcript-to-gene and gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Transcript counts are summed only within one source-defined Ensembl gene. Symbols assigned to more than one Ensembl gene are excluded downstream rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer sums source integer ENST counts by ENSG, computes each retained library size over all 227,954 source transcripts, converts the resulting gene counts to CPM and applies log2(CPM + 1). Transcript-level FPKM values are not aggregated. Values are suitable for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source follow-up origin; exact calendar anchor not separately stated in GEO",
+      "event_definition": "Death from any cause according to the source-provided alive/dead field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

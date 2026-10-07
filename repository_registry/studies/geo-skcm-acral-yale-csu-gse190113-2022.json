@@ -1,0 +1,141 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-skcm-acral-yale-csu-gse190113-2022",
+    "cancer_code": "SKCM",
+    "name": "Yale-CSU acral-melanoma cohort (GSE190113)",
+    "description": "Independent acral-melanoma cohort with bulk tumor RNA sequencing and individual overall survival from tumor resection.",
+    "cohort_context": "The source study profiled 45 acral melanomas by bulk RNA sequencing at Yale University or Central South University. TRACE Explorer retains the 43 non-overlapping patient tumors with positive, individual overall-survival follow-up from the sequenced-tumor resection; two records with missing survival are excluded. The cohort spans primary and metastatic specimens and multiple AJCC stages.",
+    "source_provider": "geo",
+    "source_accession": "GSE190113",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE190113",
+    "publication_citation": "Farshidfar et al. Nature Communications 2022",
+    "publication_id": "PMID:35197475; PMCID:PMC8866401; DOI:10.1038/s41467-022-28566-4",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Yale University and Central South University acral-melanoma genomic study",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina HiSeq 2500, HiSeq 4000, HiSeq X Ten and NovaSeq",
+      "library_method": "Tumor RNA was rRNA depleted, sequenced in bulk and quantified with Salmon against GENCODE v25. The source retained protein-coding genes, normalized to TPM, adjusted sequencing-center and year effects with parametric ComBat, replaced negative adjusted values with zero and applied log2(value + 1).",
+      "endpoint_context": "Overall survival from resection of the sequenced acral-melanoma tumor",
+      "endpoint_caveat": "The cohort includes primary and metastatic specimens across AJCC stages. Expression-survival associations may therefore reflect disease stage, specimen site, ancestry, center or treatment history; these are not equivalent to an untreated natural-history cohort.",
+      "sample_selection_note": "GEO contains one named bulk tumor profile per patient in this subcohort. Only subtype = Acral records are eligible; XY-12 and ZS-2 are excluded because both survival time and event status are missing.",
+      "disease_selection_note": "Acral melanoma is retained as a biologically distinct TCGA-SKCM analysis cohort and is not pooled with the source study's non-overlapping sun-exposed melanoma profiles.",
+      "expression_processing_note": "The source ComBat adjustment was fit across the published 105-profile acral and sun-exposed RNA collection using sequencing center and year. TRACE Explorer preserves the resulting source scale and does not refit batch correction after subcohort selection.",
+      "overlap_note": "This Yale-CSU cohort is independent of TCGA-SKCM and of the Liang, DFCI, checkpoint-inhibitor, adoptive-cell-therapy and hu14.18-IL2 cohorts already represented in the catalog. It shares a parent GEO series, but no patients, with the separately registered Yale sun-exposed subcohort.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO archive in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE190113",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190113/suppl/GSE190113_RAW.tar",
+    "expression_size": 56985600,
+    "expression_sha256": "143e77f0a4699c4389790ddce0fe43ca103120d37395bc188c709612e5f1074d",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190113/soft/GSE190113_family.soft.gz",
+    "soft_size": 15601,
+    "soft_sha256": "f8929777592519d364410e59e0cf9bfc15bd05380de24179bfb8c66d31a9497a",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": ".+",
+    "expected_primary_samples": 105,
+    "sample_characteristic_filters": [
+      {
+        "key": "subtype",
+        "include": [
+          "Acral"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 45,
+    "expected_endpoint_complete_samples": 43,
+    "expected_events": 26,
+    "expected_censored": 17,
+    "expected_expression_columns": 43,
+    "expected_source_expression_files": 105,
+    "expected_expression_gene_rows": 18928,
+    "expected_normalized_expression_gene_rows": 18928,
+    "patient_id_characteristic": "",
+    "time_characteristic": "overall survival period from resection date (year)",
+    "event_characteristic": "overall survival event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age at diagnosis (years)",
+    "stage_characteristic": "ajcc stage",
+    "stage_value_map": {
+      "0": "Stage 0",
+      "1": "Stage I",
+      "2": "Stage II",
+      "3": "Stage III",
+      "4": "Stage IV"
+    },
+    "sex_characteristic": "gender",
+    "race_characteristic": "ethnicity",
+    "expression_sample_characteristic": "",
+    "sample_type": "Primary or Metastatic Melanoma Tumor",
+    "expression": {
+      "layout": "normalized_files_tar",
+      "supplementary_file_pattern": ".+\\.ComBatAdjusted\\.tsv\\.gz",
+      "feature_column": "GeneID",
+      "feature_column_output": "Hugo_Symbol",
+      "value_column_index": 2,
+      "value_transform": "identity",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true,
+      "require_nonnegative": true,
+      "require_value_header_matches_sample_id": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary or Metastatic Melanoma Tumor",
+    "sample_role": "Acral-melanoma tumor sampled at the resection that defines survival time zero",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary or Metastatic Melanoma Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_source_log2_combat_tpm",
+    "label": "Source log2 ComBat-adjusted expression",
+    "source_unit": "Source-provided log2(max(ComBat-adjusted TPM, 0) + 1)",
+    "transform": "identity",
+    "analysis_unit": "Source-provided log2(max(ComBat-adjusted TPM, 0) + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided protein-coding gene symbols",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 18,928 source protein-coding symbols are non-empty and unique case-insensitively in every selected profile.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer preserves the source's protein-coding, center/year-adjusted and log2-transformed values without an additional transform. Values are intended for within-cohort analysis and are not directly exchangeable with unadjusted TPM."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from sequenced-tumor resection",
+      "time_column": "OS_YEARS",
+      "event_column": "OS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Resection date of the sequenced melanoma tumor",
+      "event_definition": "Death from any cause; living patients are censored at the source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

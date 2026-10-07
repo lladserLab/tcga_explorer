@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 96" role="img" aria-labelledby="title description">
+  <title id="title">TRACE Explorer</title>
+  <desc id="description">TRACE Explorer wordmark with the T-Trace symbol.</desc>
+  <g transform="translate(12 12)">
+    <rect width="72" height="72" rx="7" fill="#182235"/>
+    <path
+      d="M13.5 19.7H44.4M29.3 19.7V33.8H43.3V46.7H56.8"
+      fill="none"
+      stroke="#86D3E2"
+      stroke-width="6.8"
+      stroke-linecap="square"
+      stroke-linejoin="round"
+    />
+    <rect x="53" y="42.8" width="9" height="9" rx="1.7" fill="#F4FAFB"/>
+  </g>
+  <text x="105" y="59" fill="#182235" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="43" letter-spacing="0">
+    <tspan font-weight="700">TRACE</tspan><tspan font-weight="430"> Explorer</tspan>
+  </text>
+</svg>

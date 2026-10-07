@@ -1,0 +1,62 @@
+{
+  "name": "trace-explorer-desktop-macos",
+  "version": "0.1.7",
+  "description": "Local transcriptomic analysis with bundled Python and R",
+  "main": "main.cjs",
+  "author": "Sergio Hern\u00e1ndez-Galaz",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dist:mac": "electron-builder --mac dmg --arm64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3",
+    "playwright": "^1.62.1"
+  },
+  "build": {
+    "appId": "org.cienciavida.trace-explorer.desktop",
+    "productName": "TRACE Explorer",
+    "asar": true,
+    "directories": {
+      "output": "../build/macos/installers"
+    },
+    "files": [
+      "main.cjs",
+      "loading.html",
+      "package.json",
+      "preload.cjs",
+      "data-actions.cjs",
+      "downloads.cjs",
+      "data.html",
+      "data.css",
+      "data.cjs",
+      "icons/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../build/runtime/macos-arm64",
+        "to": "runtime",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc"
+        ]
+      }
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.medical",
+      "icon": "icons/trace-desktop.icns",
+      "identity": null,
+      "artifactName": "TRACE-Explorer-${version}-macOS-arm64.${ext}"
+    }
+  }
+}

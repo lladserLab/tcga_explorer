@@ -1,0 +1,128 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-cll-broad-2022",
+    "cancer_code": "CLL",
+    "name": "CLLmap pretreatment cohort (Broad, 2022)",
+    "description": "Independent CLL/SLL cohort restricted to explicitly untreated, pretreatment peripheral-blood specimens with patient-linked overall and failure-free survival.",
+    "cohort_context": "CLLmap includes CLL/SLL, monoclonal B-cell lymphocytosis and specimens obtained both before and after treatment. TRACE Explorer excludes MBL and post-treatment specimens, then retains the source-defined day-zero reference RNA specimen when more than one profile exists for a patient.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "cll_broad_2022",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/cll_broad_2022",
+    "publication_citation": "Knisbacher et al. Nature Genetics 2022",
+    "publication_id": "PMID:35927489; DOI:10.1038/s41588-022-01140-w",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "CLLmap",
+      "study_design": "Peripheral-blood CLL/SLL molecular cohort",
+      "endpoint_context": "Overall and failure-free survival measured from the sequenced reference sample",
+      "sample_selection_note": "Eligibility requires CLL, Pre-treatment and Untreated source labels. Four later duplicate RNA profiles are excluded using the pinned specimen timeline: DFCI-5193, JB-0010, DFCI-5170 and DFCI-5053. Their corresponding day-zero reference profiles are CRC-0007, CRC-0009, CRC-0011 and CRC-0020.",
+      "source_join_note": "The source expression matrix contains one RNA column, CRC-0035, whose sample record has no matching patient clinical row. It is not eligible and is reported by the adapter as an unmatched patient-metadata join.",
+      "histology_note": "Twenty-five source MBL profiles are not CLL/SLL and are excluded before endpoint evaluation.",
+      "treatment_note": "Post-treatment specimens are not pooled with the primary untreated cohort.",
+      "overlap_note": "The cohort is independent of TCGA and remains a hematologic study universe in hierarchical pan-cancer analysis."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/cll_broad_2022",
+    "expected_expression_samples": 715,
+    "expected_missing_sample_metadata": 0,
+    "expected_missing_patient_metadata": 1,
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "timeline_specimen": "data_timeline_specimen.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "DISEASE_TYPE",
+    "sample_type_default": "CLL",
+    "sample_role": "Peripheral-blood CLL RNA-seq specimen collected before treatment",
+    "eligibility_rules": [
+      {
+        "field": "sample.DISEASE_TYPE",
+        "include": ["CLL"],
+        "required": true
+      },
+      {
+        "field": "patient.TREATMENT_STATUS",
+        "include": ["Pre-treatment"],
+        "required": true
+      },
+      {
+        "field": "patient.PRIOR_TREATMENT_CATEGORY",
+        "include": ["Untreated"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_ID",
+        "exclude": ["DFCI-5193", "JB-0010", "DFCI-5170", "DFCI-5053"],
+        "required": true
+      }
+    ],
+    "selection_rank_rules": [
+      {
+        "field": "sample.SAMPLE_ID",
+        "order": ["CRC-0007", "CRC-0009", "CRC-0011", "CRC-0020"],
+        "default_rank": 4
+      }
+    ],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE_SAMPLING"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_tpm",
+    "label": "TPM transformed as log2(TPM + 1)",
+    "source_unit": "Transcripts per million (TPM)",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_column_count": 1,
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned CLLmap/DataHub matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to each of the 241 repeated case-insensitive source symbols are excluded rather than aggregated, leaving 54,994 uniquely identified complete symbols.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to source-provided TPM. Values support within-cohort comparisons and are not pooled numerically with other studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of the sequenced reference sample",
+      "event_definition": "Death from any cause",
+      "event_values": ["DECEASED"],
+      "censor_values": ["LIVING"]
+    },
+    {
+      "endpoint_id": "FFS",
+      "standard_code": "FFS",
+      "label": "Source-defined failure-free survival",
+      "time_column": "FFS_MONTHS",
+      "event_column": "FFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of the sequenced reference sample",
+      "event_definition": "Treatment initiation, progression or death as encoded by CLLmap",
+      "event_values": ["1:Failure"],
+      "censor_values": ["0:FailureFree"]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title description">
+  <title id="title">TRACE Explorer</title>
+  <desc id="description">A T continuing into a stepped analytical trace and ending in an evidence node.</desc>
+  <rect width="64" height="64" fill="#182235"/>
+  <path
+    d="M12 17.5H39.5M26 17.5V30H38.5V41.5H50.5"
+    fill="none"
+    stroke="#86D3E2"
+    stroke-width="6"
+    stroke-linecap="square"
+    stroke-linejoin="round"
+  />
+  <rect x="47" y="38" width="8" height="8" rx="1.5" fill="#F4FAFB"/>
+</svg>

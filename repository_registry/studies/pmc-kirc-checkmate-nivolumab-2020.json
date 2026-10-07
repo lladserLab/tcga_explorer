@@ -1,0 +1,180 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-kirc-checkmate-nivolumab-2020",
+    "cancer_code": "KIRC",
+    "name": "CheckMate nivolumab-treated advanced ccRCC cohort (2020)",
+    "description": "Independent advanced clear-cell renal-cell carcinoma cohort with pretreatment bulk tumor RNA sequencing and individual progression-free and overall-survival follow-up during nivolumab therapy.",
+    "cohort_context": "The published CheckMate-009, CheckMate-010 and CheckMate-025 biomarker resource contains 311 expression-linked tumors. TRACE Explorer prespecifies the 181 patients treated with nivolumab and excludes the 130-patient everolimus arm so treatment assignment is not mixed into a prognostic survival analysis.",
+    "source_provider": "PMC public article supplements",
+    "source_accession": "PMC7499153",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7499153/",
+    "publication_citation": "Braun et al. Nature Medicine 2020",
+    "publication_id": "PMID:32472114; PMCID:PMC7499153; DOI:10.1038/s41591-020-0839-y",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-PMC-Public-Supplement-Springer-Nature",
+    "license_url": "https://pmc.ncbi.nlm.nih.gov/about/copyright/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "CheckMate-009, CheckMate-010 and CheckMate-025 prospective clinical trials",
+      "source_data_system": "PMC author manuscript and public article supplements",
+      "library_method": "Pretreatment primary or metastatic ccRCC bulk RNA sequencing; CheckMate-010 and CheckMate-025 reads were aligned with STAR and quantified with RSEM, while the previously published CheckMate-009 TPM matrix was retained",
+      "treatment_context": "Advanced clear-cell renal-cell carcinoma treated with nivolumab",
+      "endpoint_context": "Trial-defined progression-free and overall survival after anti-PD-1 therapy",
+      "sample_selection_note": "The clinical workbook contains 1,006 trial records. Eligibility is fixed before endpoint analysis to nivolumab treatment and a non-missing RNA_ID. All 181 resulting identifiers occur exactly once in the 311-column normalized expression workbook and map to 181 unique subjects: 16 from CheckMate-009, 45 from CheckMate-010 and 120 from the nivolumab arm of CheckMate-025.",
+      "expression_processing_note": "The authors filtered low-quality libraries, upper-quartile normalized TPM to 1,000, applied log2 transformation, corrected four sequencing batches with ComBat and added a constant of 21 to remove correction-induced negative values. TRACE Explorer preserves that supplied scale unchanged.",
+      "expression_curation_note": "The source workbook contains 43,893 expression rows. Twenty-eight feature cells were converted by Excel into date values, including ambiguous duplicate March and September labels. They are excluded rather than guessed, leaving 43,865 exact and case-insensitively unique feature labels.",
+      "endpoint_caveat": "The source columns OS_CNSR and PFS_CNSR encode 1 as an observed event and 0 as censoring. The retained nivolumab cohort contains 123 OS events and 58 OS-censored observations, and 159 PFS events and 22 PFS-censored observations.",
+      "overlap_note": "These prospective CheckMate trials are independent of TCGA-KIRC and do not overlap the active RECA-EU, CPTAC, IMmotion150, FUSCC or Dana-Farber epigenomic-atlas releases.",
+      "license_note": "The author manuscript states that the clinical table and normalized RNA-seq matrix are included as public supplementary data. The files are downloaded and transformed in place with pinned hashes; source and derived expression redistribution remains disabled under PMC and Springer Nature terms."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC7499153",
+    "publication_date": "2020-05-29",
+    "full_text_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7499153/pdf/nihms-1611472.pdf",
+    "full_text_download_mode": "pmc_pow",
+    "full_text_size": 6299817,
+    "full_text_sha256": "c6329a4fec1b4906f843bc857e5bc688929ae821ccd7ed325746d49cbcd4e5a8",
+    "source_license_id": "LicenseRef-PMC-Public-Supplement-Springer-Nature",
+    "clinical_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/7499153/bin/NIHMS1611472-supplement-Table_S1__Clinical_and_immune_phenotype_data_for_the_CheckMate_cohorts.xlsx",
+    "clinical_download_mode": "pmc_pow",
+    "clinical_size": 552488,
+    "clinical_sha256": "614720ed066ecd361e6032370695d948c8d512577b7841e0423982712188c427",
+    "expression_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/7499153/bin/NIHMS1611472-supplement-Table_S4__RNA_expression__normalized_expression_matrix_.xlsx",
+    "expression_download_mode": "pmc_pow",
+    "expression_size": 111186042,
+    "expression_sha256": "11827187d69298004e7eeedfa0cec9503f95f45d410e76473b43757cc7cd2408",
+    "clinical": {
+      "format": "xlsx",
+      "sheet_name": "Clinical_and_Immune_Data",
+      "header_row": 2,
+      "expected_rows": 1006,
+      "sample_id_column": "RNA_ID",
+      "patient_id_column": "SUBJID",
+      "sample_type": "Pretreatment advanced ccRCC tumor",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "Arm",
+          "include": [
+            "NIVOLUMAB"
+          ],
+          "required": true
+        },
+        {
+          "column": "RNA_ID",
+          "exclude": [
+            "NA"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS",
+          "exclude": [
+            "NA"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS_CNSR",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "PFS",
+          "exclude": [
+            "NA"
+          ],
+          "required": true
+        },
+        {
+          "column": "PFS_CNSR",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "RNA_Expression",
+      "header_row": 2,
+      "feature_column": "gene_name",
+      "sample_start_column": 2,
+      "expected_samples": 311,
+      "expected_gene_rows": 43865,
+      "drop_date_formatted_features": true,
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment advanced ccRCC tumor",
+    "sample_role": "Pretreatment primary or metastatic advanced ccRCC tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment advanced ccRCC tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "provided_uq_log2_combat_plus21",
+    "label": "Source-provided upper-quartile normalized log2 ComBat expression",
+    "source_unit": "UQ-normalized log2 TPM, ComBat-corrected and shifted +21",
+    "transform": "identity",
+    "analysis_unit": "Source-provided upper-quartile normalized log2 ComBat expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene labels supplied in the pinned CheckMate Supplementary Table 4 workbook",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Twenty-eight date-formatted feature cells are excluded because their original gene labels cannot be recovered unambiguously. The remaining 43,865 labels are exact and case-insensitively unique, so no aggregation or online remapping is applied.",
+    "stream_source_order": true,
+    "scale_note": "The authors' normalized, batch-corrected matrix is preserved exactly after exclusion of unrecoverable date-formatted feature labels. Values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival during nivolumab therapy",
+      "time_column": "OS",
+      "event_column": "OS_CNSR",
+      "time_unit": "months",
+      "time_origin": "CheckMate trial therapy start",
+      "event_definition": "Death from any cause during trial follow-up",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival during nivolumab therapy",
+      "time_column": "PFS",
+      "event_column": "PFS_CNSR",
+      "time_unit": "months",
+      "time_origin": "CheckMate trial therapy start",
+      "event_definition": "Progression or death during trial follow-up",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

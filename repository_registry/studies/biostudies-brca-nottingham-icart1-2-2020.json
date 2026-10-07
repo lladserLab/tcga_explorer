@@ -1,0 +1,161 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "biostudies-brca-nottingham-icart1-2-2020",
+    "cancer_code": "BRCA",
+    "name": "Nottingham ICART1-2 triple-negative breast cancer cohort",
+    "description": "Independent primary triple-negative breast cancer cohort reconstructed reproducibly from public paired-end bulk RNA-seq reads and linked breast cancer-specific and distant metastasis-free survival.",
+    "cohort_context": "The source release contains one pretreatment FFPE tumor RNA-seq run for each of 60 participants in the Nottingham Primary Breast Carcinoma series. TRACE Explorer retains runs satisfying prespecified Salmon mapping QC and records exclusions without substituting outcome-dependent choices.",
+    "source_provider": "nottingham_biostudies_raw",
+    "source_accession": "E-MTAB-6729",
+    "source_url": "https://www.ebi.ac.uk/biostudies/studies/E-MTAB-6729",
+    "publication_citation": "Ogden et al. Scientific Reports 2020",
+    "publication_id": "PMID:32080212; PMCID:PMC7033213; DOI:10.1038/s41598-020-59514-1",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-EMBL-EBI-Terms-of-Use",
+    "license_url": "https://www.ebi.ac.uk/about/terms-of-use/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Nottingham Primary Breast Carcinoma series / ICART1-2",
+      "source_data_system": "EMBL-EBI BioStudies and ENA",
+      "library_method": "TruSeq RNA Access libraries from pretreatment FFPE primary tumors; paired-end Illumina HiSeq 2500 sequencing",
+      "expression_processing_note": "Public FASTQ pairs are validated against ENA byte counts and MD5 values, quantified with Salmon 1.12.1 against a MashMap-derived partial-decoy GENCODE v27 GRCh38.p10 index, summarized to genes with the pinned GENCODE transcript-to-gene map and transformed to log2(TPM + 1). The processing manifest records executable and reference checksums; both failed complete-genome-decoy index attempts remain in the processing audit.",
+      "sample_selection_note": "The source provides one run per participant. A run is retained only with at least 1,000,000 mapped fragments and a mapping rate of at least 10%; failed participants remain visible in the quantification ledger.",
+      "endpoint_note": "The source SDRF supplies individual BCSS and DMFS time and status from diagnosis. Death from breast cancer and distant metastasis are their respective events. Three records have source DMFS time equal to zero, including two reported events; TRACE Explorer preserves them in the audit but excludes them from the DMFS risk set rather than inventing a positive time.",
+      "overlap_note": "Fifty-two of 60 participants can be reconciled to E-MTAB-6603; only eight are an independent patient expansion. The two releases must not be pooled as independent cohorts.",
+      "redistribution_note": "TRACE Explorer records all source and processing checksums but conservatively disables redistribution of the source reads and derived matrix under EMBL-EBI terms."
+    }
+  },
+  "source": {
+    "provider": "nottingham_biostudies_raw",
+    "accession": "E-MTAB-6729",
+    "layout": "icart1_2_bcss_dmfs",
+    "ena_study_accession": "PRJEB26487",
+    "publication_date": "2020-02-18",
+    "expected_source_participants": 60,
+    "expected_bcss_events": 17,
+    "expected_dmfs_events": 18,
+    "salmon_version": "1.10.3",
+    "salmon_threads": 8,
+    "min_mapped_fragments": 1000000,
+    "min_mapping_rate": 10.0,
+    "prebuilt_salmon_reference": {
+      "method": "refgenie_salmon_partial_sa_index_v1",
+      "provenance_url": "http://refgenomes.databio.org/v3/assets/2230c535660fb4774114bfa966a62f823fdb6d21acf138d4/salmon_partial_sa_index?tag=default",
+      "build_log_url": "http://refgenomes.databio.org/v3/assets/log/2230c535660fb4774114bfa966a62f823fdb6d21acf138d4/salmon_partial_sa_index?tag=default",
+      "archive": {
+        "url": "http://awspds.refgenie.databio.org/refgenomes.databio.org/2230c535660fb4774114bfa966a62f823fdb6d21acf138d4/salmon_partial_sa_index__default.tgz",
+        "name": "salmon_partial_sa_index__default.tgz",
+        "size": 989208636,
+        "sha256": "614100965b346515d3b8d44812784ebb0bc92b2aab68c41ad8baffbc96ac88bd",
+        "published_md5": "d16df614c5e8e3911182c7bae1a4e483"
+      },
+      "archive_root": "default",
+      "gentrome_name": "gentrome.fa",
+      "refgenie_genome_digest": "2230c535660fb4774114bfa966a62f823fdb6d21a",
+      "refgenie_asset_digest": "7b271a9c8383046370ae882600b3c848",
+      "genome_assembly": "GRCh38.p12",
+      "genome_accession": "GCA_000001405.27",
+      "annotation_source": "Ensembl",
+      "built_salmon_version": "1.2.1",
+      "index_version": 5,
+      "expected_tx2gene_rows": 189154,
+      "expected_decoys": 47,
+      "expected_first_decoy_index": 177412,
+      "expected_kmers": 161393998
+    },
+    "files": {
+      "idf": {
+        "url": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-6729/E-MTAB-6729.idf.txt",
+        "name": "E-MTAB-6729.idf.txt",
+        "size": 5986,
+        "sha256": "8aaca74a2156dea484ace18553d10bc7ddc3a189877360addafbac92f6a902fe"
+      },
+      "sdrf": {
+        "url": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-6729/E-MTAB-6729.sdrf.txt",
+        "name": "E-MTAB-6729.sdrf.txt",
+        "size": 63897,
+        "sha256": "a5bbfd6175207ab7129e685e496384cf67567dbc058ac362c0c77f0ff567f7ab"
+      },
+      "ena_report": {
+        "url": "https://www.ebi.ac.uk/ena/portal/api/search?result=read_run&query=study_accession%3D%22PRJEB26487%22&fields=run_accession%2Cstudy_accession%2Csample_accession%2Cexperiment_accession%2Clibrary_layout%2Cread_count%2Cbase_count%2Cfastq_ftp%2Cfastq_md5%2Cfastq_bytes%2Csubmitted_ftp%2Csubmitted_md5%2Csubmitted_bytes&format=tsv&limit=0",
+        "name": "ERP108478-ena-full.tsv",
+        "size": 31866,
+        "sha256": "fd5244d008dedd6379f81aedc693cd4024197b3ff53e1f39531f4f15ad8c494a",
+        "canonicalizer": "ena_read_run_tsv"
+      },
+      "license": {
+        "url": "https://www.ebi.ac.uk/about/terms-of-use/",
+        "name": "EMBL-EBI-terms-of-use.html",
+        "size": 21379,
+        "sha256": "29b7d5a384dd7e9520003fbf6b7a9a3c255da618a6c509bb76da84b0e9fe0529"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary triple-negative breast cancer",
+    "sample_role": "Pretreatment primary-tumor FFPE bulk RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary triple-negative breast cancer"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "nottingham_salmon_log2_tpm",
+    "label": "Nottingham Salmon log2(TPM + 1)",
+    "source_unit": "Salmon gene-level TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "feature_column_count": 1,
+    "mapping_source": "GENCODE v27 GRCh38.p10 annotation pinned in the quantification manifest",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Canonical symbols represented by multiple GENCODE gene identifiers are excluded rather than combined without a unique gene-level identity.",
+    "stream_source_order": true,
+    "scale_note": "TPM values are reconstructed with one pinned pipeline and are suitable for within-cohort analysis. TRACE Explorer applies log2(TPM + 1) once after patient and run QC."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "BCSS",
+      "standard_code": "BCSS",
+      "label": "Breast cancer-specific survival",
+      "time_column": "BCSS_MONTHS",
+      "event_column": "BCSS_EVENT",
+      "time_unit": "months",
+      "time_origin": "Initial breast cancer diagnosis",
+      "event_definition": "Death from breast cancer; unknown-cause deaths and living participants are censored",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "DMFS",
+      "standard_code": "DMFS",
+      "label": "Distant metastasis-free survival",
+      "time_column": "DMFS_MONTHS",
+      "event_column": "DMFS_EVENT",
+      "time_unit": "months",
+      "time_origin": "Initial breast cancer diagnosis",
+      "event_definition": "First distant metastasis",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

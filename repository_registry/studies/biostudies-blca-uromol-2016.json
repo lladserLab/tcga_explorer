@@ -1,0 +1,143 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "biostudies-blca-uromol-2016",
+    "cancer_code": "BLCA",
+    "name": "UROMOL early-stage urothelial carcinoma cohort (2016)",
+    "description": "Independent multicenter urothelial-bladder-cancer cohort with public gene-level bulk RNA-seq FPKM and individual progression-free follow-up.",
+    "cohort_context": "The UROMOL study profiled 476 predominantly non-muscle-invasive urothelial bladder tumors collected across European clinical centers. TRACE Explorer retains the 462 participants with positive follow-up and defines an event as pathological progression to muscle-invasive (T2+) and/or metastatic disease. Fourteen zero-time censored records remain in the source audit files but are excluded from survival analysis.",
+    "source_provider": "biostudies_arrayexpress",
+    "source_accession": "E-MTAB-4321",
+    "source_url": "https://www.ebi.ac.uk/biostudies/studies/E-MTAB-4321",
+    "publication_citation": "Hedegaard et al. Cancer Cell 2016",
+    "publication_id": "PMID:27321955; DOI:10.1016/j.ccell.2016.05.004",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-EMBL-EBI-Terms-of-Use",
+    "license_url": "https://www.ebi.ac.uk/about/terms-of-use/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "UROMOL",
+      "source_data_system": "EMBL-EBI BioStudies / ArrayExpress",
+      "library_method": "Ribo-Zero total-RNA depletion, strand-specific ScriptSeq paired-end RNA-seq on Illumina HiSeq 2000; TopHat2/Bowtie2 hg19 alignment and Cuffnorm gene-level FPKM",
+      "curation_note": "The pinned SDRF links one RNA profile to each source participant and directly provides progression-free time and progression-to-T2+ status. Follow-up starts at surgery of the analyzed tumor and is censored at the latest cystoscopy, cystectomy, death or discontinued follow-up. The source matrix contains 43,204 gene rows; one truncated SRXN1 row is excluded, and symbols represented by multiple Ensembl identifiers are excluded by the shared repository mapping contract. EMBL-EBI terms add no restrictions beyond data-owner rights; redistribution is disabled conservatively."
+    }
+  },
+  "source": {
+    "provider": "biostudies_arrayexpress",
+    "accession": "E-MTAB-4321",
+    "layout": "processed_fpkm_matrix_sdrf",
+    "publication_date": "2016-06-16",
+    "expected_source_samples": 476,
+    "expected_endpoint_complete_samples": 462,
+    "expected_events": 31,
+    "expected_censored": 431,
+    "expected_source_gene_rows": 43204,
+    "expected_zero_time_source_names": [
+      "U0175",
+      "U0178",
+      "U0186",
+      "U0193",
+      "U0350",
+      "U0399",
+      "U0796",
+      "U0835",
+      "U1061",
+      "U1089",
+      "U1151",
+      "U1155",
+      "U1158",
+      "U1191"
+    ],
+    "expected_malformed_expression_rows": [
+      {
+        "source_line": 13190,
+        "feature_id": "ENSG00000172070.5",
+        "gene_symbol": "SRXN1",
+        "observed_columns": 454,
+        "expected_columns": 480
+      }
+    ],
+    "files": {
+      "idf": {
+        "url": "https://ftp.ebi.ac.uk/biostudies/fire/E-MTAB-/321/E-MTAB-4321/Files/E-MTAB-4321.idf.txt",
+        "name": "E-MTAB-4321.idf.txt",
+        "size": 11238,
+        "sha256": "4754c023b5f1a37370ff2e13298e4ac15b3161cf49fde0750fea50a934438b8b"
+      },
+      "sdrf": {
+        "url": "https://ftp.ebi.ac.uk/biostudies/fire/E-MTAB-/321/E-MTAB-4321/Files/E-MTAB-4321.sdrf.txt",
+        "name": "E-MTAB-4321.sdrf.txt",
+        "size": 274177,
+        "sha256": "0ecd8659bf122a4d2b3a547699b9f757f087b4bb07c3997eefd3b459e230d75b"
+      },
+      "expression": {
+        "url": "https://ftp.ebi.ac.uk/biostudies/fire/E-MTAB-/321/E-MTAB-4321/Files/UROMOL_gene_fpkm_gtf.txt",
+        "name": "UROMOL_gene_fpkm_gtf.txt",
+        "size": 127096686,
+        "sha256": "1526f3048c17a6c794e388a033649a9d315e4b2f0c12223a046efd1fed9e9c8a"
+      },
+      "license": {
+        "url": "https://www.ebi.ac.uk/about/terms-of-use/",
+        "name": "EMBL-EBI-terms-of-use.html",
+        "size": 21379,
+        "sha256": "29b7d5a384dd7e9520003fbf6b7a9a3c255da618a6c509bb76da84b0e9fe0529"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary urothelial bladder tumor",
+    "sample_role": "Primary or recurrent urothelial bladder tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary urothelial bladder tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "biostudies_log2_fpkm",
+    "label": "BioStudies UROMOL log2(FPKM + 1)",
+    "source_unit": "Cuffnorm gene-level FPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GENCODE hg19 gene annotation embedded in the pinned UROMOL matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Canonical symbols represented by multiple Ensembl identifiers are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer validates non-negative finite source FPKM values and applies log2(FPKM + 1) after restricting the matrix to endpoint-complete participants."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival to T2+ or metastasis",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_EVENT",
+      "time_unit": "months",
+      "time_origin": "Surgery of the analyzed tumor",
+      "event_definition": "Pathologically verified progression to muscle-invasive (T2+) and/or metastatic disease",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

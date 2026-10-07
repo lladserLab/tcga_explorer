@@ -4,30 +4,25 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.importer import ensure_gene_index
+from app.gene_symbols import (
+    GENE_ALIASES,
+    canonical_gene_symbol,
+    gene_symbol_resolution,
+    normalize_gene_symbol,
+)
 from app.models import GeneIndex
 
 
-GENE_ALIASES = {
-    "P53": "TP53",
-    "BCC7": "TP53",
-    "LFS1": "TP53",
-    "HER2": "ERBB2",
-    "HER-2": "ERBB2",
-    "NEU": "ERBB2",
-    "C-ERBB-2": "ERBB2",
-    "C-MYC": "MYC",
-    "BHLHE39": "MYC",
-    "P16": "CDKN2A",
-    "INK4A": "CDKN2A",
-    "P14ARF": "CDKN2A",
-    "MLL": "KMT2A",
-    "KIAA1809": "KMT2A",
-    "BRAF1": "BRAF",
-    "HER1": "EGFR",
-    "ERBB": "EGFR",
-    "ERBB1": "EGFR",
-    "CD340": "ERBB2",
-}
+# Re-export the pure helpers from this historical module so existing public
+# imports remain valid while schema code can avoid importing database models.
+__all__ = [
+    "GENE_ALIASES",
+    "canonical_gene_symbol",
+    "gene_symbol_resolution",
+    "normalize_gene_symbol",
+    "resolve_gene_symbol",
+    "gene_exists",
+]
 
 
 def resolve_gene_symbol(db: Session, tcga_data_dir, cohort_id: str, symbol: str) -> dict:

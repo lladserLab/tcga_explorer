@@ -1,0 +1,153 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-blca-unc-gse176307-2021",
+    "cancer_code": "BLCA",
+    "name": "UNC metastatic bladder-cancer immunotherapy cohort (GSE176307)",
+    "description": "Independent real-world metastatic bladder-cancer cohort with pretreatment bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study identified 103 patients with metastatic urothelial cancer treated with immune checkpoint blockade at the University of North Carolina from 2014 to 2018. GEO exposes RNA profiles for 89 patients, with one patient sequenced twice. TRACE Explorer retains one profile for each of the 78 patients whose source-coded primary tumor location is bladder and excludes 11 upper-tract urothelial-cancer patients.",
+    "source_provider": "geo",
+    "source_accession": "GSE176307",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE176307",
+    "publication_citation": "Rose et al. British Journal of Cancer 2021",
+    "publication_id": "PMID:34294892; PMCID:PMC8548561; DOI:10.1038/s41416-021-01488-6",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "University of North Carolina real-world metastatic urothelial-cancer cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "OmniSeq Comprehensive assay on Ion Torrent S5 XL",
+      "library_method": "RNA extracted from macrodissected FFPE tumor sections, prepared with SureSelect XT RNA Direct and quantified against GRCh38 v22 using the source STAR/Salmon pipeline",
+      "endpoint_context": "Source-provided overall survival in days among patients treated with immune checkpoint blockade",
+      "endpoint_caveat": "The GEO sample records provide individual OS time and vital status but do not state the exact temporal origin. TRACE Explorer therefore exposes source-defined OS without claiming a diagnosis-, biopsy- or treatment-anchored definition.",
+      "clinical_evidence_note": "The pinned GEO family SOFT supplies individual outcome and covariate fields. The pinned submitter key deterministically links BACI patient identifiers to the RS identifiers used by the updated Salmon TPM matrix.",
+      "sample_selection_note": "GEO contains two RNA libraries for BACI165. TRACE Explorer retains the submitter-designated BACI165_1 profile, linked to RS-03239001, and excludes BACI165_2 before clinical attachment. Every other retained patient contributes one profile.",
+      "disease_scope_note": "Eligibility requires the source field primary tumor location to equal Bladder. Eleven ureter or renal-pelvis primaries are excluded because upper-tract urothelial carcinoma is not the TCGA-BLCA primary-site cohort.",
+      "source_update_note": "GEO replaced its earlier expression matrix on 12 July 2023. This release pins the replacement GSE176307_salmon_tpm_gene.matrix.tsv file by byte size and SHA-256 digest.",
+      "overlap_note": "This single-center UNC real-world cohort is distinct from TCGA-BLCA and the IMvigor210 trial cohort already represented in TRACE Explorer. Releases remain separate and are never pooled by default.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE176307",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE176nnn/GSE176307/suppl/GSE176307_salmon_tpm_gene.matrix.tsv.gz",
+    "expression_size": 10131698,
+    "expression_sha256": "c7ebf750cc6e6ba967bba9a733c47572a53daaaff9fcf041e5ab4641ef615894",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE176nnn/GSE176307/soft/GSE176307_family.soft.gz",
+    "soft_size": 13609,
+    "soft_sha256": "ea242fbb98aa104c384a97a3d1f0baaa938031e91a5a3872b065982d73b1bf72",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Patient sample (?!BACI165_2$)BACI[0-9]+(?:_1)?",
+    "expected_primary_samples": 89,
+    "sample_characteristic_filters": [
+      {
+        "key": "primary tumor location",
+        "include": [
+          "Bladder"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 78,
+    "expected_endpoint_complete_samples": 78,
+    "expected_events": 48,
+    "expected_censored": 30,
+    "expected_expression_columns": 78,
+    "expected_expression_gene_rows": 58387,
+    "expected_normalized_expression_gene_rows": 58387,
+    "patient_id_characteristic": "clinical sample id",
+    "time_characteristic": "overall survival",
+    "event_characteristic": "alive",
+    "event_value_map": {
+      "Yes": 0,
+      "No": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "gender",
+    "race_characteristic": "race",
+    "expression_sample_characteristic": "expression sample id",
+    "expression_sample_aliases": {
+      "RS-03239001,RS-03238964": "RS-03239001"
+    },
+    "sample_type": "Advanced Urothelial Tumor",
+    "clinical": {
+      "evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE176nnn/GSE176307/suppl/GSE176307_BACI_Omniseq_Sample_Name_Key_submitted_GEO_v2.csv.gz",
+      "evidence_size": 530,
+      "evidence_sha256": "cfe452ec72c99f2c84216bb25fe291b4c78028e53b8a8189acbd5c9ed7db919b",
+      "evidence_format": "csv.gz",
+      "header_row": 1,
+      "record_id_column": "Sample ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?:Patient sample )?(BACI[0-9]+)(?:_1)?",
+      "expected_records": 89,
+      "expected_matched_records": 89,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Sample ID": "clinical sample id",
+        "Omniseq_RS_ID (RNAseq)": "expression sample id"
+      }
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Advanced Urothelial Tumor",
+    "sample_role": "Pretreatment archival metastatic-urothelial-cancer tumor from a patient whose primary tumor location is bladder",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Advanced Urothelial Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO Salmon TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned replacement Salmon TPM matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 58,387 non-empty source symbols are case-insensitively unique, so no feature collapse or exclusion is required.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer selects the 78 endpoint-linked bladder-primary columns from the updated source Salmon TPM matrix and applies log2(TPM + 1). The source matrix contains two additional RS columns not represented in the submitter key; they are outside the deterministic clinical linkage and are not imported."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Not specified by the source",
+      "event_definition": "Death from any cause as encoded by alive = No; alive = Yes is censored",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

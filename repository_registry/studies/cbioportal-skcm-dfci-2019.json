@@ -1,0 +1,97 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-skcm-dfci-2019",
+    "cancer_code": "SKCM",
+    "name": "Anti-PD-1-treated metastatic melanoma (DFCI, 2019)",
+    "description": "Independent metastatic melanoma cohort with pretreatment bulk RNA-seq and survival measured from anti-PD-1 initiation.",
+    "cohort_context": "Treatment-selected metastatic melanoma; pretreatment biopsies from patients subsequently treated with PD-1 blockade.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "mel_dfci_2019",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/mel_dfci_2019",
+    "publication_citation": "Liu et al. Nature Medicine 2019",
+    "publication_id": "PMID:31792460; DOI:10.1038/s41591-019-0654-5",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Pretreatment biomarker cohort for anti-PD-1 therapy",
+      "treatment_context": "PD-1 immune-checkpoint blockade",
+      "publication_rna_seq_patients": 121
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/mel_dfci_2019",
+    "files": {
+      "expression": "data_mrna_seq_tpm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_tpm.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "BIOPSY_SITE_CATEG",
+    "sample_type_default": "Pretreatment metastatic melanoma biopsy",
+    "sample_role": "Pretreatment metastatic melanoma biopsy used for bulk RNA sequencing",
+    "selection_rank": 0,
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["MEL"],
+        "required": true
+      },
+      {
+        "field": "patient.BIOPSY_CONTEXT",
+        "include": ["Pre-PD1", "Pre-Ipi", "On-Ipi"],
+        "required": true
+      }
+    ],
+    "stage_fields": ["patient.M_STAGE"],
+    "gender_fields": ["patient.SEX"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(TPM + 1); different identifiers are never merged implicitly.",
+    "scale_note": "The DataHub molecular-profile metadata identifies the frozen source values as RNA-seq TPM. TRACE Explorer applies log2(TPM + 1) after requiring finite non-negative values. Biopsy-context labels relative to prior ipilimumab are retained when the specimen still predates anti-PD-1; the single On-PD1 transcriptome is excluded."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "First anti-PD-1 administration",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "First anti-PD-1 administration",
+      "event_definition": "Progression or death as encoded by the source PFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

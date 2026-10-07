@@ -1,0 +1,70 @@
+{
+  "name": "trace-explorer-desktop",
+  "version": "0.1.7",
+  "description": "Local transcriptomic analysis with bundled Python and R",
+  "main": "main.cjs",
+  "author": "Sergio Hern\u00e1ndez-Galaz",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dist:windows": "electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "org.cienciavida.trace-explorer.desktop",
+    "productName": "TRACE Explorer",
+    "asar": true,
+    "directories": {
+      "output": "../build/installers"
+    },
+    "files": [
+      "main.cjs",
+      "loading.html",
+      "package.json",
+      "preload.cjs",
+      "data-actions.cjs",
+      "downloads.cjs",
+      "data.html",
+      "data.css",
+      "data.cjs",
+      "icons/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../build/runtime/windows",
+        "to": "runtime",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "TRACE-Explorer-Setup-${version}-windows-x64.exe",
+      "icon": "icons/trace-desktop.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": "icons/trace-desktop.ico",
+      "uninstallerIcon": "icons/trace-desktop.ico"
+    }
+  }
+}

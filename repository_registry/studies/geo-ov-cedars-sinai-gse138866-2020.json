@@ -1,0 +1,156 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-ov-cedars-sinai-gse138866-2020",
+    "cancer_code": "OV",
+    "name": "Cedars-Sinai HGSOC omental-metastasis cohort (GSE138866)",
+    "description": "Independent high-grade serous ovarian-cancer cohort with bulk RNA sequencing of omental metastases and individual overall-survival follow-up.",
+    "cohort_context": "The source cohort contains FFPE omental metastases collected from 130 patients during primary cytoreductive surgery. The cohort represents advanced high-grade serous ovarian cancer rather than untreated primary ovarian lesions, so absolute survival and expression distributions should be interpreted in that clinical context.",
+    "source_provider": "geo",
+    "source_accession": "GSE138866",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE138866",
+    "publication_citation": "Hu et al. npj Precision Oncology 2024",
+    "publication_id": "PMID:38360876; PMCID:PMC10869703; DOI:10.1038/s41698-024-00523-y",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Cedars-Sinai Medical Center ovarian-cancer cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq X Ten",
+      "library_method": "SMARTer Stranded Total RNA-Seq v2 from FFPE omental metastasis",
+      "endpoint_context": "Source-released assumed overall survival",
+      "redistribution_note": "The GEO-processed matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "curation_note": "The pinned workbook has one expression column for each of the 130 GEO sample titles. One death recorded at zero months is excluded before endpoint QC, leaving 129 patients with 98 deaths and 31 censored observations. Twenty-seven feature cells that Excel converted to March or September dates are repaired to their MARCH or SEPT symbols. Every row belonging to one of 66 case-insensitive duplicated symbols is excluded rather than averaged, leaving 26,988 unambiguous supplied symbols."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE138866",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138866/suppl/GSE138866_130_Omental_Mets_MedGenome_normalized.xlsx",
+    "expression_size": 46991395,
+    "expression_sha256": "bdbf4b7d5d43ecb026310793492af332b13ab807388d081fee24dff8d6fb9817",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138866/soft/GSE138866_family.soft.gz",
+    "soft_size": 12226,
+    "soft_sha256": "4c7451683a4f35315e29714c9c4bbbb48b9174493fdff7bb6141cd83e1c9e7ce",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "^[0-9]+$",
+    "expected_primary_samples": 130,
+    "expected_endpoint_complete_samples": 129,
+    "expected_events": 98,
+    "expected_censored": 31,
+    "expected_expression_columns": 129,
+    "expected_expression_gene_rows": 26988,
+    "expected_feature_replacements": 27,
+    "expected_duplicate_feature_symbols": 66,
+    "expected_excluded_duplicate_feature_rows": 406,
+    "time_characteristic": "assumed overall survival (months)",
+    "event_characteristic": "patient survival",
+    "event_value_map": {
+      "DWD-Died with Disease": 1,
+      "Alive": 0
+    },
+    "stage_characteristic": "cancer stage",
+    "grade_characteristic": "tumor grade",
+    "age_characteristic": "age at diagnosis",
+    "race_characteristic": "race",
+    "sex_default": "Female",
+    "sample_type": "Metastatic Tumor",
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "Sheet1",
+      "header_row": 1,
+      "feature_column": "Gene",
+      "sample_start_column": 2,
+      "feature_replacements": {
+        "2019-03-01T00:00:00": "MARCH1",
+        "2019-03-02T00:00:00": "MARCH2",
+        "2019-03-03T00:00:00": "MARCH3",
+        "2019-03-04T00:00:00": "MARCH4",
+        "2019-03-05T00:00:00": "MARCH5",
+        "2019-03-06T00:00:00": "MARCH6",
+        "2019-03-07T00:00:00": "MARCH7",
+        "2019-03-08T00:00:00": "MARCH8",
+        "2019-03-09T00:00:00": "MARCH9",
+        "2019-03-10T00:00:00": "MARCH10",
+        "2019-03-11T00:00:00": "MARCH11",
+        "2019-09-01T00:00:00": "SEPT1",
+        "2019-09-02T00:00:00": "SEPT2",
+        "2019-09-03T00:00:00": "SEPT3",
+        "2019-09-04T00:00:00": "SEPT4",
+        "2019-09-05T00:00:00": "SEPT5",
+        "2019-09-06T00:00:00": "SEPT6",
+        "2019-09-07T00:00:00": "SEPT7",
+        "2019-09-08T00:00:00": "SEPT8",
+        "2019-09-09T00:00:00": "SEPT9",
+        "2019-09-10T00:00:00": "SEPT10",
+        "2019-09-11T00:00:00": "SEPT11",
+        "2019-09-12T00:00:00": "SEPT12",
+        "2019-09-14T00:00:00": "SEPT14",
+        "2019-09-15T00:00:00": "SEPT15"
+      },
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Metastatic Tumor",
+    "sample_role": "FFPE omental metastasis collected during primary cytoreductive surgery",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Metastatic Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "published_deseq2_normalized_counts",
+    "label": "Published DESeq2-normalized expression",
+    "source_unit": "Source-provided DESeq2-normalized HTSeq counts",
+    "transform": "identity",
+    "analysis_unit": "Source-provided DESeq2-normalized expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene labels supplied in the pinned GSE138866 workbook",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to one of the 66 case-insensitive duplicated source labels are excluded before publication; no implicit aggregation is performed.",
+    "stream_source_order": true,
+    "scale_note": "GEO states that STAR-aligned HTSeq counts were normalized with DESeq2. TRACE Explorer preserves the published numeric values without inferring TPM, library-size comparability or a log scale. Values support only within-cohort relative analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-released overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Diagnosis, as implied by the released GEO field",
+      "event_definition": "Death with disease according to the released GEO patient-survival field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

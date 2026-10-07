@@ -1,0 +1,123 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-uab-gse79668-2016",
+    "cancer_code": "PAAD",
+    "name": "UAB resected pancreatic adenocarcinoma cohort (GSE79668)",
+    "description": "Independent pancreatic adenocarcinoma cohort with bulk RNA sequencing of resected tumors and individual overall-survival follow-up.",
+    "cohort_context": "The release contains 51 clinically annotated pancreatic adenocarcinomas collected from patients undergoing surgical resection. It is the tissue subseries of GSE79670; the fourteen pancreatic cell lines in GSE79669 are excluded. The patient cohort is independent of TCGA-PAAD and of the ICGC PACA-AU/PACA-CA validation options.",
+    "source_provider": "geo",
+    "source_accession": "GSE79668",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE79668",
+    "publication_citation": "Kirby et al. Molecular Oncology 2016",
+    "publication_id": "PMID:27282075; PMCID:PMC5423196; DOI:10.1016/j.molonc.2016.05.004",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "University of Alabama at Birmingham resected pancreatic adenocarcinoma cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Paired-end bulk RNA-seq from resected pancreatic adenocarcinoma tissue",
+      "endpoint_context": "Overall survival from diagnosis",
+      "redistribution_note": "The GEO count matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "curation_note": "All 51 tumor records have positive survival time and explicit vital status; 45 are deaths and six are censored. Matrix labels omit sequencing-run suffixes present in GEO titles, so a pinned regular-expression rule removes only an optional _T plus the terminal _SL run identifier. Library sizes are calculated across all 48,956 released count rows before log2(CPM + 1). The pinned GENCODE v9 annotation maps every Ensembl row; 334 symbols represented by more than one Ensembl row are excluded rather than combined, leaving 44,188 unambiguous genes."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE79668",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE79nnn/GSE79668/suppl/GSE79668_51_tumors_sharedgenecounts.txt.gz",
+    "expression_size": 3588753,
+    "expression_sha256": "721cd3a0d1155375ea054f410f65497568284135f32ad59157d62a564cba54f8",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE79nnn/GSE79668/soft/GSE79668_family.soft.gz",
+    "soft_size": 4641,
+    "soft_sha256": "f8f1b782a1808e6ecf454d84ed77ccf9247c7555c19d8a24b17a1465a0b06e18",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "T_.+_SL[0-9]+",
+    "expected_primary_samples": 51,
+    "expected_endpoint_complete_samples": 51,
+    "expected_events": 45,
+    "expected_censored": 6,
+    "expected_expression_columns": 51,
+    "expected_expression_gene_rows": 48956,
+    "time_characteristic": "survival time (days)",
+    "event_characteristic": "patient survival status",
+    "event_value_map": {
+      "dead": 1,
+      "alive": 0
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "patient gender",
+    "race_characteristic": "patient race",
+    "expression_sample_id_pattern": "(?:_T)?_SL[0-9]+$",
+    "expression_sample_id_replacement": "",
+    "expression_feature_id_pattern": ".*_(ENSG[0-9]+(?:\\.[0-9]+)?)$",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "Gene_EnsembleID",
+      "sample_start_column": 2
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_9/gencode.v9.annotation.gtf.gz",
+      "name": "gencode.v9.annotation.gtf.gz",
+      "size": 24655352,
+      "sha256": "3d2b73c47bc9725c585fb03896705d787106f35d31080fa8af9fff7ff5848ff6"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Surgically resected pancreatic adenocarcinoma tissue",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE release 9 hg19 annotation declared by the source study",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained sample library size across all 48,956 pinned source rows, converts counts to CPM and applies log2(CPM + 1). Values are cohort-normalized and should not be compared directly with expression units from other releases."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

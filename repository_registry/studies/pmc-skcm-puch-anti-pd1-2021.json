@@ -1,0 +1,104 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-skcm-puch-anti-pd1-2021",
+    "cancer_code": "SKCM",
+    "name": "PUCH anti-PD-1 melanoma cohort (2021)",
+    "description": "Independent advanced-melanoma cohort with pretreatment tumor bulk RNA sequencing and individual overall-survival follow-up during anti-PD-1 therapy.",
+    "cohort_context": "The Peking University Cancer Hospital validation cohort contains 60 advanced-melanoma patients treated with anti-PD-1. The public reproducibility files expose pretreatment tumor expression for 55 of those patients and source-defined overall survival for all 60.",
+    "source_provider": "europe_pmc",
+    "source_accession": "PMC7862369; HRA000524",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7862369/",
+    "publication_citation": "Cui et al. NPJ Genomic Medicine 2021",
+    "publication_id": "PMID:33542239; PMCID:PMC7862369; DOI:10.1038/s41525-021-00169-w",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-PUCH-Article-CC-BY-4.0-Public-Data",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Peking University Cancer Hospital anti-PD-1 melanoma validation cohort",
+      "source_data_system": "Europe PMC article and author-published GitHub reproducibility repository",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Whole-exome-capture bulk RNA sequencing of pretreatment FFPE tumor, aligned to GRCh37 with STAR and quantified at gene level with RSEM",
+      "treatment_context": "Advanced melanoma treated with anti-PD-1",
+      "endpoint_context": "Source-provided overall survival during the anti-PD-1 study",
+      "endpoint_caveat": "The public survival file supplies exact OS duration in months and vital status but does not name the clinical time origin. TRACE Explorer preserves source-defined OS without inferring whether time starts at treatment initiation, enrollment or another study landmark.",
+      "sample_selection_note": "The clinical and survival files contain 60 unique pretreatment records. Five identifiers have no column in the pinned expression matrix and are excluded before endpoint evaluation, leaving 55 one-profile-per-patient records with 10 deaths and 45 censored observations.",
+      "expression_processing_note": "The publication reports gene-level FPKM followed by log2 transformation, and the public loader describes the released matrices as quantile-normalized and log2-transformed. TRACE Explorer preserves the 20,293-row supplied matrix unchanged and does not infer an undocumented offset or repeat normalization.",
+      "overlap_note": "PUCH is a newly generated Chinese institutional validation cohort and is distinct from TCGA-SKCM and the Riaz, Gide, Hugo, Liu and Van Allen melanoma cohorts also distributed in the authors' reproducibility repository.",
+      "license_note": "The CC BY 4.0 article explicitly identifies the GitHub repository as the public location of code and data needed to reproduce the work. Because the repository itself has no separate LICENSE file, TRACE Explorer downloads and transforms the pinned files in place but disables redistribution of source and derived expression files."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC7862369",
+    "publication_date": "2021-02-04",
+    "clinical_url": "https://raw.githubusercontent.com/xmuyulab/ims_gene_signature/275be3c340e4cba698d085bc1a875b92dd45602c/data/mel_puch_survival_data.csv",
+    "clinical_size": 1407,
+    "clinical_sha256": "afd30bd0027a404de3dcb16832e03c2828b837b5d018c5d866a2ed39559d0ada",
+    "expression_url": "https://raw.githubusercontent.com/xmuyulab/ims_gene_signature/275be3c340e4cba698d085bc1a875b92dd45602c/data/mel_puch_exp_data.csv",
+    "expression_size": 16844340,
+    "expression_sha256": "c0a0899b754d22de017e145156ab43acaa342f124dd9e19b1d8ec5add44a5065",
+    "clinical": {
+      "format": "csv",
+      "expected_rows": 60,
+      "header_name_overrides": {
+        "1": "sample_id"
+      },
+      "sample_id_column": "sample_id",
+      "patient_id_column": "sample_id",
+      "require_expression_sample": true,
+      "sample_type": "Pretreatment melanoma tumor"
+    },
+    "expression": {
+      "layout": "simple",
+      "delimiter": ",",
+      "expected_samples": 55,
+      "expected_gene_rows": 20293
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment melanoma tumor",
+    "sample_role": "Pretreatment advanced-melanoma FFPE tumor bulk RNA profile",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment melanoma tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "provided_quantile_log2_expression",
+    "label": "Source-provided quantile-normalized log2 expression",
+    "source_unit": "Quantile-normalized log2 gene expression",
+    "transform": "identity",
+    "analysis_unit": "Source-provided quantile-normalized log2 expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 20,293 released feature labels are non-empty and case-insensitively unique, so no aggregation or online remapping is applied.",
+    "stream_source_order": true,
+    "scale_note": "The authors' reproducibility matrix is already quantile-normalized and log2-transformed. Values are preserved exactly and are intended only for within-cohort analyses."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-defined overall survival",
+      "time_column": "OS",
+      "event_column": "status",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by the source status field",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

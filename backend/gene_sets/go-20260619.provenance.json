@@ -1,0 +1,67 @@
+{
+  "creator": "Gene Ontology Consortium",
+  "generation": {
+    "active_ontology_terms": 38245,
+    "annotation_policy": "All evidence codes retained; NOT-qualified, non-human, unknown and obsolete-term rows excluded; direct annotations propagated to self and active ancestors.",
+    "gaf_stats": {
+      "accepted_rows": 906876,
+      "date_generated": "2026-06-18 08:16",
+      "excluded_nonhuman_rows": 0,
+      "excluded_not_rows": 1497,
+      "excluded_unknown_or_obsolete_term_rows": 0,
+      "gaf_version": "2.2",
+      "go_version": "http://purl.obolibrary.org/obo/go/releases/2026-06-15/extensions/go-plus.ofn",
+      "rows": 908373
+    },
+    "gene_identifier": "Uppercase UniProtKB human GAF DB Object Symbol (HGNC-compatible gene symbol)",
+    "generator": "scripts/build_go_gsea_collections.py",
+    "minimum_raw_genes": 5,
+    "safe_parent_relationships": [
+      "is_a",
+      "part_of"
+    ]
+  },
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "ontology_version": "2026-06-15",
+  "outputs": {
+    "biological_process": {
+      "file": "go-bp-20260619.gmt",
+      "gene_set_count": 8195,
+      "sha256": "004ae0ebcbe4d7f3c76744aaf3c53ebc8e4a35006070c452dae72f145d5c74b6",
+      "unique_gene_count": 31548
+    },
+    "cellular_component": {
+      "file": "go-cc-20260619.gmt",
+      "gene_set_count": 1287,
+      "sha256": "aced394e253f5ad56f8a8ad02a421943b0dadebdc0e6b01323e701f2c443d01c",
+      "unique_gene_count": 32321
+    },
+    "molecular_function": {
+      "file": "go-mf-20260619.gmt",
+      "gene_set_count": 2202,
+      "sha256": "62d80137dd55172dfe5033eb5140d793791b47740f9e34fb12e1e62d5a26a88a",
+      "unique_gene_count": 27023
+    }
+  },
+  "release": "2026-06-19",
+  "release_doi": "10.5281/zenodo.20943148",
+  "release_url": "https://release.geneontology.org/2026-06-19/",
+  "schema_version": "tcga-trace-go-gsea-provenance-v1",
+  "source_artifacts": {
+    "annotations": {
+      "date_generated": "2026-06-18 08:16",
+      "file": "HUMAN-uniprot.gaf.gz",
+      "gaf_version": "2.2",
+      "go_version": "http://purl.obolibrary.org/obo/go/releases/2026-06-15/extensions/go-plus.ofn",
+      "sha256": "258f6ea163375c036929478c400f25bf32e6d83df547cc4b864dfb4ec20c1ffb",
+      "url": "https://release.geneontology.org/2026-06-19/annotations/gaf/HUMAN-uniprot.gaf.gz"
+    },
+    "ontology": {
+      "data_version": "releases/2026-06-15",
+      "file": "go-basic.obo",
+      "sha256": "c72fc198a86983d55e43aac585d1ffdbeb6e3601475b3f18b6045acdc0a0734c",
+      "url": "https://release.geneontology.org/2026-06-19/ontology/go-basic.obo"
+    }
+  }
+}

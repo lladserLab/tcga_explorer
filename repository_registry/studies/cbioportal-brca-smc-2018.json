@@ -1,0 +1,136 @@
+{
+  "schema_version": "tcga-trace-study-spec-v2",
+  "dataset": {
+    "id": "cbioportal-brca-smc-2018",
+    "cancer_code": "BRCA",
+    "name": "Primary breast cancer PAM50 cohort (SMC, 2018)",
+    "description": "Independent Korean primary breast-cancer cohort with public TPM bulk RNA-seq and source-provided PAM50 subtype calls for expression comparison and GSEA.",
+    "cohort_context": "Primary breast tumors from the Samsung Medical Center Korean cohort. The 168 TPM-profiled tumors carry source-provided PAM50 calls; these calls are preserved as metadata and are never silently recomputed by TRACE Explorer.",
+    "source_provider": "cbioportal_api",
+    "source_accession": "brca_smc_2018",
+    "source_url": "https://www.cbioportal.org/study/summary?id=brca_smc_2018",
+    "publication_citation": "Kan et al. Nature Communications 2018",
+    "publication_id": "PMID:29713003",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "candidate_tier": "E1",
+      "registry_state": "promoted_release_specification",
+      "promotion_state": "promoted",
+      "source_cutoff": "2026-08-20",
+      "source_program": "Samsung Medical Center breast cancer cohort",
+      "source_data_system": "cBioPortal public API and DataHub",
+      "clinical_context_class": "primary_diagnostic",
+      "sample_selection_note": "The cBioPortal TPM sample list contains 168 primary Tumor samples from 168 unique patients. Eligibility requires source SAMPLE_TYPE, SAMPLE_CLASS, ONCOTREE_CODE and PAM50_SUBTYPE values.",
+      "excluded_material": "The 19 study tumors without TPM profiles and any future non-primary or non-tumor sample.",
+      "treatment_note": "Primary tumor denotes specimen origin and does not by itself prove treatment-naive status.",
+      "subtype_note": "PAM50_SUBTYPE is the source call. The source value Normal is a PAM50 Normal-like label within a primary tumor cohort, not adjacent normal tissue. Testing PAM50-defining genes across PAM50 groups is circular and must be labelled as descriptive rather than independent validation.",
+      "endpoint_note": "No individual time-to-event endpoint is curated for this release. Survival, Compare-survival and Robustness-survival are prohibited even if a future upstream field appears without a new contract.",
+      "audited_population": {
+        "source_study_samples": 187,
+        "tpm_expression_samples": 168,
+        "tpm_expression_patients": 168,
+        "pam50_counts": {
+          "Basal": 36,
+          "Her2": 18,
+          "LuminalA": 47,
+          "LuminalB": 65,
+          "Normal": 2
+        },
+        "mapped_complete_genes": 21389,
+        "variable_genes": 20935,
+        "nonfinite_expression_values": 0,
+        "status": "passed_bundle_qc"
+      }
+    }
+  },
+  "source": {
+    "provider": "cbioportal_api",
+    "study_id": "brca_smc_2018",
+    "molecular_profile_id": "brca_smc_2018_mrna_seq_tpm",
+    "sample_list_id": "brca_smc_2018_tpm",
+    "gene_batch_size": 250,
+    "expected_expression_samples": 168,
+    "expected_eligible_expression_samples": 168,
+    "expected_eligible_expression_patients": 168,
+    "expected_missing_sample_metadata": 0,
+    "expected_missing_patient_metadata": 0,
+    "sample_eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_CLASS",
+        "include": ["Tumor"],
+        "required": true
+      },
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["BRCA", "IDC", "ILC"],
+        "required": true
+      },
+      {
+        "field": "sample.PAM50_SUBTYPE",
+        "include": ["Basal", "Her2", "LuminalA", "LuminalB", "Normal"],
+        "required": true
+      }
+    ],
+    "license_evidence_url": "https://raw.githubusercontent.com/cBioPortal/datahub/master/public/brca_smc_2018/LICENSE"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary",
+    "sample_role": "Primary breast tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_CLASS",
+        "include": ["Tumor"],
+        "required": true
+      },
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["BRCA", "IDC", "ILC"],
+        "required": true
+      },
+      {
+        "field": "sample.PAM50_SUBTYPE",
+        "include": ["Basal", "Her2", "LuminalA", "LuminalB", "Normal"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["sample.INITIAL_TNM_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "Repeated rows with the same Entrez identifier are averaged sample-wise before transformation; different identifiers are never merged implicitly.",
+    "scale_note": "The public profile is RNA-seq TPM. TRACE Explorer applies log2(TPM + 1) once and does not use the separate z-score profile as an expression layer."
+  },
+  "endpoints": [],
+  "capability_policy": {
+    "prohibited": {
+      "survival": "No individual time-to-event endpoint is curated for BRCA SMC 2018; this cohort is restricted to molecular expression comparison and GSEA."
+    }
+  }
+}

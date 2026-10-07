@@ -1,0 +1,133 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-case-cnp-gse241876-2024",
+    "cancer_code": "BRCA",
+    "name": "Case CNP metastatic TNBC cohort (GSE241876)",
+    "description": "Prospective metastatic triple-negative breast-cancer cohort with pretreatment bulk RNA sequencing and individual progression-free survival during carboplatin, nab-paclitaxel and pembrolizumab.",
+    "cohort_context": "Thirty patients entered the single-arm phase-II CNP trial. GEO publishes bulk RNA profiles for 15 pretreatment biopsies and four on-treatment biopsies from four of those patients. TRACE Explorer excludes every post-treatment profile before endpoint and expression QC, retaining one baseline tumor per patient.",
+    "source_provider": "geo",
+    "source_accession": "GSE241876",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE241876",
+    "publication_citation": "Wilkerson et al. Clinical Cancer Research 2024",
+    "publication_id": "PMID:37882661; PMCID:PMC10767305; DOI:10.1158/1078-0432.CCR-23-1349",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Case Comprehensive Cancer Center phase-II CNP trial NCT03121352",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY-NC-ND 4.0 publication",
+      "source_platform": "Illumina NovaSeq",
+      "library_method": "Pretreatment core-biopsy bulk RNA-seq aligned with STAR 2.7.6a and quantified with featureCounts against human GENCODE release 42 (GRCh38.p13)",
+      "endpoint_context": "Progression-free survival during carboplatin, nab-paclitaxel and pembrolizumab in metastatic TNBC",
+      "endpoint_definition_note": "The publication defines PFS from biopsy to radiographic progression or death, censoring patients alive without progression at last follow-up.",
+      "sample_selection_note": "The full-match title rule retains 15 baseline profiles, including four suffixed PRE, and excludes R008_POST, R010_POST, R014_POST and R018_POST before patient and endpoint QC.",
+      "source_inconsistency_note": "The GEO README says reads were aligned to mm10 but in the same sentence specifies Human GENCODE release 42 (GRCh38.p13). The peer-reviewed Methods state hg38, and every matrix feature is a human Ensembl/GENCODE identifier. TRACE Explorer records the README inconsistency and uses the human GENCODE annotation supported by the article and matrix.",
+      "overlap_note": "This prospective single-arm trial is distinct from TCGA-BRCA and the other treatment cohorts represented in the catalog.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Source-file redistribution is disabled; NCBI GEO and article-license terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE241876",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE241nnn/GSE241876/suppl/GSE241876_raw_count_matrix.csv.gz",
+    "expression_size": 1697607,
+    "expression_sha256": "875037c34c05fa6ea14fe4f49323a8bd6b3fb592306bb0688d8ce2dc8be6570e",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE241nnn/GSE241876/soft/GSE241876_family.soft.gz",
+    "soft_size": 4796,
+    "soft_sha256": "49c043ba43592196d9e372cd64691495711a49a7aac2d286cd551299a2b66283",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "characteristic_conflict_policy": {
+      "tissue": "first"
+    },
+    "primary_sample_title_pattern": "R[0-9]{3}(?:_PRE)?",
+    "expected_primary_samples": 15,
+    "expected_endpoint_complete_samples": 15,
+    "expected_events": 7,
+    "expected_censored": 8,
+    "expected_expression_columns": 15,
+    "expected_expression_gene_rows": 50641,
+    "patient_id_characteristic": "",
+    "time_characteristic": "pfs",
+    "event_characteristic": "pfs event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "disease stage",
+    "sex_characteristic": "sex",
+    "race_characteristic": "race",
+    "sample_type": "Pretreatment Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column_index": 1,
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_42/gencode.v42.annotation.gtf.gz",
+      "name": "gencode.v42.annotation.gtf.gz",
+      "size": 49548290,
+      "sha256": "f59a5b38c6de1472430ccd0181927a01df0b4ad8d78f598e521badc9da80a76e"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment Tumor",
+    "sample_role": "Pretreatment primary or metastatic TNBC core biopsy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized to log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned human GENCODE release 42 GRCh38.p13 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source GENCODE row are excluded rather than combined without a source-defined rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library size over all 50,641 source rows, converts featureCounts values to CPM and applies log2(CPM + 1). Only the 15 pretreatment columns are retained; values are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival during CNP therapy",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of pretreatment biopsy",
+      "event_definition": "Radiographic disease progression or death, whichever occurred first",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

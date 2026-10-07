@@ -1,0 +1,78 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-skcm-dfci-2015",
+    "cancer_code": "SKCM",
+    "name": "Metastatic melanoma (DFCI, 2015)",
+    "description": "Independent metastatic melanoma cohort with whole-exome and RNA-seq profiling.",
+    "cohort_context": "Metastatic melanoma; clinically distinct from an unselected primary-tumor population.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "skcm_dfci_2015",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/skcm_dfci_2015",
+    "publication_citation": "Van Allen et al. Science 2015",
+    "publication_id": "PMID:26359337",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/skcm_dfci_2015",
+    "files": {
+      "expression": "data_mrna_seq_rpkm.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Metastatic tumor",
+    "sample_role": "RNA-seq tumor biopsy",
+    "selection_rank": 0,
+    "stage_fields": [
+      "sample.TUMOR_STAGE",
+      "patient.M_STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX",
+      "patient.GENDER"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE",
+      "patient.AGE_AT_DIAGNOSIS"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_rpkm",
+    "label": "log2(RPKM + 1)",
+    "source_unit": "RPKM",
+    "transform": "log2p",
+    "analysis_unit": "log2(RPKM + 1)",
+    "feature_id_type": "entrez_gene_id",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_entrez_id",
+    "duplicate_feature_rationale": "The source matrix contains repeated rows for a small number of identical Entrez IDs. Values are averaged per sample before transformation; different Entrez IDs are never merged implicitly."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

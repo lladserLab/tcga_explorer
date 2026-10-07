@@ -1,0 +1,138 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "figshare-kich-jikuya-2025",
+    "cancer_code": "KICH",
+    "name": "Independent chromophobe renal cell carcinoma atlas (2025)",
+    "description": "Chromophobe renal cell carcinomas from a 219-tumor Japanese rare-kidney-cancer transcriptome atlas, with public gene counts and individual overall-survival follow-up.",
+    "cohort_context": "Central pathology was used to retain chromophobe RCC only. When a participant contributed multiple tumors, TRACE Explorer exposes every eligible RNA sample and applies its deterministic selection order of selection rank then sample ID at analysis time.",
+    "source_provider": "figshare_publication",
+    "source_accession": "Figshare article 29151998",
+    "source_url": "https://figshare.com/s/ad48d64a102255d08bd6",
+    "publication_citation": "Jikuya et al. Nature Communications 2025",
+    "publication_id": "DOI:10.1038/s41467-025-65303-z",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Comparative transcriptome atlas of rare kidney cancers",
+      "source_data_system": "Figshare code and data archive",
+      "library_method": "Gene-level bulk RNA-seq counts normalized by TRACE Explorer to log2(CPM + 1)",
+      "curation_note": "Eligibility is outcome-independent and requires central pathology Chromophobe RCC, an RNA-seq matrix column, positive follow-up time and a published 0/1 vital-status code. Patient-level endpoint fields must agree across multiple tumor samples."
+    }
+  },
+  "source": {
+    "provider": "figshare_publication",
+    "article_id": 29151998,
+    "private_link": "ad48d64a102255d08bd6",
+    "publication_date": "2025-11-24",
+    "expected_license": "CC BY 4.0",
+    "files": {
+      "clinical": {
+        "file_id": 57618028,
+        "name": "Fig3A_sample_information_for_submission.csv",
+        "md5": "04527c29782a90a170ef6cf1af498b5a"
+      },
+      "expression": {
+        "file_id": 57618034,
+        "name": "Fig3A_RKC_merge_219.csv",
+        "md5": "68f8c6d220794e6ea47fb54269b34fa8"
+      }
+    },
+    "clinical": {
+      "delimiter": ",",
+      "sample_id_column": "Sample",
+      "patient_id_column": "Patient ID",
+      "sample_type": "Chromophobe RCC tumor",
+      "patient_consistency_columns": [
+        "Follow-up days",
+        "Consorning",
+        "Dead or alive"
+      ],
+      "eligibility_rules": [
+        {
+          "column": "Central pathology",
+          "include": [
+            "Chromophobe RCC"
+          ],
+          "required": true
+        },
+        {
+          "column": "Follow-up days",
+          "required": true
+        },
+        {
+          "column": "Consorning",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "RNA-seq ID",
+          "required": true
+        }
+      ]
+    },
+    "expression": {
+      "delimiter": ",",
+      "feature_column": "Name",
+      "sample_start_column": 3,
+      "normalization": "log2_cpm"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Chromophobe RCC tumor",
+    "sample_role": "Resected tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Chromophobe RCC tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.TNM Stage"
+    ],
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "figshare_log2_cpm",
+    "label": "Figshare counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GENCODE gene names supplied in the pinned Figshare count matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Source gene names duplicated across GENCODE rows are excluded rather than combined without an unambiguous gene-level rule.",
+    "scale_note": "TRACE Explorer computes library sizes across every source gene row for each retained sample, converts each count to CPM and applies log2(CPM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from surgery",
+      "time_column": "Follow-up days",
+      "event_column": "Consorning",
+      "time_unit": "days",
+      "time_origin": "Date of surgery for the profiled tumor",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "tcga-trace-study-spec-v2",
+  "dataset": {
+    "id": "gdc-target-all-p2",
+    "cancer_code": "ALL",
+    "name": "Pediatric acute lymphoblastic leukemia phase II (TARGET-ALL-P2)",
+    "description": "Public GDC-harmonized bulk RNA-seq from TARGET acute lymphoblastic leukemia phase II with an overall-survival contract from diagnosis.",
+    "cohort_context": "Pediatric acute lymphoblastic leukemia in TARGET phase II. The molecular population is restricted to primary blood-derived cancer from bone marrow or peripheral blood within TARGET-ALL-P2; phase III, recurrent and PanALL material are separate universes.",
+    "source_provider": "gdc_api",
+    "source_accession": "TARGET-ALL-P2",
+    "source_url": "https://portal.gdc.cancer.gov/projects/TARGET-ALL-P2",
+    "publication_citation": "NCI TARGET Acute Lymphoblastic Leukemia Phase II project",
+    "publication_id": "dbGaP:phs000464",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NIH-GDS-Open-Data",
+    "license_url": "https://gdc.cancer.gov/about-gdc/gdc-policies",
+    "redistribution_allowed": false,
+    "metadata": {
+      "candidate_tier": "S1",
+      "registry_state": "candidate_specification",
+      "promotion_state": "not_promoted",
+      "source_cutoff": "2026-08-20",
+      "source_program": "Therapeutically Applicable Research to Generate Effective Treatments (TARGET)",
+      "source_data_system": "NCI Genomic Data Commons",
+      "clinical_context_class": "hematologic_diagnostic",
+      "sample_selection_note": "Bone marrow is preferred to peripheral blood, followed by deterministic sample, aliquot and file identifiers. One eligible RNA profile is retained per patient.",
+      "excluded_material": "Recurrent blood-derived cancer and every TARGET ALL phase or aggregation other than TARGET-ALL-P2.",
+      "treatment_note": "Primary blood-derived cancer is a biospecimen class, not proof of treatment-naive status. Prior treatment remains unknown when it is not documented.",
+      "endpoint_note": "OS is measured from diagnosis by the GDC survival endpoint. Endpoint-incomplete expression patients remain eligible for molecular analyses but not Survival.",
+      "overlap_note": "TARGET-ALL-P2 must not be pooled with TARGET-ALL-P3 or PanALL as if they were additional independent samples.",
+      "preaudit_population": {
+        "source_expression_files": 532,
+        "selected_expression_patients": 452,
+        "os_events": 102,
+        "os_censored": 344,
+        "os_incomplete": 6,
+        "status": "provisional_until_bundle_qc"
+      }
+    }
+  },
+  "source": {
+    "provider": "gdc_api",
+    "project_id": "TARGET-ALL-P2",
+    "target_project_opt_in": "TARGET-ALL-P2",
+    "sample_type_priority": [
+      "Primary Blood Derived Cancer - Bone Marrow",
+      "Primary Blood Derived Cancer - Peripheral Blood"
+    ],
+    "expected_data_release": "Data Release 46.0 - August 10, 2026",
+    "expected_api_version": "8.5.0",
+    "expected_expression_files": 532,
+    "expected_selected_patients": 452,
+    "download_workers": 4,
+    "matrix_shard_size": 32,
+    "license_evidence_url": "https://gdc.cancer.gov/about-gdc/gdc-policies"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Blood Derived Cancer - Bone Marrow",
+    "sample_role": "Primary diagnostic blood-derived cancer specimen",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Blood Derived Cancer - Bone Marrow",
+          "Primary Blood Derived Cancer - Peripheral Blood"
+        ],
+        "required": true
+      },
+      {
+        "field": "sample.TISSUE_TYPE",
+        "include": ["Tumor"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.STAGE"],
+    "grade_fields": ["patient.GRADE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE_AT_INDEX"]
+  },
+  "expression": {
+    "layer_id": "log2_tpm",
+    "label": "log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "GDC STAR-counts GENCODE v36 gene_id and gene_name fields",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Distinct Ensembl gene identifiers sharing one supplied symbol are excluded rather than merged implicitly.",
+    "scale_note": "The GDC STAR-counts files supply non-negative tpm_unstranded values. TRACE Explorer applies log2(TPM + 1) once."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "GDC_OS_DAYS",
+      "event_column": "GDC_OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as implemented by the GDC survival endpoint",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

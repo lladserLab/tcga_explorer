@@ -1,0 +1,122 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-lapnet-gse319924-2026",
+    "cancer_code": "PAAD",
+    "name": "Lap-NET1 locally advanced pancreatic-cancer cohort (GSE319924)",
+    "description": "Prospective locally advanced pancreatic ductal adenocarcinoma cohort with pretreatment laser-capture microdissected tumor-cell microbulk RNA-seq and individual overall-survival follow-up.",
+    "cohort_context": "Lap-NET1 was a prospective single-arm phase 1b trial of first-line NP137 plus mFOLFIRINOX in 43 patients with locally advanced pancreatic ductal adenocarcinoma. Fine-needle aspirates were collected from 32 patients regardless of clinical outcome. TRACE Explorer retains the 22 pretreatment tumor-compartment libraries that passed the source study's sequencing QC and excludes stromal, post-treatment, surgical and technical-repeat libraries.",
+    "source_provider": "geo",
+    "source_accession": "GSE319924",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE319924",
+    "publication_citation": "Roth et al. Nature 2026",
+    "publication_id": "PMID:42020751; DOI:10.1038/s41586-026-10436-4; ClinicalTrials.gov:NCT05546853",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Lap-NET1 phase 1b trial",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "SMART-Seq mRNA LP whole-transcriptome sequencing from laser-capture microdissected pretreatment tumor cells; 100-bp paired-end reads",
+      "endpoint_context": "Overall survival from trial inclusion",
+      "treatment_context": "All retained patients received first-line NP137 plus mFOLFIRINOX; associations are treatment-context specific and are not directly transportable to untreated or resected whole-tissue cohorts.",
+      "sample_selection_note": "GEO exposes 23 pretreatment tumor-compartment libraries. S025T1R1 is excluded because the source analysis code identifies it as a failed low-depth library with 1,072 reads, reconciling the GEO inventory with the 22 QC-valid pretreatment profiles reported in the article.",
+      "qc_evidence_url": "https://github.com/Genomics-Consulting/Netris_LapNet/tree/5b956a544d6ebdfb77f01b73c7aabe56e4e699a7",
+      "qc_evidence_commit": "5b956a544d6ebdfb77f01b73c7aabe56e4e699a7",
+      "clinical_evidence_note": "Only the deidentified participant identifier and OS time/status fields published in the pinned GEO family SOFT are used. Demographic fields from the companion code repository are intentionally not imported.",
+      "overlap_note": "This prospective French trial cohort is independent of TCGA-PAAD and of the other external pancreatic-cancer releases in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Redistribution of source or derived expression matrices remains disabled; NCBI GEO terms remain controlling.",
+      "curation_note": "The 22 endpoint-complete patients contain 11 deaths and 11 censored observations. Library sizes are calculated over all 28,395 pinned source rows before log2(CPM + 1). A pinned NCBI Homo sapiens gene_info snapshot maps 27,769 Entrez rows to 27,769 unique symbols; 626 unmapped rows remain part of the library-size denominator but are excluded from the analyzable matrix."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE319924",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE319nnn/GSE319924/suppl/GSE319924_raw_counts.csv.gz",
+    "expression_size": 891799,
+    "expression_sha256": "dc0c26b520869cb312c4cba297900614f6b4337fe821e78ca502b0e315c9917c",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE319nnn/GSE319924/soft/GSE319924_family.soft.gz",
+    "soft_size": 5456,
+    "soft_sha256": "46623ab8d1c732f239aa4ce4abbad2f76fb048f2c22077a52830c8f45a952b80",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "S(?!025_)[0-9]{3}_Tumor_Pre_R1",
+    "expected_primary_samples": 22,
+    "expected_endpoint_complete_samples": 22,
+    "expected_events": 11,
+    "expected_censored": 11,
+    "expected_source_expression_files": 36,
+    "expected_expression_columns": 22,
+    "expected_expression_gene_rows": 28395,
+    "expected_normalized_expression_gene_rows": 28395,
+    "patient_id_characteristic": "id paired",
+    "time_characteristic": "os time",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "expression_sample_id_pattern": "^S([0-9]{3})_Tumor_Pre_R([0-9]+)$",
+    "expression_sample_id_replacement": "S\\1T1R\\2",
+    "sample_type": "Pretreatment Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column_index": 1,
+      "feature_column_output": "Entrez_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "format": "ncbi_gene_info",
+      "url": "https://ftp.ncbi.nlm.nih.gov/gene/DATA/GENE_INFO/Mammalia/Homo_sapiens.gene_info.gz",
+      "name": "Homo_sapiens.gene_info.gz",
+      "size": 5174664,
+      "sha256": "601953568ebb6f960619dd9912143b481e4a0d26cbcd6720810d2e8d7313cb2d"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment Tumor",
+    "sample_role": "Pretreatment laser-capture microdissected pancreatic tumor-cell microbulk",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO counts normalized to log2(CPM + 1)",
+    "source_unit": "Rsubread gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_entrez",
+    "mapping_source": "Pinned NCBI Homo sapiens gene_info snapshot downloaded 2026-07-28",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned reference maps each retained Entrez row to a unique HUGO-style symbol; no source rows are combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained sample library size across all 28,395 pinned source rows, converts counts to CPM and applies log2(CPM + 1). The final analyzable matrix retains 27,769 uniquely mapped symbols. Values are cohort-normalized and should not be compared directly with expression units from other releases."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Trial inclusion",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

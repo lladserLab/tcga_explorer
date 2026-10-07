@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">TRACE Explorer</title>
+  <desc id="description">Study-aware survival, expression, GSEA and pan-cancer analysis across bulk RNA cohorts.</desc>
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#F4FAFB" stroke-opacity="0.045"/>
+    </pattern>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1D2A40"/>
+      <stop offset="1" stop-color="#111927"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#field)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <g transform="translate(78 112)">
+    <rect width="164" height="164" rx="16" fill="#182235" stroke="#F4FAFB" stroke-opacity="0.13"/>
+    <path
+      d="M31 45H101M68 45V77H99V108H132"
+      fill="none"
+      stroke="#86D3E2"
+      stroke-width="14"
+      stroke-linecap="square"
+      stroke-linejoin="round"
+    />
+    <rect x="123" y="99" width="20" height="20" rx="3.5" fill="#F4FAFB"/>
+  </g>
+
+  <g font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif">
+    <text x="290" y="188" fill="#F4FAFB" font-size="74" letter-spacing="-1">
+      <tspan font-weight="700">TRACE</tspan><tspan font-weight="430"> Explorer</tspan>
+    </text>
+    <text x="294" y="241" fill="#AFC1CC" font-size="24" font-weight="450">
+      Transcriptomic Research Across Cohorts and Endpoints
+    </text>
+    <text x="80" y="376" fill="#E8F1F4" font-size="30" font-weight="500">
+      Carry one biological question across cohorts, endpoints and analyses.
+    </text>
+    <text x="80" y="427" fill="#9DB3BF" font-size="22" font-weight="430">
+      Survival  ·  Expression  ·  GSEA  ·  Pan-cancer  ·  Reproducible exports
+    </text>
+    <text x="80" y="556" fill="#86D3E2" font-size="20" font-weight="620" letter-spacing="0.4">
+      apps.cienciavida.org/tcga_explorer
+    </text>
+  </g>
+
+  <path d="M80 491H410V508H620V525H890V542H1118" fill="none" stroke="#86D3E2" stroke-width="3" opacity="0.72"/>
+  <rect x="1111" y="535" width="14" height="14" rx="2" fill="#F4FAFB"/>
+</svg>

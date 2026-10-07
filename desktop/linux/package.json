@@ -1,0 +1,73 @@
+{
+  "name": "trace-explorer-desktop-linux",
+  "version": "0.1.7",
+  "description": "Local transcriptomic analysis with bundled Python and R",
+  "main": "main.cjs",
+  "author": "Sergio Hern\u00e1ndez-Galaz",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dist:linux": "electron-builder --linux AppImage --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3",
+    "playwright": "^1.62.1"
+  },
+  "build": {
+    "appId": "org.cienciavida.trace-explorer.desktop",
+    "productName": "TRACE Explorer",
+    "asar": true,
+    "directories": {
+      "output": "../build/linux/installers"
+    },
+    "files": [
+      "main.cjs",
+      "loading.html",
+      "package.json",
+      "preload.cjs",
+      "data-actions.cjs",
+      "downloads.cjs",
+      "data.html",
+      "data.css",
+      "data.cjs",
+      "icons/*",
+      "platform.cjs"
+    ],
+    "extraResources": [
+      {
+        "from": "../build/runtime/linux-x64",
+        "to": "runtime",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/**",
+          "!**/*.pyc"
+        ]
+      }
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Science",
+      "icon": "icons/trace-desktop.png",
+      "artifactName": "TRACE-Explorer-${version}-Linux-x64.${ext}",
+      "desktop": {
+        "entry": {
+          "Comment": "Local transcriptomic survival, expression and pathway analysis",
+          "Keywords": "TCGA;transcriptomics;survival;bioinformatics;"
+        }
+      },
+      "syncDesktopName": true
+    },
+    "toolsets": {
+      "appimage": "1.0.3"
+    }
+  },
+  "desktopName": "trace-explorer.desktop"
+}

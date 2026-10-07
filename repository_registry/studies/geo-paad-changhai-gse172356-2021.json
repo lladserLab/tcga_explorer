@@ -1,0 +1,152 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-changhai-gse172356-2021",
+    "cancer_code": "PAAD",
+    "name": "Changhai resectable pancreatic-cancer cohort (GSE172356)",
+    "description": "Independent cohort of resected primary pancreatic ductal adenocarcinomas with public bulk tumor RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The Changhai Hospital study profiled 62 frozen, surgically resectable primary pancreatic ductal adenocarcinomas. GEO links every GSM record to the source-local YX tumor identifier through Sample_description. The article supplement reports exact overall-survival time and status for 53 of those tumors; the other nine profiles are excluded before analysis because no individual endpoint is public.",
+    "source_provider": "geo",
+    "source_accession": "GSE172356",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE172356",
+    "publication_citation": "Guo et al. Communications Biology 2021",
+    "publication_id": "PMID:34465850; PMCID:PMC8408135; DOI:10.1038/s42003-021-02557-5",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Changhai Hospital resectable pancreatic ductal adenocarcinoma study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Europe PMC",
+      "source_platform": "Illumina HiSeq X Ten",
+      "library_method": "Paired-end whole-transcriptome sequencing of frozen primary pancreatic tumors; reads were aligned with HISAT2, summarized with HTSeq and normalized with DESeq2 size factors by the source study.",
+      "endpoint_context": "Overall survival from tumor resection to death from any cause or last follow-up",
+      "endpoint_definition_note": "The source workbook uses the legacy survival-analysis coding 1=censored and 2=death. This mapping was independently checked against all three published Figure 3 log-rank results: using 2 as the event reproduces p=0.037, 0.021 and 0.19, whereas the inverse coding does not.",
+      "sample_linkage_note": "Each GEO sample has a source-local YX identifier in Sample_description. The same identifier names the public expression-matrix columns and the individual survival records, providing deterministic GSM-to-expression-to-endpoint linkage without positional matching.",
+      "sample_selection_note": "All 62 GEO records are source-designated frozen primary pancreatic tumors and map one-to-one to patients. Fifty-three have exact positive overall-survival time and status; nine without public survival records are excluded.",
+      "expression_processing_note": "The public matrix contains 45,140 unique gene-symbol rows and 62 DESeq2-normalized expression columns. TRACE Explorer selects the 53 endpoint-complete columns, excludes 2,382 genes with a source NA in any selected tumor, and applies log2(value + 1) to the remaining 42,758 complete rows; no imputation or duplicate-symbol aggregation is performed.",
+      "overlap_note": "This Changhai Hospital resection cohort is independent of TCGA-PAAD and of the other PAAD cohorts in the repository.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Source-file redistribution is disabled; NCBI GEO terms and the article's CC BY 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE172356",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE172nnn/GSE172356/suppl/GSE172356_PDA_gene_expression_matrix.txt.gz",
+    "expression_size": 17364266,
+    "expression_sha256": "861fc9af648e5b77e1bbf6e5f6a0d61711ccb4bc216a714dd327135a8ee45725",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE172nnn/GSE172356/soft/GSE172356_family.soft.gz",
+    "soft_size": 4708,
+    "soft_sha256": "2139bd419ec1a269b16e1afef811225d4354adbbb235383250594e0ea6ae044f",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "pancreatic tumor [0-9]+",
+    "expected_primary_samples": 62,
+    "expected_characteristic_eligible_samples": 62,
+    "expected_endpoint_complete_samples": 53,
+    "expected_events": 37,
+    "expected_censored": 16,
+    "expected_source_expression_files": 62,
+    "expected_expression_columns": 53,
+    "expected_expression_gene_rows": 45140,
+    "expected_normalized_expression_gene_rows": 42758,
+    "expected_dropped_incomplete_features": 2382,
+    "expected_duplicate_feature_symbols": 0,
+    "expected_excluded_duplicate_feature_rows": 0,
+    "patient_id_characteristic": "sample id",
+    "time_characteristic": "os days",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "1": 0,
+      "2": 1
+    },
+    "expression_sample_characteristic": "sample id",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8408135/supplementaryFiles",
+      "evidence_size": 1794270,
+      "evidence_sha256": "8993760fa85216e65cb1557280be4fee090b0af3ca552eb13016f3d66ffe88be",
+      "evidence_container_size": 10521841,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "42003_2021_2557_MOESM7_ESM.xlsx",
+      "sheet_name": "Figure3. Survival",
+      "header_row": 1,
+      "record_id_column": "Sample_ID",
+      "sample_metadata_field": "description",
+      "sample_id_pattern": "(YX[0-9]+T)",
+      "field_name_map": {
+        "Sample_ID": "sample id",
+        "Days": "os days",
+        "status": "os status"
+      },
+      "expected_records": 53,
+      "expected_matched_records": 53,
+      "expected_unmatched_records": 0,
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8408135/"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "gene",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "drop_incomplete_features": true,
+      "missing_value_tokens": [
+        "NA"
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "One source-designated frozen primary pancreatic ductal adenocarcinoma per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_deseq2_normalized_counts",
+    "label": "GEO DESeq2-normalized counts transformed to log2(value + 1)",
+    "source_unit": "Source-provided DESeq2 size-factor-normalized gene counts",
+    "transform": "identity",
+    "analysis_unit": "log2(DESeq2-normalized count + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GEO GSE172356 gene column",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 45,140 source gene labels are unique both exactly and case-insensitively. The 2,382 rows with an NA in at least one selected tumor are excluded as complete rows rather than imputed.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer first retains endpoint-complete tumors, excludes any gene row with a source NA among those tumors, and then applies log2(value + 1) to the source-provided DESeq2-normalized values. Values support within-cohort analyses and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from tumor resection",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Tumor resection",
+      "event_definition": "Death from any cause according to source status code 2; source status code 1 denotes censoring at last follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

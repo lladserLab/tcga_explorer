@@ -1,0 +1,156 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-laml-vienna-pedaml-gse282423-2025",
+    "cancer_code": "LAML",
+    "name": "Vienna pediatric AML diagnosis cohort (GSE282423)",
+    "description": "Independent pediatric acute myeloid leukemia cohort with sorted diagnosis-time blast bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study profiled 45 retrospectively collected pediatric AML specimens obtained at diagnosis. GSE282423 releases Salmon quantification for the 28 patients with RNA sequencing. TRACE Explorer links all 28 RNA profiles one-to-one to the source clinical table; five patients died and 23 were censored at their last recorded follow-up.",
+    "source_provider": "geo",
+    "source_accession": "GSE282423",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE282423",
+    "publication_citation": "Haladik et al. Cell Reports Medicine 2025",
+    "publication_id": "PMID:40840446; PMCID:PMC12490222; DOI:10.1016/j.xcrm.2025.102304",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "St. Anna Children's Cancer Research Institute pediatric AML functional-precision-medicine study",
+      "source_data_system": "NCBI Gene Expression Omnibus and the publication-pinned Boztug laboratory analysis repository",
+      "source_platform": "Illumina NovaSeq 6000",
+      "raw_data_accession": "GSE282423 / PRJNA1214280",
+      "library_method": "Flow-sorted leukemic blasts from fresh-frozen diagnosis bone marrow, Smart-seq2 amplification, Twist library preparation and Salmon 1.9.0 transcript quantification after GRCh38 alignment",
+      "endpoint_context": "Overall survival from pediatric AML diagnosis",
+      "endpoint_caveat": "Only five deaths occurred among the 28 RNA-linked patients. The cohort passes the repository's operational endpoint floor but grouped or adjusted survival estimates can remain imprecise and require explicit low-event warnings.",
+      "clinical_evidence_note": "The publication authors release exact time-to-death and time-to-last-follow-up values in a public analysis repository. TRACE Explorer prefers positive time to death when present and otherwise uses positive time to follow-up as the censoring time.",
+      "expression_curation_note": "TRACE Explorer reads the 28 per-sample Salmon quant.sf files, sums source NumReads values from Ensembl transcripts to Ensembl release 102 genes and applies log2(CPM + 1). Transcript versions are removed only for the pinned GTF linkage.",
+      "sample_selection_note": "Each GEO RNA profile represents sorted leukemic blasts from one patient at diagnosis and maps to one unique AML identifier; no technical-replicate or biospecimen selection is required.",
+      "ascertainment_note": "The larger study was assembled retrospectively at diagnosis and balanced by sex and gender. The RNA subset is not described as selected using future survival outcome; the release remains a convenience molecular-profiling cohort rather than a population-based series.",
+      "overlap_note": "This pediatric Vienna cohort is external to TCGA-LAML and is retained independently from adult AML studies.",
+      "redistribution_note": "TRACE Explorer rebuilds this release from pinned public GEO, Ensembl and publication-repository files. Direct redistribution of the source-derived matrix remains disabled."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE282423",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE282nnn/GSE282423/suppl/GSE282423_RAW.tar",
+    "expression_size": 86394880,
+    "expression_sha256": "f15f02d59a690fd16c2c40e6311bf3321a42811c8c207903bfef00476f9d4b78",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE282nnn/GSE282423/soft/GSE282423_family.soft.gz",
+    "soft_size": 4868,
+    "soft_sha256": "54ddb1c1bf50c29e313a4c4ad4e510a30a3f28d1bea2313b778f1c9b4ea895bc",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "RNA AML[0-9]+_.+",
+    "expected_primary_samples": 28,
+    "expected_endpoint_complete_samples": 28,
+    "expected_events": 5,
+    "expected_censored": 23,
+    "expected_expression_columns": 28,
+    "expected_source_expression_files": 28,
+    "expected_expression_transcript_rows": 237922,
+    "expected_normalized_expression_gene_rows": 57374,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "os days",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "Dead": 1,
+      "Alive": 0
+    },
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "RNA (AML[0-9]+)_.+",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Diagnosis AML Blast",
+    "clinical": {
+      "evidence_url": "https://raw.githubusercontent.com/Boztug-lab/pedaml_screening/90f3c5d7fcd2f21a0dee9b7497150b14b9c59fd1/annotations/master_table.csv",
+      "evidence_size": 5486,
+      "evidence_sha256": "08439f2bce97ed0ac1c2c98f1fc7e6c541681ebafd423dd020e7fd69c14fb8a6",
+      "evidence_format": "csv",
+      "header_row": 1,
+      "record_id_column": "SampleID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?:RNA )?(AML[0-9]+)(?:_.+)?",
+      "field_name_map": {
+        "SampleID": "patient id",
+        "time_to_death": "source time to death days",
+        "time_to_fup": "source time to follow-up days",
+        "TCGA_TRACE_OS_DAYS": "os days",
+        "TCGA_TRACE_OS_STATUS": "os status"
+      },
+      "derived_fields": [
+        {
+          "operation": "event_time_or_censor_time",
+          "target": "TCGA_TRACE_OS_DAYS",
+          "status_target": "TCGA_TRACE_OS_STATUS",
+          "event_time_field": "time_to_death",
+          "censor_time_field": "time_to_fup",
+          "event_value": "Dead",
+          "censor_value": "Alive"
+        }
+      ],
+      "allow_unmatched_records": true,
+      "expected_records": 45,
+      "expected_matched_records": 28,
+      "expected_unmatched_records": 17,
+      "terms_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "expression": {
+      "layout": "transcript_count_files_tar",
+      "supplementary_file_pattern": ".+_quant\\.sf\\.gz",
+      "feature_column": "Name",
+      "count_column": "NumReads",
+      "require_complete_reference": false
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-102/gtf/homo_sapiens/Homo_sapiens.GRCh38.102.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.102.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 48295448,
+      "sha256": "307038294611aaf86c3e61e70273a26c7b3a343cd416feed137e6e86d471ea32"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Diagnosis AML Blast",
+    "sample_role": "Flow-sorted leukemic blast population from diagnosis bone marrow",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Diagnosis AML Blast"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "geo_transcript_log2_cpm",
+    "label": "GEO Salmon NumReads aggregated as gene-level log2(CPM + 1)",
+    "source_unit": "Salmon transcript-level NumReads",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 102 GRCh38 transcript_id, gene_id and gene_name annotations",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Transcript counts are summed by Ensembl gene; symbols represented by more than one Ensembl gene are excluded downstream rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer calculates library size from every source transcript before applying gene-level CPM and log2(CPM + 1). Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Pediatric AML diagnosis",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

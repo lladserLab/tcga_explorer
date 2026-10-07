@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'"><title>Manage data · TRACE Explorer</title><link rel="stylesheet" href="data.css"></head>
+<body><main>
+<header><div><h1>Manage data</h1><p>Add public cohorts for local analysis.</p></div><button id="back">Back to TRACE</button></header>
+<nav class="tabs" role="tablist" aria-label="Add cohort data">
+ <button id="local-tab" role="tab" aria-selected="true" aria-controls="local-panel" tabindex="0">From this computer</button>
+ <button id="remote-tab" role="tab" aria-selected="false" aria-controls="remote-panel" tabindex="-1">Download</button>
+</nav>
+<div class="feedback"><p id="status" role="status" aria-live="polite"></p><progress id="progress" aria-label="Data download and import progress" hidden></progress></div>
+<section id="local-panel" role="tabpanel" aria-labelledby="local-tab">
+ <h2>Find your data packages</h2><p>Choose a folder to see its TRACE packages, or select a single <span class="filename">.tar.gz</span> file.</p>
+ <div class="toolbar"><button id="browse" class="primary">Choose a folder</button><button id="import">Choose a file</button></div>
+ <p id="local-note" class="muted">TRACE copies the data it needs. Your original files stay in place.</p>
+ <p id="local-folder" class="folder-path" hidden></p><label id="local-search-label" hidden>Find a package<input id="local-search" type="search" placeholder="Cancer name, code or filename"></label><ul id="local-files" aria-label="Data packages in the selected folder"></ul>
+</section>
+<section id="remote-panel" role="tabpanel" aria-labelledby="remote-tab" hidden>
+ <div class="section-heading"><h2>Choose data to download</h2><button id="check">Refresh list</button></div>
+ <p id="catalog-note">Loading available data…</p>
+ <div id="remote-filters" class="filters" hidden><label>Cancer<input id="search" type="search" placeholder="Name or code, e.g. breast or BRCA"></label><label>Source<select id="source"><option value="all">All sources</option><option value="tcga_reference">TCGA</option><option value="external">External studies</option></select></label></div>
+ <ul id="available" aria-label="Data available to download"></ul>
+ <details id="download-settings"><summary>Download source</summary><p class="muted">Paste the catalog link supplied by the TRACE team. It lists the available cancer packages.</p><form id="source-form"><label>Catalog link<input id="catalog-url" type="url" placeholder="https://…/catalog.json" required></label><button id="save-source" type="submit">Connect</button></form></details>
+</section>
+<section class="installed-section" aria-labelledby="installed-heading"><div class="section-heading"><h2 id="installed-heading">Ready to use <span id="installed-count" class="count"></span></h2><button id="folder">Open storage folder</button></div><p id="installed-note" class="muted">Installed cohorts appear in TRACE’s cohort selector.</p><ul id="installed"></ul></section>
+<footer>For your own expression and clinical files, choose <strong>Use your own data</strong> in TRACE.</footer>
+</main><script src="data.cjs"></script></body></html>

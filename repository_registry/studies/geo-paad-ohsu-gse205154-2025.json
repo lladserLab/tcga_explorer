@@ -1,0 +1,196 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-ohsu-gse205154-2025",
+    "cancer_code": "PAAD",
+    "name": "OHSU primary pancreatic-cancer cohort (GSE205154)",
+    "description": "Independent pancreatic ductal adenocarcinoma cohort with public bulk whole-transcriptome RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The Oregon Health & Science University study profiled 218 primary and 71 metastatic pancreatic ductal adenocarcinoma specimens selected from its institutional tissue registry according to specimen availability. TRACE Explorer retains only primary pancreatic tumors and deterministically selects one profile per patient, yielding 216 independent patients. The source study used TCGA and ICGC only as external validation cohorts; those samples are not part of this release.",
+    "source_provider": "geo",
+    "source_accession": "GSE205154",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE205154",
+    "publication_citation": "Link et al. Nature Cancer 2025",
+    "publication_id": "PMID:39789181; PMCID:PMC11779630; DOI:10.1038/s43018-024-00881-3",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "OHSU Brenden-Colson Center pancreatic cancer tissue-registry cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus plus article supplement fixed to Git commit 82a22d153d66d7dc60da74b8203ad9e2d3017563",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "Target-captured whole-transcriptome RNA sequencing of pathologist-reviewed FFPE pancreatic tumor regions, 2 x 75 bp and approximately 50 million reads per specimen",
+      "endpoint_context": "Overall survival from diagnosis to last follow-up or death, as supplied in the article's RNA specimen metadata",
+      "endpoint_caveat": "The publication omitted patients who died within 30 days after resection from selected survival figures. TRACE Explorer does not apply that outcome-dependent exclusion and retains all positive, endpoint-complete follow-up times, including three observations shorter than 30 days.",
+      "sample_selection_note": "Only specimens independently labeled Primary and Pancreas by both GEO and the article supplement are eligible. Two patients have T and T2 primary profiles with identical endpoint data; the exact -T specimen is selected before -T2 by a prespecified lexical specimen-ID rank. Seven source-designated primary fine-needle-aspirate profiles and two primary profiles collected at rapid autopsy are retained.",
+      "clinical_evidence_note": "The article repository's Supplemental Dataset 1 is pinned to an immutable Git commit. Its RNA_Specimen_Metadata sheet links every GEO title to a public patient identifier, specimen identifier, tumor class, site, diagnosis-anchored follow-up and vital status.",
+      "overlap_note": "The cohort is an independent OHSU registry series. TCGA-PAAD and ICGC-APGI were external validation datasets in the publication and are excluded from the source files used here.",
+      "redistribution_note": "The clinical supplement is distributed with the CC BY 4.0 article. TRACE Explorer downloads and transforms the GEO expression matrix in place but does not redistribute source files because GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE205154",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE205nnn/GSE205154/suppl/GSE205154_Gene_Level_TPM_Estimates.txt.gz",
+    "expression_size": 36708318,
+    "expression_sha256": "686582f0c00467de844d9ee93356e192da2c03c047f804f2b9d5270c4b62f152",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE205nnn/GSE205154/soft/GSE205154_family.soft.gz",
+    "soft_size": 22029,
+    "soft_sha256": "278aa5ec689b6393b6dbbda8da0662faafd00ac34261761b86d4fec0c9c1000e",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "ST-[0-9]+-(?:T2?|M2?|F|A-T)",
+    "expected_primary_samples": 289,
+    "sample_characteristic_filters": [
+      {
+        "key": "tumor type",
+        "include": [
+          "Primary"
+        ],
+        "required": true
+      },
+      {
+        "key": "tissue",
+        "include": [
+          "Pancreas"
+        ],
+        "required": true
+      },
+      {
+        "key": "curated tumor type",
+        "include": [
+          "Primary"
+        ],
+        "required": true
+      },
+      {
+        "key": "curated specimen site",
+        "include": [
+          "Pancreas"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 218,
+    "patient_id_characteristic": "patient id",
+    "patient_sample_selection": {
+      "rank_by": [
+        {
+          "key": "specimen id",
+          "type": "text",
+          "order": "asc"
+        }
+      ],
+      "require_equal_characteristics": [
+        "os time days",
+        "vital status"
+      ],
+      "expected_selected_samples": 216,
+      "expected_duplicate_patient_groups": 2,
+      "expected_removed_samples": 2
+    },
+    "expected_endpoint_complete_samples": 216,
+    "expected_events": 171,
+    "expected_censored": 45,
+    "expected_expression_columns": 216,
+    "expected_source_expression_files": 289,
+    "expected_expression_gene_rows": 60554,
+    "time_characteristic": "os time days",
+    "event_characteristic": "vital status",
+    "event_value_map": {
+      "Dead": 1,
+      "Alive": 0
+    },
+    "expression_sample_characteristic": "specimen id",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://raw.githubusercontent.com/engjen/Liver_Lung_PDAC/82a22d153d66d7dc60da74b8203ad9e2d3017563/Supplemental_Data/Supplemental_Dataset_1.xlsx",
+      "evidence_size": 293616,
+      "evidence_sha256": "62ad13428601b8a216284d4f5b75569035d96849b4d99866564b6f4d06ef6e98",
+      "evidence_format": "xlsx",
+      "sheet_name": "RNA_Specimen_Metadata",
+      "header_row": 1,
+      "record_id_column": "Public_Specimen_ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(ST-[0-9]+-(?:T2?|M2?|F|A-T))",
+      "expected_records": 289,
+      "expected_matched_records": 289,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Public_Patient_ID": "patient id",
+        "Public_Specimen_ID": "specimen id",
+        "Tumor_Type": "curated tumor type",
+        "Specimen_Site": "curated specimen site",
+        "Days_from_Diagnosis_to_FU": "os time days",
+        "Vital_Status_at_FU": "vital status"
+      },
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11779630/"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "ID",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 6,
+      "value_transform": "log2p"
+    },
+    "expression_feature_id_pattern": "((?:ENSG|ENSGR)[0-9]+(?:\\.[0-9]+)?)",
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_24/gencode.v24.annotation.gtf.gz",
+      "name": "gencode.v24.annotation.gtf.gz",
+      "size": 38708036,
+      "sha256": "147e62909c2cdd622433edae71796367b5774aa17f676174242801a79220093d"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Source-designated primary pancreatic ductal adenocarcinoma profile, one prespecified specimen per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "OHSU gene-level TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by the source study",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE release 24 GRCh38.p5 annotation used by the source study",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned source has unique versioned Ensembl feature identifiers. Symbols assigned to more than one Ensembl identifier are excluded rather than combined implicitly.",
+    "stream_source_order": true,
+    "scale_note": "The authors pseudoaligned reads with kallisto v0.44.0 against GRCh38.p5 and GENCODE v24 and summarized gene-level TPM with tximport v1.12.1. TRACE Explorer selects the eligible columns, applies log2(TPM + 1), and maps the original versioned Ensembl identifiers against the pinned matching GENCODE release."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from diagnosis",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis",
+      "event_definition": "Death from any cause according to the source Vital_Status_at_FU field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

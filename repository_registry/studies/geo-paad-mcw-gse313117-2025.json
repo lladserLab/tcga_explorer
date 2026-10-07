@@ -1,0 +1,115 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-mcw-gse313117-2025",
+    "cancer_code": "PAAD",
+    "name": "MCW cross-platform pancreatic-cancer cohort (GSE313117)",
+    "description": "Independent pancreatic ductal adenocarcinoma cohort with whole-transcriptome bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The retrospective single-center study included 79 patients with pancreatic ductal adenocarcinoma whose archival tumors were profiled by both whole-transcriptome RNA-seq and a commercial exome-capture assay. TRACE Explorer retains only the 79 whole-transcriptome profiles, which the source study treated as the reference assay, and excludes every matched exome-capture profile to avoid counting each patient twice or mixing platforms.",
+    "source_provider": "geo",
+    "source_accession": "GSE313117",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE313117",
+    "publication_citation": "Lee et al. npj Precision Oncology 2025",
+    "publication_id": "PMID:41422185; PMCID:PMC12819530; DOI:10.1038/s41698-025-01228-6",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Medical College of Wisconsin retrospective PDAC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NextSeq 500",
+      "library_method": "Ribo-depleted whole-transcriptome RNA-seq from FFPE tumor material; KAPA RNA HyperPrep with RiboErase and approximately 60 million reads per sample",
+      "endpoint_context": "Source-provided overall survival with clinical follow-up through September 2024",
+      "endpoint_caveat": "The source clinical file reports OS time in months and event status but does not specify the exact time origin. TRACE Explorer therefore exposes source-provided OS without claiming harmonization to a diagnosis-, treatment- or surgery-anchored definition.",
+      "sample_selection_note": "Only sample titles ending in whole transcriptome are eligible. The matched exome-capture profiles and their separate TPM matrix are excluded before endpoint and expression QC.",
+      "clinical_evidence_note": "The pinned GEO clinical CSV contains one rnaseq_name, subject identifier, OS time and OS event code for every retained whole-transcriptome library. GEO sample descriptions independently provide the exact Library name: rnaseq_N linkage used to join all 79 records.",
+      "overlap_note": "The source publication describes a retrospective single-center cohort and does not report reuse of TCGA, ICGC, CPTAC, POG570 or the UAB GSE79668 cohort.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Redistribution of the source matrices is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE313117",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE313nnn/GSE313117/suppl/GSE313117_tpm_whole_transcriptome.csv.gz",
+    "expression_size": 6480071,
+    "expression_sha256": "28c946c4bfdf3fc23cd2fc787d3eb15d45e5bf093078e49cfd0171351d1a15b6",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE313nnn/GSE313117/soft/GSE313117_family.soft.gz",
+    "soft_size": 7582,
+    "soft_sha256": "6fbc7b5f14bf45c1e2e3eee17f97ab5a3dd27b7ec43e6d504f11758cf24cef3b",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Pancreatic cancer, patient [0-9]+, whole transcriptome",
+    "expected_primary_samples": 79,
+    "expected_endpoint_complete_samples": 79,
+    "expected_events": 60,
+    "expected_censored": 19,
+    "expected_expression_columns": 79,
+    "patient_id_characteristic": "subject",
+    "time_characteristic": "time.to.os",
+    "event_characteristic": "os.code",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "expression_sample_characteristic": "rnaseq_name",
+    "sample_type": "Tumor",
+    "clinical": {
+      "evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE313nnn/GSE313117/suppl/GSE313117_deidentified_clinical_data_final.csv.gz",
+      "evidence_size": 1801,
+      "evidence_sha256": "1c064fb4edff26b7e84643bdc77764b195d6fae08c6903442e445f1b721193f4",
+      "evidence_format": "csv.gz",
+      "header_row": 1,
+      "record_id_column": "rnaseq_name",
+      "sample_metadata_field": "description",
+      "sample_id_pattern": "(?:Library name: )?(rnaseq_[0-9]+)",
+      "expected_records": 79
+    },
+    "expression": {
+      "layout": "delimited_matrix"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Tumor",
+    "sample_role": "Archival FFPE pancreatic ductal adenocarcinoma tumor profiled by whole-transcriptome RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO whole-transcriptome TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by GEO",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "HUGO-style gene symbols supplied as row identifiers in the pinned GEO whole-transcriptome matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned source matrix contains 24,416 non-empty gene symbols with no case-insensitive duplicates, so no feature collapse is required.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to the source-provided whole-transcriptome TPM values. The matched exome-capture TPM matrix is intentionally excluded because its assay coverage and abundance scale differ from whole-transcriptome RNA-seq."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Not specified by the source",
+      "event_definition": "Death from any cause as encoded in the source OS.code field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

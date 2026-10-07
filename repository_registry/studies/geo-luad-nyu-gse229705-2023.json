@@ -1,0 +1,148 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-luad-nyu-gse229705-2023",
+    "cancer_code": "LUAD",
+    "name": "NYU stage I lung adenocarcinoma cohort (GSE229705)",
+    "description": "Independent stage I lung adenocarcinoma cohort with primary-tumor bulk RNA sequencing and individual source-defined progression-free follow-up.",
+    "cohort_context": "The source study prospectively collected matched primary lung adenocarcinoma and tumor-adjacent lung specimens from 143 treatment-naive patients undergoing R0 resection at NYU Langone Health. RNA quality control retained 123 matched pairs. TRACE Explorer uses only the 123 primary-tumor profiles and never combines them with the adjacent-normal profiles.",
+    "source_provider": "geo",
+    "source_accession": "GSE229705",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE229705",
+    "publication_citation": "Dolgalev et al. Nature Communications 2023",
+    "publication_id": "PMID:37938580; PMCID:PMC10632519; DOI:10.1038/s41467-023-42327-x",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "NYU Langone stage I lung adenocarcinoma matched tumor-normal study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Nature Communications Source Data",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Mammalian rRNA-depleted Trio total-RNA libraries sequenced as paired-end 100-nucleotide reads, aligned to GRCh38 with STAR and quantified at gene level with featureCounts",
+      "endpoint_context": "Source-defined postoperative progression-free survival after R0 resection",
+      "endpoint_caveat": "The source progression event includes second primary lung tumors, locoregional recurrence and systemic metastasis. TRACE Explorer preserves the publication's PFS label and event coding; this endpoint is not reinterpreted as TCGA PFI, DFI, RFS, DSS or OS.",
+      "sample_selection_note": "The frozen GEO series contains 123 tumor-normal pairs. Only titles ending in -T are eligible, yielding one primary-tumor profile for each of 123 unique patients.",
+      "clinical_evidence_note": "Nature Communications Source Data sheet Figure 5b contains exactly the 123 expression-linked Study_ID records used in the publication's PFS curve, with individual TTP days and progression status. The linkage to the GEO patient characteristic is one-to-one and complete.",
+      "source_tissue_note": "The source article developed its main inflammatory module in tumor-adjacent normal lung. This repository release instead exposes the matched primary-tumor transcriptomes to satisfy the direct tumor-expression eligibility policy and does not claim to reproduce the adjacent-normal signature result.",
+      "overlap_note": "The NYU stage I cohort is institutionally independent of TCGA-LUAD and of the BMC/LHMC, Uppsala and TCIA LUAD cohorts already registered in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO matrix and CC BY 4.0 Source Data in place. Source-file redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE229705",
+    "expression_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE229705&format=file&file=GSE229705_counts-raw.csv.gz",
+    "expression_filename": "GSE229705_counts-raw.csv.gz",
+    "expression_size": 10415721,
+    "expression_sha256": "7ab7cfb8cc0462290a9b95b52eab04b0816074283c7133b94dbb0950721dc81d",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE229nnn/GSE229705/soft/GSE229705_family.soft.gz",
+    "soft_size": 13303,
+    "soft_sha256": "d05bdec97e9c365064e14bc6c0418b8b7904e0b8641723172b7801859c4e6f34",
+    "license_evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10632519/",
+    "primary_sample_title_pattern": "NYU[^ ]+-T \\(RNA-seq\\)",
+    "expected_primary_samples": 123,
+    "expected_endpoint_complete_samples": 123,
+    "expected_events": 45,
+    "expected_censored": 78,
+    "expected_expression_columns": 123,
+    "expected_expression_gene_rows": 60591,
+    "patient_id_characteristic": "patient",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^(.+) \\(RNA-seq\\)$",
+    "expression_sample_id_replacement": "\\1",
+    "time_characteristic": "pfs days",
+    "event_characteristic": "pfs event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-023-42327-x/MediaObjects/41467_2023_42327_MOESM10_ESM.xlsx",
+      "evidence_size": 15209349,
+      "evidence_sha256": "5012aa688d92a5faf8959c5231b8d2a5725f8d44efa7d1986ab5252ab964bda3",
+      "evidence_format": "xlsx",
+      "sheet_name": "Figure 5b",
+      "header_row": 1,
+      "record_id_column": "Study_ID",
+      "sample_metadata_field": "characteristic:patient",
+      "sample_id_pattern": "(?:NYU)?([0-9]+)",
+      "expected_records": 123,
+      "expected_matched_records": 123,
+      "expected_unmatched_records": 0,
+      "field_name_map": {
+        "Study_ID": "clinical study id",
+        "Progression": "pfs event",
+        "TTP": "pfs days",
+        "module20": "source tan module20 score"
+      }
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "gene",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Treatment-naive stage I lung adenocarcinoma primary tumor collected at R0 resection",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Raw featureCounts gene counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided GRCh38 gene symbols in the pinned GEO count matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The frozen matrix contains 60,591 non-empty unique gene symbols; no implicit aggregation is applied.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 60,591 source gene rows for each selected tumor and applies log2(CPM + 1). The adjacent-normal columns are excluded before normalization, and values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Source-defined progression-free survival",
+      "time_column": "PFS_DAYS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "days",
+      "time_origin": "R0 surgical resection",
+      "event_definition": "First source-coded progression: second primary lung tumor, locoregional recurrence or systemic metastasis",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

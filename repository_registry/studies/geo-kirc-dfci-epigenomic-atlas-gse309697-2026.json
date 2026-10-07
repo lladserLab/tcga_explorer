@@ -1,0 +1,317 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-kirc-dfci-epigenomic-atlas-gse309697-2026",
+    "cancer_code": "KIRC",
+    "name": "Dana-Farber ccRCC epigenomic-atlas RNA cohort (GSE309697)",
+    "description": "Independent clear-cell renal-cell carcinoma cohort with bulk tumor RNA sequencing and individual overall survival from diagnosis.",
+    "cohort_context": "The source atlas profiled normal kidney, localized clear-cell renal-cell carcinoma and metastases from 32 patients across several genomic assays. TRACE Explorer selects one bulk RNA profile for 23 patients, preferring a local tumor when available and otherwise retaining one source-listed metastasis. One patient with a non-positive diagnosis-to-follow-up interval is removed, leaving 22 endpoint-complete patients.",
+    "source_provider": "geo",
+    "source_accession": "GSE309697",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE309697",
+    "publication_citation": "Abou Alaiwi et al. Cell Reports 2026",
+    "publication_id": "PMID:41689799; PMCID:PMC13282931; DOI:10.1016/j.celrep.2026.116968",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Dana-Farber Cancer Institute ccRCC epigenomic atlas",
+      "source_data_system": "NCBI Gene Expression Omnibus and Europe PMC",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Poly(A)-selected bulk RNA sequencing quantified at gene level with Cufflinks; source FPKM values are transformed to log2(FPKM + 1) by TRACE Explorer.",
+      "endpoint_context": "Overall survival from RCC diagnosis, reconstructed from age at diagnosis and age at death or last follow-up in Supplementary Table S1C",
+      "endpoint_caveat": "The diagnosis-to-follow-up interval is reconstructed as an age difference and can contain rounding error. The cohort mixes localized tumors and metastases, spans treatment histories and is not an untreated natural-history cohort.",
+      "sample_selection_note": "One RNA profile is retained per linked patient. A local-tumor profile is preferred when its title and filename identify one; otherwise the first source-listed metastasis is retained. Patient 1247 has two metastatic RNA profiles and GSM9277313 is selected deterministically. Patient 12 is omitted because the clinical key RCCT 1284/1308/1077 and RNA title key 1077/1284/1308 cannot be reconciled without manual reinterpretation.",
+      "source_metadata_caveat": "For Patient 962, GEO title and filename identify GSM9277292 as the local tumor and Supplementary Table S1A confirms that a local-tumor RNA profile exists, while the GEO tissue characteristic is shifted relative to the assay title. Selection therefore uses the explicit RNA title and filename, and this source inconsistency remains visible in the audit metadata.",
+      "endpoint_exclusion_note": "Patient 14 (RCCT 1166) has age at death or last follow-up lower than age at RCC diagnosis. Its derived interval is blanked by the prespecified positive-time rule and the patient is excluded before expression analysis.",
+      "expression_processing_note": "The 23 source Cufflinks files contain the same multiset of 20,165 gene-symbol rows in different row orders. TRACE Explorer aligns rows by case-insensitive symbol, excludes all 109 rows belonging to 52 ambiguous symbols and retains 20,056 unique symbols without aggregation.",
+      "overlap_note": "The Dana-Farber atlas is external to TCGA-KIRC and is not pooled with the existing CheckMate, RECA-EU, CPTAC, IMmotion150 or FUSCC kidney cohorts.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Matrix redistribution is disabled; NCBI GEO terms and the article's CC BY-NC-ND 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE309697",
+    "expression_files": [
+      {
+        "name": "GSM9277286_R716T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277286&format=file&file=GSM9277286_R716T.genes.fpkm_tracking.gz",
+        "size": 614763,
+        "sha256": "b055676eadfc5062d9f5db023b2f677caaf9d35097abcf567dfe11d5a2729abb"
+      },
+      {
+        "name": "GSM9277289_1226M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277289&format=file&file=GSM9277289_1226M.genes.fpkm_tracking.gz",
+        "size": 602685,
+        "sha256": "b360ee89f75c00f927f06632e30dac4a8a3c89384db33ba7911f8130ca6a3f1a"
+      },
+      {
+        "name": "GSM9277292_R962T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277292&format=file&file=GSM9277292_R962T.genes.fpkm_tracking.gz",
+        "size": 615962,
+        "sha256": "1c31c59edf7cb20c718e69c74bb7f5ed4349efed113b723f9ef002a6daa635c4"
+      },
+      {
+        "name": "GSM9277294_R957T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277294&format=file&file=GSM9277294_R957T.genes.fpkm_tracking.gz",
+        "size": 608657,
+        "sha256": "6ee0bf050f78c11529c4c275f9a263908e694f3333c67369f1736bc87108feeb"
+      },
+      {
+        "name": "GSM9277297_1058T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277297&format=file&file=GSM9277297_1058T.genes.fpkm_tracking.gz",
+        "size": 608244,
+        "sha256": "7bd8021800cbad6e4520a8ef484b65eac444d0a117775eed353fb71bc85d930e"
+      },
+      {
+        "name": "GSM9277300_R638T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277300&format=file&file=GSM9277300_R638T.genes.fpkm_tracking.gz",
+        "size": 614043,
+        "sha256": "acf2abe607965dea689c5004b84e61a144f47cb020ac27e1811977c8c11322f8"
+      },
+      {
+        "name": "GSM9277302_a1014T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277302&format=file&file=GSM9277302_a1014T.genes.fpkm_tracking.gz",
+        "size": 611241,
+        "sha256": "0220d3c70bf843b514c39852c09e3a2bef5b3b9566e5370d7aee37aa4a55b311"
+      },
+      {
+        "name": "GSM9277304_a1091T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277304&format=file&file=GSM9277304_a1091T.genes.fpkm_tracking.gz",
+        "size": 608036,
+        "sha256": "0f11586e848f67235a46227d8d8aedf536c3dc5cfecf0c5ed5d67b87157b6324"
+      },
+      {
+        "name": "GSM9277307_R233T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277307&format=file&file=GSM9277307_R233T.genes.fpkm_tracking.gz",
+        "size": 608111,
+        "sha256": "dd2fe48a4c317368b82494a1971ecab9a3a4bdd6ca93a1bba9dc8346682a3b2b"
+      },
+      {
+        "name": "GSM9277309_1120T.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277309&format=file&file=GSM9277309_1120T.genes.fpkm_tracking.gz",
+        "size": 614337,
+        "sha256": "462811ac992e691f216393aebf5f1c96f0a22bd9426cf50a3ec6b1f8fecce8f2"
+      },
+      {
+        "name": "GSM9277313_1247A.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277313&format=file&file=GSM9277313_1247A.genes.fpkm_tracking.gz",
+        "size": 610067,
+        "sha256": "bd404b84d1a61df66c72d37be7b81f5cfeb225735609864a478b98a1f940fa28"
+      },
+      {
+        "name": "GSM9277315_256M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277315&format=file&file=GSM9277315_256M.genes.fpkm_tracking.gz",
+        "size": 609799,
+        "sha256": "c6e43b719560ee8a19d3b92a48363976894415d9eafa7af733e5a2f50280bf76"
+      },
+      {
+        "name": "GSM9277316_573M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277316&format=file&file=GSM9277316_573M.genes.fpkm_tracking.gz",
+        "size": 611373,
+        "sha256": "ef8352615d058e966886bb88d9767ee0795ea7bbbbdde0d8bfc2e4c6486577e6"
+      },
+      {
+        "name": "GSM9277317_968M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277317&format=file&file=GSM9277317_968M.genes.fpkm_tracking.gz",
+        "size": 602081,
+        "sha256": "e385b0a5f1d6b6b9c0fef61637a6529f819d6670890c7fd8a17e17c57a59fdd2"
+      },
+      {
+        "name": "GSM9277318_1168M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277318&format=file&file=GSM9277318_1168M.genes.fpkm_tracking.gz",
+        "size": 606471,
+        "sha256": "a1b015703e76f635e21c23f6b29b0f564dfb8ddd1c5099ec97060942d0f631d1"
+      },
+      {
+        "name": "GSM9277319_1169M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277319&format=file&file=GSM9277319_1169M.genes.fpkm_tracking.gz",
+        "size": 602683,
+        "sha256": "c35596d5150dc0ee79372081cac8537d1452bcfc84b00fc74cf2398c43a650f7"
+      },
+      {
+        "name": "GSM9277320_344M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277320&format=file&file=GSM9277320_344M.genes.fpkm_tracking.gz",
+        "size": 610469,
+        "sha256": "1962eea5d482a78f5dc69e5677272af8722a5797f0ea3ff2d5999636c5ba48a7"
+      },
+      {
+        "name": "GSM9277321_1136M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277321&format=file&file=GSM9277321_1136M.genes.fpkm_tracking.gz",
+        "size": 607784,
+        "sha256": "2826ad528e385e283e58c05c3341dedbfb77230cc61930db23f64c0f52f6f554"
+      },
+      {
+        "name": "GSM9277322_1350M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277322&format=file&file=GSM9277322_1350M.genes.fpkm_tracking.gz",
+        "size": 611320,
+        "sha256": "1d3eaf0c55bf6b910ad662bb1f9a88bdf5fafa35493617eff7c7c46d2a20cdae"
+      },
+      {
+        "name": "GSM9277323_1164M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277323&format=file&file=GSM9277323_1164M.genes.fpkm_tracking.gz",
+        "size": 610606,
+        "sha256": "7688e1350bc01c7b65f9e9566004d3b9c35f83d39e056770b7d043ec58c6b268"
+      },
+      {
+        "name": "GSM9277324_1166M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277324&format=file&file=GSM9277324_1166M.genes.fpkm_tracking.gz",
+        "size": 607140,
+        "sha256": "c171b722a6d1fab2fca2e625cbde553f7fc4f563153f0b96c6ce34cb53952044"
+      },
+      {
+        "name": "GSM9277325_1230M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277325&format=file&file=GSM9277325_1230M.genes.fpkm_tracking.gz",
+        "size": 606214,
+        "sha256": "9139061bd470a7fb018701e156ff6f4a26427b925584e2d8c953b2241be3eadd"
+      },
+      {
+        "name": "GSM9277326_334M.genes.fpkm_tracking.gz",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM9277326&format=file&file=GSM9277326_334M.genes.fpkm_tracking.gz",
+        "size": 608506,
+        "sha256": "7a8fdb1a68438a75383ee1cbe988fead8c17deb0ee47fe4176cc1f590fbf6e97"
+      }
+    ],
+    "soft_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE309697&targ=all&form=text&view=full",
+    "soft_filename": "GSE309697_all.soft",
+    "soft_size": 15931358,
+    "soft_sha256": "b6dc126cd80124f0561e1ec51c5432a9b157e075d1c188ebfbee581a2c5665c9",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "(?:Patient (?:716|962|957|1058|638|1014|1091|233|1120); RNA-Seq - local tumor|Patient 1226; RNA-Seq - mets|Patient 1247; RNA-Seq - mets 1|Patient (?:256|573|968|1168|1169|344|1136|1350|1164|1166|1230|334); RNA-Seq - mets)",
+    "expected_primary_samples": 23,
+    "expected_endpoint_complete_samples": 22,
+    "expected_events": 9,
+    "expected_censored": 13,
+    "expected_expression_columns": 22,
+    "expected_source_expression_files": 23,
+    "expected_expression_gene_rows": 20165,
+    "expected_normalized_expression_gene_rows": 20056,
+    "patient_id_characteristic": "patient_id",
+    "time_characteristic": "os_days",
+    "event_characteristic": "vital_status",
+    "event_value_map": {
+      "Alive": 0,
+      "Deceased": 1
+    },
+    "age_characteristic": "age_at_diagnosis",
+    "stage_characteristic": "stage",
+    "grade_characteristic": "grade",
+    "expression_sample_metadata_field": "geo_accession",
+    "sample_type": "Primary or Metastatic ccRCC Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13282931/supplementaryFiles",
+      "evidence_size": 72222,
+      "evidence_sha256": "92b363f294d9bac9efe654c4ccdfdb4d4376eb39d474acecec799735c81365d5",
+      "evidence_container_size": 42341533,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "NIHMS2151767-supplement-2.xlsx",
+      "sheet_name": "S1C",
+      "header_row": 1,
+      "header_name_overrides": {
+        "11": "TKI Best Response",
+        "13": "TKI Progression p/t next line",
+        "16": "ICI Line of Therapy",
+        "18": "ICI Single/Combination",
+        "21": "ICI Best Response",
+        "28": "HIF2aI Line of Therapy",
+        "29": "HIF2aI Single/Combination",
+        "30": "HIF2aI Best Response",
+        "32": "HIF2aI Progression p/t next line",
+        "42": "Age at RCC diagnosis"
+      },
+      "record_id_column": "Sample ID Local (Mets if different Number)",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?:RCCT |Patient )([0-9]+).*",
+      "sample_id_replacement": "\\1",
+      "field_name_map": {
+        "Patient ID": "patient_id",
+        "OS days": "os_days",
+        "Alive/Deceased": "vital_status",
+        "Age at RCC diagnosis": "age_at_diagnosis",
+        "Stage": "stage",
+        "Grade": "grade"
+      },
+      "derived_fields": [
+        {
+          "operation": "numeric_difference_scaled",
+          "target": "OS days",
+          "start_field": "Age at RCC diagnosis",
+          "end_field": "Age at Death/Last Follow-Up",
+          "scale": 365.25,
+          "require_positive": true
+        }
+      ],
+      "allow_unmatched_records": true,
+      "expected_records": 32,
+      "expected_matched_records": 23,
+      "expected_unmatched_records": 9
+    },
+    "expression": {
+      "layout": "normalized_files_tar",
+      "supplementary_file_pattern": ".+\\.genes\\.fpkm_tracking\\.gz",
+      "feature_column": "gene_short_name",
+      "feature_column_output": "Hugo_Symbol",
+      "value_column_index": 10,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true,
+      "feature_order_policy": "align",
+      "require_nonnegative": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary or Metastatic ccRCC Tumor",
+    "sample_role": "One source-selected local or metastatic ccRCC tumor per linked patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary or Metastatic ccRCC Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_fpkm",
+    "label": "GEO FPKM normalized to log2(FPKM + 1)",
+    "source_unit": "Cufflinks gene-level FPKM",
+    "transform": "identity",
+    "analysis_unit": "log2(FPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided Cufflinks gene_short_name values",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to the 52 case-insensitive symbols repeated in the source files are excluded before bundle construction; no ambiguous values are summed or averaged.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer aligns the common feature multiset across pinned Cufflinks files, removes ambiguous symbols and applies log2(FPKM + 1). Values are intended for within-cohort analyses and are not directly exchangeable with TPM or count-derived CPM."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from RCC diagnosis",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Age at RCC diagnosis",
+      "event_definition": "Death from any cause; living patients are censored at the source-reported last follow-up age",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

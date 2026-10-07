@@ -1,0 +1,17 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Typed key field and bibliography identifiers without secret material"
+regexTarget = "line"
+regexes = [
+  '''^\s*private_key:\s*Ed25519PrivateKey\s*$''',
+  '''^\s*"citation_key":\s*"[A-Za-z0-9_]+",?\s*$''',
+  # Public cBioPortal study IDs, not access tokens. Keep this exception limited
+  # to the reviewed identifiers and accession fields; do not ignore the registry.
+  '''^\s*"(?:source_)?accession":\s*"(?:brca_iatlas_anders_2022|gbm_iatlas_prins_2019|ccrcc_iatlas_choueiri_2016|paad_iatlas_prince_2022|hnsc_a5consortium_2025|prad_su2c_2019|blca_iatlas_imvigor210_2017|skcm_dfci_2015)",?\s*$''',
+  # Reviewed public study accessions and fixed calibration matrix identifiers.
+  '''^\s*"(?:source_)?accession":\s*"(?:mel_iatlas_hugo_ucla_2016|mel_dfci_2019|mel_tsam_liang_2017|mel_iatlas_riaz_nivolumab_2017|aml_stjude_2024|utuc_cornell_baylor_mdacc_2019|BEATAML1\.0-COHORT|gbm_mayo_pdx_sarkaria_2019|aml_ohsu_2018|prad_organoids_msk_2022|angs_painter_2025|mel_iatlas_liu_2019)",?\s*$''',
+  '''^\s*"key":\s*"(?:luad_cptac_n208|blca_uromol_n462)",?\s*$''',
+  '''^\s*"accession":\s*"SNUH-THYROID-NGS2; PMCID:PMC13374302; DOI:10\.1186/s12943-026-02699-2",?\s*$''',
+]

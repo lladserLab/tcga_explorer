@@ -134,6 +134,10 @@ The derived cache does two things:
 
 This avoids modifying `/mnt/data1/Andres/TCGA` and avoids slow first-analysis scans across sample-level GDC files. The first startup after clearing `./derived` can take tens of minutes because all cohort matrix caches are built up front.
 
-Raw count, raw TPM, raw FPKM, z-score, VST, and rlog are not exposed in the first survival UI. Z-score is better reserved for future multi-gene signatures or penalized models. VST/rlog would require an explicit DESeq2 processing step because the current `dds.rds` files were created without running `DESeq()`.
+Raw count, raw TPM, raw FPKM, VST and rlog are not exposed as direct survival
+expression scales. Z-scoring is used at the signature-scoring layer and within
+pan-cancer Cox models, but not as a standalone RNA matrix scale. VST/rlog would
+require an explicit DESeq2 processing step because the current `dds.rds` files
+were created without running `DESeq()`.
 
 Stranded count modes should only be exposed if we decide they are analytically useful for this survival workflow and materialize them with the same barcode alignment checks.

@@ -1,0 +1,9 @@
+body { margin: 0; color: oklch(24% 0.018 252); background: oklch(99% 0.003 245); font: 1rem/1.5 system-ui, sans-serif; }
+.docs-header { padding: 1rem 1.5rem; border-bottom: 1px solid oklch(86% 0.011 240); }
+.docs-header h1 { font-size: 1.25rem; margin: 0 0 .5rem; }
+.docs-header nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+.docs-header a { color: oklch(43.5% 0.083 218); display: inline-flex; align-items: center; min-height: 44px; }
+a:focus-visible { outline: 2px solid oklch(43.5% 0.083 218); outline-offset: 3px; }
+#docs-status, noscript p { margin: 1rem 1.5rem; max-width: 70ch; }
+#api-reference { min-width: 0; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

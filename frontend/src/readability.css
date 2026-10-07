@@ -1,0 +1,169 @@
+/* Reading roles, independent of display headings and scientific plot marks. */
+:root {
+  --text-body: 1rem;
+  --text-control: 0.9375rem;
+  --text-secondary: 0.875rem;
+  --text-data: 0.8125rem;
+  font-size: 16px;
+}
+
+.workspace .page-summary,
+.workspace .panel-header p,
+.workspace .result-tab-description,
+.workspace .field-help,
+.workspace .method-note,
+.workspace .help-card,
+.workspace .design-ledger-estimand span,
+.workspace .cohort-adjustment-notice {
+  font-size: var(--text-body);
+  line-height: 1.55;
+  max-width: 72ch;
+  font-weight: 400;
+}
+
+.workspace .field,
+.workspace .label-with-help,
+.workspace .filter-title span,
+.workspace .analysis-stepper button,
+.workspace .primary-button,
+.workspace .secondary-button,
+.workspace .result-tab-list button,
+.top-nav button {
+  font-size: var(--text-control);
+  line-height: 1.4;
+}
+
+.workspace input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+.workspace select,
+.workspace textarea {
+  font-size: var(--text-body);
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.workspace .design-ledger-facts dt,
+.workspace .design-ledger-facts dd,
+.workspace .design-ledger-estimand strong,
+.workspace .design-ledger-missing strong,
+.workspace .design-ledger-missing li,
+.workspace .design-ledger-cautions li,
+.workspace .result-model-label,
+.workspace .result-source-details,
+.workspace .result-setting-list dt,
+.workspace .field-error,
+.workspace .eyebrow {
+  font-size: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Tables retain their density; explanations are allowed to breathe. */
+.workspace table :is(th, td) {
+  font-size: var(--text-data);
+  line-height: 1.45;
+}
+
+.workspace .help-card { width: min(400px, calc(100vw - 48px)); }
+.workspace .design-ledger-facts { gap: 12px 16px; }
+.workspace .panel-header p { margin-top: 8px; }
+
+.home-page.home-reorganized .home-kicker,
+.home-page.home-reorganized .home-institutions > .eyebrow,
+.home-page.home-reorganized .home-coverage-heading p {
+  font-size: var(--text-data);
+  line-height: 1.5;
+}
+
+.home-page.home-reorganized .home-lede,
+.home-page.home-reorganized .home-video-intro p {
+  font-size: var(--text-body);
+  line-height: 1.55;
+  max-width: 70ch;
+}
+
+.home-page.home-reorganized .home-question-choices small,
+.home-page.home-reorganized .home-next-options small,
+.home-page.home-reorganized .home-question-next h3,
+.home-page.home-reorganized .home-data-strip dt {
+  font-size: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.home-page.home-reorganized .home-upload-entry button,
+.home-page.home-reorganized .home-secondary-links button,
+.home-page.home-reorganized .home-video-actions > button {
+  font-size: var(--text-control);
+  line-height: 1.4;
+}
+
+.trace-tutorial-library .trace-tutorial-row-copy p,
+.trace-tutorial-dock p,
+.trace-tutorial-dock li {
+  font-size: var(--text-body);
+  line-height: 1.55;
+}
+
+.trace-tutorial-library .trace-tutorial-row-meta,
+.trace-tutorial-library .trace-tutorial-mode,
+.trace-tutorial-library .trace-tutorial-row-action,
+.trace-tutorial-dock button,
+.service-status-notice span,
+.service-status-notice strong {
+  font-size: var(--text-secondary);
+  line-height: 1.5;
+}
+
+@media (min-width: 1400px) {
+  .analysis-workflow-layout {
+    grid-template-columns: minmax(540px, 600px) minmax(0, 1fr);
+  }
+}
+
+/* Portaled help must not inherit form grids, tiny labels or clipping parents. */
+.help-card.help-card-anchored {
+  position: fixed;
+  z-index: 1200;
+  width: min(420px, calc(100vw - 24px));
+  padding: 18px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
+  transform: none;
+}
+
+.help-card-anchored .help-slots { gap: 14px; }
+.help-card-anchored .help-slot { display: block; }
+.help-card-anchored .help-slot dt {
+  margin: 0 0 4px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.help-card-anchored .help-slot dd,
+.help-card-anchored .help-extra {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+.help-card-anchored .help-slots + .help-slots {
+  margin-top: 16px;
+  padding-top: 16px;
+}
+.help-card-anchored .trace-term-kicker { font-size: 14px; }
+.help-card-anchored.trace-term-card > strong { font-size: 17px; }
+.help-card-anchored.trace-term-card > span:last-child {
+  font-size: 16px;
+  line-height: 1.55;
+}

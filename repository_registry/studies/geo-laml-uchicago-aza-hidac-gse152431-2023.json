@@ -1,0 +1,190 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-laml-uchicago-aza-hidac-gse152431-2023",
+    "cancer_code": "LAML",
+    "name": "UChicago AZA-HiDAC-Mito AML cohort (GSE152431)",
+    "description": "Independent high-risk AML treatment cohort with pretreatment bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The phase I study enrolled patients with high-risk acute myeloid leukemia treated with azacitidine priming followed by high-dose cytarabine and mitoxantrone. TRACE Explorer retains one pretreatment RNA profile for each patient explicitly labelled AML or therapy-related AML in the pinned sample workbook. Profiles labelled only as myeloid neoplasm and patients with no pretreatment RNA are excluded.",
+    "source_provider": "geo",
+    "source_accession": "GSE152431",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152431",
+    "publication_citation": "Liang et al. Advanced Science 2023",
+    "publication_id": "PMID:37271891; PMCID:PMC10427370; DOI:10.1002/advs.202300445",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "University of Chicago AZA-HiDAC-Mito phase I study",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "Stranded poly(A)-selected bulk RNA sequencing of bone-marrow or peripheral-blood mononuclear cells, aligned to hg19 with STAR 2.5.3",
+      "endpoint_context": "Source-provided overall survival in months for the AZA-HiDAC-Mito cohort",
+      "endpoint_caveat": "The public workbook supplies exact individual survival duration and vital status but does not define the clinical time origin. TRACE Explorer preserves the source endpoint without claiming a harmonized diagnosis-, enrollment- or treatment-anchored origin.",
+      "clinical_evidence_note": "The pinned GEO sample-information workbook contains a unique RNA sample name, patient identifier, diagnosis, age, sex, overall-survival duration and vital status. Its 104 RNA records map one-to-one to the 104 count-matrix columns.",
+      "sample_selection_note": "Only Day-0 AZA-HiDAC-Mito RNA profiles with an explicit AML or therapy-related AML diagnosis are eligible. When both bone-marrow and peripheral-blood profiles exist for a patient, bone marrow is selected first and the source lane is the deterministic secondary tie-breaker. This leaves 23 patients from 26 eligible pretreatment libraries.",
+      "source_metadata_discrepancy_note": "The workbook labels patient 19's bone-marrow specimen as recurrent AML and the paired peripheral-blood specimen as de novo therapy-related AML. Both GEO records identify the disease state as AML and agree on patient ID, treatment, age, sex, survival time and vital status. The prespecified tissue-priority rule selects the bone-marrow profile; the conflicting subtype fields are retained in source provenance but are not treated as patient invariants.",
+      "disease_scope_note": "Five participants labelled only as myeloid neoplasm are excluded rather than inferred to have AML. Three additional AML patients have Day-5 but no Day-0 RNA and are excluded from this pretreatment release.",
+      "overlap_note": "This phase I AZA-HiDAC-Mito cohort is kept separate from the historical HiDAC-Mito comparator released from the same GEO series and from the promoted OHSU and AMLCG cohorts.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Direct source-file redistribution remains disabled under the conservative GEO repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE152431",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE152nnn/GSE152431/suppl/GSE152431_rna_raw_counts.csv.gz",
+    "expression_size": 3006495,
+    "expression_sha256": "1d6b4dfd870f493f761142f7a6b22b29c75699f3b0e673846ffb5dd7299f3b13",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE152nnn/GSE152431/soft/GSE152431_family.soft.gz",
+    "soft_size": 19048,
+    "soft_sha256": "a76f09c171946ff900fe3d5c9d30a1f4823299bc8b57384d7eb77932c2b66f52",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "(?:BM|PB)_[0-9]+_RNA",
+    "expected_primary_samples": 71,
+    "sample_characteristic_filters": [
+      {
+        "key": "therapy",
+        "include": [
+          "AZA-HiDAC-Mito"
+        ],
+        "required": true
+      },
+      {
+        "key": "time",
+        "include": [
+          "Day0"
+        ],
+        "required": true
+      },
+      {
+        "key": "diagnosis",
+        "include": [
+          "AML",
+          "tAML"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 26,
+    "patient_id_characteristic": "patient",
+    "patient_sample_selection": {
+      "rank_by": [
+        {
+          "key": "cell",
+          "type": "text",
+          "order": "asc"
+        },
+        {
+          "key": "lane",
+          "type": "text",
+          "order": "asc"
+        }
+      ],
+      "require_equal_characteristics": [
+        "survival(month)",
+        "status",
+        "age",
+        "gender",
+        "therapy"
+      ],
+      "expected_selected_samples": 23,
+      "expected_duplicate_patient_groups": 3,
+      "expected_removed_samples": 3
+    },
+    "expected_endpoint_complete_samples": 23,
+    "expected_events": 10,
+    "expected_censored": 13,
+    "expected_expression_columns": 23,
+    "expected_source_expression_files": 104,
+    "expected_expression_gene_rows": 27945,
+    "expected_normalized_expression_gene_rows": 27945,
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^(.+)_RNA$",
+    "expression_sample_id_replacement": "\\1",
+    "time_characteristic": "survival(month)",
+    "event_characteristic": "status",
+    "event_value_map": {
+      "alive": 0,
+      "dead": 1,
+      "died": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "gender",
+    "sample_type": "Pretreatment AML specimen",
+    "clinical": {
+      "evidence_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE152nnn/GSE152431/suppl/GSE152431_sample_information.xlsx",
+      "evidence_size": 54907,
+      "evidence_sha256": "9cac70be27ee2674b807eb39ca580d3247d5253166d2bc59df1dd1d0c8058a4e",
+      "evidence_format": "xlsx",
+      "sheet_name": "sample_information_V3.1(1)",
+      "header_row": 1,
+      "record_id_column": "SampleName",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "^(.+)_RNA$",
+      "sample_id_replacement": "\\1",
+      "expected_records": 104,
+      "expected_matched_records": 71,
+      "expected_unmatched_records": 33,
+      "allow_unmatched_records": true,
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10427370/"
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "sampleName",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment AML specimen",
+    "sample_role": "Day-0 bone-marrow or peripheral-blood mononuclear-cell AML specimen collected before AZA-HiDAC-Mito",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment AML specimen"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "Source-provided raw gene counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned GSE152431 count matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 27,945 source gene symbols are unique both exactly and case-insensitively; no implicit aggregation is performed.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 27,945 source gene rows for each selected pretreatment specimen and applies log2(CPM + 1). Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause according to the source workbook; living patients are censored at the source-provided follow-up duration",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

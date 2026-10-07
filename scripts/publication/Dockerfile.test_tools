@@ -1,0 +1,5 @@
+# Test-only tools. The deployed runtime and statistical packages are unchanged.
+ARG RUNTIME_IMAGE=trace-explorer-ci-backend:local
+FROM ${RUNTIME_IMAGE}
+RUN apt-get update && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*

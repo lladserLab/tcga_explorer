@@ -1,0 +1,167 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-esca-ysh-gse130078-2019",
+    "cancer_code": "ESCA",
+    "name": "YSH esophageal squamous-cell carcinoma cohort (GSE130078)",
+    "description": "Independent Korean esophageal squamous-cell carcinoma cohort with paired-tissue bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "Yonsei Severance Hospital prospectively enrolled 66 patients with esophageal squamous-cell carcinoma. Twenty-three patients have paired tumor and adjacent-noncancer RNA sequencing in GSE130078; TRACE Explorer retains one source-labelled tumor profile per patient and links it to the exact public overall-survival record.",
+    "source_provider": "geo",
+    "source_accession": "GSE130078",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE130078",
+    "publication_citation": "You et al. Proceedings of the National Academy of Sciences 2019",
+    "publication_id": "PMID:31732666; PMCID:PMC6900598; DOI:10.1073/pnas.1912126116",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Yonsei Severance Hospital prospective ESCC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the PNAS supplementary clinical workbook distributed through Europe PMC",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Ribosomal-RNA-depleted stranded total-RNA sequencing of paired tumor and adjacent mucosa; Sickle quality filtering, STAR 2.5.2b alignment to GRCh37/hg19 and featureCounts 1.5.1 quantification against GENCODE v19",
+      "endpoint_context": "Overall survival in days with source vital status Alive or Dead",
+      "endpoint_caveat": "The public clinical workbook labels the interval Days OS but does not state whether day zero is diagnosis, biopsy, enrollment or another clinical landmark. TRACE Explorer therefore preserves a source-defined OS origin.",
+      "clinical_evidence_note": "PNAS Dataset S6 contains 66 unique Patient_01 through Patient_66 records with Days OS and Vital status. The first 23 identifiers correspond exactly to the 23 paired-tissue RNA-seq patients in GEO; all have positive time and explicit status, yielding seven deaths and 16 censored observations.",
+      "sample_selection_note": "Only GEO titles ending in _cancer and only supplementary count files ending in _cancer.assigned_count.txt.gz are eligible. All 23 paired adjacent-normal profiles are excluded before endpoint evaluation.",
+      "expression_processing_note": "Each retained tumor file contains the same ordered 57,783 versioned Ensembl gene identifiers and one raw assigned-count column. All identifiers map to pinned GENCODE v19. TRACE Explorer computes library-size CPM over all source rows, applies log2(CPM + 1) and excludes 293 symbols represented by multiple source Ensembl genes, retaining 55,431 analyzable symbols.",
+      "overlap_note": "The Korean YSH cohort is independent of TCGA-ESCA and of the active Vanderbilt, Humanitas and Big Ten durvalumab esophageal-cancer releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Source redistribution is disabled; NCBI GEO terms and the article's CC BY-NC-ND 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE130078",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130078/suppl/GSE130078_RAW.tar",
+    "expression_size": 13803520,
+    "expression_sha256": "f2058d2c07b02072a78eec3b9ce2977fc51a4b1e94098bc8c11f6529a750f455",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130078/soft/GSE130078_family.soft.gz",
+    "soft_size": 4658,
+    "soft_sha256": "da12456044c12e3d0a8226403d4343e6c9c578acf270455d1815ede9e861ba43",
+    "license_evidence_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "primary_sample_title_pattern": "Patient_[0-9]{2}_cancer",
+    "expected_primary_samples": 23,
+    "expected_endpoint_complete_samples": 23,
+    "expected_events": 7,
+    "expected_censored": 16,
+    "expected_source_expression_files": 23,
+    "expected_expression_columns": 23,
+    "expected_expression_gene_rows": 57783,
+    "expected_normalized_expression_gene_rows": 57783,
+    "patient_id_characteristic": "clinical patient id",
+    "time_characteristic": "os days",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "Alive": 0,
+      "Dead": 1
+    },
+    "sex_characteristic": "sex",
+    "grade_characteristic": "grade",
+    "stage_characteristic": "tumor stage",
+    "stage_value_map": {
+      "Stage I": "Stage I",
+      "Stage III&IV": "Stage III/IV"
+    },
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6900598/supplementaryFiles",
+      "evidence_size": 15608,
+      "evidence_sha256": "00a6567b517b3e82af44c9a5bf04fb467835e2047bde8cdcb1d3e4faae1acb9b",
+      "evidence_container_size": 8469887,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "pnas.1912126116.sd06.xlsx",
+      "sheet_name": "Dataset S6",
+      "header_row": 3,
+      "header_name_overrides": {
+        "1": "Patient ID",
+        "12": "Non-cancer HERES 2-DDCt",
+        "13": "Cancer HERES 2-DDCt",
+        "14": "Group"
+      },
+      "record_id_column": "Patient ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "^(Patient_[0-9]{2})(?:_cancer)?$",
+      "expected_records": 66,
+      "allow_unmatched_records": true,
+      "expected_matched_records": 23,
+      "expected_unmatched_records": 43,
+      "field_name_map": {
+        "Patient ID": "clinical patient id",
+        "Sex": "sex",
+        "Grade": "grade",
+        "Tumor stage": "tumor stage",
+        "Days OS": "os days",
+        "Vital status": "os status"
+      },
+      "terms_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+    },
+    "expression": {
+      "layout": "featurecounts_tar",
+      "feature_column": "Gene_id",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "count_column_index": 2,
+      "supplementary_file_pattern": "GSM[0-9]+_Patient_[0-9]{2}_cancer\\.assigned_count\\.txt\\.gz"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz",
+      "name": "gencode.v19.annotation.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 37991892,
+      "sha256": "9909e8123a40eca090c3f8e501633f7cc65cd6c4adb83b95009745eca3564d70"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Pretreatment esophageal squamous-cell carcinoma tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized to log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw assigned counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned GENCODE v19 GRCh37 gene_name annotation used by the source pipeline",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 57,783 source Ensembl identifiers map to GENCODE v19. The 293 symbols assigned to more than one source Ensembl gene are excluded rather than silently combined, leaving 55,431 analyzable symbols.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 57,783 source rows for each selected tumor, applies log2(CPM + 1), maps GENCODE v19 Ensembl identifiers and excludes ambiguous symbols. Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by Vital status (Dead = event; Alive = censored)",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

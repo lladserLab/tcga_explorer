@@ -1,0 +1,167 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pmc-kirc-hcrn-gu16-260-nivolumab-2025",
+    "cancer_code": "KIRC",
+    "name": "HCRN GU16-260 nivolumab-treated advanced ccRCC cohort (2025)",
+    "description": "Independent treatment-naive advanced clear-cell renal-cell carcinoma cohort with pretreatment bulk tumor RNA sequencing and individual progression-free and overall-survival follow-up during nivolumab monotherapy.",
+    "cohort_context": "The phase II HCRN GU16-260 release contains 102 clinical records and 90 expression-linked tumors across clear-cell and non-clear-cell RCC. TRACE Explorer prespecifies the 72 clear-cell patients to match TCGA-KIRC and excludes 18 non-clear-cell tumors before endpoint analysis.",
+    "source_provider": "PMC public article supplements",
+    "source_accession": "PMC12048281",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12048281/",
+    "publication_citation": "Hugaboom et al. Cancer Discovery 2025",
+    "publication_id": "PMID:39992403; PMCID:PMC12048281; DOI:10.1158/2159-8290.CD-24-0991",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-PMC-Public-Supplement-AACR",
+    "license_url": "https://pmc.ncbi.nlm.nih.gov/about/copyright/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "HCRN GU16-260 randomized phase II trial (NCT03117309), Part A",
+      "source_data_system": "PMC author manuscript and public article supplements",
+      "library_method": "FFPE tumor RNA captured with Illumina TruSeq RNA Exome, sequenced as 76-bp paired-end reads on HiSeq 2000 or 2500, aligned with STAR 2.7.10a and quantified with RSEM 1.3.1",
+      "treatment_context": "Previously untreated advanced clear-cell renal-cell carcinoma treated with nivolumab monotherapy",
+      "endpoint_context": "Trial-defined progression-free and overall survival after nivolumab initiation",
+      "sample_selection_note": "Supplementary Table S1 contains 102 unique subjects and Supplementary Table S2 contains 90 unique expression columns, all linked exactly to clinical records. Eligibility is fixed before endpoint analysis to clear-cell histology, a present expression column, positive OS and PFS times and explicit censor indicators, retaining 72 unique patients. The authors selected a metastatic specimen when a patient had paired primary and metastatic samples.",
+      "expression_processing_note": "The authors aligned RNA-seq reads with STAR and quantified expression with RSEM. Every source expression column sums to approximately 1,000,000, confirming the article-described TPM scale. TRACE Explorer preserves the supplied TPM values unchanged.",
+      "expression_curation_note": "The source workbook contains 56,238 expression rows with Ensembl identifiers and supplied gene descriptions. Twenty-nine descriptions were converted by Excel into date values and cannot be recovered unambiguously. Among the remaining rows, case-insensitive duplicate screening identifies 203 ambiguous descriptions spanning 2,140 rows. Date-formatted and duplicated descriptions are excluded rather than guessed or aggregated, leaving 54,069 exact and case-insensitively unique gene labels.",
+      "endpoint_caveat": "OS_CNSR and PFS_CNSR encode 1 as an observed event and 0 as censoring. The retained clear-cell cohort contains 26 OS events and 46 OS-censored observations, and 55 PFS events and 17 PFS-censored observations.",
+      "overlap_note": "HCRN GU16-260 is independent of TCGA-KIRC and of the active RECA-EU, CPTAC, IMmotion150, FUSCC, Dana-Farber epigenomic-atlas, CheckMate and JAVELIN Renal 101 releases.",
+      "license_note": "The author manuscript states that patient-level clinical data and normalized RNA-seq expression are included in public Supplementary Tables S1 and S2. The files are downloaded and transformed in place with pinned hashes; source and derived expression redistribution remains disabled under PMC and AACR terms."
+    }
+  },
+  "source": {
+    "provider": "europe_pmc_supplement",
+    "pmcid": "PMC12048281",
+    "publication_date": "2025-02-21",
+    "full_text_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12048281/pdf/nihms-2062158.pdf",
+    "full_text_download_mode": "pmc_pow",
+    "full_text_size": 3476499,
+    "full_text_sha256": "e4acff6237f772199018826a28b17c70aa9cd6deb5cb1a77746b583cb34cea89",
+    "source_license_id": "LicenseRef-PMC-Public-Supplement-AACR",
+    "clinical_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/12048281/bin/NIHMS2062158-supplement-1.xlsx",
+    "clinical_download_mode": "pmc_pow",
+    "clinical_size": 24613,
+    "clinical_sha256": "24d480b18ba2953ce5afd91752dacad86e5ead08b5394dad712fd9cf654d54c1",
+    "expression_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/12048281/bin/NIHMS2062158-supplement-2.xlsx",
+    "expression_download_mode": "pmc_pow",
+    "expression_size": 33936184,
+    "expression_sha256": "59ca76ccfa7a5850dcae0c0245a9baba9b5126fb58037920059af5256d2b0fee",
+    "clinical": {
+      "format": "xlsx",
+      "sheet_name": "Table_S1",
+      "header_row": 1,
+      "expected_rows": 102,
+      "sample_id_column": "SUBJECT_ID",
+      "patient_id_column": "SUBJECT_ID",
+      "sample_type": "Pretreatment advanced ccRCC FFPE tumor",
+      "require_expression_sample": true,
+      "eligibility_rules": [
+        {
+          "column": "Histology_type",
+          "include": [
+            "cc"
+          ],
+          "required": true
+        },
+        {
+          "column": "OS",
+          "required": true
+        },
+        {
+          "column": "OS_CNSR",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        },
+        {
+          "column": "PFS",
+          "required": true
+        },
+        {
+          "column": "PFS_CNSR",
+          "include": [
+            "0",
+            "1"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "expression": {
+      "layout": "xlsx_matrix",
+      "sheet_name": "Table_S2",
+      "header_row": 1,
+      "feature_column": "Description",
+      "sample_start_column": 3,
+      "expected_samples": 90,
+      "expected_gene_rows": 54069,
+      "drop_date_formatted_features": true,
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Pretreatment advanced ccRCC FFPE tumor",
+    "sample_role": "Pretreatment primary or metastatic advanced ccRCC FFPE tumor used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Pretreatment advanced ccRCC FFPE tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "provided_rsem_tpm",
+    "label": "Source-provided RSEM TPM",
+    "source_unit": "RSEM transcripts per million",
+    "transform": "identity",
+    "analysis_unit": "Source-provided RSEM TPM",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene descriptions supplied with Ensembl identifiers in HCRN GU16-260 Supplementary Table S2",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Twenty-nine date-formatted descriptions are excluded because their original labels cannot be recovered unambiguously. All 2,140 rows carrying one of 203 case-insensitively duplicated descriptions are also excluded rather than aggregated. The remaining 54,069 supplied labels are exact and case-insensitively unique.",
+    "stream_source_order": true,
+    "scale_note": "The authors' RSEM TPM matrix is preserved unchanged after exclusion of unrecoverable date-formatted and ambiguous duplicate descriptions. Values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival during nivolumab therapy",
+      "time_column": "OS",
+      "event_column": "OS_CNSR",
+      "time_unit": "months",
+      "time_origin": "HCRN GU16-260 nivolumab initiation",
+      "event_definition": "Death from any cause during trial follow-up",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival during nivolumab therapy",
+      "time_column": "PFS",
+      "event_column": "PFS_CNSR",
+      "time_unit": "months",
+      "time_origin": "HCRN GU16-260 nivolumab initiation",
+      "event_definition": "Progression or death during trial follow-up",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

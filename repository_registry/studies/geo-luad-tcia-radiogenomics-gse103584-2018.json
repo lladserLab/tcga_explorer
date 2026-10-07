@@ -1,0 +1,203 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-luad-tcia-radiogenomics-gse103584-2018",
+    "cancer_code": "LUAD",
+    "name": "Stanford-VA resected lung adenocarcinoma radiogenomics cohort (GSE103584)",
+    "description": "Independent resected lung adenocarcinoma cohort with direct tumor bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The NSCLC-Radiogenomics collection contains 130 surgically excised non-small-cell lung tumors with RNA sequencing. TRACE Explorer links the public GEO/SRA profiles to the TCIA clinical table by the explicit R01 case identifier and retains the 96 tumors classified as adenocarcinoma. Thirty-one squamous-cell carcinomas and three NSCLC-NOS tumors are excluded before outcome analysis.",
+    "source_provider": "geo",
+    "source_accession": "GSE103584:LUAD",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE103584",
+    "publication_citation": "Bakr et al. Scientific Data 2018",
+    "publication_id": "PMID:30325352; PMCID:PMC6190740; DOI:10.1038/sdata.2018.202",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-3.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Stanford University and Veterans Administration Palo Alto NSCLC-Radiogenomics collection",
+      "source_data_system": "NCBI GEO/SRA reprocessed by recount3 plus the TCIA NSCLC-Radiogenomics clinical table",
+      "source_platform": "Illumina HiSeq 2500",
+      "raw_data_accession": "GSE103584 / SRP117020",
+      "library_method": "TruSeq Stranded Total RNA with Ribo-Zero depletion from frozen surgically excised tumor tissue",
+      "endpoint_context": "Overall survival from surgical resection",
+      "clinical_evidence_note": "For deceased patients, TRACE Explorer uses the source Time to Death (days) value directly. For living patients, censoring time is the positive interval from surgery to Date of Last Known Alive, where surgery date equals CT Date plus the source Days between CT and surgery offset.",
+      "date_caveat": "The TCIA dates were shifted for de-identification but remain chronologically ordered. Only within-patient intervals are used; no calendar-date inference is made.",
+      "expression_note": "The original GEO Cufflinks matrix contains extensive feature-level missingness. TRACE Explorer instead uses the same public SRA runs as uniformly processed recount3 GENCODE v26 gene sums, applies recount3 AUC scaling to 40 million reads and then log2(x + 1), without imputing expression.",
+      "sample_selection_note": "Each eligible R01 case maps one-to-one to one GEO tumor library and one SRA run; no replicate selection is required.",
+      "overlap_note": "This Stanford-VA surgical cohort is independent of TCGA-LUAD. It is retained separately from other lung cohorts and is never pooled by default.",
+      "redistribution_note": "The TCIA clinical table is CC BY 3.0. GEO/SRA terms remain controlling for the expression data, so TRACE Explorer rebuilds the release from pinned public files and disables direct matrix redistribution."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE103584",
+    "expression_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/gene_sums/20/SRP117020/sra.gene_sums.SRP117020.G026.gz",
+    "expression_size": 13562961,
+    "expression_sha256": "cb91d14e6abbc9e61ad7a3430d1276383ea7fe166fada612b556f427b09900d1",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE103nnn/GSE103584/soft/GSE103584_family.soft.gz",
+    "soft_size": 8881,
+    "soft_sha256": "26e514f9f57e56909f906df304adfe189f6ec5165134746c1cfafca25c911924",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "R01-[0-9]+",
+    "expected_primary_samples": 130,
+    "sample_characteristic_filters": [
+      {
+        "key": "clinical histology",
+        "include": [
+          "Adenocarcinoma"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 96,
+    "expected_endpoint_complete_samples": 96,
+    "expected_events": 31,
+    "expected_censored": 65,
+    "expected_expression_columns": 96,
+    "expected_source_expression_files": 130,
+    "expected_expression_gene_rows": 63856,
+    "expected_normalized_expression_gene_rows": 63856,
+    "patient_id_characteristic": "clinical case id",
+    "time_characteristic": "os days",
+    "event_characteristic": "survival status",
+    "event_value_map": {
+      "Dead": 1,
+      "Alive": 0
+    },
+    "expression_sample_characteristic": "clinical case id",
+    "grade_characteristic": "clinical histopathological grade",
+    "age_characteristic": "clinical age",
+    "sex_characteristic": "clinical gender",
+    "race_characteristic": "clinical ethnicity",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://wiki.cancerimagingarchive.net/download/attachments/28672347/NSCLCR01Radiogenomic_DATA_LABELS_2018-05-22_1500-shifted.csv?api=v2&modificationDate=1531967714295&version=1",
+      "evidence_size": 66643,
+      "evidence_sha256": "0a1f7cdf02cef58450db17f116a3fb0ecfd4d737ca6843bb1939dbe421071476",
+      "evidence_format": "csv",
+      "header_row": 1,
+      "record_id_column": "Case ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(R01-[0-9]+)",
+      "expected_records": 162,
+      "expected_matched_records": 130,
+      "expected_unmatched_records": 32,
+      "allow_unmatched_records": true,
+      "field_name_map": {
+        "Case ID": "clinical case id",
+        "Age at Histological Diagnosis": "clinical age",
+        "Gender": "clinical gender",
+        "Ethnicity": "clinical ethnicity",
+        "Histology": "clinical histology",
+        "Pathological T stage": "clinical pathological t stage",
+        "Pathological N stage": "clinical pathological n stage",
+        "Pathological M stage": "clinical pathological m stage",
+        "Histopathological Grade": "clinical histopathological grade",
+        "Survival Status": "survival status",
+        "Time to Death (days)": "source time to death days",
+        "CT Date": "source ct date",
+        "Days between CT and surgery": "source days between ct and surgery",
+        "Date of Last Known Alive": "source last known alive date",
+        "TCGA_TRACE_OS_DAYS": "os days"
+      },
+      "derived_fields": [
+        {
+          "operation": "event_time_or_censor_interval",
+          "target": "TCGA_TRACE_OS_DAYS",
+          "status_field": "Survival Status",
+          "event_values": [
+            "Dead"
+          ],
+          "censor_values": [
+            "Alive"
+          ],
+          "event_time_field": "Time to Death (days)",
+          "censor_start_date_field": "CT Date",
+          "censor_start_offset_days_field": "Days between CT and surgery",
+          "censor_end_date_field": "Date of Last Known Alive",
+          "date_format": "%m/%d/%Y"
+        }
+      ],
+      "terms_url": "https://creativecommons.org/licenses/by/3.0/"
+    },
+    "expression": {
+      "layout": "recount3_gene_sums",
+      "sample_metadata_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/metadata/20/SRP117020/sra.sra.SRP117020.MD.gz",
+      "sample_metadata_size": 13876,
+      "sample_metadata_sha256": "2a2b7156c0a12f474857a78ef74506b21091364d5dbc74b69f76db5785a7d386",
+      "qc_metadata_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/metadata/20/SRP117020/sra.recount_qc.SRP117020.MD.gz",
+      "qc_metadata_size": 33980,
+      "qc_metadata_sha256": "59ee9070be9a9d935d565fd90c3b277b833e13f8268a38baba27c5d6feba0acb",
+      "run_id_column": "external_id",
+      "sample_id_column": "sample_title",
+      "auc_column": "bc_auc.all_reads_all_bases",
+      "target_size": 40000000,
+      "expected_annotation": "G026",
+      "expected_source_runs": 130
+    },
+    "gene_reference": {
+      "url": "https://duffel.rail.bio/recount3/human/annotations/gene_sums/human.gene_sums.G026.gtf.gz",
+      "name": "human.gene_sums.G026.gtf.gz",
+      "size": 1842619,
+      "sha256": "2d1bdff8d91e08f1291fd47850d9d61cfa6768cc3a4cb8516775a873b007d0f6"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Surgically excised primary lung adenocarcinoma, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "recount3_g026_log2_auc_scaled",
+    "label": "log2(recount3 AUC-scaled gene coverage + 1)",
+    "source_unit": "recount3 GENCODE v26 gene-sum base-pair coverage",
+    "transform": "identity",
+    "analysis_unit": "log2(AUC-scaled gene coverage + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned recount3 GENCODE v26 (Ensembl 88, GRCh38) annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Versioned Ensembl identifiers are mapped with the matching pinned GENCODE v26 annotation. Symbols assigned to more than one Ensembl identifier are excluded rather than combined implicitly.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies the recount3 transform_counts AUC normalization: round(gene-sum base-pair coverage x 40,000,000 / sample AUC), followed by log2(x + 1). The scale supports within-gene comparisons inside this cohort and is not numerically harmonized across studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival from surgical resection",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Surgical resection",
+      "event_definition": "Death from any cause; living patients are censored at the last-known-alive date",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

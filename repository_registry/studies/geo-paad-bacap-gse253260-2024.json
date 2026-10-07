@@ -1,0 +1,147 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-bacap-gse253260-2024",
+    "cancer_code": "PAAD",
+    "name": "BACAP prospective primary-PDAC biopsy cohort (GSE253260)",
+    "description": "Prospective multicenter pancreatic ductal adenocarcinoma cohort with pretreatment primary-tumor bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The French BACAP cohort prospectively enrolled patients with cytologically or pathologically confirmed PDAC before treatment, regardless of resectability or metastatic stage. GSE253260 publishes 397 primary-tumor endoscopic-ultrasound fine-needle-aspiration wash profiles. TRACE Explorer retains 380 patients with a released count-matrix column and complete positive overall-survival time/status.",
+    "source_provider": "geo",
+    "source_accession": "GSE253260",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE253260",
+    "publication_citation": "Nicolle et al. EBioMedicine 2024",
+    "publication_id": "PMID:39383608; PMCID:PMC11497430; DOI:10.1016/j.ebiom.2024.105373",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Biological and clinical database for pancreatic adenocarcinoma (BACAP)",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY-NC-ND 4.0 publication",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Lexogen QuantSeq 3-prime FWD bulk RNA sequencing of pretreatment primary-PDAC endoscopic-ultrasound fine-needle-aspiration biopsy wash material; reads were aligned to Ensembl GRCh38 with STAR and counted with featureCounts",
+      "endpoint_context": "Source-provided overall survival in months for a prospective all-stage PDAC cohort",
+      "endpoint_caveat": "GEO publishes exact individual OS and PFS duration/status but does not state the clinical time origin in the family metadata. TRACE Explorer preserves source-defined OS without inferring a diagnosis, biopsy or treatment origin.",
+      "sample_selection_note": "Every GEO record represents one primary-PDAC biopsy from one normalized patient identifier. BPC137T is excluded before endpoint evaluation because the pinned 396-column count matrix omits that otherwise listed GEO sample. Fourteen additional records lack a complete endpoint and two have non-positive follow-up, leaving 380 OS-eligible profiles.",
+      "expression_processing_note": "TRACE Explorer calculates library sizes across all 60,671 pinned source Ensembl rows, applies log2(CPM + 1), maps versionless identifiers with Ensembl release 95 GRCh38 and excludes symbols represented by multiple Ensembl genes rather than silently aggregating them.",
+      "expression_curation_note": "The pinned matrix contains 60,671 unique versionless Ensembl rows. Ensembl release 95 maps 58,453 rows to 56,912 symbols; 160 symbols represented by more than one Ensembl gene are excluded rather than combined, leaving 56,752 unambiguous analyzable symbols.",
+      "clinical_covariate_note": "GEO supplies exact age and sex plus the source disease-stage category for the retained records. Resectable, borderline, locally advanced and metastatic labels are preserved as categorical source stage.",
+      "overlap_note": "The prospective French BACAP cohort is institutionally and accession-wise distinct from TCGA-PAAD and from the other active external pancreatic-cancer releases in TRACE Explorer.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution remains disabled; NCBI GEO terms and the article's CC BY-NC-ND 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE253260",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE253nnn/GSE253260/suppl/GSE253260_BACAP.rawct.tsv.gz",
+    "expression_filename": "GSE253260_BACAP.rawct.tsv.gz",
+    "expression_size": 11770536,
+    "expression_sha256": "60a27ee44042ad85066a53d79cee4f15b734ac31eaaf13a63f0f7098d6a75cda",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE253nnn/GSE253260/soft/GSE253260_family.soft.gz",
+    "soft_size": 39324,
+    "soft_sha256": "86edec80ad2d5c4a294ec5a4347b152b57fc6e666ac99392f7449b9122234095",
+    "license_evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11497430/",
+    "primary_sample_title_pattern": "^BPC[0-9]+T$",
+    "expected_primary_samples": 397,
+    "sample_characteristic_filters": [
+      {
+        "key": "sample id",
+        "exclude": [
+          "BPC137T"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 396,
+    "expected_endpoint_complete_samples": 380,
+    "expected_events": 305,
+    "expected_censored": 75,
+    "expected_expression_columns": 380,
+    "expected_expression_gene_rows": 60671,
+    "expected_normalized_expression_gene_rows": 60671,
+    "patient_id_characteristic": "normpatient id",
+    "expression_sample_characteristic": "sample id",
+    "time_characteristic": "osdelay",
+    "event_characteristic": "osevent",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age",
+    "sex_characteristic": "sex",
+    "stage_characteristic": "diseasestage",
+    "stage_value_map": {
+      "resectable": "Resectable",
+      "borderline": "Borderline resectable",
+      "locadvanced": "Locally advanced",
+      "meta": "Metastatic"
+    },
+    "sample_type": "Primary PDAC Biopsy",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "GeneSymbol",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.95.gtf.gz",
+      "size": 43668708,
+      "sha256": "b54faa39220ab12d62dfa9c6a529668fc56bc926bba64bb2faaa1003319b7341"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary PDAC Biopsy",
+    "sample_role": "Pretreatment primary-PDAC endoscopic-ultrasound fine-needle-aspiration biopsy wash, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary PDAC Biopsy"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized to log2(CPM + 1)",
+    "source_unit": "featureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 95 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one Ensembl gene are excluded rather than combined without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 60,671 source rows for each retained biopsy, applies log2(CPM + 1), maps source Ensembl identifiers to pinned GRCh38 gene symbols and excludes ambiguous symbols. Values are intended only for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-defined overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by the GEO osevent field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

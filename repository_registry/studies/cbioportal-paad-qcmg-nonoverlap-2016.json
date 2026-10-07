@@ -1,0 +1,147 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-paad-qcmg-nonoverlap-2016",
+    "cancer_code": "PAAD",
+    "name": "Australian PDAC non-overlapping extension (QCMG/UQ, 2016)",
+    "description": "Eighteen primary pancreatic ductal adenocarcinomas from the Bailey QCMG/UQ release that do not occur in the active ICGC Release 28 PACA-AU expression cohort, with bulk RNA-seq and exact overall-survival follow-up.",
+    "cohort_context": "The Bailey release contains 96 pancreatic tumors. TRACE Explorer retains only 18 primary tumors explicitly annotated as pancreatic ductal adenocarcinoma that are absent from the active 66-patient PACA-AU release. The other 52 expression- and endpoint-complete PDAC identifiers overlap the active release, and 26 non-PDAC histologies are excluded.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "paad_qcmg_uq_2016:nonoverlap",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/paad_qcmg_uq_2016",
+    "publication_citation": "Bailey et al. Nature 2016",
+    "publication_id": "PMID:26909576; DOI:10.1038/nature16965",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Australian Pancreatic Cancer Genome Initiative / QCMG",
+      "parent_source_study": "paad_qcmg_uq_2016",
+      "related_active_dataset": "icgc-paad-paca-au-2016",
+      "overlap_note": "The 18 retained ICGC submitted donor identifiers have zero overlap with the 66 patients in the active PACA-AU release. Because both releases derive from the same Australian study program and use different expression quantifications, they remain separate and must not be treated as independent studies in a meta-analysis.",
+      "histology_note": "Only exact Pancreatic Ductal Adenocarcinoma records are eligible. Invasive IPMN, adenosquamous, acinar, undifferentiated, mucinous non-cystic, clear-cell and signet-ring records are excluded.",
+      "curation_note": "The explicit patient allow-list is the set difference between the 70 exact-PDAC expression/OS records in the pinned QCMG/UQ matrix and the 66 submitted donor identifiers represented by the active ICGC Release 28 PACA-AU cohort. The intersection contains 52 identifiers, leaving 18 QCMG/UQ-only patients."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/paad_qcmg_uq_2016",
+    "files": {
+      "expression": "data_mrna_seq_v2_rsem.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_v2_rsem.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "include_patient_ids": [
+      "ICGC_0006",
+      "ICGC_0007",
+      "ICGC_0031",
+      "ICGC_0048",
+      "ICGC_0052",
+      "ICGC_0053",
+      "ICGC_0059",
+      "ICGC_0066",
+      "ICGC_0067",
+      "ICGC_0075",
+      "ICGC_0103",
+      "ICGC_0109",
+      "ICGC_0115",
+      "ICGC_0205",
+      "ICGC_0206",
+      "ICGC_0207",
+      "ICGC_0212",
+      "ICGC_0503"
+    ],
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary pancreatic ductal adenocarcinoma",
+    "sample_role": "Primary tumor RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "patient.HISTOLOGICAL_SUBTYPE",
+        "include": [
+          "Pancreatic Ductal Adenocarcinoma"
+        ],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary"
+        ],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_CLASS",
+        "include": [
+          "Tumour"
+        ],
+        "required": true
+      },
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": [
+          "PAAD"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.AJCC_PATHOLOGIC_TUMOR_STAGE"
+    ],
+    "grade_fields": [
+      "sample.TUMOR_GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.ETHNICITY"
+    ],
+    "age_fields": [
+      "patient.AGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "provided_log2_tmm_cpm",
+    "label": "Provided log2 TMM-normalized CPM",
+    "source_unit": "RSEM; TMM-normalized log2 counts per million",
+    "transform": "identity",
+    "analysis_unit": "Provided log2 TMM-normalized CPM",
+    "feature_column_count": 2,
+    "feature_id_type": "provided_hugo_entrez",
+    "mapping_source": "Source-provided HUGO symbol and Entrez gene identifier pair",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with an identical source-provided HUGO/Entrez pair are averaged sample-wise; symbols attached to conflicting source identifiers are excluded.",
+    "scale_note": "Bailey et al. report RSEM quantification followed by edgeR TMM normalization, conversion to counts per million and log2 transformation. The pinned DataHub values are preserved without a second transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "DAYS_TO_LAST_FOLLOWUP",
+      "event_column": "STATUS",
+      "time_unit": "days",
+      "time_origin": "Initial pathologic diagnosis",
+      "event_definition": "Death from any cause, including source labels DOD, DOC and deceased with unknown cause",
+      "event_values": [
+        "DOD",
+        "DOC",
+        "Deceased - Of Unknown Cause"
+      ],
+      "censor_values": [
+        "NED",
+        "AWD"
+      ]
+    }
+  ]
+}

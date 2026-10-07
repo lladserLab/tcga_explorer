@@ -1,0 +1,110 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-coad-sidra-lumc-2023",
+    "cancer_code": "COAD",
+    "name": "Primary colon cancer cohort (Sidra-LUMC AC-ICAM, 2023)",
+    "description": "Independent primary colon cancer cohort with bulk RNA-seq and linked overall, disease-specific and progression-free survival.",
+    "cohort_context": "Fresh-frozen, treatment-naive primary colon cancers retained after cross-platform quality control; one tumor and one patient record are supplied for each participant.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "coad_silu_2022",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/coad_silu_2022",
+    "publication_citation": "Roelands et al. Nature Medicine 2023",
+    "publication_id": "DOI:10.1038/s41591-023-02324-5",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "study_design": "Retrospective primary colon cancer cohort with prospectively prespecified immune-signature validation",
+      "source_cohort_name": "Sidra-LUMC AC-ICAM",
+      "curation_note": "The cBioPortal study metadata reports zero RNA-seq samples because its RNA sample-list category is absent, but the immutable expression file contains 348 primary tumors that map one-to-one to 348 clinical records."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/coad_silu_2022",
+    "files": {
+      "expression": "data_mrna_seq_expression.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_expression.txt",
+      "license": "LICENSE"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary colon tumor",
+    "sample_role": "Treatment-naive primary colon tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": ["Primary Tumor"],
+        "required": true
+      },
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["COAD"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": ["patient.AJCC_PATH_STAGE", "patient.CLINICAL_STAGE"],
+    "gender_fields": ["patient.SEX"],
+    "age_fields": ["patient.AGE_AT_DX"]
+  },
+  "expression": {
+    "layer_id": "log2_edaseq_quantile_counts",
+    "label": "log2 EDASeq/quantile-normalized counts",
+    "source_unit": "EDASeq within/between-lane and quantile-normalized gene counts",
+    "transform": "log2p",
+    "analysis_unit": "log2(normalized count + 1)",
+    "feature_id_type": "hugo_symbol",
+    "mapping_source": "cBioPortal Genes API",
+    "duplicate_feature_policy": "mean_within_source_id",
+    "duplicate_feature_rationale": "Repeated rows with the same supplied symbol are averaged sample-wise before log2(normalized count + 1); different identifiers are never merged implicitly.",
+    "scale_note": "The source publication describes featureCounts followed by EDASeq within- and between-lane normalization and preprocessCore quantile normalization. TRACE Explorer applies the publication's downstream log2(x + 1) transformation to the supplied normalized matrix."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of surgery",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "DSS",
+      "standard_code": "DSS",
+      "label": "Disease-specific survival",
+      "time_column": "DSS_MONTHS",
+      "event_column": "DSS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of surgery",
+      "event_definition": "Colon-cancer death as encoded by the source DSS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    },
+    {
+      "endpoint_id": "PFS",
+      "standard_code": "PFS",
+      "label": "Progression-free survival",
+      "time_column": "PFS_MONTHS",
+      "event_column": "PFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of surgery",
+      "event_definition": "Progression, recurrence or death as encoded by the source PFS status",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

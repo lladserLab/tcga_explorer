@@ -1,0 +1,74 @@
+{
+  "schema_version": "trace-teaching-contract-v2",
+  "content_kind": "fixed_interpretation_case",
+  "source_kind": "synthetic_case",
+  "result_id": "TRACE-TEACH-CONTINUOUS-V1",
+  "pipeline_version": "teaching-contract-only",
+  "snapshot_date": "2026-08-05",
+  "title": "Continuous before cutpoint",
+  "status": "not_a_computed_analysis_result",
+  "scenario": {
+    "population": "240 synthetic endpoint-complete patients",
+    "endpoint": {
+      "name": "Overall survival",
+      "time_unit": "months",
+      "events": 96
+    },
+    "question": "Does a continuous expression effect remain the primary estimand when a grouped curve is shown for communication?",
+    "analysis_contract": {
+      "primary_estimand": "Cox hazard ratio per +1 within-analysis SD of continuous expression",
+      "reference": "one within-analysis SD lower expression",
+      "grouped_role": "prespecified median-split communication and sensitivity only",
+      "cutpoint_selection": "no cutpoint is selected from the displayed evidence"
+    },
+    "primary_evidence": [
+      "continuous hazard ratio with confidence interval",
+      "functional-form assessment",
+      "proportional-hazards diagnostics"
+    ],
+    "secondary_evidence": [
+      "prespecified grouped Kaplan-Meier curve",
+      "risk table"
+    ],
+    "synthetic_values": {
+      "effect_unit": "+1 SD expression",
+      "hazard_ratio": 1.4,
+      "confidence_interval_95": [1.1, 1.8],
+      "continuous_cox": {
+        "n_patients": 240,
+        "n_events": 96,
+        "hazard_ratio": 1.4,
+        "confidence_interval_95": [1.1, 1.8]
+      },
+      "functional_form": {
+        "method": "restricted cubic spline compared with the linear continuous Cox term",
+        "status": "completed",
+        "nonlinearity_p_value": 0.28,
+        "interpretation": "The synthetic case does not show strong evidence against a linear effect; this is not proof of linearity."
+      },
+      "proportional_hazards": {
+        "method": "cox.zph",
+        "marker_p_value": 0.41,
+        "global_p_value": 0.36,
+        "interpretation": "No proportional-hazards departure is detected in this synthetic case; the diagnostic does not prove the assumption."
+      },
+      "grouped_kaplan_meier": {
+        "role": "secondary prespecified median-split display",
+        "group_low": {
+          "n": 120,
+          "survival_probability_at_months": { "12": 0.91, "24": 0.8, "36": 0.69 },
+          "number_at_risk_at_months": { "0": 120, "12": 104, "24": 78, "36": 52 }
+        },
+        "group_high": {
+          "n": 120,
+          "survival_probability_at_months": { "12": 0.85, "24": 0.69, "36": 0.56 },
+          "number_at_risk_at_months": { "0": 120, "12": 98, "24": 67, "36": 39 }
+        },
+        "interpretation": "The grouped curves communicate a time pattern compatible with the continuous direction but do not replace the continuous estimand."
+      }
+    }
+  },
+  "answer_key": "Under the stated Cox model, +1 SD of expression is associated with a 40% higher instantaneous hazard; it does not mean 40% more deaths and it is not a causal effect.",
+  "interpretation_boundary": "The grouped display cannot replace or redefine the continuous estimand, and no cutpoint may be selected from the displayed result.",
+  "completion_rule": "Completion depends on identifying the estimand and diagnostics, never on statistical significance."
+}

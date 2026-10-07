@@ -1,0 +1,83 @@
+{
+  "schema_version": "tcga-trace-pancancer-study-universe-registry-v3",
+  "registry_version": "2026.08.20.v3",
+  "source_cutoff": "2026-08-20",
+  "updated_at": "2026-08-20T00:00:00-04:00",
+  "description": "Capability-aware extension of the immutable v2 pan-cancer study-universe registry. It dispositions the active FU-GBC release and the molecular-only SMC breast-cancer cohort without admitting either cohort to hierarchical survival synthesis.",
+  "base_registry": "pancancer_study_universes_v2.json",
+  "manifest_additions": [
+    {
+      "dataset_id": "fu-gbc-cancer-cell-2026",
+      "activation": "required",
+      "category": "catalog_only",
+      "capabilities": {
+        "catalog": {
+          "available": true,
+          "reason": "available"
+        },
+        "expression_comparison": {
+          "available": true,
+          "reason": "available"
+        },
+        "gsea": {
+          "available": true,
+          "reason": "available"
+        },
+        "survival": {
+          "available": true,
+          "reason": "available_with_unconfirmed_time_origin"
+        },
+        "hierarchical_pancancer": {
+          "available": false,
+          "reason": "time_origin_not_classifiable"
+        }
+      },
+      "reasons": [
+        "time_origin_not_classifiable"
+      ],
+      "expected_count_deltas": {
+        "external_catalog_only": 1,
+        "external_active": 1,
+        "total_selectable": 1,
+        "total_catalogued": 1
+      }
+    },
+    {
+      "dataset_id": "cbioportal-brca-smc-2018",
+      "activation": "when_manifest_present",
+      "category": "catalog_only",
+      "capabilities": {
+        "catalog": {
+          "available": true,
+          "reason": "available"
+        },
+        "expression_comparison": {
+          "available": true,
+          "reason": "available"
+        },
+        "gsea": {
+          "available": true,
+          "reason": "available"
+        },
+        "survival": {
+          "available": false,
+          "reason": "survival_endpoint_unavailable"
+        },
+        "hierarchical_pancancer": {
+          "available": false,
+          "reason": "survival_endpoint_unavailable"
+        }
+      },
+      "reasons": [
+        "survival_endpoint_unavailable",
+        "molecular_analysis_only"
+      ],
+      "expected_count_deltas": {
+        "external_catalog_only": 1,
+        "external_active": 1,
+        "total_selectable": 1,
+        "total_catalogued": 1
+      }
+    }
+  ]
+}

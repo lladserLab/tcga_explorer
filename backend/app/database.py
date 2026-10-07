@@ -1,7 +1,7 @@
 import time
 from collections.abc import Generator
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from app.config import get_settings
@@ -13,6 +13,12 @@ class Base(DeclarativeBase):
 
 settings = get_settings()
 engine = create_engine(settings.database_url, pool_pre_ping=True)
+if engine.dialect.name == "sqlite":
+    @event.listens_for(engine, "connect")
+    def configure_local_sqlite(connection, _record):
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("PRAGMA busy_timeout=30000")
+        connection.execute("PRAGMA journal_mode=WAL")
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
@@ -39,7 +45,13 @@ def wait_for_database(timeout_seconds: int = 60) -> None:
 
 
 def init_db() -> None:
+    if not settings.database_schema_management_enabled:
+        return
     from app import models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
-
+    if engine.dialect.name == "sqlite":
+        return
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE samples ADD COLUMN IF NOT EXISTS grade VARCHAR(128)"))
+        conn.execute(text("CREATE INDEX IF NOT EXISTS ix_samples_grade ON samples (grade)"))

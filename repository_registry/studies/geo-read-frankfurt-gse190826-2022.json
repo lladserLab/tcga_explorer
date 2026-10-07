@@ -1,0 +1,152 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-read-frankfurt-gse190826-2022",
+    "cancer_code": "READ",
+    "name": "Frankfurt neoadjuvant rectal-cancer cohort (GSE190826)",
+    "description": "Independent locally advanced rectal-cancer cohort with pretreatment bulk RNA-seq and individual disease-free-survival follow-up.",
+    "cohort_context": "The source study profiled 105 FFPE rectal-cancer biopsies collected before neoadjuvant chemoradiotherapy and 12 post-treatment surgical specimens. TRACE Explorer excludes every post-treatment profile and retains the 86 baseline biopsies with a positive, source-provided DFS time and recognized event status.",
+    "source_provider": "geo",
+    "source_accession": "GSE190826",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE190826",
+    "publication_citation": "Nicolas et al. Cancer Cell 2022",
+    "publication_id": "PMID:35120600; DOI:10.1016/j.ccell.2022.01.004",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Georg-Speyer-Haus and German Rectal Cancer Study Group",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the CC BY 4.0 article supplement",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "FFPE total RNA, standard Illumina cDNA libraries, Trimmomatic 0.36, STAR 2.5.2b against GRCh38 and Subread 1.5.2 gene-level featureCounts",
+      "endpoint_context": "Disease-free survival in locally advanced rectal cancer treated with neoadjuvant chemoradiotherapy followed by surgery",
+      "endpoint_caveat": "GEO and Supplementary Table S1 label the endpoint as DFS and provide event and time in months, but do not state the exact time origin or decompose the event type. TRACE Explorer therefore exposes it as source-provided DFS and does not claim harmonization with TCGA-CDR DFI or PFI.",
+      "sample_selection_note": "Expression eligibility is applied before sample selection. Only Time=Pre-CRT biopsies are eligible; all twelve post-CRT profiles are excluded before endpoint QC.",
+      "clinical_evidence_note": "The pinned Cancer Cell Supplementary Table S1 contains 105 baseline biopsy IDs and agrees exactly with the GEO treatment, response, DFS-event and DFS-time fields. It additionally supplies age, sex, grade and pre/post-treatment TNM components.",
+      "overlap_note": "GSE156281 is not counted separately: 95 shared sample labels have identical Ensembl count vectors and represent an earlier overlapping submission of this cohort.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO files in place. Redistribution of the source tar is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE190826",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190826/suppl/GSE190826_RAW.tar",
+    "expression_size": 533811200,
+    "expression_sha256": "c7f1e24d20e2f6baca1dbaea1e07052dec447206d6c8acd6429c43c725777e02",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190826/soft/GSE190826_family.soft.gz",
+    "soft_size": 9104,
+    "soft_sha256": "08a3c0a564d9a329aa669b4f26a42a56568349b4ded6a1c6f3fd3f6a53ff6a20",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "GSH_RADONC_RectalCancer_[0-9]{3}",
+    "expected_primary_samples": 117,
+    "sample_characteristic_filters": [
+      {
+        "key": "time",
+        "include": [
+          "Pre-CRT"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 105,
+    "expected_endpoint_complete_samples": 86,
+    "expected_events": 29,
+    "expected_censored": 57,
+    "expected_source_expression_files": 117,
+    "expected_expression_columns": 86,
+    "expected_expression_gene_rows": 57500,
+    "patient_id_characteristic": "",
+    "time_characteristic": "disease free survival time (months)",
+    "event_characteristic": "disease free survival event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age",
+    "grade_characteristic": "grading",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://ars.els-cdn.com/content/image/1-s2.0-S153561082200006X-mmc2.xlsx",
+      "evidence_size": 28202,
+      "evidence_sha256": "f8deaf2bf0330a0916762bd013f795619b733581934dbbf234e5b1a64bfbfe4d",
+      "evidence_format": "xlsx",
+      "sheet_name": "Transcriptomic_1st_Cohort",
+      "header_row": 2,
+      "record_id_column": "Biopsy ID- pre CTR",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(GSH_RADONC_RectalCancer_[0-9]{3})",
+      "expected_records": 105
+    },
+    "expression": {
+      "layout": "featurecounts_tar",
+      "feature_column": "Geneid",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "count_column_index": 7,
+      "supplementary_file_pattern": ".+\\.counts\\.txt\\.gz"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-107/gtf/homo_sapiens/Homo_sapiens.GRCh38.107.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.107.gtf.gz",
+      "size": 52555212,
+      "sha256": "9994f3bc8792c63803e3d91a1a8d2e613503fc59e278bcb156e55d0a7c3fb7b1"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Pretreatment FFPE biopsy from a primary locally advanced rectal carcinoma",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO featureCounts normalized to log2(CPM + 1)",
+    "source_unit": "Subread gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 107 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "For each of the 86 retained pretreatment biopsies, TRACE Explorer computes the library size over all 57,500 source Ensembl rows, converts counts to CPM and applies log2(CPM + 1). Values are suitable for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Source-provided disease-free survival",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Not specified by the source",
+      "event_definition": "Event encoded in the source DFS Event field; recurrence, progression and death are not separately identified",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

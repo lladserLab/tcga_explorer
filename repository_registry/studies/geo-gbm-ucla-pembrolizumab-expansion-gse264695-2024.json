@@ -1,0 +1,191 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-gbm-ucla-pembrolizumab-expansion-gse264695-2024",
+    "cancer_code": "GBM",
+    "name": "UCLA recurrent glioblastoma pembrolizumab expansion cohort (GSE264695)",
+    "description": "Independent stage-2 expansion cohort with bulk RNA sequencing of recurrent glioblastoma and individual overall-survival follow-up.",
+    "cohort_context": "The source trial enrolled adults with surgically accessible recurrent glioblastoma to a single-arm neoadjuvant pembrolizumab expansion cohort. GSE264695 contains one RNA profile from the prior stage-1 trial and 19 profiles from the stage-2 expansion. TRACE Explorer excludes the stage-1 profile because that participant is already represented in the separately curated initial-trial release and retains only the 19 non-overlapping expansion patients with public expression and overall-survival data.",
+    "source_provider": "geo",
+    "source_accession": "GSE264695:expansion",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE264695",
+    "publication_citation": "McFaline-Figueroa et al. Nature Communications 2024",
+    "publication_id": "PMID:39737895; PMCID:PMC11685579; DOI:10.1038/s41467-024-54326-7",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "NCT02852655 neoadjuvant pembrolizumab stage-2 expansion cohort",
+      "source_data_system": "NCBI GEO plus the pinned Nature Communications source-data workbook",
+      "source_platform": "Illumina NovaSeq S4",
+      "library_method": "Paired-end 2 x 100-bp bulk RNA sequencing of resected recurrent glioblastoma, aligned to GRCh38 with HISAT2 and quantified with HTSeq-count",
+      "endpoint_context": "Overall survival during the recurrent-glioblastoma pembrolizumab trial",
+      "endpoint_caveat": "The public source-data workbook provides OS time and event status but does not state a more precise time origin in the column definition. TRACE Explorer therefore preserves the source endpoint without inferring whether day zero is enrollment, neoadjuvant treatment or surgery.",
+      "sample_selection_note": "The title filter retains the 19 stage-2 extension libraries and excludes Pt7 from the initial randomized trial. Each retained patient maps one-to-one to one tumor profile.",
+      "overlap_note": "Pt7 is excluded to prevent overlap with the separately curated initial neoadjuvant/adjuvant trial. The 19 retained extension patients are not present in that release.",
+      "expression_note": "TRACE Explorer starts from the public gene-level HTSeq count workbook, excludes all rows belonging to duplicated source symbols, calculates library-size CPM within the retained 19-patient cohort and applies log2(CPM + 1). It does not apply the publication's downstream batch-effect correction.",
+      "clinical_evidence_note": "The exact source-data workbook member is pinned by size and SHA-256 inside the Europe PMC supplementary archive. SampleID links the 19 GEO extension titles to OS, age, sex, ethnicity, MGMT and IDH fields.",
+      "redistribution_note": "The transformed release is rebuilt from pinned public sources. Direct matrix redistribution remains disabled because GEO terms and the article's CC BY-NC-ND 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE264695",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE264nnn/GSE264695/suppl/GSE264695_Prins.PD1NeoAdjv.Combo.Merck.Nov2022.htseqCount.SampleRenamedForGEO.xlsx",
+    "expression_size": 3946455,
+    "expression_sha256": "0adde00580f394c23a0ae64f3da42168c5e0cc132bd22027e92507545a8fbaf7",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE264nnn/GSE264695/soft/GSE264695_family.soft.gz",
+    "soft_size": 3753,
+    "soft_sha256": "7fba558c8672a8828f55e2ef104ef2695c607873d7665430be3a7116cde453e2",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Patient (?:36|37|38|40|41|42|44|46|47|48|49|50|51|52|54|55|56|58|59), extension",
+    "expected_primary_samples": 19,
+    "expected_endpoint_complete_samples": 19,
+    "expected_events": 14,
+    "expected_censored": 5,
+    "expected_expression_columns": 19,
+    "expected_source_expression_files": 20,
+    "expected_expression_gene_rows": 40134,
+    "expected_normalized_expression_gene_rows": 40134,
+    "expected_feature_replacements": 27,
+    "expected_duplicate_feature_symbols": 2,
+    "expected_excluded_duplicate_feature_rows": 4,
+    "patient_id_characteristic": "source patient id",
+    "time_characteristic": "os days",
+    "event_characteristic": "os event",
+    "event_value_map": {
+      "1": 1,
+      "0": 0
+    },
+    "expression_sample_characteristic": "source patient id",
+    "age_characteristic": "age at treatment",
+    "sex_characteristic": "gender",
+    "race_characteristic": "ethnicity",
+    "sample_type": "Recurrent Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11685579/supplementaryFiles",
+      "evidence_container_size": 7675098,
+      "evidence_size": 83702,
+      "evidence_sha256": "2b216cbba0c280ab8c40dc36153703262ddbd59c41e5f9e143866d2da60d4311",
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "41467_2024_54326_MOESM4_ESM.xlsx",
+      "sheet_name": "SFig4C",
+      "header_row": 3,
+      "record_id_column": "SampleID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "^(?:Pt|Patient )([0-9]+)(?:_[AB](?:_Extension)?|, (?:initial trial|extension))$",
+      "sample_id_replacement": "\\1",
+      "expected_records": 49,
+      "expected_matched_records": 19,
+      "expected_unmatched_records": 30,
+      "allow_unmatched_records": true,
+      "field_name_map": {
+        "SampleID": "source patient id",
+        "OS": "os days",
+        "OS.Event": "os event",
+        "Age": "age at treatment",
+        "Gender": "gender",
+        "Treatment Group (B: Adjuvant; A: Neoadjuvant)": "treatment group",
+        "Batch": "source batch",
+        "Ethnicity": "ethnicity",
+        "MGMT": "mgmt status",
+        "IDH": "idh status",
+        "iRANO": "irano score",
+        "Steroid": "steroid dose"
+      }
+    },
+    "expression": {
+      "layout": "xlsx_gene_counts",
+      "sheet_name": "Sheet1",
+      "header_row": 1,
+      "feature_column": "Gene",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "feature_replacements": {
+        "2024-03-01T00:00:00": "MARCH1",
+        "2024-03-02T00:00:00": "MARCH2",
+        "2024-03-03T00:00:00": "MARCH3",
+        "2024-03-04T00:00:00": "MARCH4",
+        "2024-03-05T00:00:00": "MARCH5",
+        "2024-03-06T00:00:00": "MARCH6",
+        "2024-03-07T00:00:00": "MARCH7",
+        "2024-03-08T00:00:00": "MARCH8",
+        "2024-03-09T00:00:00": "MARCH9",
+        "2024-03-10T00:00:00": "MARCH10",
+        "2024-03-11T00:00:00": "MARCH11",
+        "2024-09-01T00:00:00": "SEPT1",
+        "2024-09-02T00:00:00": "SEPT2",
+        "2024-09-03T00:00:00": "SEPT3",
+        "2024-09-04T00:00:00": "SEPT4",
+        "2024-09-05T00:00:00": "SEPT5",
+        "2024-09-06T00:00:00": "SEPT6",
+        "2024-09-07T00:00:00": "SEPT7",
+        "2024-09-08T00:00:00": "SEPT8",
+        "2024-09-09T00:00:00": "SEPT9",
+        "2024-09-10T00:00:00": "SEPT10",
+        "2024-09-11T00:00:00": "SEPT11",
+        "2024-09-12T00:00:00": "SEPT12",
+        "2024-09-14T00:00:00": "SEPT14",
+        "2024-12-01T00:00:00": "DEC1"
+      },
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true,
+      "count_value_type": "integer"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Recurrent Tumor",
+    "sample_role": "Resected recurrent glioblastoma after one neoadjuvant pembrolizumab dose, one profile per extension-cohort patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Recurrent Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm_htseq",
+    "label": "Gene-level HTSeq counts transformed to log2(CPM + 1)",
+    "source_unit": "Source-provided gene-level HTSeq raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Gene labels supplied in the pinned GSE264695 workbook",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows belonging to duplicated source labels are excluded rather than summed or averaged implicitly. The excluded duplicate rows contain zero counts in every retained expansion sample and therefore do not alter their library sizes.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes CPM from the 19 retained extension libraries and applies log2(CPM + 1). The scale supports within-gene comparisons inside this cohort and is not harmonized numerically across studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-released overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Trial follow-up origin not more precisely specified in the public source-data column",
+      "event_definition": "Death from any cause according to the source OS.Event field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

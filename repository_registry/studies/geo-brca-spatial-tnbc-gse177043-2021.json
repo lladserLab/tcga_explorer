@@ -1,0 +1,162 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-spatial-tnbc-gse177043-2021",
+    "cancer_code": "BRCA",
+    "name": "Primary TNBC spatial-immunophenotype Cohort A2 (GSE177043)",
+    "description": "Independent primary triple-negative breast-cancer cohort with public bulk tumor RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The source study profiled 43 untreated primary triple-negative breast cancers in RNA-seq validation Cohort A2. The public article workbook links 41 expression columns to exact overall-survival time and event status; two RNA profiles without an individual clinical row are excluded before analysis.",
+    "source_provider": "geo",
+    "source_accession": "GSE177043",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE177043",
+    "publication_citation": "Hammerl et al. Nature Communications 2021",
+    "publication_id": "PMID:34580291; PMCID:PMC8476574; DOI:10.1038/s41467-021-25962-0",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Primary TNBC spatial-immunophenotype RNA-seq validation Cohort A2",
+      "source_data_system": "NCBI Gene Expression Omnibus and Europe PMC",
+      "source_platform": "Illumina HiSeq 4000",
+      "library_method": "Whole-transcriptome RNA sequencing of untreated primary triple-negative breast tumors; GEO reports STAR 2.4.2a alignment to GRCh38, geTMM normalization and source log2 transformation.",
+      "endpoint_context": "Overall survival in months for the source Cohort A patients",
+      "endpoint_definition_note": "The public clinical workbook supplies OS duration in months and the binary osi indicator, where 1 denotes death and 0 denotes censoring. The associated article explicitly labels the survival time scale as months.",
+      "sample_linkage_note": "GEO sample titles are the Cohort A2 identifiers used as expression-matrix columns and in the sampleCohortA2 clinical-workbook field. This provides deterministic expression-to-endpoint linkage without positional matching.",
+      "sample_selection_note": "All 43 GEO records are source-designated primary TNBC tumors and map one-to-one to expression columns. Forty-one have a linked positive OS time and explicit event status; JA074 and X1966 lack a public individual clinical row and are excluded.",
+      "expression_processing_note": "The public matrix contains 58,381 rows, an Ensembl identifier column, a source gene-symbol column and 43 source log2-normalized expression columns. TRACE Explorer selects the 41 endpoint-complete columns, excludes 33,929 symbols with a source NA in at least one retained tumor and excludes all 1,737 rows belonging to 186 case-insensitive duplicated symbols, leaving 22,897 complete non-ambiguous symbols. Negative source-normalized values are retained and no imputation or additional transformation is applied.",
+      "overlap_note": "Cohort A2 is independent of TCGA-BRCA. Its source-local sample identifiers and untreated primary-TNBC design are distinct from the other breast-cancer cohorts currently promoted in the repository.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public files in place. Direct source-file redistribution is disabled; NCBI GEO terms and the article's CC BY 4.0 license remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE177043",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE177nnn/GSE177043/suppl/GSE177043_CohortA2_RNAseq_DESEQ2_log2normalized_TNBC_Immuno.txt.gz",
+    "expression_size": 4397254,
+    "expression_sha256": "e48d561a556e454e9dcdbf50c7a901db43a3588ef0365935fa7626dfc15c246b",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE177nnn/GSE177043/soft/GSE177043_family.soft.gz",
+    "soft_size": 3938,
+    "soft_sha256": "ae069ddc6c477ef6f5527a2ab9137e3bcd7bcdfff807b420e53935a8ef53f414",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "primary_sample_title_pattern": "(?:JA|X)[0-9]+",
+    "expected_primary_samples": 43,
+    "expected_characteristic_eligible_samples": 43,
+    "expected_endpoint_complete_samples": 41,
+    "expected_events": 15,
+    "expected_censored": 26,
+    "expected_source_expression_files": 43,
+    "expected_expression_columns": 41,
+    "expected_expression_gene_rows": 58381,
+    "expected_normalized_expression_gene_rows": 22897,
+    "expected_dropped_incomplete_features": 33929,
+    "expected_duplicate_feature_symbols": 186,
+    "expected_excluded_duplicate_feature_rows": 1737,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "os months",
+    "event_characteristic": "os status",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "grade_characteristic": "grade",
+    "stage_characteristic": "stage",
+    "expression_sample_metadata_field": "title",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8476574/supplementaryFiles",
+      "evidence_size": 123707,
+      "evidence_sha256": "5152783b8406f9f0a9c4312d8cb9c638737eb9bb3d4069fc7d669cc02f3a1766",
+      "evidence_container_size": 5296519,
+      "evidence_pin_scope": "archive_member",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "41467_2021_25962_MOESM4_ESM.xlsx",
+      "sheet_name": "clinical data cohort A",
+      "header_row": 1,
+      "record_id_column": "sampleCohortA2",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "((?:JA|X)[0-9]+)",
+      "field_name_map": {
+        "ID": "clinical cohort id",
+        "sampleCohortA2": "patient id",
+        "immunophenotype": "clinical immunophenotype",
+        "BR.Grade": "grade",
+        "T.stage": "stage",
+        "osi": "os status",
+        "os": "os months",
+        "dfsi": "dfs status",
+        "dfs": "dfs months",
+        "mfsi": "mfs status",
+        "mfs": "mfs months"
+      },
+      "expected_records": 41,
+      "expected_matched_records": 41,
+      "expected_unmatched_records": 0,
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8476574/"
+    },
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "name",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 3,
+      "value_transform": "identity",
+      "allow_negative_values": true,
+      "duplicate_feature_policy": "exclude_ambiguous",
+      "duplicate_feature_case_insensitive": true,
+      "drop_incomplete_features": true,
+      "missing_value_tokens": [
+        "NA"
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "One source-designated untreated primary triple-negative breast tumor per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_source_log2_normalized",
+    "label": "GEO source-provided log2-normalized expression",
+    "source_unit": "Source geTMM-normalized log2 gene expression",
+    "transform": "identity",
+    "analysis_unit": "Source log2-normalized expression",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GEO GSE177043 name column",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Every row belonging to a symbol represented more than once under case-insensitive comparison is excluded rather than silently aggregated. Rows containing a source NA in any retained endpoint-complete tumor are also excluded without imputation.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer preserves the source log2-normalized values, including negative values, after deterministic endpoint-column selection and complete, non-ambiguous symbol filtering. Values support within-cohort analyses and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical follow-up origin",
+      "event_definition": "Death from any cause according to source osi=1; osi=0 denotes censoring",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

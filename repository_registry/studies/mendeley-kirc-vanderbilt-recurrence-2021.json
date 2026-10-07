@@ -1,0 +1,135 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "mendeley-kirc-vanderbilt-recurrence-2021",
+    "cancer_code": "KIRC",
+    "name": "Vanderbilt primary ccRCC recurrence cohort (2021)",
+    "description": "Treatment-naive clear-cell renal cell carcinomas resected at Vanderbilt, with public gene-level bulk RNA-seq counts and individual post-surgical recurrence follow-up.",
+    "cohort_context": "The publication describes a 157-patient Vanderbilt tissue-bank validation cohort. TRACE Explorer retains 119 primary ccRCC resections after exact RNA linkage, histology and endpoint checks and the four RNA quality exclusions prespecified by the source analysis. The separately published small recurrence-matched discovery cohort is not included.",
+    "source_provider": "mendeley_publication",
+    "source_accession": "Mendeley Data nc9bc8dn4m v1",
+    "source_url": "https://data.mendeley.com/datasets/nc9bc8dn4m/1",
+    "publication_citation": "Obradovic et al. Cell 2021",
+    "publication_id": "DOI:10.1016/j.cell.2021.04.038",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Vanderbilt tissue-bank ccRCC recurrence validation cohort",
+      "source_data_system": "Mendeley Data publication archive",
+      "library_method": "Gene-level counts normalized by TRACE Explorer to log2(CPM + 1)",
+      "independence_note": "The source identifies this as a Vanderbilt tissue-bank cohort of treatment-naive surgical resections. Its VA patient identifiers, recruitment context and assay release are distinct from TCGA and from the advanced-disease trial cohorts already registered for KIRC.",
+      "curation_note": "Eligibility is outcome-independent within the large validation cohort. It requires an exact primary ccRCC RNA profile, a positive interval from resection or complete response, an exact recurrence date for events or last-contact date for censoring, and exclusion of the four RNA profiles removed by source quality control."
+    }
+  },
+  "source": {
+    "provider": "mendeley_publication",
+    "dataset_id": "nc9bc8dn4m",
+    "dataset_version": 1,
+    "publication_date": "2021-05-12",
+    "expected_doi": "10.17632/nc9bc8dn4m.1",
+    "expected_license": "CC BY 4.0",
+    "expected_eligible_patients": 119,
+    "expected_events": 17,
+    "expected_censored": 102,
+    "files": {
+      "clinical": {
+        "file_id": "f694a572-1557-4fa6-b438-cce5af8b91b4",
+        "name": "validation_dataset_metadata.csv",
+        "size": 51575,
+        "sha256": "44e9355c26bf7aa17ebbbb52accada745b67200a61bc452946184bd146da057b"
+      },
+      "expression": {
+        "file_id": "eb98728d-05f1-4a65-a122-52d0a7615274",
+        "name": "validation_dataset_bulkRNASeq_counts.gct",
+        "size": 29952843,
+        "sha256": "79631c7d0046fedc7f6f7d22a4918ade37ebda639f1b0dc8605da7f901087dcb"
+      },
+      "analysis_script": {
+        "file_id": "a5787fe5-6590-4ec4-9979-3fddba88db95",
+        "name": "bulkRNASeq_validation_cohort_analysis.R",
+        "size": 10021,
+        "sha256": "d302b3c7577c4cac7d67178aa7086766e27b735cef518ab56cf898ea3aa345f5"
+      }
+    },
+    "clinical": {
+      "excluded_sample_keys": [
+        "1",
+        "28",
+        "62",
+        "104"
+      ],
+      "eligibility_rules": [
+        "valid RNA identifier linked to the pinned expression matrix",
+        "source duplicate rows excluded",
+        "Metastasectomy or [met] Biopsy equals No",
+        "Primary Histology equals ccRCC",
+        "source RNA quality exclusions 1, 28, 62 and 104",
+        "Recurrence equals Yes or No",
+        "exact recurrence date for events",
+        "exact last-contact date for censored observations",
+        "positive interval from Date of resection or CR"
+      ]
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary ccRCC tumor",
+    "sample_role": "Treatment-naive primary tumor resection used for bulk RNA sequencing",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary ccRCC tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.Formal staging"
+    ],
+    "grade_fields": [
+      "patient.Fuhrman grade"
+    ],
+    "gender_fields": [
+      "patient.Sex"
+    ],
+    "age_fields": [
+      "patient.Age"
+    ]
+  },
+  "expression": {
+    "layer_id": "mendeley_log2_cpm",
+    "label": "Mendeley counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GENCODE gene names supplied in the pinned Mendeley count matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Blank and case-insensitively duplicated source gene labels are excluded rather than guessed or aggregated.",
+    "scale_note": "TRACE Explorer computes library sizes across all source gene rows for each retained sample, converts counts to CPM and applies log2(CPM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Recurrence-free survival after resection",
+      "time_column": "RFS_DAYS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Date of primary resection or complete response",
+      "event_definition": "Documented post-surgical disease recurrence",
+      "event_values": [
+        "1"
+      ],
+      "censor_values": [
+        "0"
+      ]
+    }
+  ]
+}

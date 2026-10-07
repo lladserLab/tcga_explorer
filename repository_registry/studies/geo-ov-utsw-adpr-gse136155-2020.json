@@ -1,0 +1,161 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-ov-utsw-adpr-gse136155-2020",
+    "cancer_code": "OV",
+    "name": "UT Southwestern HGSOC ADP-ribosylation cohort (GSE136155)",
+    "description": "Independent high-grade serous ovarian-cancer cohort with tumor bulk RNA sequencing and individual recurrence-free survival.",
+    "cohort_context": "The source study characterized ADP-ribosylation phenotypes in 34 high-grade serous ovarian cancers and generated bulk RNA sequencing for 22 tumors. TRACE Explorer links those 22 public GEO/SRA libraries directly to the study's Western Blot ID clinical rows. One patient has recurrence-free survival recorded as zero months and is excluded by the positive-time rule, leaving 21 independent patients.",
+    "source_provider": "geo",
+    "source_accession": "GSE136155",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE136155",
+    "publication_citation": "Conrad et al. Molecular Cancer Therapeutics 2020",
+    "publication_id": "PMID:31594824; PMCID:PMC7153754; DOI:10.1158/1535-7163.MCT-19-0569",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "UT Southwestern high-grade serous ovarian-cancer tissue cohort",
+      "source_data_system": "NCBI GEO/SRA uniformly reprocessed by recount3 plus the pinned PMC author-manuscript clinical supplement",
+      "source_platform": "Illumina HiSeq 2500",
+      "raw_data_accession": "GSE136155 / SRP219037",
+      "library_method": "Bulk tumor RNA sequencing; source reads were aligned to hg19 with Bowtie, while TRACE Explorer uses the same public SRA runs uniformly processed by recount3 against GENCODE v26",
+      "endpoint_context": "Recurrence-free survival from diagnosis to recurrence or last follow-up",
+      "endpoint_caveat": "The source supplement explicitly defines RFS from diagnosis. Patient18 has RFS equal to zero months and is excluded before endpoint QC. Overall-survival time is public but death status is not, so OS is not exposed.",
+      "sample_selection_note": "Each GEO title maps one-to-one to a Western Blot ID and one SRA run. The supplement's RNA Sequencing Y/N field contains labels inconsistent with several deposited GEO titles; eligibility therefore follows the actual GEO/SRA libraries and direct patient IDs rather than that auxiliary flag.",
+      "expression_note": "GEO distributes BigWig tracks rather than a compact gene matrix. TRACE Explorer reconstructs expression from the same 22 SRA runs using pinned recount3 GENCODE v26 gene sums, AUC scales to 40 million reads and applies log2(x + 1).",
+      "clinical_evidence_note": "The exact NIH author-manuscript XLSX supplement is downloaded through PMC's proof-of-work flow and pinned by byte size and SHA-256. Western Blot ID supplies the direct patient linkage; no inference from the RNA Sequencing Y/N column is made.",
+      "overlap_note": "This institutional tissue cohort is independent of TCGA-OV and the other curated ovarian cohorts.",
+      "redistribution_note": "TRACE Explorer rebuilds the release from pinned public files and disables direct matrix redistribution because GEO and PMC source terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE136155",
+    "expression_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/gene_sums/37/SRP219037/sra.gene_sums.SRP219037.G026.gz",
+    "expression_size": 2339892,
+    "expression_sha256": "979efeab1dfd92c6d7a2ab102683dec7e9bfde10e40c58552216795719a25590",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE136nnn/GSE136155/soft/GSE136155_family.soft.gz",
+    "soft_size": 3605,
+    "soft_sha256": "641d1fcd8bf4f10cde6e82b2986261b12401f566a2026e583e115e93bae2a250",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Patient[0-9]+",
+    "expected_primary_samples": 22,
+    "expected_endpoint_complete_samples": 21,
+    "expected_events": 15,
+    "expected_censored": 6,
+    "expected_expression_columns": 21,
+    "expected_source_expression_files": 22,
+    "expected_expression_gene_rows": 63856,
+    "expected_normalized_expression_gene_rows": 63856,
+    "time_characteristic": "rfs months",
+    "event_characteristic": "first recurrence",
+    "event_value_map": {
+      "Y": 1,
+      "N": 0
+    },
+    "stage_characteristic": "stage at diagnosis",
+    "expression_sample_metadata_field": "title",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/7153754/bin/NIHMS1540727-supplement-1.xlsx",
+      "evidence_size": 16351,
+      "evidence_sha256": "d91512f44eaaff70c2dc6d1d9f73d849acd7cdcaa83126dc3705047b307c43a1",
+      "evidence_format": "xlsx",
+      "download_mode": "pmc_pow",
+      "sheet_name": "Characteristics",
+      "header_row": 3,
+      "record_id_column": "Western Blot ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "^(?:Patient)?([0-9]+)$",
+      "sample_id_replacement": "\\1",
+      "expected_records": 34,
+      "expected_matched_records": 22,
+      "expected_unmatched_records": 12,
+      "allow_unmatched_records": true,
+      "field_name_map": {
+        "Western Blot ID": "source patient id",
+        "Primary Tumor Site": "primary tumor site",
+        "Tissue Sample Site": "tissue sample site",
+        "Stage at Diagnosis": "stage at diagnosis",
+        "Histology": "histology",
+        "Pre-Treatment CA-125 (U/mL)": "pretreatment ca125",
+        "Germline BRCA Status*": "germline brca status",
+        "Primary Treatment (PDS/NACT)*": "primary treatment",
+        "Debulking Status": "debulking status",
+        "Platinum Status*": "platinum status",
+        "First Recurrence (Y/N)": "first recurrence",
+        "RFS (months)*": "rfs months"
+      }
+    },
+    "expression": {
+      "layout": "recount3_gene_sums",
+      "sample_metadata_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/metadata/37/SRP219037/sra.sra.SRP219037.MD.gz",
+      "sample_metadata_size": 3148,
+      "sample_metadata_sha256": "40ef7dcec761904b9d88cc7befdc5a957c124d63a1eee0bd05e3c868f234a839",
+      "qc_metadata_url": "https://duffel.rail.bio/recount3/human/data_sources/sra/metadata/37/SRP219037/sra.recount_qc.SRP219037.MD.gz",
+      "qc_metadata_size": 5892,
+      "qc_metadata_sha256": "52a8b7bcbb857eca404e6dd530d36a59829af8c990e8c214643a2fe587e790bb",
+      "run_id_column": "external_id",
+      "sample_id_column": "sample_title",
+      "auc_column": "bc_auc.all_reads_all_bases",
+      "target_size": 40000000,
+      "expected_annotation": "G026",
+      "expected_source_runs": 22
+    },
+    "gene_reference": {
+      "url": "https://duffel.rail.bio/recount3/human/annotations/gene_sums/human.gene_sums.G026.gtf.gz",
+      "name": "human.gene_sums.G026.gtf.gz",
+      "size": 1842619,
+      "sha256": "2d1bdff8d91e08f1291fd47850d9d61cfa6768cc3a4cb8516775a873b007d0f6"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "High-grade serous ovarian-cancer tumor specimen, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "recount3_g026_log2_auc_scaled",
+    "label": "log2(recount3 AUC-scaled gene coverage + 1)",
+    "source_unit": "recount3 GENCODE v26 gene-sum base-pair coverage",
+    "transform": "identity",
+    "analysis_unit": "log2(AUC-scaled gene coverage + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned recount3 GENCODE v26 (Ensembl 88, GRCh38) annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Versioned Ensembl identifiers are mapped with the matching pinned GENCODE v26 annotation. Symbols assigned to more than one Ensembl identifier are excluded rather than combined implicitly.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies the recount3 transform_counts AUC normalization: round(gene-sum base-pair coverage x 40,000,000 / sample AUC), followed by log2(x + 1). The scale supports within-gene comparisons inside this cohort and is not numerically harmonized across studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Recurrence-free survival from diagnosis",
+      "time_column": "RFS_MONTHS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Date of diagnosis",
+      "event_definition": "First recurrence; patients without recurrence are censored at last follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

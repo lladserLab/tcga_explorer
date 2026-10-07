@@ -1,0 +1,133 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "zenodo-lihc-planet-2024",
+    "cancer_code": "LIHC",
+    "name": "PLANet resected hepatocellular carcinoma cohort (2024)",
+    "description": "Independent bulk RNA-seq from spatially sampled, resected hepatocellular carcinomas in the Asia-Pacific PLANet cohort, linked to individual time-to-recurrence follow-up.",
+    "cohort_context": "The publication included 123 early-to-intermediate-stage HCC patients. TRACE Explorer retains one expression-complete tumor region per patient using total raw-count library size before reading the outcome; 109 selected patients have positive time-to-recurrence follow-up.",
+    "source_provider": "zenodo_publication",
+    "source_accession": "Zenodo 12548543",
+    "source_url": "https://zenodo.org/records/12548543",
+    "publication_citation": "Chen et al. Journal of Hepatology 2024",
+    "publication_id": "DOI:10.1016/j.jhep.2024.05.017",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0 + CC-BY-NC-ND-4.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Precision Medicine in Liver Cancer across an Asia-Pacific Network (PLANet; NCT03267641)",
+      "source_data_system": "Zenodo source-data record plus the pinned publisher clinical supplement",
+      "library_method": "featureCounts raw gene counts normalized by TRACE Explorer to log2(CPM + 1)",
+      "curation_note": "Only exact patient-region identifiers present in both the publication sample map and the count matrix are eligible. One region is selected per patient by greatest total raw-count library size, with lexical sample ID as the deterministic tie-breaker; the rule does not use recurrence.",
+      "endpoint_note": "TTR is time from surgery to documented recurrence. It is not relabelled as recurrence-free survival because the source endpoint does not count death without recurrence as an event.",
+      "redistribution_note": "The Zenodo expression archive is CC BY 4.0, while the publisher clinical supplement is CC BY-NC-ND 4.0. TRACE Explorer permits analysis but disables direct matrix downloads and does not represent the combined derivative as freely redistributable."
+    }
+  },
+  "source": {
+    "provider": "zenodo_publication",
+    "record_id": 12548543,
+    "record_doi": "10.5281/zenodo.12548543",
+    "expected_revision": 6,
+    "expected_zenodo_license": "cc-by-4.0",
+    "publication_date": "2024-06-30",
+    "publication_doi": "10.1016/j.jhep.2024.05.017",
+    "license_evidence_url": "https://api.crossref.org/works/10.1016%2Fj.jhep.2024.05.017",
+    "expected_clinical_license_url": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "expression_archive": {
+      "key": "source_data.zip",
+      "member": "source_data/RNA_raw_counts.tsv",
+      "size": 73846256,
+      "md5": "1126e860774f7d08b113eef03d31cf35",
+      "sha256": "74826d037eefec0e7d6ad8b697943ef67c564dceb54f9b385277dc532bb090ef"
+    },
+    "clinical": {
+      "url": "https://ars.els-cdn.com/content/image/1-s2.0-S0168827824003520-mmc4.xlsx",
+      "name": "1-s2.0-S0168827824003520-mmc4.xlsx",
+      "size": 614988,
+      "sha256": "9e8a6baa4bf26541abf937886a13d35ecbdd6dc4ec8217be4f44de82f7b57892",
+      "patient_sheet": "Merged_PAT123",
+      "patient_header_row": 1,
+      "sample_sheet": "merged_RNA_sample_table",
+      "sample_header_row": 1,
+      "patient_id_column": "Publication_ID",
+      "sample_patient_column": "Publication_ID",
+      "sample_region_column": "Tumor",
+      "sample_type_column": "Sample_type",
+      "allowed_sample_types": [
+        "Tumor"
+      ],
+      "output_sample_type": "Resected primary HCC tumor region"
+    },
+    "expression": {
+      "delimiter": "\t",
+      "feature_column": "gene_name",
+      "sample_start_column": 4,
+      "allowed_unmapped_sample_patterns": [
+        "_N[0-9]*$"
+      ],
+      "expected_source_sample_columns": 482,
+      "expected_mapped_sample_columns": 393,
+      "expected_selected_patients": 110,
+      "minimum_gene_rows": 10000
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Resected primary HCC tumor region",
+    "sample_role": "One outcome-independent tumor RNA profile per resected HCC patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Resected primary HCC tumor region"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.TNM Stage (V8)"
+    ],
+    "grade_fields": [
+      "patient.Edmondson Grade"
+    ],
+    "gender_fields": [
+      "patient.Gender"
+    ],
+    "race_fields": [
+      "patient.Race"
+    ],
+    "age_fields": [
+      "patient.Age (Years)"
+    ]
+  },
+  "expression": {
+    "layer_id": "zenodo_log2_cpm",
+    "label": "PLANet counts normalized to log2(CPM + 1)",
+    "source_unit": "Gene-level featureCounts raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GENCODE v33 gene_name values supplied in the pinned PLANet featureCounts matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Repeated supplied gene symbols are excluded rather than combined without an unambiguous source-level rule.",
+    "scale_note": "Library size is calculated across all source gene rows for the selected tumor region, followed by counts per million and log2(CPM + 1)."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "TTR",
+      "standard_code": "TTR",
+      "label": "Time to recurrence after resection",
+      "time_column": "TTR.time",
+      "event_column": "TTR.status",
+      "time_unit": "days",
+      "time_origin": "Date of surgery for the profiled resected tumor",
+      "event_definition": "Documented tumor recurrence (source TTR.status = 1); source TTR.status = 0 is censored",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

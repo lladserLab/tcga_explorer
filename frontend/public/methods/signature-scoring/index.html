@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Citable TRACE Explorer methods for patient-level gene-signature scoring.">
+  <meta name="trace-method-contract" content="trace-signature-scoring-methods-v2">
+  <meta name="trace-source-sha256" content="4f9349a7a6c7e373f7a67aa9362da40c9386535361168eb7e0edff671000fd5c">
+  <link rel="canonical" href="https://apps.cienciavida.org/tcga_explorer/methods/signature-scoring/">
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <title>Signature scoring | TRACE Explorer Methods</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: oklch(24% .018 252);
+      --ink-strong: oklch(17% .02 252);
+      --muted: oklch(49% .018 245);
+      --signal: oklch(43.5% .083 218);
+      --signal-soft: oklch(94% .018 218);
+      --canvas: oklch(96.5% .006 238);
+      --paper: oklch(99% .003 245);
+      --line: oklch(86% .011 240);
+      --line-strong: oklch(71% .018 240);
+      --warning: oklch(64% .13 70);
+      --header: oklch(18% .022 252);
+      --max: 1120px;
+      font-family: "IBM Plex Sans", Aptos, ui-sans-serif, system-ui, sans-serif;
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background-color: var(--canvas);
+      background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 28px 28px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    a { color: var(--signal); text-underline-offset: .18em; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid var(--warning); outline-offset: 3px; }
+    .skip-link { position: fixed; top: 10px; left: 10px; z-index: 10; transform: translateY(-160%); padding: 10px 14px; background: var(--paper); color: var(--ink-strong); border: 1px solid var(--line-strong); }
+    .skip-link:focus { transform: none; }
+    .topbar { background: var(--header); color: var(--paper); border-bottom: 1px solid oklch(32% .025 232); }
+    .topbar-inner { width: min(calc(100% - 32px), var(--max)); min-height: 68px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; font-weight: 680; }
+    .brand img { width: 30px; height: 30px; }
+    .topnav { display: flex; align-items: center; gap: 20px; }
+    .topnav a { color: oklch(88% .01 238); text-decoration: none; }
+    .topnav a:hover { color: var(--paper); text-decoration: underline; }
+    .hero { background: var(--paper); border-bottom: 1px solid var(--line); }
+    .hero-inner { width: min(calc(100% - 32px), var(--max)); margin: auto; padding: 64px 0 46px; }
+    .eyebrow { margin: 0 0 10px; color: var(--signal); font-size: 12px; font-weight: 780; }
+    h1 { max-width: 18ch; margin: 0; color: var(--ink-strong); font-size: 54px; line-height: 1.02; letter-spacing: -.035em; }
+    .lede { max-width: 67ch; margin: 22px 0 0; font-size: 18px; color: var(--muted); }
+    .contract-line { display: flex; flex-wrap: wrap; gap: 9px 24px; margin: 30px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .contract-line strong { color: var(--ink); }
+    .layout { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; display: grid; grid-template-columns: 218px minmax(0, 1fr); gap: 54px; padding: 42px 0 86px; align-items: start; }
+    .toc { position: sticky; top: 24px; padding: 4px 0; }
+    .toc h2 { margin: 0 0 12px; font-size: 13px; }
+    .toc ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-strong); }
+    .toc li { border-bottom: 1px solid var(--line); }
+    .toc a { display: block; padding: 10px 3px; color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--signal); }
+    main { min-width: 0; }
+    .section { scroll-margin-top: 20px; margin-bottom: 62px; }
+    .section > h2 { margin: 0 0 20px; color: var(--ink-strong); font-size: 24px; line-height: 1.18; }
+    .section-note { max-width: 68ch; margin: -7px 0 20px; color: var(--muted); }
+    .prose { max-width: 72ch; }
+    .prose p { margin: 0 0 14px; }
+    .recommendation { margin: 28px 0 0; padding: 20px; background: var(--signal-soft); border: 1px solid color-mix(in oklch, var(--signal) 34%, var(--line)); border-radius: 4px; }
+    .recommendation strong { display: block; margin-bottom: 5px; color: var(--ink-strong); }
+    .workflow { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-strong); }
+    .workflow li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 19px 0; border-bottom: 1px solid var(--line); }
+    .workflow li > span { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--signal); border-radius: 50%; color: var(--signal); font-weight: 720; font-variant-numeric: tabular-nums; }
+    .workflow h3, .rule h3 { margin: 0 0 5px; color: var(--ink-strong); font-size: 16px; }
+    .workflow p, .rule p { max-width: 72ch; margin: 0; }
+    .table-region { overflow-x: auto; border: 1px solid var(--line); background: var(--paper); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--ink-strong); font-weight: 700; }
+    tr:last-child > * { border-bottom: 0; }
+    .method-list { border-top: 1px solid var(--line-strong); }
+    .method { background: color-mix(in oklch, var(--paper) 92%, transparent); border-bottom: 1px solid var(--line-strong); }
+    .method summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 19px 4px; cursor: pointer; list-style-position: outside; }
+    .method summary::marker { color: var(--signal); }
+    .method-title, .method-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+    .method-title strong { color: var(--ink-strong); font-size: 18px; }
+    code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .86em; }
+    .method-title code { padding: 3px 6px; color: var(--muted); background: var(--canvas); border: 1px solid var(--line); border-radius: 4px; }
+    .method-meta { justify-content: flex-end; color: var(--muted); font-size: 12px; }
+    .status { padding: 3px 7px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); font-weight: 690; }
+    .status-available { border-color: color-mix(in oklch, var(--signal) 52%, var(--line)); color: var(--signal); }
+    .status-boundary { border-color: color-mix(in oklch, var(--warning) 55%, var(--line)); }
+    .method-body { padding: 2px 4px 26px; }
+    .formula { display: flex; align-items: baseline; gap: 13px; margin-bottom: 18px; padding: 13px 15px; background: var(--ink-strong); color: var(--paper); border-radius: 4px; overflow-x: auto; }
+    .formula span { flex: 0 0 auto; color: oklch(77% .055 218); font-size: 12px; font-weight: 750; }
+    .formula code { white-space: nowrap; font-size: 13px; }
+    dl { margin: 0; }
+    dl > div { display: grid; grid-template-columns: 154px minmax(0, 1fr); gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    dl > div:last-child { border-bottom: 0; }
+    dt { color: var(--muted); font-size: 13px; font-weight: 700; }
+    dd { margin: 0; }
+    dd > span { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
+    .rule { padding: 18px 0; border-top: 1px solid var(--line); }
+    .rule:first-of-type { border-top-color: var(--line-strong); }
+    .limitations { max-width: 72ch; padding-left: 21px; }
+    .limitations li { margin: 0 0 11px; padding-left: 5px; }
+    .references { max-width: 78ch; padding-left: 22px; }
+    .references li { margin: 0 0 13px; padding-left: 5px; }
+    .download-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+    .download-row a { display: inline-flex; min-height: 44px; align-items: center; padding: 0 13px; border: 1px solid var(--line-strong); border-radius: 6px; background: var(--paper); text-decoration: none; font-weight: 650; }
+    footer { border-top: 1px solid var(--line); background: var(--paper); }
+    .footer-inner { width: min(calc(100% - 32px), var(--max)); margin: auto; padding: 28px 0 38px; color: var(--muted); font-size: 12px; }
+    .footer-inner code { overflow-wrap: anywhere; }
+    @media (max-width: 780px) {
+      .topbar-inner { min-height: 60px; }
+      .topnav a:first-child { display: none; }
+      .hero-inner { padding: 42px 0 34px; }
+      h1 { font-size: 40px; }
+      .layout { grid-template-columns: 1fr; gap: 36px; padding-top: 28px; }
+      .toc { position: static; }
+      .toc ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .toc li:nth-child(odd) { border-right: 1px solid var(--line); }
+      .toc a { padding: 10px 8px; }
+      .method summary { grid-template-columns: 1fr; }
+      .method-meta { justify-content: flex-start; }
+      dl > div { grid-template-columns: 1fr; gap: 3px; }
+    }
+    @media (max-width: 430px) {
+      body { font-size: 14px; }
+      .topbar-inner, .hero-inner, .layout, .footer-inner { width: min(calc(100% - 24px), var(--max)); }
+      h1 { font-size: 34px; }
+      .brand span { max-width: 120px; line-height: 1.15; }
+      .topnav { gap: 11px; font-size: 13px; }
+      .toc ul { grid-template-columns: 1fr; }
+      .toc li:nth-child(odd) { border-right: 0; }
+      .method-title { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: var(--paper); color: var(--ink-strong); font-size: 10pt; }
+      .skip-link, .topnav, .toc, .download-row { display: none; }
+      .topbar { background: var(--paper); color: var(--ink-strong); }
+      .topbar-inner, .hero-inner, .layout, .footer-inner { width: 100%; }
+      .hero-inner { padding: 28px 0; }
+      .layout { display: block; padding: 24px 0; }
+      .section { break-inside: avoid; margin-bottom: 32px; }
+      details .method-body { display: block; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to methods</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../" aria-label="TRACE Explorer home"><img src="../../brand/trace-mark.svg" alt=""><span>TRACE Explorer</span></a>
+      <nav class="topnav" aria-label="Methods page links">
+        <a href="../../?view=help#trace-guide-methods-signature-scoring">In-app explanation</a>
+        <a href="methods.md">Markdown</a>
+      </nav>
+    </div>
+  </header>
+  <div class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Methods · stable reference</p>
+      <h1>Signature scoring</h1>
+      <p class="lede">How TRACE turns one gene or a gene set into one score per sample</p>
+      <div class="contract-line" aria-label="Method contract metadata">
+        <span><strong>Contract</strong> trace-signature-scoring-methods-v2</span>
+        <span><strong>Engine contract</strong> bioconductor-single-sample-scoring-v2.0</span>
+        <span><strong>Reviewed</strong> 2026-09-07</span>
+        <span><strong>Runtime</strong> R 4.4.2 · Bioconductor 3.20</span>
+        <span><strong>Methods available</strong> 7</span>
+      </div>
+    </div>
+  </div>
+  <div class="layout">
+    <nav class="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#workflow">Before scoring</a></li>
+        <li><a href="#methods">Methods</a></li>
+        <li><a href="#rules">Shared rules</a></li>
+        <li><a href="#limitations">Limitations</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </nav>
+    <main id="content" tabindex="-1">
+      <section class="section prose" id="overview">
+        <h2>What this score means</h2>
+        <p>A signature score is a compact summary of expression. It does not by itself establish pathway activity, prognosis or treatment response.</p><p>TRACE records the expression layer, resolved genes, scoring population, method parameters and score hash so the calculation can be inspected and repeated.</p>
+        <div class="recommendation"><strong>Recommended starting point</strong>For a bulk-RNA signature that may be examined across cohorts, start with singscore. It ranks genes within each sample and does not estimate its reference distribution from the other patients in the run.</div>
+        <div class="download-row" aria-label="Download method definitions">
+          <a href="methods.md" download>Download Markdown</a>
+          <a href="contract.json" download>Download JSON contract</a>
+        </div>
+      </section>
+      <section class="section" id="workflow">
+        <h2>What happens before scoring</h2>
+        <ol class="workflow"><li><span>1</span><div><h3>Choose the expression layer</h3><p>TRACE uses the analysis-ready layer declared by the dataset. Uploaded counts or abundance values are transformed during import according to their declared unit; the scorer never guesses a scale.</p></div></li><li><span>2</span><div><h3>Resolve the signature</h3><p>Gene symbols and supported aliases are resolved before scoring. Every requested component must map. Consistent duplicates are reported and counted once; conflicting weights or directions are rejected.</p></div></li><li><span>3</span><div><h3>Fix the patient and feature universe</h3><p>The selected molecular population or external sample types are applied before choosing one RNA profile per participant. Arithmetic scores use the analysis-eligible complete cases. Rank-based scores use this molecular population and the full frozen feature universe before endpoint and clinical filters are applied. Choosing a different tissue population changes the scoring population; it never falls back to another tissue type.</p></div></li><li><span>4</span><div><h3>Calculate and record the score</h3><p>TRACE stores the method, parameters, direction of every component, population counts, resolved feature universe and a hash of the resulting score vector. Clinical filters are part of this record.</p></div></li></ol>
+      </section>
+      <section class="section" id="notation">
+        <h2>Notation</h2>
+        <div class="table-region" tabindex="0" role="region" aria-label="Score notation table">
+          <table><thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead><tbody><tr><th scope="row">xᵢg</th><td>analysis-ready expression for sample i and gene g</td></tr><tr><th scope="row">w₍g₎</th><td>user-supplied gene weight; the default is 1</td></tr><tr><th scope="row">G</th><td>number of distinct resolved genes in the signature</td></tr><tr><th scope="row">U</th><td>number of usable genes in the frozen expression-layer universe</td></tr></tbody></table>
+        </div>
+      </section>
+      <section class="section" id="methods">
+        <h2>Scoring methods</h2>
+        <p class="section-note">Choose the method that matches how the score will be used. Expand a row for its exact calculation, population dependence and limits.</p>
+        <div class="method-list">
+      <details class="method" id="method-single">
+        <summary>
+          <span class="method-title"><strong>Single gene</strong><code>single</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Direct expression</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = xᵢg</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>TRACE native scorer</dd></div>
+            <div><dt>Parameters</dt><dd>Exactly one resolved gene.</dd></div>
+            <div><dt>Direction</dt><dd>A direction is not applied. The score retains the expression direction of the selected gene.</dd></div>
+            <div><dt>Gene universe</dt><dd>The selected gene. Participants without its expression value are excluded.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>The same stored expression value does not change when other participants are added or removed.</dd></div>
+            <div><dt>How to read it</dt><dd>A one-unit score difference is one unit on the declared expression layer.</dd></div>
+            <div><dt>Important limit</dt><dd>Values from different expression layers or processing pipelines are not directly interchangeable.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-mean">
+        <summary>
+          <span class="method-title"><strong>Mean</strong><code>mean</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Transparent arithmetic score</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = (1/G) Σg xᵢg</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>TRACE native scorer</dd></div>
+            <div><dt>Parameters</dt><dd>Two or more resolved genes; all components receive equal weight.</dd></div>
+            <div><dt>Direction</dt><dd>All genes are treated as positive components.</dd></div>
+            <div><dt>Gene universe</dt><dd>The resolved signature genes. Only participants with expression for every component are scored.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>It does not use other participants, but it depends directly on the expression scale.</dd></div>
+            <div><dt>How to read it</dt><dd>Higher scores mean higher average expression of the listed genes on the declared layer.</dd></div>
+            <div><dt>Important limit</dt><dd>Highly expressed genes can dominate the average. Use only genes measured on a common, appropriate scale.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-weighted">
+        <summary>
+          <span class="method-title"><strong>Weighted mean</strong><code>weighted</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Signed arithmetic score</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = Σg w₍g₎xᵢg / Σg |w₍g₎|</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>TRACE native scorer</dd></div>
+            <div><dt>Parameters</dt><dd>Two or more resolved genes with finite, non-zero weights.</dd></div>
+            <div><dt>Direction</dt><dd>Positive weights increase the score; negative weights decrease it. Weight magnitude is retained.</dd></div>
+            <div><dt>Gene universe</dt><dd>The resolved signature genes. Only participants with expression for every component are scored.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>It does not use other participants, but it depends directly on the expression scale and chosen weights.</dd></div>
+            <div><dt>How to read it</dt><dd>The sign and magnitude follow the declared weights and expression layer.</dd></div>
+            <div><dt>Important limit</dt><dd>Weights learned in another assay may not transfer to a new processing pipeline.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-zscore">
+        <summary>
+          <span class="method-title"><strong>Z-score mean</strong><code>zscore</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Within-run standardized score</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = Σg w₍g₎[(xᵢg − x̄g)/s₍g₎] / Σg |w₍g₎|</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>TRACE native scorer</dd></div>
+            <div><dt>Parameters</dt><dd>Two or more resolved genes with finite, non-zero weights; x̄g and sample SD s₍g₎ are estimated among eligible, expression-complete participants in the run.</dd></div>
+            <div><dt>Direction</dt><dd>Positive weights increase the score; negative weights decrease it. Weight magnitude is retained.</dd></div>
+            <div><dt>Gene universe</dt><dd>The resolved signature genes and the eligible complete-case scoring population.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>Yes. Changing clinical filters, endpoint eligibility or cohort composition can change every score.</dd></div>
+            <div><dt>How to read it</dt><dd>A higher value means higher standardized expression relative to this run, not an absolute cross-study value.</dd></div>
+            <div><dt>Important limit</dt><dd>Do not compare numerical z-scores from separately scored cohorts. Constant components contribute no variation and are reported.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-singscore" open>
+        <summary>
+          <span class="method-title"><strong>singscore</strong><code>singscore</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Recommended rank-based bulk score</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = singscore TotalScore from centered within-sample ranks</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>singscore::rankGenes + singscore::simpleScore<span>singscore 1.26.0, Bioconductor 3.20</span></dd></div>
+            <div><dt>Parameters</dt><dd>rankGenes(tiesMethod = &quot;min&quot;); simpleScore(centerScore = TRUE, knownDirection = TRUE).</dd></div>
+            <div><dt>Direction</dt><dd>Plain genes and +1 weights form upSet; −1 weights form downSet. Other weight magnitudes and zero are rejected because rank methods do not estimate weighted effects.</dd></div>
+            <div><dt>Gene universe</dt><dd>All usable genes in the selected frozen expression layer for that sample.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>It does not estimate ranks from other participants. Scores can still change if the measured gene universe, preprocessing or signature mapping changes.</dd></div>
+            <div><dt>How to read it</dt><dd>Higher TotalScore means positive genes rank higher and negative genes rank lower within the sample.</dd></div>
+            <div><dt>Important limit</dt><dd>Cross-study interpretation still requires comparable feature universes and attention to assay, batch and tissue composition.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-ssgsea">
+        <summary>
+          <span class="method-title"><strong>ssGSEA</strong><code>ssgsea</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Sample-wise enrichment score</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = ESᵢ(up) − ESᵢ(down); a missing direction contributes 0</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>GSVA::ssgseaParam + GSVA::gsva<span>GSVA 2.0.7, Bioconductor 3.20</span></dd></div>
+            <div><dt>Parameters</dt><dd>alpha = 0.25, normalize = FALSE, minSize = 2, maxSize = Inf.</dd></div>
+            <div><dt>Direction</dt><dd>Plain genes and +1 weights form the positive set; −1 weights form the negative set. Other magnitudes and zero are rejected.</dd></div>
+            <div><dt>Gene universe</dt><dd>All usable genes in the selected frozen expression layer for that sample. Each non-empty direction must retain at least two mapped genes.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>The enrichment walk is sample-wise and TRACE disables across-sample range normalization. Scores can still change with the feature universe, preprocessing and ties.</dd></div>
+            <div><dt>How to read it</dt><dd>Higher values indicate relative enrichment of the positive component over the negative component within a sample.</dd></div>
+            <div><dt>Important limit</dt><dd>Numerical scores should not be assumed exchangeable across assays. Signature size and gene-gene correlation affect behaviour.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-aucell">
+        <summary>
+          <span class="method-title"><strong>AUCell</strong><code>aucell</code></span>
+          <span class="method-meta"><span class="status status-available">Available</span><span>Top-ranked activity sensitivity</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Sᵢ = normalized AUCᵢ(up) − normalized AUCᵢ(down)</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>AUCell::AUCell_buildRankings + AUCell::AUCell_calcAUC<span>AUCell 1.28.0, Bioconductor 3.20</span></dd></div>
+            <div><dt>Parameters</dt><dd>Sequential ranking with package-defined random tie handling; keepZeroesAsNA = FALSE; aucMaxRank = ceiling(0.05 × U); normAUC = TRUE. Per-sample seed = first 8 hex digits of SHA-256(&quot;bioconductor-single-sample-scoring-v2.0|1|&lt;sample ID&gt;&quot;), modulo 2,147,483,646, plus 1.</dd></div>
+            <div><dt>Direction</dt><dd>Plain genes and +1 weights form the positive set; −1 weights form the negative set. Other magnitudes and zero are rejected.</dd></div>
+            <div><dt>Gene universe</dt><dd>All usable genes in the selected frozen expression layer for that sample; U and the resulting aucMaxRank are exported.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>Ranking is performed per sample. Results still depend on feature detection, ties, the feature universe and the top-rank threshold.</dd></div>
+            <div><dt>How to read it</dt><dd>Higher values indicate that positive signature genes are more concentrated near the top of the sample ranking than negative genes.</dd></div>
+            <div><dt>Important limit</dt><dd>AUCell was developed for ranking-based activity assessment in single-cell workflows. TRACE presents it as a sensitivity, not the default bulk-RNA score.</dd></div>
+          </dl>
+        </div>
+      </details>
+      <details class="method" id="method-gsva">
+        <summary>
+          <span class="method-title"><strong>GSVA</strong><code>gsva</code></span>
+          <span class="method-meta"><span class="status status-boundary">Not available</span><span>Current boundary</span></span>
+        </summary>
+        <div class="method-body">
+          <div class="formula" aria-label="Score definition"><span>Score</span><code>Not available in TRACE Explorer.</code></div>
+          <dl>
+            <div><dt>Engine</dt><dd>Not implemented</dd></div>
+            <div><dt>Parameters</dt><dd>None.</dd></div>
+            <div><dt>Direction</dt><dd>Not applicable.</dd></div>
+            <div><dt>Gene universe</dt><dd>Not applicable.</dd></div>
+            <div><dt>Dependence on the run</dt><dd>GSVA estimates expression distributions across a sample cohort, so its score is cohort-relative.</dd></div>
+            <div><dt>How to read it</dt><dd>TRACE does not currently expose GSVA as a signature score.</dd></div>
+            <div><dt>Important limit</dt><dd>If introduced later, it will require a frozen reference population and will not be presented as a transportable per-sample default.</dd></div>
+          </dl>
+        </div>
+      </details></div>
+      </section>
+      <section class="section" id="rules">
+        <h2>Rules shared by all methods</h2>
+        <section class="rule" id="rule-expression-input"><h3>Expression input</h3><p>The result records the dataset, release, expression-layer identifier and analysis scale. Rank-based scores require a finite, frozen broad expression layer with at least 1,000 unique usable genes and no more than 75 million gene-by-sample entries; small targeted panels should use arithmetic methods. Rank-based methods are insensitive to strictly monotone transformations only when the feature universe and ties are unchanged.</p></section><section class="rule" id="rule-mapping-and-coverage"><h3>Mapping and coverage</h3><p>Signature scoring requires 100% mapping of all requested components. TRACE reports submitted and resolved symbols, aliases, missing genes and duplicate resolutions. Consistent duplicates contribute once; a conflicting duplicate, an unmapped gene or fewer than two distinct resolved genes blocks a multi-gene score. Duplicate symbols inside a source matrix use the first row by recorded row number, and that policy is exported.</p></section><section class="rule" id="rule-missing-expression"><h3>Missing expression</h3><p>Arithmetic methods use complete cases for all resolved signature genes. Rank methods require every value in the frozen expression layer and canonical molecular population to be finite; they do not silently drop a patient or feature when scoring. Constant signature genes remain in the calculation and are reported. Participant counts before and after scoring remain visible.</p></section><section class="rule" id="rule-direction-and-weights"><h3>Direction and weights</h3><p>Mean treats all genes as positive. Weighted and z-score methods retain finite, non-zero weight magnitude. singscore, ssGSEA and AUCell accept only plain or +1 genes as up and −1 genes as down; zero and other magnitudes are invalid.</p></section><section class="rule" id="rule-rest-representation"><h3>REST representation</h3><p>The interface uses GENE, GENE:1 and GENE:-1. REST clients may instead set signature_genes[].direction to up or down and should omit weight in that form. Explicit direction is authoritative if both fields are sent; any supplied rank-method weight must still be +1 or −1.</p></section><section class="rule" id="rule-filters-and-timing"><h3>Filters and timing</h3><p>Arithmetic methods follow endpoint and clinical eligibility; z-score is recalculated in that complete-case population. Rank methods are scored once on the canonical molecular population before endpoint and clinical filters, then the stored scores are subset for the requested analysis. Thus filtering unrelated patients does not change a retained patient&#x27;s rank score.</p></section><section class="rule" id="rule-across-studies"><h3>Across studies</h3><p>TRACE scores and fits associations inside each study. Raw patient-level rank scores from different studies are never pooled as if they shared one numerical scale. A workflow reports multi-study synthesis only for effect estimates that satisfy its declared common-scale and hierarchy rules; rank-signature effects remain study-level in the current pan-cancer workflow.</p></section><section class="rule" id="rule-downstream-inference"><h3>Downstream inference</h3><p>Scoring and inference are separate decisions. A score may enter a continuous model, a declared grouped comparison or GSEA grouping. Survival models report the effect per one standard deviation among the patients retained for that analysis, and grouped views recalculate their declared cutpoint there. Filtering therefore does not change a retained patient&#x27;s frozen rank score, but it can change the model&#x27;s unit or group assignment. A cutpoint does not validate a signature, and multiple tried definitions must be interpreted as a family.</p></section>
+      </section>
+      <section class="section" id="limitations">
+        <h2>What these scores cannot establish</h2>
+        <ul class="limitations"><li>A high score is not direct evidence that a pathway is causally active.</li><li>Tumour purity and immune or stromal content can influence many signatures; adjustment is not automatic and should be justified for the biological question.</li><li>Batch, assay and feature-universe differences remain relevant even for within-sample rank methods.</li><li>A signature evaluated in the same data used to derive it is not an independent validation.</li><li>Random or matched gene sets can be useful negative controls, but they do not replace a prespecified hypothesis or external validation.</li></ul>
+      </section>
+      <section class="section" id="references">
+        <h2>References</h2>
+        <ol class="references"><li id="ref-foroutan2018"><a href="https://doi.org/10.1186/s12859-018-2435-4">Foroutan M et al. Single sample scoring of molecular phenotypes. BMC Bioinformatics. 2018;19:404.</a></li><li id="ref-barbie2009"><a href="https://doi.org/10.1038/nature08460">Barbie DA et al. Systematic RNA interference reveals that oncogenic KRAS-driven cancers require TBK1. Nature. 2009;462:108–112.</a></li><li id="ref-hanzelmann2013"><a href="https://doi.org/10.1186/1471-2105-14-7">Hänzelmann S, Castelo R, Guinney J. GSVA: gene set variation analysis for microarray and RNA-seq data. BMC Bioinformatics. 2013;14:7.</a></li><li id="ref-aibar2017"><a href="https://doi.org/10.1038/nmeth.4463">Aibar S et al. SCENIC: single-cell regulatory network inference and clustering. Nature Methods. 2017;14:1083–1086.</a></li><li id="ref-gsva_manual"><a href="https://bioconductor.org/packages/3.20/bioc/html/GSVA.html">Bioconductor. GSVA package reference and vignette, version 2.0.7.</a></li><li id="ref-singscore_manual"><a href="https://bioconductor.org/packages/3.20/bioc/html/singscore.html">Bioconductor. singscore package reference, version 1.26.0.</a></li><li id="ref-aucell_manual"><a href="https://bioconductor.org/packages/3.20/bioc/html/AUCell.html">Bioconductor. AUCell package reference, version 1.28.0.</a></li></ol>
+      </section>
+    </main>
+  </div>
+  <footer><div class="footer-inner">Generated from <code>docs/methods/signature_scoring.json</code> · Source SHA-256 <code>4f9349a7a6c7e373f7a67aa9362da40c9386535361168eb7e0edff671000fd5c</code></div></footer>
+</body>
+</html>

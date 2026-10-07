@@ -1,0 +1,292 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-prad-otago-gse278135-2024",
+    "cancer_code": "PRAD",
+    "name": "Otago four-year prostate biochemical-recurrence cohort (GSE278135)",
+    "description": "Independent localized prostate acinar-adenocarcinoma cohort with public bulk RNA sequencing from radical-prostatectomy tissue and an individual four-year biochemical-recurrence endpoint.",
+    "cohort_context": "The University of Otago study approached 23 eligible men who underwent radical prostatectomy between April 2018 and February 2020; 18 consented and one lacked suitable tissue, leaving 17 profiled patients. TRACE Explorer excludes the source-designated biochemical-persistence case because persistent PSA and post-clearance recurrence are different estimands. The remaining 16 patients comprise eight recurrences with exact event times and eight patients without recurrence through the source-defined four-year follow-up horizon.",
+    "source_provider": "geo",
+    "source_accession": "GSE278135",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE278135",
+    "publication_citation": "Smith et al. Data 2024",
+    "publication_id": "DOI:10.3390/data9120150",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-NC-ND",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "University of Otago prostate cancer recurrence data descriptor",
+      "source_data_system": "NCBI Gene Expression Omnibus plus the publisher-hosted clinical supplement",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Ribosomal-RNA-depleted bulk RNA-seq from FFPE radical-prostatectomy tumor tissue",
+      "endpoint_context": "Biochemical recurrence within four years after radical prostatectomy",
+      "redistribution_note": "TRACE Explorer analyzes the public GEO matrix and a curated transcription of endpoint fields from the pinned publisher supplement. Source files are not redistributed because the data descriptor specifies CC BY-NC-ND for the dataset.",
+      "sample_selection_note": "The source matrix contains technical replicates BCR_014A and BCR_014B. The GEO title labels BCR_014A as replicate 1; TRACE Explorer retains that prespecified first replicate and excludes replicate 2 before endpoint and expression QC.",
+      "endpoint_curation_note": "BCR_001 is source-labelled biochemical persistence and is excluded before analysis. Exact recurrence times are retained for the eight recurrence cases. The eight source-labelled non-recurrence cases are administratively censored at 4.0 years, the common minimum follow-up explicitly reported for the cohort; their unknown follow-up beyond four years is not inferred.",
+      "curation_note": "Sixteen endpoint-complete patients contribute eight biochemical recurrences and eight four-year censored observations. The source-provided TPM matrix contains 23,639 Ensembl gene rows and 18 RNA columns. TRACE Explorer retains one column per eligible patient, maps Ensembl GRCh37 release 87 identifiers with the matching pinned annotation and applies log2(TPM + 1)."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE278135",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE278nnn/GSE278135/suppl/GSE278135_BCR_TPM_RNA_seq.csv.gz",
+    "expression_size": 3279854,
+    "expression_sha256": "8d015e8b333cecdea2ef29059c7d6e30100663255332a1cc2d38230e3d95df8d",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE278nnn/GSE278135/soft/GSE278135_family.soft.gz",
+    "soft_size": 4599,
+    "soft_sha256": "8e323368c71fc91a44ce4536c233285fa2e2acc665ef26946dd07b84388cb384",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Prostate tumour (?:Biochemical recurrence|No biochemical recurrence) RNA-seq, Patient [0-9]+(?:, Repicate 1)?",
+    "expected_primary_samples": 16,
+    "expected_endpoint_complete_samples": 16,
+    "expected_events": 8,
+    "expected_censored": 8,
+    "expected_expression_columns": 16,
+    "expected_expression_gene_rows": 23639,
+    "patient_id_characteristic": "study id",
+    "expression_sample_characteristic": "expression sample id",
+    "time_characteristic": "bcrfs years",
+    "event_characteristic": "biochemical recurrence",
+    "event_value_map": {
+      "yes": 1,
+      "no": 0
+    },
+    "age_characteristic": "age",
+    "stage_characteristic": "tumour stage",
+    "grade_characteristic": "tumour gleason_grade",
+    "grade_value_map": {
+      "3+3=6": "G1",
+      "3+4=7": "G2",
+      "4+3=7": "G3",
+      "4+4=8": "G4",
+      "5+3=8": "G4",
+      "4+5=9": "G5",
+      "5+4=9": "G5",
+      "5+5=10": "G5"
+    },
+    "sex_default": "male",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "value_transform": "identity",
+      "duplicate_feature_policy": "error"
+    },
+    "clinical": {
+      "evidence_url": "https://mdpi-res.com/d_attachment/data/data-09-00150/article_deploy/data-09-00150-s001.zip",
+      "evidence_size": 12004,
+      "evidence_sha256": "e43992b68bfd4e5a6ad75d1546a269990fed7259ebcf6f645d6c25b169350613",
+      "record_id_column": "Patient Number",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "Prostate tumour (?:Biochemical recurrence|No biochemical recurrence) RNA-seq, Patient ([0-9]+)(?:, Repicate 1)?",
+      "expected_records": 16,
+      "expected_matched_records": 16,
+      "field_name_map": {
+        "Patient Number": "patient number",
+        "Study ID": "study id",
+        "Expression Sample ID": "expression sample id",
+        "Biochemical Recurrence": "biochemical recurrence",
+        "BCRFS Years": "bcrfs years",
+        "Age": "age"
+      },
+      "records": [
+        {
+          "Patient Number": "2",
+          "Study ID": "BCR_002",
+          "Expression Sample ID": "BCR_002",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 2.181,
+          "Age": 73
+        },
+        {
+          "Patient Number": "3",
+          "Study ID": "BCR_003",
+          "Expression Sample ID": "BCR_003",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 73
+        },
+        {
+          "Patient Number": "4",
+          "Study ID": "BCR_004",
+          "Expression Sample ID": "BCR_004",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 2.638,
+          "Age": 69
+        },
+        {
+          "Patient Number": "5",
+          "Study ID": "BCR_005",
+          "Expression Sample ID": "BCR_005",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 2.205,
+          "Age": 67
+        },
+        {
+          "Patient Number": "6",
+          "Study ID": "BCR_006",
+          "Expression Sample ID": "BCR_006",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 1.847,
+          "Age": 65
+        },
+        {
+          "Patient Number": "7",
+          "Study ID": "BCR_007",
+          "Expression Sample ID": "BCR_007",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 2.778,
+          "Age": 60
+        },
+        {
+          "Patient Number": "8",
+          "Study ID": "BCR_008",
+          "Expression Sample ID": "BCR_008",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 1.718,
+          "Age": 47
+        },
+        {
+          "Patient Number": "9",
+          "Study ID": "BCR_009",
+          "Expression Sample ID": "BCR_009",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 71
+        },
+        {
+          "Patient Number": "10",
+          "Study ID": "BCR_010",
+          "Expression Sample ID": "BCR_010",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 69
+        },
+        {
+          "Patient Number": "11",
+          "Study ID": "BCR_011",
+          "Expression Sample ID": "BCR_011",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 68
+        },
+        {
+          "Patient Number": "12",
+          "Study ID": "BCR_012",
+          "Expression Sample ID": "BCR_012",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 65
+        },
+        {
+          "Patient Number": "13",
+          "Study ID": "BCR_013",
+          "Expression Sample ID": "BCR_013",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 0.786,
+          "Age": 52
+        },
+        {
+          "Patient Number": "14",
+          "Study ID": "BCR_014",
+          "Expression Sample ID": "BCR_014A",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 71
+        },
+        {
+          "Patient Number": "15",
+          "Study ID": "BCR_015",
+          "Expression Sample ID": "BCR_015",
+          "Biochemical Recurrence": "Yes",
+          "BCRFS Years": 3.951,
+          "Age": 60
+        },
+        {
+          "Patient Number": "16",
+          "Study ID": "BCR_016",
+          "Expression Sample ID": "BCR_016",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 65
+        },
+        {
+          "Patient Number": "17",
+          "Study ID": "BCR_017",
+          "Expression Sample ID": "BCR_017",
+          "Biochemical Recurrence": "No",
+          "BCRFS Years": 4.0,
+          "Age": 66
+        }
+      ]
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/grch37/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh37.87.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.87.gtf.gz",
+      "size": 42400095,
+      "sha256": "56bc520f5e9cbc14ab4d03b472355b572818729fa422b905ba62d58291590058"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "FFPE acinar adenocarcinoma from radical prostatectomy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "Published GEO TPM transformed as log2(TPM + 1)",
+    "source_unit": "TPM",
+    "transform": "log2p",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 87 GRCh37 annotation matching the source STAR/featureCounts pipeline",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Ensembl identifiers mapping to the same case-normalized gene symbol are excluded rather than combined without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "The source aligned reads to Ensembl GRCh37 release 87, quantified gene counts with featureCounts and published TPM values. TRACE Explorer applies log2(TPM + 1) once after selecting endpoint-linked profiles. Values are cohort-specific and should not be compared numerically across studies."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "BCRFS",
+      "standard_code": "BCRFS",
+      "label": "Four-year biochemical recurrence-free survival",
+      "time_column": "BCRFS_YEARS",
+      "event_column": "BCRFS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Radical prostatectomy",
+      "event_definition": "Biochemical recurrence, defined by the source as a persistent PSA rise to at least 0.20 ng/mL after radical prostatectomy; the source-designated biochemical-persistence case is excluded",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

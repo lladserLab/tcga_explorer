@@ -1,0 +1,133 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-chol-beaujon-gse244807-2026",
+    "cancer_code": "CHOL",
+    "name": "Beaujon intrahepatic cholangiocarcinoma cohort (GSE244807)",
+    "description": "Independent intrahepatic cholangiocarcinoma cohort with bulk total-RNA sequencing of FFPE biopsies or surgical specimens and individual overall-survival follow-up.",
+    "cohort_context": "The source discovery cohort contains one RNA profile for each of 246 patients treated at Beaujon Hospital between 2000 and 2021. TRACE Explorer retains the 230 patients with positive overall-survival time and explicit vital status; the separate TCGA-CHOL and 32-case external validation sets described by the publication are not part of GSE244807.",
+    "source_provider": "geo",
+    "source_accession": "GSE244807",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE244807",
+    "publication_citation": "Beaufrere et al. JHEP Reports 2026; Lubuela et al. Virchows Archiv 2024",
+    "publication_id": "PMID:41541502; PMCID:PMC12800354; DOI:10.1016/j.jhepr.2025.101675; PMID:39242455",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Beaujon Hospital intrahepatic cholangiocarcinoma discovery cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "SMARTer Stranded Total RNA-seq from FFPE biopsy or surgical tumor tissue",
+      "endpoint_context": "Study-defined overall survival",
+      "redistribution_note": "The GEO count matrix is analyzable in TRACE Explorer, but direct matrix redistribution remains disabled because GEO access alone does not resolve all submitter intellectual-property claims.",
+      "curation_note": "GEO provides one expression identifier, age, sex, death status and overall-survival time for each source sample. Sixteen records report OS=0 and are excluded under the positive-time rule, leaving 230 endpoint-complete patients with 169 deaths and 61 censored observations. Library sizes are calculated over all 61,806 pinned featureCounts rows before log2(CPM + 1). Ensembl release 107 maps 41,389 rows to 40,189 symbols; 77 symbols represented by multiple Ensembl rows are excluded rather than combined, leaving 40,112 unambiguous genes."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE244807",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE244nnn/GSE244807/suppl/GSE244807_raw_counts.txt.gz",
+    "expression_size": 14726938,
+    "expression_sha256": "ff572d3c9ad3bff9c63bbe35f764e04cf22ff5ef7b5c008b71650dd57aeca333",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE244nnn/GSE244807/soft/GSE244807_family.soft.gz",
+    "soft_size": 14657,
+    "soft_sha256": "585905431012aa0180cddf3c7e07f1b910bc480019df3a9b71a4c9ff65f15985",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "CK[0-9]+",
+    "expected_primary_samples": 246,
+    "sample_characteristic_filters": [
+      {
+        "key": "tissue",
+        "include": [
+          "Biopsy",
+          "Surgical specimen"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 246,
+    "expected_endpoint_complete_samples": 230,
+    "expected_events": 169,
+    "expected_censored": 61,
+    "expected_expression_columns": 230,
+    "expected_expression_gene_rows": 61806,
+    "patient_id_characteristic": "",
+    "expression_sample_characteristic": "sample id",
+    "time_characteristic": "os",
+    "event_characteristic": "death",
+    "event_value_map": {
+      "1": 1,
+      "0": 0
+    },
+    "age_characteristic": "age at_the_time_of_sampling",
+    "sex_characteristic": "gender",
+    "sample_type": "Primary Tumor",
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column_index": 1,
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-107/gtf/homo_sapiens/Homo_sapiens.GRCh38.107.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.107.gtf.gz",
+      "size": 52555212,
+      "sha256": "9994f3bc8792c63803e3d91a1a8d2e613503fc59e278bcb156e55d0a7c3fb7b1"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Primary iCCA FFPE biopsy or surgical tumor specimen",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO counts normalized to log2(CPM + 1)",
+    "source_unit": "FeatureCounts gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 107 GRCh38 annotation declared by the source study",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes each retained sample library size across all 61,806 pinned source rows, converts counts to CPM and applies log2(CPM + 1). Values are cohort-normalized and should not be compared directly with expression units from other releases."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source study baseline",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

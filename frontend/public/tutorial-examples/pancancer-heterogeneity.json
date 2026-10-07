@@ -1,0 +1,61 @@
+{
+  "schema_version": "trace-teaching-contract-v2",
+  "content_kind": "fixed_interpretation_case",
+  "source_kind": "synthetic_case",
+  "result_id": "TRACE-TEACH-PANCANCER-V1",
+  "pipeline_version": "teaching-contract-only",
+  "snapshot_date": "2026-08-05",
+  "title": "Pan-cancer heterogeneity",
+  "status": "not_a_computed_analysis_result",
+  "scenario": {
+    "analysis_unit": "Each study is analyzed as its own universe.",
+    "endpoint": "Overall survival",
+    "effect_unit": "+1 within-study expression IQR",
+    "hierarchy": [
+      "study-specific effect",
+      "cancer-level synthesis",
+      "global synthesis"
+    ],
+    "required_evidence": [
+      "effect estimates and confidence intervals",
+      "study and cancer heterogeneity",
+      "modified-HKSJ inference status",
+      "global prediction interval and unavailable-study reasons"
+    ],
+    "synthetic_values": {
+      "effect_unit": "+1 within-study expression IQR",
+      "study_effects": [
+        { "study_id": "SYN-BRCA-01", "cancer": "BRCA", "status": "completed", "hazard_ratio": 1.32, "confidence_interval_95": [1.05, 1.66], "n_patients": 310, "n_events": 104 },
+        { "study_id": "SYN-BRCA-02", "cancer": "BRCA", "status": "completed", "hazard_ratio": 1.18, "confidence_interval_95": [0.91, 1.53], "n_patients": 226, "n_events": 81 },
+        { "study_id": "SYN-KIRC-01", "cancer": "KIRC", "status": "completed", "hazard_ratio": 0.82, "confidence_interval_95": [0.61, 1.1], "n_patients": 248, "n_events": 91 },
+        { "study_id": "SYN-KIRC-02", "cancer": "KIRC", "status": "completed", "hazard_ratio": 0.96, "confidence_interval_95": [0.68, 1.35], "n_patients": 174, "n_events": 63 },
+        { "study_id": "SYN-LUAD-01", "cancer": "LUAD", "status": "completed", "hazard_ratio": 1.29, "confidence_interval_95": [0.91, 1.83], "n_patients": 202, "n_events": 72 },
+        { "study_id": "SYN-LUAD-02", "cancer": "LUAD", "status": "completed", "hazard_ratio": 0.93, "confidence_interval_95": [0.65, 1.33], "n_patients": 185, "n_events": 67 },
+        { "study_id": "SYN-LUAD-03", "cancer": "LUAD", "status": "not_evaluable", "reason": "fewer than the prespecified minimum endpoint events" }
+      ],
+      "cancer_effects": [
+        { "cancer": "BRCA", "n_studies": 2, "hazard_ratio": 1.25, "confidence_interval_95": [1.05, 1.49], "heterogeneity": { "i_squared_percent": 0, "tau_squared": 0, "q_p_value": 0.61 }, "inference": "REML random effects with modified HKSJ" },
+        { "cancer": "KIRC", "n_studies": 2, "hazard_ratio": 0.88, "confidence_interval_95": [0.7, 1.11], "heterogeneity": { "i_squared_percent": 0, "tau_squared": 0, "q_p_value": 0.53 }, "inference": "REML random effects with modified HKSJ" },
+        { "cancer": "LUAD", "n_studies": 2, "hazard_ratio": 1.1, "confidence_interval_95": [0.84, 1.44], "heterogeneity": { "i_squared_percent": 28, "tau_squared": 0.018, "q_p_value": 0.24 }, "inference": "REML random effects with modified HKSJ" }
+      ],
+      "global_effect": {
+        "n_cancers": 3,
+        "hazard_ratio": 1.08,
+        "confidence_interval_95": [0.9, 1.29],
+        "prediction_interval_95": [0.72, 1.62],
+        "heterogeneity": { "i_squared_percent": 54, "tau_squared": 0.035, "q_p_value": 0.11 },
+        "inference": "REML random effects with modified HKSJ"
+      },
+      "unavailable_studies": [
+        { "study_id": "SYN-LUAD-03", "reason": "fewer than the prespecified minimum endpoint events" }
+      ]
+    },
+    "not_part_of_this_hierarchical_case": [
+      "TCGA reference-mode power and precision map",
+      "TCGA reference-mode clinical-adjustment sensitivity"
+    ]
+  },
+  "answer_key": "The global estimate is imprecise and its prediction interval includes effects on both sides of HR 1, so it cannot be interpreted as a universal direction across cancers or studies.",
+  "interpretation_boundary": "A global estimate summarizes a hierarchy; it does not imply a universal effect in every cancer or study.",
+  "completion_rule": "Completion depends on identifying concordant, discordant and imprecise evidence, never on significance."
+}

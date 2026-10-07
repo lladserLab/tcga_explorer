@@ -1,0 +1,156 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-paad-msk-gse124231-2021",
+    "cancer_code": "PAAD",
+    "name": "MSK resected PDAC RNA-seq cohort (GSE124231)",
+    "description": "Independent treatment-naive resected pancreatic ductal adenocarcinoma cohort with primary-tumor bulk RNA sequencing and individual disease-free survival.",
+    "cohort_context": "The source study prospectively collected 54 surgically resected PDAC tumors at Memorial Sloan Kettering Cancer Center. Direct bulk RNA sequencing passed source release for 48 tumors; all 48 expression-linked patients have individual disease-free-survival time and recurrence status in the publication supplement.",
+    "source_provider": "geo",
+    "source_accession": "GSE124231",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE124231",
+    "publication_citation": "Dhara et al. Nature Communications 2021",
+    "publication_id": "PMID:34031415; PMCID:PMC8144607; DOI:10.1038/s41467-021-23237-2",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Memorial Sloan Kettering prospective resected PDAC study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Nature Communications Supplementary Data 2",
+      "source_platform": "Illumina HiSeq 2000",
+      "library_method": "Ribosomal-RNA-depleted bulk RNA sequencing of EpCAM-enriched primary PDAC cells, aligned to hg19 with STAR 2.5.0b and counted at exon level with HTSeq 0.9.1",
+      "endpoint_context": "Source-defined disease-free survival after surgical resection, updated through July 2020",
+      "endpoint_caveat": "The supplement labels the endpoint DFS and supplies recurrence status and follow-up in days. TRACE Explorer preserves that source definition and does not reinterpret it as TCGA DFI or PFI.",
+      "sample_selection_note": "The GEO subseries exposes one RNA count profile for each of 48 patients. Six additional clinical records without a released RNA profile are excluded by a deterministic patient-key join.",
+      "clinical_evidence_note": "Nature Communications Supplementary Data 2 contains 54 individual records. A declared normalization maps source keys such as Pt 10 and GEO titles such as RNA-Seq PT10_1 to the same PT10 linkage key; exactly 48 records match the count-matrix columns.",
+      "expression_curation_note": "TRACE Explorer computes library sizes over all 57,905 source Ensembl rows, applies log2(CPM + 1), maps hg19 Ensembl identifiers with the pinned GRCh37 release 75 annotation and excludes 248 symbols represented by multiple Ensembl genes, leaving 55,630 analyzable symbols.",
+      "overlap_note": "The MSK cohort is independent of TCGA-PAAD and of the active UAB, OHSU, MCW, LAPNET, CPTAC, POG570 and ICGC pancreatic cohorts.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO matrix and CC BY 4.0 supplementary workbook in place. Direct source-file redistribution remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE124231",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE124nnn/GSE124231/suppl/GSE124231_counts_rnaseq.txt.gz",
+    "expression_size": 2735505,
+    "expression_sha256": "4aed2ae5e1cd64d57132562856be368c6e1f528a4a495c1acff2f9db24d69e0e",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE124nnn/GSE124231/soft/GSE124231_family.soft.gz",
+    "soft_size": 4615,
+    "soft_sha256": "8cd376168fb5dbbbf0a76ff81ae15fba3e1a7949e7f1cf8c446b2a9adce0116b",
+    "license_evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8144607/",
+    "primary_sample_title_pattern": "RNA-Seq PT[0-9]+_1",
+    "expected_primary_samples": 48,
+    "expected_endpoint_complete_samples": 48,
+    "expected_events": 32,
+    "expected_censored": 16,
+    "expected_expression_columns": 48,
+    "expected_expression_gene_rows": 57905,
+    "expected_normalized_expression_gene_rows": 57905,
+    "patient_id_characteristic": "patient id",
+    "time_characteristic": "dfs days",
+    "event_characteristic": "dfs event",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age at surgery",
+    "stage_characteristic": "stage",
+    "grade_characteristic": "tumor differentiation",
+    "expression_sample_id_pattern": "^RNA-Seq (PT[0-9]+_1)$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://www.ebi.ac.uk/biostudies/files/S-EPMC8144607/41467_2021_23237_MOESM4_ESM.xlsx",
+      "evidence_size": 15823,
+      "evidence_sha256": "faf67191d817f60ed51ba220fec133348e7c5b148e99e60d434e561c673d044f",
+      "evidence_format": "xlsx",
+      "sheet_name": "Sheet1",
+      "header_row": 2,
+      "record_id_column": "Sample ID",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "(?i)(?:Pt\\s*|RNA-Seq\\s+PT)([0-9]+)(?:_1)?",
+      "sample_id_replacement": "PT\\1",
+      "allow_unmatched_records": true,
+      "expected_records": 54,
+      "expected_matched_records": 48,
+      "expected_unmatched_records": 6,
+      "field_name_map": {
+        "Sample ID": "patient id",
+        "Age (years) at surgery": "age at surgery",
+        "Margin status": "supplement margin status",
+        "Stage": "stage",
+        "DFS in days (07/2020)": "dfs days",
+        "Recurrenece (07/2020)": "dfs event"
+      },
+      "terms_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8144607/"
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column": "ID",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "integer"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "format": "ensembl_gtf",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Treatment-naive surgically resected primary PDAC tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO raw counts normalized as log2(CPM + 1)",
+    "source_unit": "HTSeq gene-level raw counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols assigned to more than one Ensembl gene are excluded rather than silently combined.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes library-size CPM across all 57,905 source rows for each selected tumor, applies log2(CPM + 1), maps source Ensembl identifiers to pinned GRCh37 release 75 gene symbols and excludes ambiguous symbols. Values are intended for within-cohort analysis."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Source-defined disease-free survival",
+      "time_column": "DFS_DAYS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Surgical resection",
+      "event_definition": "First documented disease recurrence according to the source supplement",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

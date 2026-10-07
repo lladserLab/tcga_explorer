@@ -1,0 +1,121 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "icgc-prad-prad-fr-2017",
+    "cancer_code": "PRAD",
+    "name": "French primary prostate adenocarcinoma (ICGC PRAD-FR)",
+    "description": "Independent French primary prostate-adenocarcinoma cohort with open ICGC Release 28 bulk RNA-seq and linked recurrence follow-up.",
+    "cohort_context": "Primary prostate adenocarcinomas from the PRAD-FR project. The associated EGA study describes 15 French Caucasian and 10 African-Caribbean men enrolled to characterize genomic events associated with aggressive early-stage disease.",
+    "source_provider": "icgc_release28",
+    "source_accession": "ICGC25K:R28:PRAD-FR; EGA:EGAS00001002176; EGA:EGAD00001003344",
+    "source_url": "https://www.ega-archive.org/datasets/EGAD00001003344",
+    "publication_citation": "ICGC PRAD-FR and EGA EGAS00001002176 project record",
+    "publication_id": "EGA:EGAS00001002176; EGA:EGAD00001003344",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-ICGC-Data-Access-and-Publication-Policy",
+    "license_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "International Cancer Genome Consortium 25K",
+      "source_project": "Prostate Cancer - Adenocarcinoma - France",
+      "source_release": "Release 28 (2019-11-26)",
+      "redistribution_note": "The open cohort is analyzable in TRACE Explorer, while direct matrix download remains disabled pending a dedicated ICGC redistribution review.",
+      "curation_note": "TRACE Explorer requires an exact recurrence interval or an explicit complete-remission censoring state with positive follow-up. Donors with a recorded recurrence type but no recurrence interval are excluded. One Ensembl/DESeq2 RNA-seq analysis linked to a primary 8140/3 adenocarcinoma is selected deterministically per donor."
+    }
+  },
+  "source": {
+    "provider": "icgc_release28",
+    "object_endpoint": "https://object.genomeinformatics.org",
+    "bucket": "icgc25k-open",
+    "release_prefix": "release_28",
+    "release_date": "2019-11-26",
+    "project_code": "PRAD-FR",
+    "release_readme_key": "release_28/projects_files/README.txt",
+    "license_evidence_url": "https://docs.icgc-argo.org/docs/data-access/publication-guidelines",
+    "download_workers": 12,
+    "clinical_endpoint_mode": "recurrence_interval",
+    "recurrence_censor_disease_statuses": [
+      "complete remission"
+    ],
+    "specimen_type_priority": [
+      "Primary tumour - solid tissue"
+    ],
+    "required_tumour_histological_types": [
+      "8140/3"
+    ],
+    "required_gene_model": "Ensembl",
+    "required_normalization_algorithm": "DESeq2 1.14.1",
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz",
+      "name": "Homo_sapiens.GRCh37.75.gtf.gz",
+      "size": 39344043,
+      "sha256": "770f48d9aecd9bdecdf147fd141c23670b215bccbdbfa459048f45b02581c2ed"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary prostate adenocarcinoma",
+    "sample_role": "Primary tumor RNA-seq",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary tumour - solid tissue"
+        ],
+        "required": true
+      },
+      {
+        "field": "sample.TUMOUR_HISTOLOGICAL_TYPE",
+        "include": [
+          "8140/3"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "deseq2_normalized_source_scale",
+    "label": "DESeq2-normalized expression",
+    "source_unit": "ICGC normalized_read_count; DESeq2 1.14.1 transformed",
+    "transform": "identity",
+    "analysis_unit": "Source-supplied DESeq2-normalized expression",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 75 GRCh37 GTF",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Ambiguous symbols mapped from more than one Ensembl gene are removed before the matrix is written.",
+    "stream_source_order": true,
+    "scale_note": "ICGC identifies the source normalization as DESeq2 1.14.1 and supplies transformed non-negative values on an approximately log2 count scale. TRACE Explorer preserves that supplied scale without applying a second logarithm, maps Ensembl identifiers with the pinned GRCh37 reference and restricts interpretation to within-cohort relative expression."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFI",
+      "standard_code": "RFI",
+      "label": "Recurrence-free interval",
+      "time_column": "ICGC_RFI_DAYS",
+      "event_column": "ICGC_RFI_STATUS",
+      "time_unit": "days",
+      "time_origin": "Primary diagnosis",
+      "event_definition": "First recorded local recurrence or distant recurrence/progression",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

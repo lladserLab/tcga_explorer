@@ -1,0 +1,99 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "pdc-ov-cptac-hgsc-2023",
+    "cancer_code": "OV",
+    "name": "High-grade serous ovarian carcinoma (CPTAC prospective)",
+    "description": "Independent prospective CPTAC ovarian HGSC cohort with harmonized bulk RNA-seq and linked overall-survival follow-up.",
+    "cohort_context": "CPTAC prospectively collected 83 new treatment-naive ovarian HGSC tumors at 12 tissue-source sites. The PDC pan-cancer freeze contains 82 tumor RNA profiles; 79 have positive overall-survival time and explicit status, including six deaths and 73 censored observations. These cases were collected independently of the earlier CPTAC proteomic study of TCGA ovarian tumors.",
+    "source_provider": "pdc_pancancer",
+    "source_accession": "PDC000118; RNA_BCM_v1; Clinical_meta_data_v1",
+    "source_url": "https://pdc.cancer.gov/pdc/study/PDC000118",
+    "publication_citation": "McDermott et al. Cell Reports Medicine 2020",
+    "publication_id": "PMID:32529193; PMCID:PMC7289043; DOI:10.1016/j.xcrm.2020.100004",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://proteomic.datacommons.cancer.gov/pdc/data-use-guidelines",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "Clinical Proteomic Tumor Analysis Consortium (CPTAC)",
+      "source_data_system": "NCI Proteomic Data Commons pan-cancer data freeze v1",
+      "redistribution_note": "PDC states that its data are available under CC BY 4.0. The CPTAC BCM GENCODE mapping snapshot is also archived under CC BY 4.0 at Zenodo.",
+      "curation_note": "The official PDC clinical archive supplies exact OS_days and OS_event fields. The versioned LinkedOmics data-freeze expression member is accepted only after its SHA-256 matches the same HGSC member independently extracted from the official PDC RNA_BCM_v1 archive. Versioned Ensembl identifiers are mapped with the CPTAC BCM GENCODE v34 snapshot; every symbol represented by more than one Ensembl identifier is excluded rather than merged."
+    }
+  },
+  "source": {
+    "provider": "pdc_pancancer",
+    "clinical_file_id": "24898fea-3bad-4d5c-8161-4183cc47cd2e",
+    "clinical_archive_member": "Clinical_meta_data_v1/HGSC_meta.txt",
+    "clinical_archive_sha256": "eb1b0397249f3f38d9594b60c2bf23a3e21b9495ae4a43d5c563f38f5e43c890",
+    "clinical_member_sha256": "506aa67a887eb6e09c770887207fc79cb0e7150f2cd8767e976815117dd2b0b5",
+    "clinical_id_column": "idx",
+    "expression_file_id": "7900acde-4565-4f26-a1d1-bbaec677adaa",
+    "expression_archive_member": "RNA_BCM_v1/HGSC_RNAseq_gene_RSEM_coding_UQ_1500_log2_Tumor.txt",
+    "expression_mirror_url": "https://cptac-pancancer-data.s3.us-west-2.amazonaws.com/data_freeze_v1.2_reorganized/OV/OV_RNAseq_gene_RSEM_coding_UQ_1500_log2_Tumor.txt",
+    "expression_member_sha256": "5b25a3cbea0bb041f40fccb8b4120cf2b8135f16f102aacb1e4cb39923509d97",
+    "mapping_url": "https://zenodo.org/api/records/8034305/files/bcm-ov-mapping-gencode.v34.basic.annotation-mapping.txt.gz/content",
+    "mapping_sha256": "dbad83c38ff26cac6cf15628884533df86806984c42ee28242f5af66bfeec3b4",
+    "mapping_release": "GENCODE v34 basic (CHR), CPTAC BCM snapshot; Zenodo 10.5281/zenodo.8034305",
+    "snapshot_date": "2023-05-24T17:18:28Z",
+    "license_evidence_url": "https://proteomic.datacommons.cancer.gov/pdc/data-use-guidelines"
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Tumor",
+    "sample_role": "Treatment-naive HGSC tumor",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [],
+    "age_fields": [
+      "patient.AGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "log2_rsem_uq",
+    "label": "log2(RSEM-UQ + 1)",
+    "source_unit": "RSEM upper-quartile normalized abundance",
+    "transform": "identity",
+    "analysis_unit": "log2(RSEM-UQ + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned CPTAC BCM GENCODE v34 basic (CHR) annotation mapping",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols represented by more than one Ensembl gene are all excluded rather than combined without a source-defined aggregation rule.",
+    "stream_source_order": true,
+    "scale_note": "The CPTAC BCM pipeline supplies gene-level RSEM abundance after upper-quartile normalization and log2(value + 1) transformation. TRACE Explorer preserves the released values without another transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Diagnosis as encoded in the CPTAC pan-cancer clinical freeze",
+      "event_definition": "Death from any cause",
+      "censor_prefix": "0",
+      "event_prefix": "1"
+    }
+  ]
+}

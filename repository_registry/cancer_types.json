@@ -1,0 +1,295 @@
+{
+  "schema_version": "tcga-trace-cancer-types-v1",
+  "cancer_types": [
+    {"code": "ACC", "tcga_cohort": "TCGA-ACC", "name": "Adrenocortical carcinoma", "primary_site": "Adrenal gland"},
+    {"code": "BLCA", "tcga_cohort": "TCGA-BLCA", "name": "Bladder urothelial carcinoma", "primary_site": "Bladder"},
+    {"code": "BRCA", "tcga_cohort": "TCGA-BRCA", "name": "Breast invasive carcinoma", "primary_site": "Breast"},
+    {"code": "CESC", "tcga_cohort": "TCGA-CESC", "name": "Cervical squamous cell carcinoma and endocervical adenocarcinoma", "primary_site": "Cervix"},
+    {"code": "CHOL", "tcga_cohort": "TCGA-CHOL", "name": "Cholangiocarcinoma", "primary_site": "Bile duct"},
+    {"code": "COAD", "tcga_cohort": "TCGA-COAD", "name": "Colon adenocarcinoma", "primary_site": "Colon"},
+    {"code": "DLBC", "tcga_cohort": "TCGA-DLBC", "name": "Diffuse large B-cell lymphoma", "primary_site": "Lymphoid tissue"},
+    {"code": "ESCA", "tcga_cohort": "TCGA-ESCA", "name": "Esophageal carcinoma", "primary_site": "Esophagus"},
+    {"code": "GBM", "tcga_cohort": "TCGA-GBM", "name": "Glioblastoma multiforme", "primary_site": "Brain"},
+    {"code": "HNSC", "tcga_cohort": "TCGA-HNSC", "name": "Head and neck squamous cell carcinoma", "primary_site": "Head and neck"},
+    {"code": "KICH", "tcga_cohort": "TCGA-KICH", "name": "Kidney chromophobe", "primary_site": "Kidney"},
+    {"code": "KIRC", "tcga_cohort": "TCGA-KIRC", "name": "Kidney renal clear cell carcinoma", "primary_site": "Kidney"},
+    {"code": "KIRP", "tcga_cohort": "TCGA-KIRP", "name": "Kidney renal papillary cell carcinoma", "primary_site": "Kidney"},
+    {"code": "LAML", "tcga_cohort": "TCGA-LAML", "name": "Acute myeloid leukemia", "primary_site": "Hematopoietic system"},
+    {"code": "LGG", "tcga_cohort": "TCGA-LGG", "name": "Brain lower grade glioma", "primary_site": "Brain"},
+    {"code": "LIHC", "tcga_cohort": "TCGA-LIHC", "name": "Liver hepatocellular carcinoma", "primary_site": "Liver"},
+    {"code": "LUAD", "tcga_cohort": "TCGA-LUAD", "name": "Lung adenocarcinoma", "primary_site": "Lung"},
+    {"code": "LUSC", "tcga_cohort": "TCGA-LUSC", "name": "Lung squamous cell carcinoma", "primary_site": "Lung"},
+    {"code": "MESO", "tcga_cohort": "TCGA-MESO", "name": "Mesothelioma", "primary_site": "Pleura"},
+    {"code": "OV", "tcga_cohort": "TCGA-OV", "name": "Ovarian serous cystadenocarcinoma", "primary_site": "Ovary"},
+    {"code": "PAAD", "tcga_cohort": "TCGA-PAAD", "name": "Pancreatic adenocarcinoma", "primary_site": "Pancreas"},
+    {"code": "PCPG", "tcga_cohort": "TCGA-PCPG", "name": "Pheochromocytoma and paraganglioma", "primary_site": "Adrenal and paraganglia"},
+    {"code": "PRAD", "tcga_cohort": "TCGA-PRAD", "name": "Prostate adenocarcinoma", "primary_site": "Prostate"},
+    {"code": "READ", "tcga_cohort": "TCGA-READ", "name": "Rectum adenocarcinoma", "primary_site": "Rectum"},
+    {"code": "SARC", "tcga_cohort": "TCGA-SARC", "name": "Sarcoma", "primary_site": "Soft tissue"},
+    {"code": "SKCM", "tcga_cohort": "TCGA-SKCM", "name": "Skin cutaneous melanoma", "primary_site": "Skin"},
+    {"code": "STAD", "tcga_cohort": "TCGA-STAD", "name": "Stomach adenocarcinoma", "primary_site": "Stomach"},
+    {"code": "TGCT", "tcga_cohort": "TCGA-TGCT", "name": "Testicular germ cell tumors", "primary_site": "Testis"},
+    {"code": "THCA", "tcga_cohort": "TCGA-THCA", "name": "Thyroid carcinoma", "primary_site": "Thyroid"},
+    {"code": "THYM", "tcga_cohort": "TCGA-THYM", "name": "Thymoma", "primary_site": "Thymus"},
+    {"code": "UCEC", "tcga_cohort": "TCGA-UCEC", "name": "Uterine corpus endometrial carcinoma", "primary_site": "Uterus"},
+    {"code": "UCS", "tcga_cohort": "TCGA-UCS", "name": "Uterine carcinosarcoma", "primary_site": "Uterus"},
+    {"code": "UVM", "tcga_cohort": "TCGA-UVM", "name": "Uveal melanoma", "primary_site": "Eye"},
+    {
+      "code": "GBC",
+      "tcga_cohort": "FU-GBC",
+      "name": "Gallbladder cancer",
+      "primary_site": "Gallbladder",
+      "cohort_kind": "external_only",
+      "summary": {
+        "samples": 201,
+        "patients": 135,
+        "primary_tumor_samples": 135,
+        "adjacent_non_tumor_samples": 66,
+        "other_samples": 0,
+        "genes": 15926
+      }
+    },
+    {
+      "code": "CLL",
+      "tcga_cohort": "EXT-CLL",
+      "name": "Chronic lymphocytic leukemia / small lymphocytic lymphoma",
+      "primary_site": "Hematopoietic and lymphoid system",
+      "cohort_kind": "external_only",
+      "summary": {
+        "samples": 566,
+        "patients": 566,
+      "primary_tumor_samples": 0,
+      "adjacent_non_tumor_samples": 0,
+      "other_samples": 566,
+        "genes": 54994
+      }
+    },
+    {
+      "code": "NBL",
+      "tcga_cohort": "EXT-NBL",
+      "name": "Neuroblastoma",
+      "primary_site": "Adrenal and sympathetic nervous system",
+      "cohort_kind": "external_only",
+      "summary": {
+        "samples": 498,
+        "patients": 498,
+        "primary_tumor_samples": 498,
+        "adjacent_non_tumor_samples": 0,
+        "other_samples": 0,
+        "genes": 23146
+      }
+    },
+    {
+      "code": "PLGG",
+      "tcga_cohort": "EXT-PLGG",
+      "name": "Pediatric low-grade glioma",
+      "primary_site": "Brain",
+      "cohort_kind": "external_only",
+      "summary": {
+        "samples": 62,
+        "patients": 62,
+        "primary_tumor_samples": 62,
+        "adjacent_non_tumor_samples": 0,
+        "other_samples": 0,
+        "genes": 18205
+      }
+    },
+    {
+      "code": "SCLC",
+      "tcga_cohort": "EXT-SCLC",
+      "name": "Small-cell lung cancer",
+      "primary_site": "Lung",
+      "cohort_kind": "external_only",
+      "summary": {
+        "samples": 39,
+        "patients": 39,
+        "primary_tumor_samples": 39,
+        "adjacent_non_tumor_samples": 0,
+        "other_samples": 0,
+        "genes": 51131
+      }
+    },
+    {
+      "code": "PAML",
+      "tcga_cohort": "EXT-PAML",
+      "name": "Pediatric acute myeloid leukemia",
+      "primary_site": "Hematopoietic and reticuloendothelial system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "ALL",
+      "tcga_cohort": "EXT-ALL",
+      "name": "Acute lymphoblastic leukemia",
+      "primary_site": "Hematopoietic and reticuloendothelial system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "PTCL",
+      "tcga_cohort": "EXT-PTCL",
+      "name": "Peripheral T-cell lymphoma",
+      "primary_site": "Hematopoietic and lymphoid system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "CUP",
+      "tcga_cohort": "EXT-CUP",
+      "name": "Cancer of unknown primary",
+      "primary_site": "Unknown primary",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "OSARC",
+      "tcga_cohort": "EXT-OSARC",
+      "name": "Osteosarcoma",
+      "primary_site": "Bone",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "RT",
+      "tcga_cohort": "EXT-RT",
+      "name": "Rhabdoid tumor",
+      "primary_site": "Kidney, liver and other pediatric sites",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "WT",
+      "tcga_cohort": "EXT-WT",
+      "name": "Wilms tumor",
+      "primary_site": "Kidney",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MM",
+      "tcga_cohort": "EXT-MM",
+      "name": "Multiple myeloma",
+      "primary_site": "Bone marrow and hematopoietic system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "EPN",
+      "tcga_cohort": "EXT-EPN",
+      "name": "Ependymoma",
+      "primary_site": "Central nervous system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "BL",
+      "tcga_cohort": "EXT-BL",
+      "name": "Burkitt lymphoma",
+      "primary_site": "Hematopoietic and lymphoid system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "HIVLC",
+      "tcga_cohort": "EXT-HIVLC",
+      "name": "HIV-associated lung cancer",
+      "primary_site": "Lung",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MB",
+      "tcga_cohort": "EXT-MB",
+      "name": "Medulloblastoma",
+      "primary_site": "Central nervous system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "PHGG",
+      "tcga_cohort": "EXT-PHGG",
+      "name": "Pediatric high-grade glioma",
+      "primary_site": "Central nervous system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "ATRT",
+      "tcga_cohort": "EXT-ATRT",
+      "name": "Atypical teratoid/rhabdoid tumor",
+      "primary_site": "Central nervous system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "ALCL",
+      "tcga_cohort": "EXT-ALCL",
+      "name": "Anaplastic large-cell lymphoma",
+      "primary_site": "Hematopoietic and lymphoid system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MDSAML",
+      "tcga_cohort": "EXT-MDSAML",
+      "name": "Myelodysplastic syndrome and secondary acute myeloid leukemia",
+      "primary_site": "Hematopoietic and reticuloendothelial system",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MTC",
+      "tcga_cohort": "EXT-MTC",
+      "name": "Medullary thyroid carcinoma",
+      "primary_site": "Thyroid",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MNG",
+      "tcga_cohort": "EXT-MNG",
+      "name": "Meningioma",
+      "primary_site": "Meninges",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "OCCC",
+      "tcga_cohort": "EXT-OCCC",
+      "name": "Ovarian clear-cell carcinoma",
+      "primary_site": "Ovary",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "FHRCC",
+      "tcga_cohort": "EXT-FHRCC",
+      "name": "Fumarate hydratase-deficient renal cell carcinoma",
+      "primary_site": "Kidney",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "MFSUPS",
+      "tcga_cohort": "EXT-MFSUPS",
+      "name": "Myxofibrosarcoma and undifferentiated pleomorphic sarcoma",
+      "primary_site": "Soft tissue",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "EOCNHG",
+      "tcga_cohort": "EXT-EOCNHG",
+      "name": "Early-stage non-high-grade serous ovarian carcinoma",
+      "primary_site": "Ovary",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "UTUC",
+      "tcga_cohort": "EXT-UTUC",
+      "name": "Upper tract urothelial carcinoma",
+      "primary_site": "Renal pelvis and ureter",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "CHS",
+      "tcga_cohort": "EXT-CHS",
+      "name": "Central chondrosarcoma",
+      "primary_site": "Bone",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "NST",
+      "tcga_cohort": "EXT-NST",
+      "name": "Nerve-sheath tumor spectrum",
+      "primary_site": "Peripheral nerves and soft tissue",
+      "cohort_kind": "external_only"
+    },
+    {
+      "code": "ASCC",
+      "tcga_cohort": "EXT-ASCC",
+      "name": "Anal squamous cell carcinoma",
+      "primary_site": "Anus",
+      "cohort_kind": "external_only"
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-luad-steiner-gse273377-validation-2026",
+    "cancer_code": "LUAD",
+    "name": "LHMC stage I LUAD validation cohort (GSE273377)",
+    "description": "Independent stage I lung adenocarcinoma validation cohort with bulk exome-capture RNA sequencing and individual seven-year recurrence-free survival.",
+    "cohort_context": "The source study independently validated its vascular-invasion program in resected stage I lung adenocarcinomas from Lahey Hospital and Medical Center. Sixty RNA profiles passed source QC. They represent 59 patients because one patient contributed two tumor profiles; TRACE Explorer retains the profile with the higher transcript-integrity number. One patient lacks individual RFS and one has time zero, leaving 57 endpoint-complete patients. The discovery cohort is registered separately and is never pooled with this dataset.",
+    "source_provider": "geo",
+    "source_accession": "GSE273377",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE273377",
+    "publication_citation": "Steiner et al. Nature Communications 2026",
+    "publication_id": "PMID:41876493; PMCID:PMC13013712; DOI:10.1038/s41467-026-70600-2",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "LHMC stage I LUAD vascular-invasion validation study",
+      "source_data_system": "NCBI Gene Expression Omnibus and Nature Communications source data",
+      "source_platform": "Illumina HiSeq 2500",
+      "library_method": "Exome-targeted bulk RNA-seq from FFPE resection tissue using Illumina TruSeq RNA Exome libraries and paired-end 75-nucleotide reads",
+      "endpoint_context": "Source-defined seven-year recurrence-free survival after surgical resection",
+      "endpoint_caveat": "The source data provide individual follow-up capped at 84 months and a binary RFS event field. The cohort has only six events, so adjusted and nonlinear models require explicit sparse-data diagnostics.",
+      "sample_selection_note": "Only samples labeled validation cohort and passed qc: TRUE are eligible. Patient 1231 has two endpoint-identical profiles; the higher mean transcript-integrity number is selected deterministically before endpoint QC.",
+      "clinical_evidence_note": "The pinned CC BY source-data ZIP contains 59 validation RNA records with individual RFS. Fifty-nine GEO titles link exactly; one additional passed-QC GEO profile has no individual endpoint. A time-zero censored record is excluded under the repository-wide positive-time rule.",
+      "overlap_note": "The validation and discovery cohorts are independent source cohorts. They are exposed as separate datasets, and neither includes TCGA-LUAD, Uppsala GSE81089 or TRACERx samples used elsewhere in the publication.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the public GEO and CC BY source files in place. Redistribution of the source expression matrix remains disabled under the conservative repository policy."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE273377",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE273nnn/GSE273377/suppl/GSE273377_exp_count.txt.gz",
+    "expression_size": 7918470,
+    "expression_sha256": "db10c28b08cb0f00f44d26a7b1ec2bc721d01f534780e202cc974f44cfe2ffcc",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE273nnn/GSE273377/soft/GSE273377_family.soft.gz",
+    "soft_size": 12065,
+    "soft_sha256": "174d00a175d778e909bb341d49e026ef0a7e39e83fef9d436b5e345c31d0ded2",
+    "license_evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13013712/",
+    "primary_sample_title_pattern": ".+",
+    "expected_primary_samples": 169,
+    "sample_characteristic_filters": [
+      {
+        "key": "cohort",
+        "include": [
+          "validation cohort"
+        ],
+        "required": true
+      },
+      {
+        "key": "passed qc",
+        "include": [
+          "TRUE"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 60,
+    "patient_sample_selection": {
+      "rank_by": [
+        {
+          "key": "mean tin",
+          "type": "numeric",
+          "order": "desc"
+        }
+      ],
+      "require_equal_characteristics": [
+        "time_7_year_rfs",
+        "rfs_7_year"
+      ],
+      "expected_selected_samples": 59,
+      "expected_duplicate_patient_groups": 1,
+      "expected_removed_samples": 1
+    },
+    "expected_endpoint_complete_samples": 57,
+    "expected_events": 6,
+    "expected_censored": 51,
+    "expected_expression_columns": 57,
+    "expected_expression_gene_rows": 62703,
+    "patient_id_characteristic": "patient id",
+    "expression_sample_characteristic": "",
+    "time_characteristic": "time_7_year_rfs",
+    "event_characteristic": "rfs_7_year",
+    "event_value_map": {
+      "1": 1,
+      "0": 0
+    },
+    "stage_characteristic": "tnm 8th_edition_stage",
+    "stage_value_map": {
+      "0": "Stage 0",
+      "IA1": "Stage IA1",
+      "IA2": "Stage IA2",
+      "IA3": "Stage IA3",
+      "IB": "Stage IB"
+    },
+    "sample_type": "Primary Tumor",
+    "clinical": {
+      "evidence_url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-026-70600-2/MediaObjects/41467_2026_70600_MOESM4_ESM.zip",
+      "evidence_size": 43295745,
+      "evidence_sha256": "42e8cf4acd3e59e5bc68a92c1d68637670b48272c061a440057e279be297d191",
+      "evidence_format": "zip_xlsx",
+      "archive_member": "NCOMMS-24-43874C_source_data/steiner_source_data_bulkRNAseq.xlsx",
+      "sheet_name": "Figure 4F-1",
+      "header_row": 3,
+      "header_name_overrides": {
+        "1": "Sample"
+      },
+      "record_id_column": "Sample",
+      "sample_metadata_field": "title",
+      "sample_id_pattern": "([A-Za-z0-9-]+)",
+      "expected_records": 59,
+      "expected_matched_records": 59,
+      "expected_unmatched_records": 0
+    },
+    "expression": {
+      "layout": "wide_gene_counts",
+      "feature_column_index": 1,
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "count_value_type": "nonnegative_numeric"
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-108/gtf/homo_sapiens/Homo_sapiens.GRCh38.108.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.108.gtf.gz",
+      "size": 54107597,
+      "sha256": "1ae26267acf522d8d9a94736e2c00b5ff1008d43623fc73644092016ae0c57e8"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Tumor",
+    "sample_role": "Resected stage I lung adenocarcinoma FFPE tumor from the independent validation cohort",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_cpm",
+    "label": "GEO RSEM counts normalized to log2(CPM + 1)",
+    "source_unit": "RSEM gene-level expected counts",
+    "transform": "identity",
+    "analysis_unit": "log2(CPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 108 GRCh38 annotation declared by the source study",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "Symbols mapped from more than one source Ensembl row are excluded rather than combined without an unambiguous source-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer computes sample library sizes across all 62,703 pinned RSEM count rows, converts counts to CPM and applies log2(CPM + 1). It does not apply the source study's downstream ComBat-seq correction, avoiding leakage of source-defined comparison groups into a general-purpose survival layer."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "RFS",
+      "standard_code": "RFS",
+      "label": "Seven-year recurrence-free survival",
+      "time_column": "RFS_MONTHS",
+      "event_column": "RFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Surgical resection",
+      "event_definition": "Recurrence event as encoded in the source seven-year RFS field",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

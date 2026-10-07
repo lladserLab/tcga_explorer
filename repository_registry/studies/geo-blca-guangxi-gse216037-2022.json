@@ -1,0 +1,122 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-blca-guangxi-gse216037-2022",
+    "cancer_code": "BLCA",
+    "name": "Guangxi treatment-naive MIBC cohort (GSE216037)",
+    "description": "Independent muscle-invasive bladder-cancer cohort with primary-tumor bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The First Affiliated Hospital of Guangxi Medical University enrolled 52 patients with pathologist-confirmed muscle-invasive bladder cancer between February 2018 and October 2019. Every patient contributes one treatment-naive primary-tumor RNA profile with complete positive overall-survival time and status.",
+    "source_provider": "geo",
+    "source_accession": "GSE216037",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE216037",
+    "publication_citation": "Tao et al. Frontiers in Genetics 2022",
+    "publication_id": "PMID:36568387; PMCID:PMC9780475; DOI:10.3389/fgene.2022.1057302",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Guangxi Medical University MIBC cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina NextSeq 500",
+      "library_method": "TruSeq whole-transcriptome RNA sequencing of treatment-naive primary MIBC; reads were filtered with fastp, aligned to hg19 with HISAT2 and assembled with StringTie/Cufflinks before RPKM calculation",
+      "endpoint_context": "Source-provided overall survival in months for 52 treatment-naive MIBC patients",
+      "endpoint_caveat": "GEO publishes exact individual OS duration and state but does not define whether follow-up begins at diagnosis, admission, surgery or sampling. TRACE Explorer preserves the source endpoint without claiming a harmonized clinical origin.",
+      "sample_selection_note": "The source provides exactly one BC1-BC52 primary-tumor RNA profile per patient. All 52 records have positive OS time and a binary survival state; no sample-selection fallback is required.",
+      "expression_processing_note": "The source matrix contains 34,372 unique case-insensitive gene symbols and RPKM values for BC1-BC52. TRACE Explorer selects all endpoint-complete columns and applies log2(RPKM + 1).",
+      "clinical_covariate_note": "GEO exposes sex and grade. Age is supplied only as Young, Old or unknown rather than an exact numeric value and is therefore not registered as an age covariate.",
+      "overlap_note": "The Guangxi cohort is institutionally and accession-wise distinct from the promoted IMvigor210, Northwestern, UNC and UROMOL bladder-cancer releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE216037",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE216nnn/GSE216037/suppl/GSE216037_Processed_data.csv.gz",
+    "expression_filename": "GSE216037_Processed_data.csv.gz",
+    "expression_size": 4931242,
+    "expression_sha256": "8db533e7e68f9873a6d51b52a5ac0381d36caf777dbead8ef76cc4df951e3955",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE216nnn/GSE216037/soft/GSE216037_family.soft.gz",
+    "soft_size": 6503,
+    "soft_sha256": "ca4eea6b56c3f9a34cafbb4ead87751ec64cb6f467da76e6297eb0bc28677e0b",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "BC[0-9]+",
+    "expected_primary_samples": 52,
+    "expected_endpoint_complete_samples": 52,
+    "expected_events": 17,
+    "expected_censored": 35,
+    "expected_expression_columns": 52,
+    "expected_source_expression_files": 52,
+    "expected_expression_gene_rows": 34372,
+    "expected_normalized_expression_gene_rows": 34372,
+    "patient_id_characteristic": "",
+    "time_characteristic": "overall survival(month)",
+    "event_characteristic": "survival state",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "grade_characteristic": "Grade",
+    "sex_characteristic": "Gender",
+    "sample_type": "Primary MIBC Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "SYMBOL1",
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary MIBC Tumor",
+    "sample_role": "Treatment-naive primary muscle-invasive bladder tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary MIBC Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": [
+      "patient.GRADE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_rpkm",
+    "label": "GEO gene-level RPKM transformed to log2(RPKM + 1)",
+    "source_unit": "Gene-level RPKM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(RPKM + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided SYMBOL1 column in the pinned GEO matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All 34,372 source gene symbols are non-empty and unique under case-insensitive comparison, so no aggregation or ambiguity exclusion is required.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(RPKM + 1) to source-provided gene-level RPKM. Values are intended for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_MONTHS",
+      "event_column": "OS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Source-defined clinical origin, not specified",
+      "event_definition": "Death from any cause as encoded by survival state (1 = death; 0 = censored)",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

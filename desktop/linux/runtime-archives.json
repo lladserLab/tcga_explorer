@@ -1,0 +1,8 @@
+[
+  {
+    "file": "python.tar.gz",
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261003/cpython-3.13.16%2B20261003-x86_64-unknown-linux-gnu-install_only.tar.gz",
+    "sha256": "0a0272910b10417c659a9312fb3f2d7a6d774da7bd510999be7a3ba83273dc1f",
+    "bytes": 75271871
+  }
+]

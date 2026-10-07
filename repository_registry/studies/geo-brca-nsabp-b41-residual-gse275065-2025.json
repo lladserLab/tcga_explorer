@@ -1,0 +1,157 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-brca-nsabp-b41-residual-gse275065-2025",
+    "cancer_code": "BRCA",
+    "name": "NSABP B-41 post-treatment residual-disease cohort (GSE275065)",
+    "description": "Randomized phase III HER2-positive early breast-cancer subset with post-neoadjuvant residual-tumor bulk RNA sequencing and individual event-free survival.",
+    "cohort_context": "GSE275065 releases 27 post-treatment residual-disease tumor profiles from NSABP B-41 participants who did not achieve pathological complete response in the breast. TRACE Explorer excludes one event recorded at zero follow-up, leaving 26 unique patients with positive event-free-survival time, seven events and 19 censored observations.",
+    "source_provider": "geo",
+    "source_accession": "GSE275065",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE275065",
+    "publication_citation": "Fernandez-Martinez et al. Annals of Oncology 2025",
+    "publication_id": "PMID:39706338; PMCID:PMC11949722; DOI:10.1016/j.annonc.2024.12.010",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "NSABP B-41 randomized phase III trial NCT00486668",
+      "source_data_system": "NCBI Gene Expression Omnibus and Annals of Oncology",
+      "source_platform": "Illumina NovaSeq 6000",
+      "library_method": "Ribo-Zero FFPE total RNA sequencing followed by STAR alignment, Salmon abundance estimation and source-defined fixed-upper-quartile normalization; TRACE Explorer applies log2(value + 1).",
+      "endpoint_context": "Event-free survival among participants with residual invasive disease after neoadjuvant HER2-directed therapy",
+      "endpoint_definition_note": "The pooled-analysis publication defines EFS from randomization to local, regional or distant recurrence, non-breast second primary cancer, contralateral invasive breast cancer or death from any cause. GEO releases exact individual EFS time in years and binary event status.",
+      "sample_selection_note": "All 27 GEO profiles are source-designated post-treatment residual-disease tumors and map one-to-one to the public matrix. The single zero-time event record GSM8464846 is excluded by the repository positive-time rule before analysis.",
+      "residual_disease_caveat": "The cohort is conditional on residual disease at surgery and cannot be generalized to trial participants who achieved pathological complete response. The 27-profile release is also a selected molecular subset of the 97 NSABP B-41 participants with residual disease reported in the pooled study.",
+      "source_metadata_caveat": "The accession title, POST matrix filename, pcr breast=RD field, treated-tumor fields and linked publication identify post-treatment residual tumors. A boilerplate GEO extraction-protocol sentence says baseline tumor samples and conflicts with those source-designating fields; TRACE Explorer records the inconsistency rather than silently treating the samples as pretreatment.",
+      "expression_processing_note": "The linked article states that Salmon gene counts were normalized to a fixed upper quartile before log2 transformation. The public matrix contains 58,387 unique source symbols and unlogged nonnegative normalized values; TRACE Explorer applies only the documented log2(value + 1) transform.",
+      "controlled_access_note": "Raw FASTQ files and the broader NSABP B-41 clinical dataset are controlled under dbGaP phs003275.v2.p1. The exact processed matrix and individual EFS fields used for this 27-profile release are public in GEO.",
+      "overlap_note": "GSE275065 is external to TCGA-BRCA. It is the post-treatment residual-disease subset related to the 245-profile pretreatment GSE234519 release; GSE234519 is not imported because its individual endpoints remain controlled. No participant from either accession is pooled with another TRACE Explorer breast-cancer release.",
+      "redistribution_note": "TRACE Explorer downloads and transforms pinned GEO files in place. Source-file redistribution is disabled and NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE275065",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE275nnn/GSE275065/suppl/GSE275065_B41_27_POST_salmon_gene_normalized.matrix.txt.gz",
+    "expression_size": 6829288,
+    "expression_sha256": "92ff156f1143b022a4440caad2fe9378b3ff957cb5d819f499c52ce01263c666",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE275nnn/GSE275065/soft/GSE275065_family.soft.gz",
+    "soft_size": 4719,
+    "soft_sha256": "e9732ad3c92f7b1249bd633c694fa0af509e739cfe4a07addc6b102608179366",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "Primary breast tumor, RNAseq, B41_.+",
+    "expected_primary_samples": 27,
+    "sample_characteristic_filters": [
+      {
+        "key": "pcr breast",
+        "include": [
+          "RD"
+        ],
+        "required": true
+      },
+      {
+        "key": "is tumor",
+        "include": [
+          "Y"
+        ],
+        "required": true
+      },
+      {
+        "key": "primary metastatic_tumor",
+        "include": [
+          "Primary"
+        ],
+        "required": true
+      }
+    ],
+    "expected_characteristic_eligible_samples": 27,
+    "expected_endpoint_complete_samples": 26,
+    "expected_events": 7,
+    "expected_censored": 19,
+    "expected_expression_columns": 26,
+    "expected_expression_gene_rows": 58387,
+    "expected_normalized_expression_gene_rows": 58387,
+    "expected_duplicate_feature_symbols": 0,
+    "time_characteristic": "efs time",
+    "event_characteristic": "efs stat",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "collection age",
+    "stage_characteristic": "stage",
+    "race_characteristic": "race",
+    "sex_default": "Female",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^Primary breast tumor, RNAseq, (B41_.+)$",
+    "expression_sample_id_replacement": "\\1",
+    "sample_type": "Post-neoadjuvant Residual Primary Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column_index": 1,
+      "feature_column_output": "Hugo_Symbol",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": true
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Post-neoadjuvant Residual Primary Tumor",
+    "sample_role": "One source-designated residual invasive breast tumor per participant after neoadjuvant HER2-directed therapy",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Post-neoadjuvant Residual Primary Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "gender_fields": [
+      "patient.SEX"
+    ],
+    "race_fields": [
+      "patient.RACE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_upper_quartile",
+    "label": "GEO fixed-upper-quartile-normalized Salmon counts transformed as log2(value + 1)",
+    "source_unit": "Upper-quartile-normalized Salmon gene counts",
+    "transform": "identity",
+    "analysis_unit": "log2(source upper-quartile-normalized count + 1)",
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "GEO GSE275065 source gene-symbol row labels",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The pinned source matrix has no case-insensitively duplicated feature symbols.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies the log2(value + 1) step documented by the linked publication to source values already normalized to a fixed upper quartile. Values support within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "EFS",
+      "standard_code": "EFS",
+      "label": "Event-free survival",
+      "time_column": "EFS_YEARS",
+      "event_column": "EFS_STATUS",
+      "time_unit": "years",
+      "time_origin": "Trial randomization",
+      "event_definition": "Local, regional or distant recurrence; non-breast second primary cancer; contralateral invasive breast cancer; or death from any cause",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

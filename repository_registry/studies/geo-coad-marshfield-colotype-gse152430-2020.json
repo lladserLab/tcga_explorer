@@ -1,0 +1,132 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "geo-coad-marshfield-colotype-gse152430-2020",
+    "cancer_code": "COAD",
+    "name": "Marshfield stage-II colon-cancer cohort (GSE152430)",
+    "description": "Independent stage-II colon-cancer cohort with FFPE bulk RNA sequencing and individual overall-survival follow-up.",
+    "cohort_context": "The Marshfield Clinic cohort contains 49 pathologist-reviewed stage-II colon cancers resected from 49 patients. TRACE Explorer retains the 48 tumors with positive complete overall-survival time and status; one death is excluded because GEO reports no survival time.",
+    "source_provider": "geo",
+    "source_accession": "GSE152430",
+    "source_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152430",
+    "publication_citation": "Buechler et al. Scientific Reports 2020",
+    "publication_id": "PMID:32694712; PMCID:PMC7374173; DOI:10.1038/s41598-020-69083-y",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "LicenseRef-NCBI-GEO-Data-Use-and-CC-BY-4.0",
+    "license_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "redistribution_allowed": false,
+    "metadata": {
+      "source_program": "Marshfield Clinic ColoType validation cohort",
+      "source_data_system": "NCBI Gene Expression Omnibus and the CC BY 4.0 publication",
+      "source_platform": "Illumina NextSeq 500",
+      "library_method": "Ribosomal-RNA-depleted whole-transcriptome sequencing of FFPE primary colon tumors; reads were aligned with Rsubread to Ensembl release 90, counted with featureCounts and converted to TPM",
+      "endpoint_context": "Source-provided overall survival in days for a stage-II surgical colon-cancer cohort with at least five years of clinical follow-up",
+      "endpoint_caveat": "GEO labels the endpoint days_to_death_or_censor and provides year and age at surgery, but does not explicitly define the time origin in the deposited metadata. TRACE Explorer preserves the source endpoint without claiming a harmonized postoperative origin.",
+      "sample_selection_note": "The title pattern selects all 49 source-designated colon-cancer tumors. GSM4615226, patient 90090, is excluded because it is marked as a death but has NA survival time. Every retained tumor represents one patient.",
+      "disease_selection_note": "All source profiles are pathologist-reviewed stage-II colon cancers and are assigned to TCGA-COAD; no rectal tumors are included.",
+      "expression_processing_note": "The source-provided matrix contains 58,206 unique Ensembl release 90 gene identifiers and TPM values for all 49 tumors. TRACE Explorer selects the 48 endpoint-complete columns, maps identifiers with the pinned release 90 GTF and applies log2(TPM + 1).",
+      "additional_endpoint_note": "GEO also reports individual distant-metastasis time and status for 47 patients, including seven events. The current release registers OS only because the GEO adapter materializes one source time/event pair per study specification.",
+      "overlap_note": "The Marshfield cohort is institutionally and accession-wise distinct from the promoted Japanese GSE192667 colon cohort and other external COAD releases.",
+      "redistribution_note": "TRACE Explorer downloads and transforms the pinned public GEO files in place. Source-file redistribution is disabled; NCBI GEO terms remain controlling."
+    }
+  },
+  "source": {
+    "provider": "geo",
+    "accession": "GSE152430",
+    "expression_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE152nnn/GSE152430/suppl/GSE152430_tpm_matrix.txt.gz",
+    "expression_filename": "GSE152430_tpm_matrix.txt.gz",
+    "expression_size": 17469749,
+    "expression_sha256": "5f7c747b9651b4ee24a36d3124ecdf761ed9b6424e6a4886699e81c06fcdb7d0",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE152nnn/GSE152430/soft/GSE152430_family.soft.gz",
+    "soft_size": 6563,
+    "soft_sha256": "9a90ee2348406cb8cd00f1378125f5852d8cf8e84fa4570113857653e6c55689",
+    "license_evidence_url": "https://www.ncbi.nlm.nih.gov/geo/info/disclaimer.html",
+    "primary_sample_title_pattern": "colon cancer tumor, [0-9]+",
+    "expected_primary_samples": 49,
+    "expected_endpoint_complete_samples": 48,
+    "expected_events": 17,
+    "expected_censored": 31,
+    "expected_expression_columns": 48,
+    "expected_source_expression_files": 49,
+    "expected_expression_gene_rows": 58206,
+    "expected_normalized_expression_gene_rows": 58206,
+    "patient_id_characteristic": "",
+    "expression_sample_metadata_field": "title",
+    "expression_sample_id_pattern": "^colon cancer tumor, ([0-9]+)$",
+    "expression_sample_id_replacement": "\\1",
+    "time_characteristic": "days_to_death_or_censor",
+    "event_characteristic": "overall_survival",
+    "event_value_map": {
+      "0": 0,
+      "1": 1
+    },
+    "age_characteristic": "age_at_surgery",
+    "stage_characteristic": "Stage",
+    "sample_type": "Primary Colon Tumor",
+    "expression": {
+      "layout": "wide_normalized_matrix",
+      "feature_column": "gene",
+      "feature_column_output": "Ensembl_Gene_Id",
+      "sample_start_column": 2,
+      "value_transform": "log2p",
+      "duplicate_feature_policy": "error",
+      "duplicate_feature_case_insensitive": false
+    },
+    "gene_reference": {
+      "url": "https://ftp.ensembl.org/pub/release-90/gtf/homo_sapiens/Homo_sapiens.GRCh38.90.gtf.gz",
+      "name": "Homo_sapiens.GRCh38.90.gtf.gz",
+      "size": 41837030,
+      "sha256": "5a61dc29e424a874a7d4a374010d7a8735cf087670de244628a9bb800911af6b"
+    }
+  },
+  "samples": {
+    "sample_type_column": "SAMPLE_TYPE",
+    "sample_type_default": "Primary Colon Tumor",
+    "sample_role": "Pathologist-reviewed FFPE stage-II primary colon tumor, one bulk RNA profile per patient",
+    "eligibility_rules": [
+      {
+        "field": "sample.SAMPLE_TYPE",
+        "include": [
+          "Primary Colon Tumor"
+        ],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "stage_fields": [
+      "patient.STAGE"
+    ],
+    "age_fields": [
+      "patient.AGE_AT_INDEX"
+    ]
+  },
+  "expression": {
+    "layer_id": "geo_log2_tpm",
+    "label": "GEO gene-level TPM transformed to log2(TPM + 1)",
+    "source_unit": "Gene-level TPM supplied by GEO",
+    "transform": "identity",
+    "analysis_unit": "log2(TPM + 1)",
+    "feature_id_type": "provided_ensembl_hugo",
+    "mapping_source": "Pinned Ensembl release 90 GRCh38 gene_name annotation",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "The 58,206 source Ensembl identifiers are unique. Symbols mapped from more than one Ensembl row are excluded rather than combined without an unambiguous gene-level rule.",
+    "stream_source_order": true,
+    "scale_note": "TRACE Explorer applies log2(TPM + 1) to source-provided gene-level TPM. Values are intended for within-cohort analysis and are not cross-study normalized."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "OS",
+      "standard_code": "OS",
+      "label": "Source-provided overall survival",
+      "time_column": "OS_DAYS",
+      "event_column": "OS_STATUS",
+      "time_unit": "days",
+      "time_origin": "Source-defined clinical origin, not explicitly specified",
+      "event_definition": "Death from any cause as encoded by the GEO overall_survival field; zero-status records are censored at the source-provided follow-up",
+      "censor_prefix": "0:",
+      "event_prefix": "1:"
+    }
+  ]
+}

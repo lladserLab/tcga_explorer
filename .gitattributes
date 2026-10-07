@@ -1,0 +1,4 @@
+# Markdown's two trailing spaces are intentional line breaks.
+*.md whitespace=-blank-at-eol
+# Keep third-party license text and checksummed vendor assets byte-for-byte.
+backend/app/static/api-docs/* -whitespace

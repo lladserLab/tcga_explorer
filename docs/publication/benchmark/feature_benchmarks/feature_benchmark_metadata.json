@@ -1,0 +1,413 @@
+{
+  "api_base_url": "http://backend:8000",
+  "diagnostic_rows": [
+    {
+      "adjusted_p_value": 0.0158343910767646,
+      "adjustment_status": "Completed: Continuous expression user-adjusted for Age.",
+      "audit_hash": "7e1324b7ec3cf9bbd20a9aa391e310a38c3d834a200ccccb49f1e66d94159a96",
+      "cohort": "TCGA-KIRC",
+      "cox_p_value": null,
+      "diagnostic_model": "continuous_user_adjusted",
+      "effect_summary": "HR per SD 0.85 (0.74-0.98); nonlinearity p=4.51e-04",
+      "endpoint": "OS",
+      "events_per_parameter": 87.5,
+      "firth_hr": null,
+      "firth_hr_conf_high": null,
+      "firth_hr_conf_low": null,
+      "firth_p_value": null,
+      "firth_status": "not_triggered",
+      "firth_ties": null,
+      "firth_trigger_reasons": "[]",
+      "grouped_logrank_p_value": 0.0001234168831825091,
+      "heterogeneity_i2": null,
+      "id": "20ff24d9229e422fa23781ff3544c95a",
+      "information_status": "adequate",
+      "interaction_p_value": null,
+      "interpretation": "Continuous and grouped summaries are shown together; clinical adjustment, PH and nonlinearity remain separate diagnostics.",
+      "kind": "diagnostic_hypoxia",
+      "label": "KIRC compact hypoxia z-score signature",
+      "limitation": "Continuous and grouped summaries are shown together; clinical adjustment, PH and nonlinearity remain separate diagnostics.",
+      "marker": "ZSCORE(CA9+VEGFA+SLC2A1+LDHA+PGK1)",
+      "meta_p_value": null,
+      "n_events": 175,
+      "n_patients": 531,
+      "nonlinearity_p_value": 0.0004510028063255225,
+      "opposite_significant": null,
+      "parameter_count": 2,
+      "ph_global_p_value": 0.6524844125888354,
+      "ph_marker_p_value": 0.9981512979582157,
+      "primary_p_value": 0.023959037817679617,
+      "primary_statistic": "continuous Cox per +1 SD",
+      "rmst_p_value": 0.0006852836498666352,
+      "signature_inputs": "CA9, VEGFA, SLC2A1, LDHA, PGK1",
+      "standard_cox_status": "completed",
+      "status": "completed",
+      "summary": "HR per SD 0.85 (0.74-0.98); grouped log-rank p=1.23e-04; RMST delta 178 days"
+    },
+    {
+      "adjusted_p_value": null,
+      "adjustment_status": "User-selected interaction adjustment completed.",
+      "audit_hash": "32249341edc840bbf56bf41a4dfa73f87ffdc731c2ad63cccfde70397ddfd32e",
+      "cohort": "TCGA-SKCM",
+      "cox_p_value": null,
+      "diagnostic_model": "signature_interaction_user_adjusted",
+      "effect_summary": "Global separation; 4 KM groups",
+      "endpoint": "OS",
+      "events_per_parameter": 46.5,
+      "firth_hr": null,
+      "firth_hr_conf_high": null,
+      "firth_hr_conf_low": null,
+      "firth_p_value": null,
+      "firth_status": "not_triggered",
+      "firth_ties": null,
+      "firth_trigger_reasons": "[]",
+      "heterogeneity_i2": null,
+      "id": "8bf6e21e56a34be7aa51bdf6704b525a",
+      "information_status": "adequate",
+      "interaction_p_value": 0.602136386264755,
+      "interpretation": "Four-group separation is significant, but the continuous interaction term is not. This diagnostic uses the declared metastatic SKCM population.",
+      "kind": "diagnostic_two_signature",
+      "label": "SKCM effector x exhaustion signatures",
+      "limitation": "Four-group separation is significant, but the continuous interaction term is not. This diagnostic uses the declared metastatic SKCM population.",
+      "marker": "Effector x Exhaustion",
+      "meta_p_value": null,
+      "n_events": 186,
+      "n_patients": 353,
+      "opposite_significant": null,
+      "parameter_count": 4,
+      "ph_global_p_value": 0.25336336398443327,
+      "primary_p_value": 3.465827177751606e-06,
+      "primary_statistic": "four-group log-rank",
+      "rmst_p_value": null,
+      "signature_inputs": "Effector: CD8A, GZMB, PRF1, IFNG, CXCL9, CXCL10; Exhaustion: PDCD1, CTLA4, LAG3, HAVCR2, TIGIT",
+      "standard_cox_status": "completed",
+      "status": "completed",
+      "summary": "Global log-rank p=3.47e-06; interaction HR 0.96"
+    },
+    {
+      "adjusted_p_value": null,
+      "adjustment_status": "Ordinal sensitivity: 26/33 cohorts evaluable; 3 selected adjusted FDR hits; stage-adjusted common-scale REML HR 1.03 (HKSJ p=0.082; 95% PI 0.94-1.13).",
+      "audit_hash": "d504a990164e965d2294d91950b487727bede3d9651f8e7862ac97f7008bfc5b",
+      "cohort": "pan-cancer",
+      "cox_p_value": null,
+      "effect_summary": "6/32 cohorts FDR<0.10; common-scale REML HR 1.04 (1.00-1.08); 95% PI 0.93-1.17",
+      "endpoint": "OS",
+      "heterogeneity_i2": 60.22252846392128,
+      "id": "pc_901ba88a576d9387ac3fa39a",
+      "interaction_p_value": null,
+      "interpretation": "The modest primary estimate attenuates under ordinal clinical sensitivity.",
+      "kind": "diagnostic_pancancer",
+      "label": "CA9 pan-cancer primary + ordinal sensitivity",
+      "limitation": "Primary I2=60.2%; 95% prediction interval 0.93-1.17; ordinal sensitivity was evaluable in 26/33 cancers with 3 direction reversals; 3 selected adjusted FDR hits.",
+      "marker": "CA9",
+      "meta_p_value": 0.03226029268729077,
+      "n_events": 2959,
+      "n_patients": 9820,
+      "opposite_significant": 6,
+      "ph_global_p_value": null,
+      "primary_p_value": 0.03226029268729077,
+      "primary_statistic": "common-scale REML/HKSJ meta-analysis",
+      "rmst_p_value": null,
+      "signature_inputs": "CA9",
+      "status": "completed",
+      "summary": "Primary 6/32 FDR hits; stage-adjusted common-scale REML HR 1.03 (HKSJ p=0.082; 95% PI 0.94-1.13)"
+    }
+  ],
+  "feature_rows": [
+    {
+      "adjusted_p_value": 5.578429807157165e-07,
+      "adjustment_status": "Completed: Continuous expression user-adjusted for Age.",
+      "audit_hash": "ccd2c03fa2bc0a19be903c840e46fa448aec56df4b21170e304663a1e8fe5e41",
+      "cohort": "TCGA-ACC",
+      "cox_p_value": null,
+      "diagnostic_model": "continuous_user_adjusted",
+      "effect_summary": "HR per SD 2.85 (1.90-4.26); nonlinearity p=",
+      "endpoint": "OS",
+      "events_per_parameter": 14,
+      "firth_hr": null,
+      "firth_hr_conf_high": null,
+      "firth_hr_conf_low": null,
+      "firth_p_value": null,
+      "firth_status": "not_triggered",
+      "firth_ties": null,
+      "firth_trigger_reasons": "[]",
+      "grouped_logrank_p_value": 0.0004594336801918414,
+      "heterogeneity_i2": null,
+      "id": "e5ace9fb744a45fba9c82b0431742a77",
+      "information_status": "adequate",
+      "interaction_p_value": null,
+      "interpretation": "RNA-seq analogue of a published expression contrast; the original qRT-PCR threshold is not replicated.",
+      "kind": "weighted_signature",
+      "label": "ACC BUB1B-PINK1 expression contrast",
+      "limitation": "RNA-seq analogue of a published expression contrast; the original qRT-PCR threshold is not replicated.",
+      "marker": "WEIGHTED(BUB1B+PINK1)",
+      "meta_p_value": null,
+      "n_events": 28,
+      "n_patients": 79,
+      "nonlinearity_p_value": null,
+      "opposite_significant": null,
+      "parameter_count": 2,
+      "ph_global_p_value": 0.5208172017970246,
+      "ph_marker_p_value": 0.2654652539181786,
+      "primary_p_value": 3.663969453500922e-07,
+      "primary_statistic": "continuous Cox per +1 SD",
+      "rmst_p_value": 0.00019035739032683278,
+      "signature_inputs": "BUB1B, PINK1 (w=-1)",
+      "standard_cox_status": "completed",
+      "status": "completed",
+      "summary": "HR per SD 2.85 (1.90-4.26); grouped log-rank p=4.59e-04; RMST delta -460 days"
+    },
+    {
+      "adjusted_p_value": null,
+      "adjustment_status": "Low-information Cox model: 5.25 events per fitted parameter (< 10). Interpret maximum-likelihood estimates cautiously and compare the Firth penalized sensitivity.; Interaction-specific proportional hazards test p < 0.05; interpret the average interaction HR with the prespecified two-year temporal diagnostic.",
+      "audit_hash": "9194ae5acd12a3bd2749e807fb0cefac26cacfbffb72775f244bb09cc4a1fb61",
+      "cohort": "TCGA-UVM",
+      "cox_p_value": null,
+      "diagnostic_model": "signature_interaction_user_adjusted",
+      "effect_summary": "Global separation; BAP1-low/PRAME-high 10/21 events; BAP1-high/PRAME-low 1/21",
+      "endpoint": "DSS",
+      "events_per_parameter": 5.25,
+      "firth_hr": 1.3779709267854936,
+      "firth_hr_conf_high": 2.0350364987077807,
+      "firth_hr_conf_low": 0.9098210928924755,
+      "firth_p_value": 0.12631843500703743,
+      "firth_status": "completed",
+      "firth_ties": "breslow",
+      "firth_trigger_reasons": "[\"5.25 events per fitted parameter is below the prespecified threshold of 10.\"]",
+      "heterogeneity_i2": null,
+      "id": "f330642683964947befa2cc2c8da57a5",
+      "information_status": "caution",
+      "interaction_p_value": 0.6370237913969757,
+      "interpretation": "Four-group stratification is supported; the continuous interaction term is not significant.",
+      "kind": "two_marker",
+      "label": "UVM BAP1 x PRAME grouping",
+      "limitation": "Continuous interaction p=0.637; signature interaction user-adjusted for age completed without a model warning.",
+      "marker": "BAP1 x PRAME",
+      "meta_p_value": null,
+      "n_events": 21,
+      "n_patients": 80,
+      "opposite_significant": null,
+      "parameter_count": 4,
+      "ph_global_p_value": 0.4311057110034102,
+      "primary_p_value": 0.002219601163402479,
+      "primary_statistic": "four-group log-rank",
+      "rmst_p_value": null,
+      "signature_inputs": "BAP1 x PRAME; independent median splits",
+      "standard_cox_status": "completed",
+      "status": "completed",
+      "summary": "Global log-rank p=0.002; interaction HR 1.09"
+    },
+    {
+      "adjusted_p_value": null,
+      "adjustment_status": "Ordinal sensitivity: 26/33 cohorts evaluable; 10 selected adjusted FDR hits; stage-adjusted common-scale REML HR 1.21 (HKSJ p=0.004; 95% PI 0.73-2.01).",
+      "audit_hash": "3b260cd966333e93de4a9802de7346c0400fefdd8a08007a392645f4a6389c71",
+      "cohort": "pan-cancer",
+      "cox_p_value": null,
+      "effect_summary": "17/32 cohorts FDR<0.10; common-scale REML HR 1.20 (1.06-1.37); 95% PI 0.65-2.25",
+      "endpoint": "OS",
+      "heterogeneity_i2": 85.9833961751844,
+      "id": "pc_a1a751ec03b61a441d0e251c",
+      "interaction_p_value": null,
+      "interpretation": "The broad primary association is attenuated but directionally consistent in the stage-adjusted family.",
+      "kind": "pancancer",
+      "label": "BIRC5 pan-cancer primary + ordinal sensitivity",
+      "limitation": "Primary I2=86.0%; 95% prediction interval 0.65-2.25; selected ordinal sensitivity was evaluable in 26/33 cancers and mixed adjustment families were not pooled.",
+      "marker": "BIRC5",
+      "meta_p_value": 0.0054867429935403535,
+      "n_events": 2959,
+      "n_patients": 9820,
+      "opposite_significant": 3,
+      "ph_global_p_value": null,
+      "primary_p_value": 0.0054867429935403535,
+      "primary_statistic": "common-scale REML/HKSJ meta-analysis",
+      "rmst_p_value": null,
+      "signature_inputs": "BIRC5",
+      "status": "completed",
+      "summary": "Primary 17/32 FDR hits; stage-adjusted common-scale REML HR 1.21 (HKSJ p=0.004; 95% PI 0.73-2.01)"
+    }
+  ],
+  "finished_at": "2026-08-11T23:33:57Z",
+  "prespecified_adjustment_covariates": [
+    "age_at_index"
+  ],
+  "reused_frozen_raw_results": false,
+  "signature_definitions": [
+    {
+      "cohort": "TCGA-ACC",
+      "construction": "(BUB1B - PINK1)/2 on log2(TPM + 1) expression; continuous Cox primary and median split sensitivity.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "BUB1B",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "PINK1",
+          "weight": -1.0
+        }
+      ],
+      "rationale": "RNA-seq analogue of the published two-gene differential-expression predictor; not a replication of its qRT-PCR threshold.",
+      "role": "Main",
+      "score_method": "weighted",
+      "workflow": "ACC BUB1B-PINK1 contrast"
+    },
+    {
+      "cohort": "TCGA-UVM",
+      "construction": "Gene-level BAP1 expression; median split for crossed grouping.",
+      "endpoint": "DSS",
+      "genes": [
+        {
+          "gene_symbol": "BAP1",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Gene-expression workflow analogue of established BAP1 prognostic biology; not a mutation or immunohistochemistry classifier.",
+      "role": "Main",
+      "score_method": "single",
+      "workflow": "UVM BAP1 marker"
+    },
+    {
+      "cohort": "TCGA-UVM",
+      "construction": "Gene-level PRAME expression; median split for crossed grouping.",
+      "endpoint": "DSS",
+      "genes": [
+        {
+          "gene_symbol": "PRAME",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Paired with BAP1 to exercise literature-anchored four-group stratification; not a clinical PRAME assay.",
+      "role": "Main",
+      "score_method": "single",
+      "workflow": "UVM PRAME marker"
+    },
+    {
+      "cohort": "pan-cancer",
+      "construction": "Primary continuous Cox with expression z-scored within each cohort; parallel ordinal stage, grade and stage+grade sensitivity models.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "BIRC5",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Published pan-cancer prognostic marker used to exercise FDR, family-specific adjustment and meta-analysis.",
+      "role": "Main",
+      "score_method": "single",
+      "workflow": "BIRC5 pan-cancer primary + ordinal sensitivity"
+    },
+    {
+      "cohort": "TCGA-KIRC",
+      "construction": "Equal-weight mean of per-gene z-scores.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "CA9",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "VEGFA",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "SLC2A1",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "LDHA",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "PGK1",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Compact Hallmark-aligned hypoxia example selected to exercise transparent multi-gene scoring without presenting a pathway model.",
+      "role": "Diagnostic",
+      "score_method": "zscore",
+      "workflow": "KIRC compact hypoxia signature"
+    },
+    {
+      "cohort": "TCGA-SKCM",
+      "construction": "Equal-weight mean of per-gene z-scores in metastatic SKCM; crossed with the exhaustion signature after median splits.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "CD8A",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "GZMB",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "PRF1",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "IFNG",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "CXCL9",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "CXCL10",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Cytotoxic T-cell and interferon-chemokine example selected for an immune-active TCGA-SKCM workflow benchmark.",
+      "role": "Diagnostic",
+      "score_method": "zscore",
+      "workflow": "SKCM effector signature"
+    },
+    {
+      "cohort": "TCGA-SKCM",
+      "construction": "Equal-weight mean of per-gene z-scores in metastatic SKCM; crossed with the effector signature after median splits.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "PDCD1",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "CTLA4",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "LAG3",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "HAVCR2",
+          "weight": 1.0
+        },
+        {
+          "gene_symbol": "TIGIT",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Checkpoint/exhaustion marker example paired with the effector score to exercise two-signature grouping and interaction Cox.",
+      "role": "Diagnostic",
+      "score_method": "zscore",
+      "workflow": "SKCM exhaustion signature"
+    },
+    {
+      "cohort": "pan-cancer",
+      "construction": "Primary single-gene continuous Cox with expression z-scored within each cohort; parallel ordinal stage, grade and stage+grade sensitivity models.",
+      "endpoint": "OS",
+      "genes": [
+        {
+          "gene_symbol": "CA9",
+          "weight": 1.0
+        }
+      ],
+      "rationale": "Single-gene hypoxia and kidney-cancer marker canary selected to expose attenuation and cross-cancer heterogeneity.",
+      "role": "Diagnostic",
+      "score_method": "single",
+      "workflow": "CA9 pan-cancer primary + ordinal sensitivity"
+    }
+  ],
+  "started_at": "2026-08-11T23:33:41Z"
+}

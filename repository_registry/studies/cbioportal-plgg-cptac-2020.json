@@ -1,0 +1,110 @@
+{
+  "schema_version": "tcga-trace-study-spec-v1",
+  "dataset": {
+    "id": "cbioportal-plgg-cptac-2020",
+    "cancer_code": "PLGG",
+    "name": "Pediatric low-grade glioma cohort (CPTAC, 2020)",
+    "description": "Independent pediatric low-grade glioma cohort restricted to primary, treatment-naive tumors with bulk RNA sequencing and source-defined disease/progression-free survival.",
+    "cohort_context": "The CPTAC pediatric brain-tumor study contains several distinct histologies. TRACE Explorer retains only samples labelled pediatric low-grade glioma, Primary and Treatment naive; other pediatric brain tumors are not pooled into PLGG.",
+    "source_provider": "cbioportal_datahub",
+    "source_accession": "brain_cptac_2020",
+    "source_url": "https://github.com/cBioPortal/datahub/tree/master/public/brain_cptac_2020",
+    "publication_citation": "Petralia et al. Cell 2020",
+    "publication_id": "PMID:33242424; DOI:10.1016/j.cell.2020.10.044",
+    "organism": "Homo sapiens",
+    "assay": "bulk_rna_seq",
+    "independence_status": "verified_external",
+    "license_id": "ODbL-1.0",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "redistribution_allowed": true,
+    "metadata": {
+      "source_program": "CPTAC Pediatric Brain Tumor",
+      "study_design": "Proteogenomic pediatric brain-tumor cohort",
+      "endpoint_context": "Source-defined DFS after initial treatment",
+      "histology_note": "Ependymoma, pediatric high-grade glioma, ganglioglioma, medulloblastoma, craniopharyngioma and atypical teratoid/rhabdoid tumor records are excluded.",
+      "treatment_note": "Only records explicitly labelled Treatment naive in both source treatment fields are eligible.",
+      "endpoint_note": "Overall survival is not exposed because only one death is observed in the endpoint-complete PLGG subset.",
+      "overlap_note": "PLGG is a pediatric entity and is not mapped to the adult TCGA-LGG cohort."
+    }
+  },
+  "source": {
+    "repository": "cBioPortal/datahub",
+    "branch": "master",
+    "study_path": "public/brain_cptac_2020",
+    "expected_expression_samples": 188,
+    "expected_missing_sample_metadata": 0,
+    "expected_missing_patient_metadata": 0,
+    "files": {
+      "expression": "data_mrna_seq_v2_rsem.txt",
+      "patients": "data_clinical_patient.txt",
+      "samples": "data_clinical_sample.txt",
+      "study_metadata": "meta_study.txt",
+      "expression_metadata": "meta_mrna_seq_v2_rsem.txt",
+      "license": {
+        "path": "README.md",
+        "scope": "repository",
+        "target_name": "DATAHUB_LICENSE_README.md"
+      }
+    }
+  },
+  "samples": {
+    "sample_type_column": "TUMOR_TYPE",
+    "sample_type_default": "Primary",
+    "sample_role": "Primary treatment-naive pediatric low-grade glioma",
+    "eligibility_rules": [
+      {
+        "field": "sample.ONCOTREE_CODE",
+        "include": ["PLGG"],
+        "required": true
+      },
+      {
+        "field": "sample.TUMOR_TYPE",
+        "include": ["Primary"],
+        "required": true
+      },
+      {
+        "field": "sample.TREATMENT_STATUS",
+        "include": ["Treatment naive"],
+        "required": true
+      },
+      {
+        "field": "sample.SAMPLE_ANNOTATION",
+        "include": ["Treatment naive"],
+        "required": true
+      }
+    ],
+    "selection_rank": 0,
+    "grade_fields": ["patient.UPDATED_GRADE"],
+    "gender_fields": ["patient.SEX"],
+    "race_fields": ["patient.RACE"],
+    "age_fields": ["patient.AGE"]
+  },
+  "expression": {
+    "layer_id": "provided_log2_fpkm",
+    "label": "Provided log2(FPKM + 1) expression",
+    "source_unit": "RSEM-estimated FPKM provided as log2(FPKM + 1)",
+    "transform": "identity",
+    "analysis_unit": "Provided log2(FPKM + 1)",
+    "feature_column_count": 1,
+    "feature_id_type": "provided_hugo_symbol",
+    "mapping_source": "Source-provided gene symbols in the pinned CPTAC/DataHub matrix",
+    "duplicate_feature_policy": null,
+    "duplicate_feature_rationale": "All rows for the duplicated symbols BTBD8 and MYO18A are excluded rather than implicitly aggregated, leaving 18,205 uniquely identified complete symbols.",
+    "stream_source_order": true,
+    "scale_note": "The DataHub molecular-profile metadata defines the supplied values as log2(FPKM + 1). TRACE Explorer preserves that scale without a second transformation."
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "DFS",
+      "standard_code": "DFS",
+      "label": "Disease/progression-free survival (source DFS)",
+      "time_column": "DFS_MONTHS",
+      "event_column": "DFS_STATUS",
+      "time_unit": "months",
+      "time_origin": "Initial treatment, according to the source clinical dictionary",
+      "event_definition": "Recurrence or progression as encoded by the source DFS status",
+      "event_values": ["Recurred/Progressed"],
+      "censor_values": ["DiseaseFree"]
+    }
+  ]
+}
