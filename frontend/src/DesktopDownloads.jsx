@@ -1,6 +1,5 @@
 import React from "react";
 import { TraceIcon } from "./design/icons";
-import { HelpButton } from "./help";
 import { DESKTOP_RELEASE, TRACE_GITHUB_URL } from "./desktopRelease";
 
 export default function DesktopDownloads({ local = import.meta.env.VITE_TRACE_LOCAL_DESKTOP === "true" }) {
@@ -13,7 +12,6 @@ export default function DesktopDownloads({ local = import.meta.env.VITE_TRACE_LO
         <h2 id="home-desktop-title">Run TRACE on your computer</h2>
         <p>Analyze your own files or selected public cohorts. Your data and results are stored locally.</p>
         <div className="home-desktop-meta">
-          <HelpButton label="Desktop installation and data" helpId="desktopInstallation" />
           {github}
         </div>
       </div>
